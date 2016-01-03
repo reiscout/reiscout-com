@@ -1,0 +1,5 @@
+name = Commerce Reiscout
+description = Commerce behaviour cistomization.
+package = Reiscout
+core = 7.x
+files[] = commerce_reiscout.module
