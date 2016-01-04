@@ -7,8 +7,8 @@
  * Implements address access control.
  */
 
-define('COMMERCE_REISCOUT_PICTURE_NODE_TYPE', 'picture');
-define('COMMERCE_REISCOUT_PICTURE_ADDRESS_ACCESS_PRODUCT_SKU', 'picture');
+define('COMMERCE_REISCOUT_PROPERTY_NODE_TYPE', 'property');
+define('COMMERCE_REISCOUT_PROPERTY_ADDRESS_ACCESS_PRODUCT_SKU', 'property-address-access');
 
 /**
  * Return display nodes associated with purchased products by user.
@@ -44,7 +44,7 @@ function commerce_reiscout_get_purchased_display_entities($uid, $sku = '', $orde
  * A helper wrapper for commerce_reiscout_get_purchased_display_entities()
  */
 function commerce_reiscout_get_user_purchased_picture_nids() {
-  $entities = commerce_reiscout_get_purchased_display_entities($GLOBALS['user']->uid, 'picture-address-access', 'completed');
+  $entities = commerce_reiscout_get_purchased_display_entities($GLOBALS['user']->uid, COMMERCE_REISCOUT_PROPERTY_ADDRESS_ACCESS_PRODUCT_SKU, 'completed');
   $nids = array();
   foreach ($entities as $entity) {
     if ($entity['entity_type'] == 'node') {
@@ -65,8 +65,8 @@ function commerce_reiscout_field_access($op, $field, $entity_type, $entity, $acc
   }
 
   // Access control for field_address in picture node.
-  if ($op == 'view' && $entity_type == 'node' && !empty($entity->type) && $entity->type == COMMERCE_REISCOUT_PICTURE_NODE_TYPE
-  && $field['field_name'] == 'field_address') {
+  if ($op == 'view' && $entity_type == 'node' && !empty($entity->type) && $entity->type == COMMERCE_REISCOUT_PROPERTY_NODE_TYPE
+  && $field['field_name'] == 'field_address_text') {
 
     // Allow access if user is an author.
     if ($entity->uid == $account->uid) {
