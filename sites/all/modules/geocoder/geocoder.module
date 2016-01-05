@@ -294,7 +294,6 @@ function geocoder_service_check_request($handler, $format, $check_ac = TRUE) {
  * TODO
  */
 function geocoder_reverse($handler, $lat, $long, $options = array(), $cache_type = 2, $cache_reset = FALSE) {
-    dpm(func_get_args(), __FUNCTION__);
     ctools_include('plugins');
     static $static_cache_reverse = array();
 
