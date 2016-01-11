@@ -1,11 +1,11 @@
 cordova*js
-app/modules/*
-app/themes/*
-app/settings.js
+#app/modules/*
+#app/themes/*
+#app/settings.js
 app/.gitignore
 app/README.*
 res
-config.xml
+#config.xml
 
 # Ignore a potential jDrupal folder
 jDrupal
