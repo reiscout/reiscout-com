@@ -9387,7 +9387,6 @@ function image_field_widget_form(form, form_state, field, instance, langcode,
     }
     // Add click handler for photo button.
     html += '$("#' + items[delta].id + '-button").on("click",function(){' +
-      'edit_node_edit_field_image_und_0_value_imagefield_ready();' +
       'var photo_options = {' +
         'quality: ' + quality + ',' +
         'destinationType: ' + imagefield_destination_type + '.DATA_URL,' +
