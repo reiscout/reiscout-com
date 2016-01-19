@@ -264,10 +264,6 @@ function services_edit_form_endpoint_resources($form, &$form_state, $endpoint) {
   // Call _services_build_resources() directly instead of
   // services_get_resources to bypass caching.
   $resources = _services_build_resources($endpoint->name);
-  // Sort the resources by the key, which is the string used for grouping each
-  // resource in theme_services_resource_table().
-  ksort($resources);
-
   $form['instructions'] = array(
     '#type' => 'item',
     '#title' => t('Resources'),
@@ -345,16 +341,8 @@ function services_edit_form_endpoint_resources($form, &$form_state, $endpoint) {
           );
 
           $controller_settings = array();
-          $info = array(
-            'op' => $op + array('name' => $op_name),
-            'class' => $class,
-            'resource' => $resource,
-            'endpoint' => $endpoint,
-          );
-
           // Let modules add their own settings.
-          drupal_alter('controller_settings', $controller_settings, $info);
-
+          drupal_alter('controller_settings', $controller_settings);
           // Get service update versions.
           $update_versions = services_get_update_versions($resource_key, $op_name);
           $options = array(
@@ -362,12 +350,12 @@ function services_edit_form_endpoint_resources($form, &$form_state, $endpoint) {
           );
           $options = array_merge($options, $update_versions);
           $default_api_value = 0;
-
-          if (isset($op['endpoint']) && isset($op['endpoint']['services'])) {
-            $default_api_value = $op['endpoint']['services']['resource_api_version'];
+          if (isset($endpoint->resources[$resource_key][$class][$op_name]['endpoint']['services'])) {
+            $default_api_value = $endpoint->resources[$resource_key][$class][$op_name]['endpoint']['services'];
           }
+          $disabled = (count($options) == 1);
           // Add the version information if it has any
-          if (count($options) !== 1) {
+          if (!$disabled) {
             $controller_settings['services'] = array(
               '#title' => 'Services',
               '#type' => 'item',
@@ -376,6 +364,7 @@ function services_edit_form_endpoint_resources($form, &$form_state, $endpoint) {
                 '#options' => $options,
                 '#default_value' => $default_api_value,
                 '#title' => 'Resource API Version',
+                '#disabled' => $disabled,
               ),
             );
           }
@@ -393,7 +382,7 @@ function services_edit_form_endpoint_resources($form, &$form_state, $endpoint) {
               $disabled = FALSE;
             }
           }
-          if (!empty($controller_settings)) {
+          if (!$disabled) {
             $res_item[$class][$op_name]['settings'] = $controller_settings;
           }
         }
@@ -420,9 +409,9 @@ function services_edit_form_endpoint_resources_validate($form, $form_state) {
 
   // Validate aliases.
   foreach ($input['resources'] as $resource_name => $resource) {
-    if (!empty($resource['alias']) && !preg_match('/^[0-9a-z-_]+$/', $resource['alias'])) {
+    if (!empty($resource['alias']) && !preg_match('/^[a-z-]+$/', $resource['alias'])) {
       // Still this doesn't highlight needed form element.
-      form_set_error("resources][{$resource_name}][alias", t("The alias for the !name resource may only contain lower case a-z, digits 0-9, underscores and dashes.", array(
+      form_set_error("resources][{$resource_name}][alias", t("The alias for the !name resource may only contain lower case a-z and dashes.", array(
         '!name' => $resource_name,
       )));
     }

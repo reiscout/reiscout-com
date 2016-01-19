@@ -330,10 +330,7 @@ function _taxonomy_resource_definition() {
  * @see taxonomy_get_term()
  */
 function _taxonomy_term_resource_retrieve($tid) {
-  $term = taxonomy_term_load($tid);
-  //Lets check field_permissions
-  $term = services_field_permissions_clean('view', 'taxonomy_term', $term);
-  return $term;
+  return taxonomy_term_load($tid);
 }
 
 /**
@@ -592,9 +589,7 @@ function _taxonomy_resource_delete_access($tid) {
  * @see _node_resource_index() for more notes
  **/
 function _taxonomy_term_resource_index($page, $fields, $parameters, $page_size) {
-  $taxonomy_select = db_select('taxonomy_term_data', 't');
-  $taxonomy_select->join('taxonomy_term_hierarchy', 'tth', 't.tid = tth.tid');
-  $taxonomy_select->fields('tth')
+  $taxonomy_select = db_select('taxonomy_term_data', 't')
     ->orderBy('vid', 'DESC')
     ->orderBy('weight', 'DESC')
     ->orderBy('name', 'DESC');
