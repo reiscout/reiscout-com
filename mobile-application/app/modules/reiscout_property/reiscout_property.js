@@ -14,3 +14,66 @@ function reiscout_property_form_alter(form, form_state, form_id) {
     }
     catch (error) { console.log('reiscout_property_form_alter - ' + error); }
 }
+
+/**
+ * Implements hook_menu().
+ */
+function reiscout_property_menu() {
+    var items = {};
+    items['property-listing'] = {
+        title: 'Property Objects',
+        page_callback: 'reiscout_property_listing_page'
+    };
+    return items;
+}
+
+/**
+ * The page callback to display the view.
+ */
+function reiscout_property_listing_page() {
+    try {
+        var content = {};
+        content['reiscout_property_listing'] = {
+            theme: 'view',
+            format: 'unformatted_list',
+            path: 'drupalgap/views_datasource/property-listing', /* the path to the view in Drupal */
+            row_callback: 'reiscout_property_listing_row',
+            empty_callback: 'reiscout_property_listing_empty',
+            attributes: {
+                id: 'reiscout_property_listing_view'
+            }
+        };
+        return content;
+    }
+    catch (error) { console.log('reiscout_property_listing_page - ' + error); }
+}
+
+/**
+ * The row callback to render a single row.
+ */
+function reiscout_property_listing_row(view, row) {
+    try {
+        var row_html = '';
+        if (row.image.src && row.address.length) {
+            row_html = '<a href="node/' + row.nid + '">';
+            row_html += '<div class="address">' + row.address + '</div>';
+            row_html += '<img src="'+ row.image.src +'">';
+            row_html += '</a>';
+        } else if (row.address.length) {
+            row_html = l(t(row.address), 'node/' + row.nid);
+        }
+
+        return '<div class="view-row">' + row_html + '</div>';
+    }
+    catch (error) { console.log('reiscout_property_listing_row - ' + error); }
+}
+
+/**
+ * Shows empty view content
+ */
+function reiscout_property_listing_empty(view) {
+    try {
+        return t('Sorry, no property objects were found.');
+    }
+    catch (error) { console.log('reiscout_property_listing_empty - ' + error); }
+}
