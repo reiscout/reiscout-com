@@ -65,10 +65,9 @@ function reiscout_property_listing_row(view, row) {
   try {
     var row_html = '';
     if (row.image.src && row.address.length) {
-      row_html = '<a href="node/' + row.nid + '">';
       row_html += '<div class="address">' + row.address + '</div>';
       row_html += '<img src="' + row.image.src + '">';
-      row_html += '</a>';
+      row_html = l(row_html, 'node/' + row.nid);
     } else if (row.address.length) {
       row_html = l(t(row.address), 'node/' + row.nid);
     }
