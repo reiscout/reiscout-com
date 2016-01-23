@@ -102,7 +102,7 @@ Drupal.settings.cache.views = {
 // DrupalGap Mode (defaults to 'web-app')
 //  'web-app' - use this mode to build a web application for a browser window
 //  'phonegap' - use this mode to build a mobile application with phonegap
-drupalgap.settings.mode = 'web-app';
+drupalgap.settings.mode = 'phonegap';
 
 // Language Files - locale/[language-code].json
 drupalgap.settings.locale = {
@@ -156,7 +156,7 @@ drupalgap.settings.loader = {
 
 /** Contributed Modules - www/app/modules **/
 Drupal.modules.contrib['geofield'] = {};
-Drupal.modules.contrib['title'] = {};
+Drupal.modules.contrib['reiscout_property'] = {};
 
 //Drupal.modules.contrib['example'] = {};
 
