@@ -33,7 +33,7 @@ Drupal.settings.language_default = 'und';
 Drupal.settings.cache.entity = {
 
   /* Globals (will be used if not overwritten below) */
-  enabled: true,
+  enabled: false,
   expiration: 60, // # of seconds to cache, set to 0 to cache forever
 
   /* Entity types */
@@ -91,7 +91,7 @@ Drupal.settings.cache.entity = {
 /* Views Caching */
 
 Drupal.settings.cache.views = {
-  enabled: true,
+  enabled: false,
   expiration: 3600
 };
 
