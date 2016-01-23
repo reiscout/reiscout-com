@@ -217,18 +217,11 @@ drupalgap.settings.menus['user_menu_authenticated'] = {
           'data-icon': 'delete'
         }
       }
-    }
-  ]
-};
-
-// Main Menu
-drupalgap.settings.menus['main_menu'] = {
-  options: menu_popup_get_default_options(),
-  links: [
+    },
     {
-      title:'Content',
-      path:'node',
-      options:{
+      title: 'Add Property',
+      path: 'node/add/property',
+      options: {
         attributes: {
           'data-icon': 'star',
           'class': 'ui-btn ui-btn-icon-right'
@@ -236,25 +229,18 @@ drupalgap.settings.menus['main_menu'] = {
       }
     },
     {
-      title:'Taxonomy',
-      path:'taxonomy/vocabularies',
-      options:{
-        attributes:{
-          'data-icon':'grid'
+      title: 'My Properties',
+      path: 'my-properties',
+      options: {
+        attributes: {
+          'data-icon': 'grid',
+          'class': 'ui-btn ui-btn-icon-right'
         }
       }
     },
-    {
-      title:'Users',
-      path:'user-listing',
-      options:{
-        attributes:{
-          'data-icon':'info'
-        }
-      }
-    }
   ]
 };
+
 
 /****************************************|
  * Blocks - http://drupalgap.org/node/83 |

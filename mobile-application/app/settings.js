@@ -222,13 +222,61 @@ drupalgap.settings.menus['user_menu_authenticated'] = {
 };
 
 // Main Menu
-drupalgap.settings.menus['main_menu'] = {
+drupalgap.settings.menus = {}; // Do not remove this line.
+
+// User Menu Anonymous
+drupalgap.settings.menus['user_menu_anonymous'] = {
   options: menu_popup_get_default_options(),
   links: [
     {
-      title:'Content',
-      path:'node',
-      options:{
+      title: 'Login',
+      path: 'user/login',
+      options: {
+        attributes: {
+          'data-icon': 'lock',
+          'class': 'ui-btn ui-btn-icon-right'
+        }
+      }
+    },
+    {
+      title: 'Create new account',
+      path: 'user/register',
+      options: {
+        attributes: {
+          'data-icon': 'plus'
+        }
+      }
+    }
+  ]
+};
+
+// User Menu Authenticated
+drupalgap.settings.menus['user_menu_authenticated'] = {
+  options: menu_popup_get_default_options(),
+  links: [
+    {
+      title: 'My Account',
+      path: 'user',
+      options: {
+        attributes: {
+          'data-icon': 'user',
+          'class': 'ui-btn ui-btn-icon-right'
+        }
+      }
+    },
+    {
+      title: 'Logout',
+      path: 'user/logout',
+      options: {
+        attributes: {
+          'data-icon': 'delete'
+        }
+      }
+    },
+    {
+      title: 'Add Property',
+      path: 'node/add/property',
+      options: {
         attributes: {
           'data-icon': 'star',
           'class': 'ui-btn ui-btn-icon-right'
@@ -236,23 +284,15 @@ drupalgap.settings.menus['main_menu'] = {
       }
     },
     {
-      title:'Taxonomy',
-      path:'taxonomy/vocabularies',
-      options:{
-        attributes:{
-          'data-icon':'grid'
+      title: 'My Properties',
+      path: 'my-properties',
+      options: {
+        attributes: {
+          'data-icon': 'grid',
+          'class': 'ui-btn ui-btn-icon-right'
         }
       }
     },
-    {
-      title:'Users',
-      path:'user-listing',
-      options:{
-        attributes:{
-          'data-icon':'info'
-        }
-      }
-    }
   ]
 };
 
