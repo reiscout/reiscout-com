@@ -114,10 +114,10 @@ drupalgap.settings.locale = {
  *************/
 
 // App Title
-drupalgap.settings.title = 'DrupalGap';
+drupalgap.settings.title = 'Reiscout';
  
 // App Front Page
-drupalgap.settings.front = 'dashboard';
+drupalgap.settings.front = 'property-listing';
 
 // Theme
 drupalgap.settings.theme = 'easystreet3';
