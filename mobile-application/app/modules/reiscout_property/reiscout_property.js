@@ -22,7 +22,7 @@ function reiscout_property_form_alter(form, form_state, form_id) {
 function reiscout_property_menu() {
   var items = {};
   items['property-listing'] = {
-    title: 'Property Objects',
+    title: 'Reiscout',
     page_callback: 'reiscout_property_listing_page'
   };
 
