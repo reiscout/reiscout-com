@@ -40,6 +40,7 @@ function reiscout_property_menu() {
  */
 function reiscout_property_listing_page() {
   try {
+    console.log('go reiscout_property_listing_page');
     var content = {};
     content['reiscout_property_listing'] = {
       theme: 'view',
@@ -63,16 +64,15 @@ function reiscout_property_listing_page() {
  */
 function reiscout_property_listing_row(view, row) {
   try {
-    var row_html = '';
-    if (row.image.src && row.address.length) {
-      row_html += '<div class="address">' + row.address + '</div>';
+    if (row.image.src) {
+      var row_html = '';
       row_html += '<img src="' + row.image.src + '">';
+      if (row.address.length) {
+        row_html += '<div class="address">' + row.address + '</div>';
+      }
       row_html = l(row_html, 'node/' + row.nid);
-    } else if (row.address.length) {
-      row_html = l(t(row.address), 'node/' + row.nid);
+      return '<div class="view-row">' + row_html + '</div>';
     }
-
-    return '<div class="view-row">' + row_html + '</div>';
   }
   catch (error) {
     console.log('reiscout_property_listing_row - ' + error);
