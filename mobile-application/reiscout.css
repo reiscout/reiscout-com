@@ -1,0 +1,17 @@
+
+/* Property node form */
+#node_add_property #node_edit .field-name-field-product {
+    display: none;
+}
+
+#node_add_property #node_edit .field-name-field-geo-position label,
+#node_add_property #node_edit .field-name-field-geo-position div {
+    display: none;
+}
+
+/* Hide main menu icon */
+.ui-icon-bars.ui-btn-icon-notext {
+    display: none;
+}
+
+
