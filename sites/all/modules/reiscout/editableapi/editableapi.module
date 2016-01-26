@@ -1,0 +1,72 @@
+<?php
+
+/**
+ * Implements hook_services_resources().
+ */
+function editableapi_services_resources() {
+  // File where resources stored.
+  $file = array(
+    'type'   => 'inc',
+    'module' => 'editableapi',
+    'name'   => 'editableapi.resource'
+  );
+
+  $editableapi_resource = array(
+    'editableapi' => array(
+      'actions' => array(
+        'save' => array(
+          'help' => t('Save value of field.'),
+          'callback' => '_editableapi_resource_save',
+          'access callback' => '_editableapi_update_access',
+          'file' => $file,
+          'args' => array(
+            array(
+              'name' => 'nid',
+              'optional' => FALSE,
+              'source' => array('data' => 'nid'),
+              'type' => 'int',
+            ),
+            array(
+              'name' => 'type',
+              'optional' => FALSE,
+              'source' => array('data' => 'type'),
+              'type' => 'string',
+            ),
+            array(
+              'name' => 'field',
+              'optional' => FALSE,
+              'source' => array('data' => 'field'),
+              'type' => 'string',
+            ),
+            array(
+              'name' => 'language',
+              'optional' => FALSE,
+              'source' => array('data' => 'language'),
+              'type' => 'string',
+            ),
+            array(
+              'name' => 'delta',
+              'optional' => FALSE,
+              'source' => array('data' => 'delta'),
+              'type' => 'int',
+            ),
+            array(
+              'name' => 'value',
+              'optional' => FALSE,
+              'source' => array('data' => 'value'),
+              'type' => 'string',
+            ),
+          ),
+        )
+      ),
+    ),
+  );
+
+  return $editableapi_resource;
+}
+
+function _editableapi_update_access($nid, $type, $field, $language, $delta, $value) {
+  $node = node_load($nid);
+
+  return ($node && $node->type === $type && node_access('update', $node) && field_access('edit', field_info_field($field), 'node', $node));
+}

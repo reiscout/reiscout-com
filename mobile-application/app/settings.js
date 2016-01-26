@@ -13,7 +13,7 @@ Drupal.settings.debug = true;
  ****************************************/
 
 /* DRUPAL PATHS */
- 
+
 // Site Path (do not use a trailing slash)
 Drupal.settings.site_path = 'http://reiscout.com'; // e.g. http://www.example.com
 
@@ -115,7 +115,7 @@ drupalgap.settings.locale = {
 
 // App Title
 drupalgap.settings.title = 'Reiscout';
- 
+
 // App Front Page
 drupalgap.settings.front = 'property-listing';
 
@@ -161,6 +161,7 @@ Drupal.modules.contrib['reiscout_property'] = {};
 //Drupal.modules.contrib['example'] = {};
 
 /** Custom Modules - www/app/modules/custom **/
+Drupal.modules.custom['reiscout_editableaddress'] = {};
 
 //Drupal.modules.custom['my_module'] = {};
 

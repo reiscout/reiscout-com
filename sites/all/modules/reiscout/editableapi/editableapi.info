@@ -1,0 +1,7 @@
+name = Reiscout Editable Field API
+description = Reiscout Editable Field API
+package = Reiscout
+core = 7.x
+dependencies[] = node
+dependencies[] = field
+dependencies[] = services
