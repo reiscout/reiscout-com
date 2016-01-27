@@ -27,7 +27,8 @@ function property_default_rules_configuration() {
         { "entity_has_field" : { "entity" : [ "node" ], "field" : "field_geo_position" } },
         { "entity_has_field" : { "entity" : [ "node" ], "field" : "field_address_text" } },
         { "NOT data_is_empty" : { "data" : [ "node:field-geo-position:lat" ] } },
-        { "NOT data_is_empty" : { "data" : [ "node:field-geo-position:lon" ] } }
+        { "NOT data_is_empty" : { "data" : [ "node:field-geo-position:lon" ] } },
+        { "data_is_empty" : { "data" : [ "node:field-address-text" ] } }
       ],
       "DO" : [
         { "geocoder_rules_reverse_geocode" : {
