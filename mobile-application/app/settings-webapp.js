@@ -161,7 +161,7 @@ Drupal.modules.contrib['reiscout_property'] = {};
 //Drupal.modules.contrib['example'] = {};
 
 /** Custom Modules - www/app/modules/custom **/
-Drupal.modules.custom['reiscout_editableaddress'] = {};
+//Drupal.modules.custom['reiscout_editableaddress'] = {};
 
 //Drupal.modules.custom['my_module'] = {};
 
