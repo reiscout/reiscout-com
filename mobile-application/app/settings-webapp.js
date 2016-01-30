@@ -162,6 +162,7 @@ Drupal.modules.contrib['reiscout_property'] = {};
 
 /** Custom Modules - www/app/modules/custom **/
 //Drupal.modules.custom['reiscout_editableaddress'] = {};
+Drupal.modules.custom['reiscout_geocoder'] = {};
 
 //Drupal.modules.custom['my_module'] = {};
 

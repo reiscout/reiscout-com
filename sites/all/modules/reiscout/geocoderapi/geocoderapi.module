@@ -1,0 +1,60 @@
+<?php
+
+function geocoderapi_permission() {
+  return array(
+    'use geocoder api' => array(
+      'title'       => t('Use Geocoder API'),
+      'description' => t('Allow user to use Geocoder API through Services'),
+    ),
+  );
+}
+
+/**
+ * Implements hook_services_resources().
+ */
+function geocoderapi_services_resources() {
+  // File where resources stored.
+  $file = array(
+    'type'   => 'inc',
+    'module' => 'geocoderapi',
+    'name'   => 'geocoderapi.resource'
+  );
+
+  $resource = array(
+    'geocoderapi' => array(
+      'actions' => array(
+        'geocode_reverse' => array(
+          'help' => t('Reverse geocoding.'),
+          'callback' => '_geocoderapi_action_geocode_reverse',
+          'access callback' => 'user_access',
+          'access arguments' => array('use geocoder api'),
+          'access arguments append' => FALSE,
+          'file' => $file,
+          'args' => array(
+            array(
+              'name' => 'latitude',
+              'optional' => FALSE,
+              'source' => array('data' => 'latitude'),
+              'type' => 'string',
+            ),
+            array(
+              'name' => 'longitude',
+              'optional' => FALSE,
+              'source' => array('data' => 'longitude'),
+              'type' => 'string',
+            ),
+            array(
+              'name' => 'options',
+              'optional' => TRUE,
+              'source' => array('data' => 'options'),
+              'type' => 'array',
+              'default value' => array(),
+            ),
+          ),
+        )
+      ),
+    ),
+  );
+
+  return $resource;
+}

@@ -1,0 +1,6 @@
+name = Reiscout Geocoder API
+description = Reiscout Geocoder API
+package = Reiscout
+core = 7.x
+dependencies[] = geocoder
+dependencies[] = services
