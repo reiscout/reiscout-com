@@ -53,7 +53,7 @@ Drupal.settings.cache.entity = {
     node: {
 
       /* Node Globals (will be used if not overwritten below) */
-      enabled: true,
+      enabled: false,
       expiration: 120,
 
       /* Content types (aka bundles) */
@@ -161,7 +161,7 @@ Drupal.modules.contrib['reiscout_property'] = {};
 //Drupal.modules.contrib['example'] = {};
 
 /** Custom Modules - www/app/modules/custom **/
-//Drupal.modules.custom['reiscout_editableaddress'] = {};
+Drupal.modules.custom['reiscout_editableaddress'] = {};
 Drupal.modules.custom['reiscout_geocoder'] = {};
 
 //Drupal.modules.custom['my_module'] = {};
