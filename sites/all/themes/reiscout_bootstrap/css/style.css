@@ -1,3 +1,42 @@
 /**
  * Place your custom styles here.
  */
+
+/* Sign in block */
+#login-bar {
+    margin-top: 10px;
+    min-height: auto;
+    padding: 0;
+}
+
+#login-bar .form-item input.form-text {
+    width: auto;
+    display: inline;
+}
+
+#login-bar .form-item input.form-text {
+    height: 25px;
+}
+#login-bar .form-actions button.form-submit {
+    height: 25px;
+    padding: 0px 6px;
+    margin-top: -4px;
+}
+
+#login-bar .form-item,
+#login-bar .form-actions {
+    display: inline;
+}
+
+#login-bar #user-login-form {
+    float: right;
+}
+
+#login-bar #user-login-form > div > ul {
+    list-style: none;
+}
+#login-bar #user-login-form > div > ul li {
+    display: inline;
+    padding-right: 15px;
+    font-size: small;
+}
