@@ -243,6 +243,40 @@ drupalgap.settings.menus['user_menu_authenticated'] = {
   ]
 };
 
+// Main Menu
+/*drupalgap.settings.menus['main_menu'] = {
+  options: menu_popup_get_default_options(),
+  links: [
+    {
+      title:'Content',
+      path:'node',
+      options:{
+        attributes: {
+          'data-icon': 'star',
+          'class': 'ui-btn ui-btn-icon-right'
+        }
+      }
+    },
+    {
+      title:'Taxonomy',
+      path:'taxonomy/vocabularies',
+      options:{
+        attributes:{
+          'data-icon':'grid'
+        }
+      }
+    },
+    {
+      title:'Users',
+      path:'user-listing',
+      options:{
+        attributes:{
+          'data-icon':'info'
+        }
+      }
+    }
+  ]
+};*/
 
 /****************************************|
  * Blocks - http://drupalgap.org/node/83 |
@@ -264,7 +298,7 @@ drupalgap.settings.blocks.easystreet3 = {
         mode: 'include',
       }
     },
-    main_menu: { }
+    //main_menu: { }
   },
   sub_header: {
     title: { }
@@ -288,7 +322,7 @@ drupalgap.settings.menus.regions = {}; // Do not remove this line.
 drupalgap.settings.menus.regions['header'] = {
   links:[
     /* Main Menu Popup Menu Button */
-    {
+    /*{
       options: {
         popup: true,
         popup_delta: 'main_menu',
@@ -297,7 +331,7 @@ drupalgap.settings.menus.regions['header'] = {
           'data-icon': 'bars'
         }
       }
-    },
+    },*/
     /* Home Button */
     {
       path: '',
