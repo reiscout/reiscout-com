@@ -276,9 +276,7 @@ drupalgap.settings.blocks.easystreet3 = {
     messages: { },
     main: { }
   },
-  footer: {
-    powered_by: { }
-  }
+  footer: { }
 };
 
 /****************************************************|
