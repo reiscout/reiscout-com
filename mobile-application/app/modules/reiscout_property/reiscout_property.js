@@ -66,7 +66,7 @@ function reiscout_property_listing_row(view, row) {
     if (row.image.src) {
       var row_html = '';
       row_html += '<img src="' + row.image.src + '">';
-      if (row.address.length) {
+      if (row.address && row.address.length) {
         row_html += '<div class="address">' + row.address + '</div>';
       }
       row_html = l(row_html, 'node/' + row.nid);
