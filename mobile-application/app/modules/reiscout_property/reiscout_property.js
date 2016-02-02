@@ -40,7 +40,6 @@ function reiscout_property_menu() {
  */
 function reiscout_property_listing_page() {
   try {
-    console.log('go reiscout_property_listing_page');
     var content = {};
     content['reiscout_property_listing'] = {
       theme: 'view',
