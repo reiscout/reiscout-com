@@ -120,7 +120,7 @@ drupalgap.settings.title = 'Reiscout';
 drupalgap.settings.front = 'property-listing';
 
 // Theme
-drupalgap.settings.theme = 'reiscout1';
+drupalgap.settings.theme = 'reiscout';
 
 // Logo
 drupalgap.settings.logo = 'app/themes/reiscout/images/splashscreen-logo.png';
