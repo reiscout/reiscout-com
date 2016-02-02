@@ -120,10 +120,10 @@ drupalgap.settings.title = 'Reiscout';
 drupalgap.settings.front = 'property-listing';
 
 // Theme
-drupalgap.settings.theme = 'easystreet3';
+drupalgap.settings.theme = 'reiscout';
 
 // Logo
-drupalgap.settings.logo = 'themes/easystreet3/images/drupalgap.jpg';
+drupalgap.settings.logo = 'app/themes/reiscout/images/splashscreen-logo.png';
 
 // Offline Warning Message. Set to false to hide message.
 drupalgap.settings.offline_message = 'No connection found!';
@@ -284,7 +284,7 @@ drupalgap.settings.menus['user_menu_authenticated'] = {
 drupalgap.settings.blocks = {}; // Do not remove this line.
 
 // Easy Street 3 Theme Blocks
-drupalgap.settings.blocks.easystreet3 = {
+drupalgap.settings.blocks.reiscout = {
   header: {
     user_menu_anonymous: {
       roles: {
