@@ -41,7 +41,7 @@ function reiscout_geocoder_field_widget_form(form, form_state, field, instance, 
 
     items[delta].children.push({
       id: items[delta].id + '-btn',
-      text: t('Get current position'),
+      text: t('Get GPS Address'),
       type: 'button',
       options: {
         attributes: {

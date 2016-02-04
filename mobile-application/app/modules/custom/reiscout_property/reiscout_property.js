@@ -3,6 +3,7 @@
  */
 function reiscout_property_form_alter(form, form_state, form_id) {
   try {
+    debugger;
     if (form_id == 'node_edit' && form.bundle == 'property') {
       // On property node edit forms, hide title field and set some non-empty value
       // In will be autopopulated on server side on save.
