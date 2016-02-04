@@ -156,13 +156,13 @@ drupalgap.settings.loader = {
 
 /** Contributed Modules - www/app/modules **/
 Drupal.modules.contrib['geofield'] = {};
-Drupal.modules.contrib['reiscout_property'] = {};
 
 //Drupal.modules.contrib['example'] = {};
 
 /** Custom Modules - www/app/modules/custom **/
 Drupal.modules.custom['reiscout_editableaddress'] = {};
 Drupal.modules.custom['reiscout_geocoder'] = {};
+Drupal.modules.custom['reiscout_property'] = {};
 
 //Drupal.modules.custom['my_module'] = {};
 
