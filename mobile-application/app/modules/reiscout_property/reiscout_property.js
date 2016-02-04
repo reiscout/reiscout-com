@@ -9,6 +9,18 @@ function reiscout_property_form_alter(form, form_state, form_id) {
       form.elements['title'].prefix += '<div style="display: none;">';
       form.elements['title'].suffix += '</div>';
       form.elements['title'].default_value = 'value placeholder';
+
+      // Hide some fields fro now
+      var hide_fields = [
+        'field_owner_fname', 'field_owner_lname', 'field_owner_phone', 'field_owner_address'
+      ];
+      for (var i in hide_fields) {
+        var fieldname = hide_fields[i];
+        if (form.elements[fieldname]) {
+          form.elements[fieldname].prefix = '<div style="display: none;">';
+          form.elements[fieldname].suffix = '</div>';
+        }
+      }
     }
   }
   catch (error) {
