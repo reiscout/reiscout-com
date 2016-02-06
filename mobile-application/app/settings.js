@@ -156,11 +156,12 @@ drupalgap.settings.loader = {
 
 /** Contributed Modules - www/app/modules **/
 Drupal.modules.contrib['geofield'] = {};
-Drupal.modules.contrib['reiscout_property'] = {};
 
 //Drupal.modules.contrib['example'] = {};
 
 /** Custom Modules - www/app/modules/custom **/
+Drupal.modules.custom['reiscout_property'] = {};
+Drupal.modules.custom['reiscout_addressautocomplete'] = {};
 Drupal.modules.custom['reiscout_editableaddress'] = {};
 Drupal.modules.custom['reiscout_geocoder'] = {};
 
@@ -283,7 +284,7 @@ drupalgap.settings.menus['user_menu_authenticated'] = {
  ****************************************/
 drupalgap.settings.blocks = {}; // Do not remove this line.
 
-// Easy Street 3 Theme Blocks
+// Theme Blocks
 drupalgap.settings.blocks.reiscout = {
   header: {
     user_menu_anonymous: {

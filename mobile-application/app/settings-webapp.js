@@ -160,9 +160,10 @@ Drupal.modules.contrib['geofield'] = {};
 //Drupal.modules.contrib['example'] = {};
 
 /** Custom Modules - www/app/modules/custom **/
+Drupal.modules.custom['reiscout_property'] = {};
+Drupal.modules.custom['reiscout_addressautocomplete'] = {};
 Drupal.modules.custom['reiscout_editableaddress'] = {};
 Drupal.modules.custom['reiscout_geocoder'] = {};
-Drupal.modules.custom['reiscout_property'] = {};
 
 //Drupal.modules.custom['my_module'] = {};
 
