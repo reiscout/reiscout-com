@@ -3,7 +3,6 @@
  */
 function reiscout_property_form_alter(form, form_state, form_id) {
   try {
-    debugger;
     if (form_id == 'node_edit' && form.bundle == 'property') {
       // On property node edit forms, hide title field and set some non-empty value
       // In will be autopopulated on server side on save.
@@ -13,7 +12,14 @@ function reiscout_property_form_alter(form, form_state, form_id) {
 
       // Hide some fields fro now
       var hide_fields = [
-        'field_owner_fname', 'field_owner_lname', 'field_owner_phone', 'field_owner_address'
+        // hide owner fields
+        'field_owner_fname', 'field_owner_lname', 'field_owner_phone', 'field_owner_address',
+        // hide product field
+        'field_product',
+        // hide property info fields
+        'field_under_contract', 'field_arv', 	'field_repairs_price', 'field_mortgage_company', 'field_assessed_value',
+        'field_last_purchase_time', 'field_last_purchase_price', 'field_lot_size', 'field_bathrooms',
+        'field_bedrooms', 'field_size'
       ];
       for (var i in hide_fields) {
         var fieldname = hide_fields[i];
