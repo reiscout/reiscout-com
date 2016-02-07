@@ -8,17 +8,6 @@
     background-position: center;
 }
 
-/* Property node form */
-#node_add_property #node_edit .field-name-field-product {
-    display: none;
-}
-
-#node_add_property #node_edit .field-name-field-geo-position label,
-#node_add_property #node_edit .field-name-field-geo-position div {
-    /* show for now for debugging */
-    /* display: none; */
-}
-
 /* Styles for property listing */
 #reiscout_property_listing_view .view-row {
 	padding-bottom: 10px;
