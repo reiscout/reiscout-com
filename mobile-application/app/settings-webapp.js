@@ -123,7 +123,7 @@ drupalgap.settings.front = 'property-listing';
 drupalgap.settings.theme = 'reiscout';
 
 // Logo
-drupalgap.settings.logo = 'app/themes/reiscout/images/splashscreen-logo-transparent.png';
+drupalgap.settings.logo = 'app/themes/reiscout/images/splashscreen-logo.png';
 
 // Offline Warning Message. Set to false to hide message.
 drupalgap.settings.offline_message = 'No connection found!';
