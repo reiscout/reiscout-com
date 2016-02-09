@@ -342,7 +342,6 @@
       if (this.options.country){
         request.region = this.options.country;
       }
-      console.log(request);
       this.geocoder.geocode(request, $.proxy(this.handleGeocode, this));
     },
 
