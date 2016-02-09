@@ -15,7 +15,7 @@ Drupal.settings.debug = true;
 /* DRUPAL PATHS */
 
 // Site Path (do not use a trailing slash)
-Drupal.settings.site_path = 'http://reiscout.com'; // e.g. http://www.example.com
+Drupal.settings.site_path = 'http://reiscout.com.local'; // e.g. http://www.example.com
 
 // Default Services Endpoint Path
 Drupal.settings.endpoint = 'drupalgap';
@@ -102,7 +102,7 @@ Drupal.settings.cache.views = {
 // DrupalGap Mode (defaults to 'web-app')
 //  'web-app' - use this mode to build a web application for a browser window
 //  'phonegap' - use this mode to build a mobile application with phonegap
-drupalgap.settings.mode = 'phonegap';
+drupalgap.settings.mode = 'web-app';
 
 // Language Files - locale/[language-code].json
 drupalgap.settings.locale = {
