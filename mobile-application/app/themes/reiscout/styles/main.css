@@ -35,3 +35,8 @@
 	font-weight: 300;
 	text-shadow: 1px 1px 0 rgb(128, 141, 152);
 }
+
+/* Splash screen */
+#_drupalgap_splash_content {
+    text-align: center;
+}
