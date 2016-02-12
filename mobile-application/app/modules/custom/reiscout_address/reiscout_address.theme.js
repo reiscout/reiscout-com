@@ -1,5 +1,9 @@
 function theme_reiscout_address_hidden(variables) {
   try {
+    if (Drupal.settings.debug) {
+      console.log(['theme_reiscout_address_hidden', variables]);
+    }
+    
     var html = [
       '<div class="' + variables.name + '">',
         (variables.label.length ? '<div><h3>' + variables.label + '</h3></div>' : ''),
@@ -10,7 +14,7 @@ function theme_reiscout_address_hidden(variables) {
             options: {
               attributes: {
                 class: 'ui-link ui-btn ui-btn-b ui-btn-icon-left ui-icon-eye ui-btn-inline ui-shadow ui-corner-all',
-                onclick: 'javascript:_reiscout_address_user_request_address_info(this);',
+                onclick: 'javascript:_reiscout_address_user_request_address_info(this);'
               }
             }
           }),
@@ -37,6 +41,10 @@ function theme_reiscout_address_hidden(variables) {
 
 function theme_reiscout_address_editable(variables) {
   try {
+    if (Drupal.settings.debug) {
+      console.log(['theme_reiscout_address_editable', variables]);
+    }
+    
     var html = [
       '<div class="' + variables.name + '">',
         (variables.label.length ? '<div><h3>' + variables.label + '</h3></div>' : ''),
@@ -50,7 +58,7 @@ function theme_reiscout_address_editable(variables) {
               options: {
                 attributes: {
                   class: 'ui-link ui-btn ui-btn-b ui-icon-edit ui-btn-icon-notext ui-btn-inline ui-shadow ui-corner-all editable-edit',
-                  onclick: 'javascript:_reiscout_address_editable_address_form_show(this);',
+                  onclick: 'javascript:_reiscout_address_editable_address_form_show(this);'
                 }
               }
             }),
@@ -70,7 +78,7 @@ function theme_reiscout_address_editable(variables) {
               options: {
                 attributes: {
                   class: 'ui-link ui-btn ui-btn-b ui-icon-check ui-btn-icon-notext ui-btn-inline ui-shadow ui-corner-all editable-save',
-                  onclick: 'javascript:_reiscout_address_editable_address_form_save(this, ' + variables.nid +', \'' + variables.bundle + '\', \'' + variables.name + '\', \'' + variables.language + '\');',
+                  onclick: 'javascript:_reiscout_address_editable_address_form_save(this, ' + variables.nid +', \'' + variables.bundle + '\', \'' + variables.name + '\', \'' + variables.language + '\');'
                 }
               }
             }),
@@ -79,7 +87,7 @@ function theme_reiscout_address_editable(variables) {
               options: {
                 attributes: {
                   class: 'ui-link ui-btn ui-btn-b ui-icon-back ui-btn-icon-notext ui-btn-inline ui-shadow ui-corner-all editable-cancel',
-                  onclick: 'javascript:_reiscout_address_editable_address_form_cancel(this);',
+                  onclick: 'javascript:_reiscout_address_editable_address_form_cancel(this);'
                 }
               }
             }),
@@ -91,6 +99,6 @@ function theme_reiscout_address_editable(variables) {
     return html;
   }
   catch (error) {
-    console.log('theme_reiscout_address_hidden - ' + error);
+    console.log('theme_reiscout_address_editable - ' + error);
   }
 }

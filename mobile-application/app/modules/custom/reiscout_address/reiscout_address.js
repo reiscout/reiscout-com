@@ -137,7 +137,7 @@ function reiscout_address_field_widget_form(form, form_state, field, instance, l
           jqm_page_event: 'pageshow',
           jqm_page_event_callback: '_reiscout_address_geocomplete_field_pageshow',
           jqm_page_event_args: JSON.stringify({
-              geocomplete_id: items[delta].id,
+              geocomplete_id: items[delta].id
           })
         })
       });
