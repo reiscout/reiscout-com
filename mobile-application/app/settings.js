@@ -161,9 +161,12 @@ Drupal.modules.contrib['geofield'] = {};
 
 /** Custom Modules - www/app/modules/custom **/
 Drupal.modules.custom['reiscout_property'] = {};
-Drupal.modules.custom['reiscout_addressautocomplete'] = {};
-Drupal.modules.custom['reiscout_editableaddress'] = {};
-Drupal.modules.custom['reiscout_geocoder'] = {};
+Drupal.modules.custom['reiscout_address'] = {
+  includes: [
+    {name: 'reiscout_address.theme'},
+    {name: 'reiscout_address.forms'}
+  ]
+};
 
 //Drupal.modules.custom['my_module'] = {};
 
