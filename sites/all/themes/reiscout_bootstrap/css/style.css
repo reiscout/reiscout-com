@@ -40,3 +40,9 @@
     padding-right: 15px;
     font-size: small;
 }
+
+/* Property listing */
+.view-property-listing .views-field-field-image img {
+    margin: auto;
+    margin-bottom: 2em;
+}
