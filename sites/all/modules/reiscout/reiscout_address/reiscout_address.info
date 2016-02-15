@@ -1,5 +1,6 @@
 name = Reiscout Address
-description = Handle addresses appearance.
-package = Reiscout
 core = 7.x
-files[] = reiscout_address.module
+package = Reiscout
+dependencies[] = flag
+features[features_api][] = api:2
+features[flag][] = reiscout_address_viewed_by_user

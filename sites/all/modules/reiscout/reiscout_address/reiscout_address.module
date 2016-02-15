@@ -1,4 +1,10 @@
 <?php
+/**
+ * @file
+ * Code for the Reiscout Address feature.
+ */
+
+include_once 'reiscout_address.features.inc';
 
 define('REISCOUT_ADDRESS_VIEWED_FLAG', 'reiscout_address_viewed_by_user');
 
@@ -100,3 +106,4 @@ function reiscout_address_user_has_view($nid, $uid) {
 function reiscout_address_get_address($node) {
   return $node->field_address_text[LANGUAGE_NONE][0]['value'];
 }
+
