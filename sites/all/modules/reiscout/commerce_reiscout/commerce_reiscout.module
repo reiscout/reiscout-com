@@ -58,6 +58,7 @@ function commerce_reiscout_get_user_purchased_picture_nids() {
  * Implements hook_field_access.
  */
 function commerce_reiscout_field_access($op, $field, $entity_type, $entity, $account) {
+  return;
 
   // Do nothing if current user is admin
   if ($account->uid == 1) {
