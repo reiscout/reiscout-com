@@ -1,0 +1,5 @@
+name = Reiscout Address
+description = Handle addresses appearance.
+package = Reiscout
+core = 7.x
+files[] = reiscout_address.module

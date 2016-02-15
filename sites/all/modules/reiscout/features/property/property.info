@@ -3,7 +3,6 @@ core = 7.x
 package = Reiscout
 dependencies[] = auto_entitylabel
 dependencies[] = commerce_cart
-dependencies[] = commerce_reiscout
 dependencies[] = editableapi
 dependencies[] = features
 dependencies[] = field_group
