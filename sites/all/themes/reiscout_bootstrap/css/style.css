@@ -46,3 +46,8 @@
     margin: auto;
     margin-bottom: 2em;
 }
+
+/* Property page */
+.node-type-property h1.page-header {
+    display: none;
+}
