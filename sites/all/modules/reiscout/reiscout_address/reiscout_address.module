@@ -9,6 +9,46 @@ include_once 'reiscout_address.features.inc';
 define('REISCOUT_ADDRESS_VIEWED_FLAG', 'reiscout_address_viewed_by_user');
 
 /**
+ * Implements hook_services_resources().
+ */
+function reiscout_address_services_resources() {
+  $file = array(
+    'type'   => 'inc',
+    'module' => 'reiscout_address',
+    'name'   => 'reiscout_address.resource'
+  );
+
+  $resource = array(
+    'addressapi' => array(
+      'actions' => array(
+        'setview' => array(
+          'help' => t('Save view address click statistics.'),
+          'callback' => 'reiscout_address_resource_action_view_address',
+          'access callback' => 'reiscout_address_resource_access',
+          'file' => $file,
+          'args' => array(
+            array(
+              'name' => 'nid',
+              'optional' => FALSE,
+              'source' => array('data' => 'nid'),
+              'type' => 'int',
+            ),
+          ),
+        )
+      ),
+    ),
+  );
+
+  return $resource;
+}
+
+function reiscout_address_resource_access($nid) {
+  $node = node_load($nid);
+
+  return ($node && $node->type === 'property' && !user_is_anonymous());
+}
+
+/**
  * Implements hook_menu
  *
  * ajax callback to show the modal or place address
@@ -46,7 +86,7 @@ function reiscout_address_button_ajax_callback($js = NULL, $node) {
   } else {
     $account = $GLOBALS['user'];
     $address = reiscout_address_get_address($node);
-    reiscout_address_set_view($node->nid, $account->uid);
+    reiscout_address_set_view($node->nid);
     $commands[] = ajax_command_html('#address-ajax-placeholder', $address);
     print ajax_render($commands); // this function exits.
     exit;
@@ -62,9 +102,8 @@ function reiscout_address_button_ajax_callback($js = NULL, $node) {
  */
 function reiscout_address_node_view ($node, $view_mode, $langcode) {
   if ($view_mode == 'full' && $node->type == 'property') {
-    $account = $GLOBALS['user'];
     // For authorized user who have the flag (already viewed the address) show the address
-    if (!user_is_anonymous() && reiscout_address_user_has_view($node->nid, $account->uid)) {
+    if (!user_is_anonymous() && reiscout_address_user_has_view($node->nid)) {
       return;
     }
 
@@ -83,15 +122,14 @@ function reiscout_address_node_view ($node, $view_mode, $langcode) {
 /*
  * set the flag that node has been viewed by the user
  */
-function reiscout_address_set_view($nid, $uid) {
-  // It returns false if pass uid argument to it.
-  flag('flag', REISCOUT_ADDRESS_VIEWED_FLAG, $nid);
+function reiscout_address_set_view($nid, $account = NULL) {
+  return flag('flag', REISCOUT_ADDRESS_VIEWED_FLAG, $nid, $account);
 }
 
 /*
  * set the flag that node has been viewed by the user
  */
-function reiscout_address_user_has_view($nid, $uid) {
+function reiscout_address_user_has_view($nid, $uid = null) {
   $flags = flag_get_user_flags('node', $nid, $uid);
   if (array_key_exists(REISCOUT_ADDRESS_VIEWED_FLAG, $flags)) {
     return TRUE;

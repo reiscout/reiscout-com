@@ -237,6 +237,7 @@ function reiscout_address_entity_post_render_field(entity, field_name, field, re
         }
         else {
           reference.content = theme('reiscout_address_hidden', {
+            nid: entity.nid,
             label: label,
             name: field_name,
             value: value
@@ -433,7 +434,7 @@ function _reiscout_address_property_address_pageshow(options) {
       console.log(['_reiscout_address_property_address_pageshow', options]);
     }
 
-    $(options.selector).data('address', options.address);
+    $(options.selector).data('address', options.address).data('nid', options.nid);
   }
   catch (error) {
     console.log('_reiscout_address_property_address_pageshow - ' + error);
@@ -451,8 +452,29 @@ function _reiscout_address_user_request_address_info(button) {
     }
     else {
       var container = $(button).parent().parent();
-      container.find('.address-value').text(container.find('.address-value').data('address'));
+      var address = container.find('.address-value');
+      address.text(address.data('address'));
       container.find('.address-button').hide();
+
+      Drupal.services.call({
+        method: 'POST',
+        path: 'addressapi/setview.json',
+        service: 'addressapi',
+        resource: 'setview',
+        data: JSON.stringify({
+          nid: address.data('nid')
+        }),
+        success: function(result) {
+          if (Drupal.settings.debug) {
+            console.log(['_reiscout_address_user_request_address_info.success', result]);
+          }
+        },
+        error: function(xhr, status, message) {
+          if (Drupal.settings.debug) {
+            console.log(['_reiscout_address_user_request_address_info.error', xhr, status, message]);
+          }
+        }
+      });
     }
   }
   catch (error) {

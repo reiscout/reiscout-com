@@ -28,7 +28,8 @@ function theme_reiscout_address_hidden(variables) {
         jqm_page_event_callback: '_reiscout_address_property_address_pageshow',
         jqm_page_event_args: JSON.stringify({
             selector: '.' + variables.name + ' .address-value',
-            address: variables.value
+            address: variables.value,
+            nid: variables.nid
         })
     });
 
