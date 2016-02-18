@@ -45,7 +45,17 @@ function reiscout_address_services_resources() {
 function reiscout_address_resource_access($nid) {
   $node = node_load($nid);
 
-  return ($node && $node->type === 'property' && !user_is_anonymous());
+  return ($node && $node->type === 'property' && !user_is_anonymous() && $node->uid !== $GLOBALS['user']->uid);
+}
+
+function reiscout_address_entity_load($entities, $type) {
+  if ($type === 'node' && !user_is_anonymous()) {
+    foreach ($entities as $entity) {
+      if ($entity->type === 'property') {
+        $entity->_flag_is_user_has_view = ($entity->uid === $GLOBALS['user']->uid || reiscout_address_user_has_view($entity->nid));
+      }
+    }
+  }
 }
 
 /**
@@ -103,7 +113,7 @@ function reiscout_address_button_ajax_callback($js = NULL, $node) {
 function reiscout_address_node_view ($node, $view_mode, $langcode) {
   if ($view_mode == 'full' && $node->type == 'property') {
     // For authorized user who have the flag (already viewed the address) show the address
-    if (!user_is_anonymous() && reiscout_address_user_has_view($node->nid)) {
+    if (!user_is_anonymous() && ($node->uid === $GLOBALS['user']->uid || reiscout_address_user_has_view($node->nid))) {
       return;
     }
 

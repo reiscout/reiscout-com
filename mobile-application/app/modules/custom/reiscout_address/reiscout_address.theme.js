@@ -10,7 +10,7 @@ function theme_reiscout_address_hidden(variables) {
         '<span class="address-value"></span>',
         '<span class="address-button">',
           theme('button_link', {
-            text: t('Get Address'),
+            text: t('Show Address and Owner Info'),
             options: {
               attributes: {
                 class: 'ui-link ui-btn ui-btn-b ui-btn-icon-left ui-icon-eye ui-btn-inline ui-shadow ui-corner-all',
@@ -29,7 +29,8 @@ function theme_reiscout_address_hidden(variables) {
         jqm_page_event_args: JSON.stringify({
             selector: '.' + variables.name + ' .address-value',
             address: variables.value,
-            nid: variables.nid
+            nid: variables.nid,
+            fields: variables.fields || []
         })
     });
 
@@ -37,6 +38,36 @@ function theme_reiscout_address_hidden(variables) {
   }
   catch (error) {
     console.log('theme_reiscout_address_hidden - ' + error);
+  }
+}
+
+function theme_reiscout_address_hidden_field(variables) {
+  try {
+    if (Drupal.settings.debug) {
+      console.log(['theme_reiscout_address_hidden_field', variables]);
+    }
+
+    var html = [
+      '<div class="' + variables.name + '" style="display:none;">',
+        (variables.label.length ? '<div><h3>' + variables.label + '</h3></div>' : ''),
+        '<span class="value"></span>',
+      '</div>'
+    ].join('');
+
+    html += drupalgap_jqm_page_event_script_code({
+        page_id: drupalgap_get_page_id(),
+        jqm_page_event: 'pageshow',
+        jqm_page_event_callback: '_reiscout_address_property_hidden_pageshow',
+        jqm_page_event_args: JSON.stringify({
+            selector: '.' + variables.name + ' .value',
+            value: variables.value
+        })
+    }, variables.delta);
+
+    return html;
+  }
+  catch (error) {
+    console.log('theme_reiscout_address_hidden_field - ' + error);
   }
 }
 
