@@ -40,3 +40,13 @@
 #_drupalgap_splash_content {
     text-align: center;
 }
+
+/* Property page */
+.node.node-view h2 {
+    display: none;
+}
+
+.node.ui-page .region_sub_header {
+    display: none;
+}
+
