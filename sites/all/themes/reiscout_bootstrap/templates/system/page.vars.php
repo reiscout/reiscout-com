@@ -15,7 +15,7 @@
  */
 function reiscout_bootstrap_preprocess_page(&$variables) {
     $sign_in_block = user_block_view('login');
-    if (0 && $sign_in_block) {
+    if ($sign_in_block) {
         $sign_in_block['content']['actions']['#weight'] = 9;
         $sign_in_block['content']['links']['#weight'] = 10;
         $variables['login_block'] = $sign_in_block;
