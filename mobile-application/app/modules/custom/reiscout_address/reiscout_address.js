@@ -523,7 +523,7 @@ function _reiscout_address_goto_destination(path, forward) {
       path = drupalgap.settings.front;
     }
 
-    drupalgap_goto(path);
+    drupalgap_goto(path, {reloadPage: true});
   }
   catch (error) {
     console.log('_reiscout_address_goto_destination - ' + error);

@@ -11744,7 +11744,7 @@ function user_logout_pagechange() {
   try {
     user_logout({
       success: function(data) {
-        drupalgap_goto(drupalgap.settings.front);
+        drupalgap_goto(drupalgap.settings.front, {reloadPage: true});
       }
     });
   }
