@@ -3,6 +3,7 @@ cordova*js
 #app/themes/*
 #app/settings.js
 app/.gitignore
+app/settings-webapp-local.js
 app/README.*
 res
 #config.xml
