@@ -122,6 +122,18 @@ function _comment_resource_definition() {
               'default value' => variable_get('services_comment_index_page_size', 20),
               'source' => array('param' => 'pagesize'),
             ),
+            array(
+              'name' => 'options',
+              'optional' => TRUE,
+              'type' => 'array',
+              'description' => 'Additional query options.',
+              'default value' => array(
+                'orderby' => array(
+                  'created' => 'DESC'
+                )
+              ),
+              'source' => array('param' => 'options'),
+            ),
           ),
           'access callback' => '_comment_resource_access',
           'access arguments' => array('view'),
@@ -208,7 +220,7 @@ function _comment_resource_create($comment) {
   }
 
   $comment_empty = (object) $comment_empty;
-
+  $form_state['programmed_bypass_access_check'] = FALSE;
   $ret = drupal_form_submit('comment_form', $form_state, $comment_empty);
 
   // Error if needed.
@@ -233,7 +245,13 @@ function _comment_resource_create($comment) {
  *   The comment object
  */
 function _comment_resource_retrieve($cid) {
-  return comment_load($cid);
+
+  $comment = comment_load($cid);
+
+  //Lets check field_permissions
+  $comment = services_field_permissions_clean('view', 'comment', $comment);
+
+  return $comment;
 }
 
 /**
@@ -260,7 +278,8 @@ function _comment_resource_update($cid, $comment) {
   $form_state['values'] = $comment;
   $form_state['values']['op'] = variable_get('services_comment_save_button_resource_update', t('Save'));
   $form_state['comment'] = $old_comment;
-
+  $form_state['programmed_bypass_access_check'] = FALSE;
+  
   drupal_form_submit('comment_form', $form_state, $old_comment);
 
   if ($errors = form_get_errors()) {
@@ -314,16 +333,17 @@ function _comment_resource_delete($cid) {
  *   indicating items to retrieve.
  * @param $page_size
  *   Integer number of items to be returned.
+ * @param $options
+ *   Additional query options.
  * @return
  *   An array of comment objects.
  *
  * @see _node_resource_index() for more notes
  **/
-function _comment_resource_index($page, $fields, $parameters, $page_size) {
-  $comment_select = db_select('comment', 't')
-    ->orderBy('created', 'DESC');
+function _comment_resource_index($page, $fields, $parameters, $page_size, $options = array()) {
+  $comment_select = db_select('comment', 't');
 
-  services_resource_build_index_query($comment_select, $page, $fields, $parameters, $page_size, 'comment');
+  services_resource_build_index_query($comment_select, $page, $fields, $parameters, $page_size, 'comment', $options);
 
   if (!user_access('administer comments')) {
     $comment_select->condition('status', COMMENT_PUBLISHED);
@@ -389,9 +409,11 @@ function _comment_resource_access($op = 'view', $args = array()) {
     case 'view':
       // Check if the user has access to comments
       return user_access('access comments');
-    case 'create':
     case 'delete':
+      return user_access('administer comments');
     case 'edit':
+      return comment_access('edit', $comment);
+    case 'create':
       // Check if the user may post comments, node has comments enabled
       // and that the user has access to the node.
       return user_access('post comments') && ($node->comment == COMMENT_NODE_OPEN);

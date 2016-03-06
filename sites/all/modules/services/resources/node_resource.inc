@@ -116,6 +116,19 @@ function _node_resource_definition() {
               'default value' => variable_get('services_node_index_page_size', 20),
               'source' => array('param' => 'pagesize'),
             ),
+            array(
+              'name' => 'options',
+              'optional' => TRUE,
+              'type' => 'array',
+              'description' => 'Additional query options.',
+              'default value' => array(
+                'orderby' => array(
+                  'sticky' => 'DESC',
+                  'created' => 'DESC'
+                )
+              ),
+              'source' => array('param' => 'options'),
+            ),
           ),
           'access arguments' => array('access content'),
         ),
@@ -259,6 +272,8 @@ function _node_resource_retrieve($nid) {
     // cause never ending recursion in rendering.
     unset($node->uri);
   }
+  //Lets check field_permissions
+  $node = services_field_permissions_clean('view', 'node', $node);
   return $node;
 }
 
@@ -278,13 +293,14 @@ function _node_resource_retrieve($nid) {
  * @see drupal_form_submit()
  */
 function _node_resource_create($node) {
+  global $user;
   // Adds backwards compatability with regression fixed in #1083242
   $node = _services_arg_value($node, 'node');
-
   if (!isset($node['name'])) {
     // Assign username to the node from $user created at auth step.
-    global $user;
-    $node['name'] = $user->name;
+    if (isset($user->name)) {
+      $node['name'] = $user->name;
+    }
   }
   if(!isset($node['language'])) {
     $node['language'] = LANGUAGE_NONE;
@@ -302,8 +318,22 @@ function _node_resource_create($node) {
   $form_state = array();
   $form_state['values'] = $node;
   $form_state['values']['op'] = variable_get('services_node_save_button_' . $node_type . '_resource_create', t('Save'));
+  $form_state['programmed_bypass_access_check'] = FALSE;
 
-  drupal_form_submit($node_type . '_node_form', $form_state, (object)$node);
+  // Build a stub node object for the form in a similar way as node_add() does,
+  // but always make the node author default to the current user (if the user
+  // has permission to change it, $form_state['values'] will override this
+  // default when the form is submitted).
+  $stub_node = (object) array_intersect_key($node, array_flip(array('type', 'language')));
+  $stub_node->name = $user->name;
+
+  // Contributed modules may check the triggering element in the form state.
+  // The triggering element is usually set from the browser's POST request, so
+  // we'll automatically set it as the submit action from here.
+  $stub_form = drupal_get_form($node_type . '_node_form', (object) $stub_node);
+  $form_state['triggering_element'] = $stub_form['actions']['submit'];
+
+  drupal_form_submit($node_type . '_node_form', $form_state, (object)$stub_node);
 
   if ($errors = form_get_errors()) {
     return services_error(implode(" ", $errors), 406, array('form_errors' => $errors));
@@ -392,6 +422,14 @@ function _node_resource_update($nid, $node) {
   $form_state['values'] = $node;
   $form_state['values']['op'] = variable_get('services_node_save_button_' . $node_type . '_resource_update', t('Save'));
   $form_state['node'] = $old_node;
+  $form_state['programmed_bypass_access_check'] = FALSE;
+
+  // Contributed modules may check the triggering element in the form state.
+  // The triggering element is usually set from the browser's POST request, so
+  // we'll automatically set it as the submit action from here.
+  $stub_form = drupal_get_form($node_type . '_node_form', (object) $old_node);
+  $form_state['triggering_element'] = $stub_form['actions']['submit'];
+
   drupal_form_submit($node_type . '_node_form', $form_state, $old_node);
 
   if ($errors = form_get_errors()) {
@@ -437,6 +475,8 @@ function _node_resource_delete($nid) {
  *   indicating items to retrieve.
  * @param $page_size
  *   Integer number of items to be returned.
+ * @param $options
+ *   Additional query options.
  * @return
  *   An array of node objects.
  *
@@ -446,14 +486,11 @@ function _node_resource_delete($nid) {
  *     - Is there an easier syntax we can define which can make the urls
  *       for index requests more straightforward?
  */
-function _node_resource_index($page, $fields, $parameters, $page_size) {
-  module_load_include('inc', 'services', 'services.module');
+function _node_resource_index($page, $fields, $parameters, $page_size, $options = array()) {
   $node_select = db_select('node', 't')
-    ->addTag('node_access')
-    ->orderBy('sticky', 'DESC')
-    ->orderBy('created', 'DESC');
+    ->addTag('node_access');
 
-  services_resource_build_index_query($node_select, $page, $fields, $parameters, $page_size, 'node');
+  services_resource_build_index_query($node_select, $page, $fields, $parameters, $page_size, 'node', $options);
 
   if (!user_access('administer nodes')) {
     $node_select->condition('status', 1);
@@ -582,7 +619,15 @@ function _node_resource_load_node_comments($nid, $count = 0, $start = 0) {
     $cids[] = $record->cid;
   }
 
-  return !empty($cids) ? comment_load_multiple($cids) : array();
+  !empty($cids) ? $comments = comment_load_multiple($cids) : array();
+
+  $return_comments = array();
+
+  foreach ($comments as $comment) {
+    $return_comments[] = services_field_permissions_clean('view', 'comment', $comment);
+  }
+
+  return $return_comments;
 }
 
 /**
@@ -652,13 +697,13 @@ function _node_resource_attach_file($nid, $field_name, $attach, $field_values) {
       }
     }
 
-    $counter++;
     $node->{$field_name}[LANGUAGE_NONE][$counter] = (array)$file_obj;
     // Check the field display settings.
     if (isset($field['settings']['display_field'])) {
       // Set the display option.
       $node->{$field_name}[LANGUAGE_NONE][$counter]['display'] = $field['settings']['display_field'];
     }
+    $counter++;
   }
 
   node_save($node);
