@@ -37,7 +37,7 @@
       
       <!-- DrupalGap -->
       <script type="text/javascript" charset="utf-8" src="bin/drupalgap-7.x-1.3.min.js"></script>
-      <!--<script type="text/javascript" charset="utf-8" src="app/settings-webapp.js"></script>-->
+      <script type="text/javascript" charset="utf-8" src="app/settings-webapp.js"></script>
       <link rel="stylesheet" href="drupalgap.css" />
 
       <!-- Reiscout !-->
@@ -45,24 +45,6 @@
 
     </head>
     <body>
-
-    <script>
-        function UrlExists(url) {
-            var http = new XMLHttpRequest();
-            http.open('HEAD', url, false);
-            http.send();
-            return http.status != 404;
-        }
-
-        var script = document.createElement("script");
-        script.type = "text/javascript";
-        if (UrlExists('app/settings-webapp-local.js')) {
-            script.src = "app/settings-webapp-local.js";
-        } else {
-            script.src = "app/settings-webapp.js";
-        }
-        document.head.appendChild(script);
-    </script>
 
       <!-- Mobile Application Splash Screen -->
       <div id="_drupalgap_splash" data-role="page">
