@@ -453,7 +453,7 @@ function property_field_default_field_instances() {
         'module' => 'image',
         'settings' => array(
           'image_link' => '',
-          'image_style' => 'mobapp_property_page',
+          'image_style' => 'medium',
         ),
         'type' => 'image',
         'weight' => 0,
@@ -463,7 +463,7 @@ function property_field_default_field_instances() {
         'module' => 'image',
         'settings' => array(
           'image_link' => '',
-          'image_style' => '',
+          'image_style' => 'medium',
         ),
         'type' => 'image',
         'weight' => 0,
