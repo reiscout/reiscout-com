@@ -18,7 +18,7 @@ $Id: build.xml 2955 2007-07-09 12:12:27Z steven $
      from which Ant executes the requested task.  This is normally
      set to the current working directory.
 -->
-  <project basedir=".." default="dist" name="proj4js">
+  <project basedir="../../" default="dist" name="proj4js">
 
 <!-- ===================== Property Definitions =========================== -->
 <!--
