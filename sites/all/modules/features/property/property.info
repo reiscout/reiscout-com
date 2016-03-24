@@ -73,6 +73,7 @@ features[image][] = property_listing
 features[image][] = property_page
 features[node][] = property
 features[rules_config][] = rules_address_reverse_geocode
+features[rules_config][] = rules_set_created_property_node_staus_to_published
 features[variable][] = auto_entitylabel_node_property
 features[variable][] = auto_entitylabel_pattern_node_property
 features[variable][] = auto_entitylabel_php_node_property

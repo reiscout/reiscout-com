@@ -48,5 +48,15 @@ function property_default_rules_configuration() {
       ]
     }
   }');
+  $items['rules_set_created_property_node_staus_to_published'] = entity_import('rules_config', '{ "rules_set_created_property_node_staus_to_published" : {
+      "LABEL" : "Set created property node staus to published",
+      "PLUGIN" : "reaction rule",
+      "OWNER" : "rules",
+      "TAGS" : [ "reiscout" ],
+      "REQUIRES" : [ "rules" ],
+      "ON" : { "node_insert--property" : { "bundle" : "property" } },
+      "DO" : [ { "node_publish" : { "node" : [ "node" ] } } ]
+    }
+  }');
   return $items;
 }
