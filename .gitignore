@@ -7,3 +7,12 @@ sites/*/private
 
 # Ignore Netbeans project directory
 nbproject
+
+.DS_Store
+*/.DS_Store
+
+.swp
+*/.DS_Store
+
+.idea
+*/.idea
