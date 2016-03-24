@@ -1,0 +1,5 @@
+name = Reiscout Property Commerce
+description = Commerce behaviour cistomization related to property content type.
+package = Reiscout
+core = 7.x
+files[] = reiscout_property_commerce.module

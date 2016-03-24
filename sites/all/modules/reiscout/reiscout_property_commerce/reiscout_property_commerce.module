@@ -1,0 +1,131 @@
+<?php
+
+/**
+ * @file
+ * Customize commerce modules behaviours for reiscout project needs.
+ *
+ * Implements address access control.
+ */
+
+define('REISCOUT_PROPERTY_COMMERCE_NODE_TYPE', 'property');
+define('REISCOUT_PROPERTY_COMMERCE_ADDRESS_ACCESS_PRODUCT_SKU', 'property-address-access');
+define('REISCOUT_PROPERTY_COMMERCE_ADDRESS_ACCESS_PRODUCT_ID', 1);
+define('REISCOUT_PROPERTY_COMMERCE_OWNER_INFO_PRODUCT_SKU', 'property-owner-info-for-seller');
+define('REISCOUT_PROPERTY_COMMERCE_OWNER_INFO_PRODUCT_ID', 2);
+
+require_once 'reiscout_property_commerce.inc';
+
+/**
+ * List of fields to sell access to
+ */
+function reiscout_property_commerce_fields_access_to_sell() {
+  return array(
+    'field_address_text',
+  );
+}
+
+/**
+ * Implements hook_field_access.
+ */
+function reiscout_property_commerce_field_access($op, $field, $entity_type, $entity, $account) {
+
+  // Show property address fields only for
+  // - admin role
+  // - property owner
+  // - user purchased the address
+
+  // Do nothing if current user is admin
+  if ($account->uid == 1) {
+    return;
+  }
+
+  // Access control for field_address in picture node.
+  if ($op == 'view' && $entity_type == 'node' && !empty($entity->type) && $entity->type == COMMERCE_REISCOUT_PROPERTY_NODE_TYPE
+  &&  in_array($field['field_name'], reiscout_property_commerce_fields_access_to_sell() ) ) {
+
+    // Allow access if user is an author.
+    if ($entity->uid == $account->uid) {
+      return TRUE;
+    }
+
+    // Allow access if user purchased the node.
+    if (in_array($entity->nid, reiscout_property_commerce_get_user_purchased_picture_nids())) {
+      return TRUE;
+    }
+
+    // Deny access otherwise
+    return FALSE;
+  }
+}
+
+/**
+ * Implements hook_form_alter().
+ */
+function reiscout_property_commerce_form_property_node_form_alter(&$form, &$form_state, $form_id) {
+  //dpm(func_get_args(), __FUNCTION__);
+  $form['field_product']['#access'] = FALSE;
+}
+
+function reiscout_property_commerce_node_presave($node) {
+  //dpm($node, __FUNCTION__);
+  if (!$node->type == 'REISCOUT_PROPERTY_COMMERCE_NODE_TYPE') {
+    return;
+  }
+  $node->field_product[LANGUAGE_NONE] = array(
+    0 => array('product_id' => REISCOUT_PROPERTY_COMMERCE_ADDRESS_ACCESS_PRODUCT_ID),
+    1 => array('product_id' => REISCOUT_PROPERTY_COMMERCE_OWNER_INFO_PRODUCT_ID),
+  );
+
+}
+
+function reiscout_property_commerce_form_alter(&$form, &$form_state, $form_id) {
+
+  if ('commerce_cart_add_to_cart_form_1_2' == $form_id) {
+    dpm(func_get_args(), __FUNCTION__);
+
+
+
+    $node = node_load($form_state['context']['entity_id']);
+    $product_to_buy = '';
+    // Check to allow user to buy owner info
+    if ($node->uid == $GLOBALS['user']->uid
+      && !reiscout_property_commerce_is_display_node_purchased ($GLOBALS['user']->uid, $node->nid, REISCOUT_PROPERTY_COMMERCE_OWNER_INFO_PRODUCT_SKU)) {
+      $product_to_buy = 'owner_info';
+    }
+
+    // Check to allow user to buy an address
+    if ($node->uid != $GLOBALS['user']->uid
+      && !reiscout_property_commerce_is_display_node_purchased ($GLOBALS['user']->uid, $node->nid, REISCOUT_PROPERTY_COMMERCE_ADDRESS_ACCESS_PRODUCT_SKU)) {
+      $product_to_buy = 'address';
+    }
+
+    if ($product_to_buy == 'owner_info') {
+      $form['product_id']['#default_value'] = REISCOUT_PROPERTY_COMMERCE_OWNER_INFO_PRODUCT_ID;
+      $form['product_id']['#access'] = FALSE;
+      $price = reiscout_property_commerce_get_owner_info_price();
+      $form['submit']['#value'] = t('Request us to collect an Owner Info for @price @cur',
+        array(
+          '@price' =>  commerce_currency_amount_to_decimal($price['amount'], $price['currency_code']),
+          '@cur' => $price['currency_code'],
+        )
+      );
+    } elseif ($product_to_buy == 'address') {
+      $form['product_id']['#default_value'] = REISCOUT_PROPERTY_COMMERCE_ADDRESS_ACCESS_PRODUCT_ID;
+      $form['product_id']['#access'] = FALSE;
+
+      $price = reiscout_property_commerce_get_property_address_price($node);
+      $form['submit']['#value'] = t('Buy Property Address for @price @cur',
+        array(
+          '@price' => commerce_currency_amount_to_decimal($price['amount'], $price['currency_code']),
+          '@cur' => $price['currency_code'],
+        )
+      );
+    } elseif (user_access('administer site configuration')) {
+      // Do nothing
+    } else {
+      $form['#access'] = FALSE;
+    }
+
+  }
+
+}
