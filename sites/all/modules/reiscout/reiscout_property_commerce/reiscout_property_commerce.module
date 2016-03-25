@@ -81,9 +81,10 @@ function reiscout_property_commerce_node_presave($node) {
 function reiscout_property_commerce_form_alter(&$form, &$form_state, $form_id) {
 
   if ('commerce_cart_add_to_cart_form_1_2' == $form_id) {
-    dpm(func_get_args(), __FUNCTION__);
-
-
+    // Do nothing for admin
+    if (user_access('administer site configuration')) {
+      return;
+    }
 
     $node = node_load($form_state['context']['entity_id']);
     $product_to_buy = '';
@@ -120,12 +121,9 @@ function reiscout_property_commerce_form_alter(&$form, &$form_state, $form_id) {
           '@cur' => $price['currency_code'],
         )
       );
-    } elseif (user_access('administer site configuration')) {
-      // Do nothing
     } else {
       $form['#access'] = FALSE;
     }
-
   }
 
 }
