@@ -15,7 +15,7 @@ Drupal.settings.debug = true;
 /* DRUPAL PATHS */
 
 // Site Path (do not use a trailing slash)
-Drupal.settings.site_path = 'http://reiscout.dev'; // e.g. http://www.example.com
+Drupal.settings.site_path = 'http://reiscout.com'; // e.g. http://www.example.com
 
 // Default Services Endpoint Path
 Drupal.settings.endpoint = 'drupalgap';
@@ -173,6 +173,8 @@ Drupal.modules.custom['reiscout_address'] = {
 
 //Drupal.modules.custom['my_module'] = {};
 
+drupalgap.settings.stripe_api_key = 'pk_test_wbtsk9Um4YdkftiHOgfcPUWF';
+
 /***************************************|
  * Menus - http://drupalgap.org/node/85 |
  ***************************************/
@@ -310,19 +312,19 @@ drupalgap.settings.blocks.reiscout = {
   },
   sub_header: {
     title: { },
+  },
+  navigation: {
     commerce_cart: {
       pages: {
         mode: 'exclude',
         value: ['cart', 'checkout/*', 'checkout/shipping/*']
       }
-    }
-  },
-  navigation: {
-    primary_local_tasks: { }
+    },
+    primary_local_tasks: { },
   },
   content: {
     messages: { },
-    main: { }
+    main: { },
   },
   footer: { }
 };

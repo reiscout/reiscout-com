@@ -656,7 +656,7 @@ function commerce_cart_add_to_cart_form(form, form_state, product_display) {
     if (product_display[product_entities_field_name]) {
       
       //dpm('commerce_product field_info_instances');
-      var field_info_instances = drupalgap_field_info_instances('commerce_product', product_display.type);
+      var field_info_instances = drupalgap_field_info_instances('node', product_display.type);
       if (!field_info_instances) {
         // Failed to load the instances, throw some informative warnings.
         dpm('WARNING: commerce_cart_add_to_cart_form() - no field instances were located for ' + product_display.type + '');
@@ -767,6 +767,7 @@ function commerce_cart_add_to_cart_form(form, form_state, product_display) {
       type: 'submit',
       value: 'Add to cart'
     };
+    console.log('form >>', form);
     return form;
   }
   catch (error) { console.log('commerce_cart_add_to_cart_form - ' + error); }
@@ -835,6 +836,10 @@ function _commerce_cart_attribute_change() {
  */
 function _commerce_product_display_get_current_product_id() {
   try {
+
+    // Just return product id '1' until I fix it.
+    return 1;
+
     // Iterate over each attribute on the page, pull out the field_name and
     // value, and set them aside, so they can later be used to determine which
     // product is currently selected.
