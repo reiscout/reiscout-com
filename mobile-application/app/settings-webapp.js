@@ -156,6 +156,9 @@ drupalgap.settings.loader = {
 
 /** Contributed Modules - www/app/modules **/
 Drupal.modules.contrib['geofield'] = {};
+Drupal.modules.contrib['commerce'] = {};
+Drupal.modules.contrib['commerce_drupalgap_stripe'] = {};
+Drupal.modules.contrib['addressfield'] = {};
 
 //Drupal.modules.contrib['example'] = {};
 
@@ -169,6 +172,8 @@ Drupal.modules.custom['reiscout_address'] = {
 };
 
 //Drupal.modules.custom['my_module'] = {};
+
+drupalgap.settings.stripe_api_key = 'pk_test_wbtsk9Um4YdkftiHOgfcPUWF';
 
 /***************************************|
  * Menus - http://drupalgap.org/node/85 |
@@ -302,17 +307,24 @@ drupalgap.settings.blocks.reiscout = {
         mode: 'include',
       }
     },
+
     //main_menu: { }
   },
   sub_header: {
-    title: { }
+    title: { },
   },
   navigation: {
-    primary_local_tasks: { }
+    commerce_cart: {
+      pages: {
+        mode: 'exclude',
+        value: ['cart', 'checkout/*', 'checkout/shipping/*']
+      }
+    },
+    primary_local_tasks: { },
   },
   content: {
     messages: { },
-    main: { }
+    main: { },
   },
   footer: { }
 };
