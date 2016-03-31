@@ -13,7 +13,7 @@
  * @param string $order_status an order status, default to 'completed'
  * @param string $sku product sku
  */
-function reiscout_property_commerce_get_purchased_display_entities($uid, $sku = '', $order_status = 'completed') {
+function reiscout_property_commerce_get_order_display_entities($uid, $sku = '', $order_status = 'completed') {
 
   $purchased_entities = &drupal_static(__FUNCTION__ . '_' .$uid . '_' . $sku);
   if (!empty($purchased_entities)) {
@@ -38,15 +38,23 @@ function reiscout_property_commerce_get_purchased_display_entities($uid, $sku = 
 }
 
 function reiscout_property_commerce_is_display_node_purchased ($uid, $nid, $sku) {
-  $purchased_entities = reiscout_property_commerce_get_purchased_display_entities($uid, $sku);
-  return in_array($nid, $purchased_entities['node']);
+  $purchased_entities = reiscout_property_commerce_get_order_display_entities($uid, $sku);
+  if (!empty($purchased_entities['node'])) {
+    return in_array($nid, $purchased_entities['node']);
+  } else {
+    return FALSE;
+  }
+
 }
 
 /**
  * A helper wrapper for commerce_reiscout_get_purchased_display_entities()
  */
-function reiscout_property_commerce_get_user_purchased_picture_nids() {
-  $entities = commerce_reiscout_get_purchased_display_entities($GLOBALS['user']->uid, COMMERCE_REISCOUT_PROPERTY_ADDRESS_ACCESS_PRODUCT_SKU, 'completed');
+function reiscout_property_commerce_get_order_product_display_nids($sku, $status = 'completed', $uid = '') {
+  if (empty($uid)) {
+    $uid = $GLOBALS['user']->uid;
+  }
+  $entities = reiscout_property_commerce_get_order_display_entities($uid, $sku, $status);
   $nids = array();
   foreach ($entities as $entity) {
     if ($entity['entity_type'] == 'node') {

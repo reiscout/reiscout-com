@@ -49,7 +49,7 @@ function reiscout_property_commerce_field_access($op, $field, $entity_type, $ent
     }
 
     // Allow access if user purchased the node.
-    if (in_array($entity->nid, reiscout_property_commerce_get_user_purchased_picture_nids())) {
+    if (in_array($entity->nid, reiscout_property_commerce_get_order_product_display_nids(REISCOUT_PROPERTY_COMMERCE_ADDRESS_ACCESS_PRODUCT_SKU))) {
       return TRUE;
     }
 
@@ -62,12 +62,15 @@ function reiscout_property_commerce_field_access($op, $field, $entity_type, $ent
  * Implements hook_form_alter().
  */
 function reiscout_property_commerce_form_property_node_form_alter(&$form, &$form_state, $form_id) {
-  //dpm(func_get_args(), __FUNCTION__);
+  // Hide product selection on property node edit page.
   $form['field_product']['#access'] = FALSE;
 }
 
+/**
+ * Implements hook_node_presave().
+ */
 function reiscout_property_commerce_node_presave($node) {
-  //dpm($node, __FUNCTION__);
+  // Assign products to property nodes on save.
   if (!$node->type == 'REISCOUT_PROPERTY_COMMERCE_NODE_TYPE') {
     return;
   }
@@ -81,6 +84,7 @@ function reiscout_property_commerce_node_presave($node) {
 function reiscout_property_commerce_form_alter(&$form, &$form_state, $form_id) {
 
   if ('commerce_cart_add_to_cart_form_1_2' == $form_id) {
+    
     // Do nothing for admin
     if (user_access('administer site configuration')) {
       return;
@@ -127,3 +131,36 @@ function reiscout_property_commerce_form_alter(&$form, &$form_state, $form_id) {
   }
 
 }
+
+function reiscout_property_commerce_commerce_cart_product_add($order, $product, $quantity, $line_item) {
+
+  return;
+
+  $user_purchased_nids = array_merge(
+    reiscout_property_commerce_get_order_product_display_nids(REISCOUT_PROPERTY_COMMERCE_ADDRESS_ACCESS_PRODUCT_SKU),
+    reiscout_property_commerce_get_order_product_display_nids(REISCOUT_PROPERTY_COMMERCE_OWNER_INFO_PRODUCT_SKU)
+  );
+
+  $user_in_cart_nids = array_merge(
+    reiscout_property_commerce_get_order_product_display_nids(REISCOUT_PROPERTY_COMMERCE_ADDRESS_ACCESS_PRODUCT_SKU, 'shopping_cart'),
+    reiscout_property_commerce_get_order_product_display_nids(REISCOUT_PROPERTY_COMMERCE_OWNER_INFO_PRODUCT_SKU, 'shopping_cart')
+  );
+
+  //dpm(func_get_args(), __FUNCTION__);
+  //dpm($user_purchased_nids, '$user_purchased_nids');
+  //dpm($user_in_cart_nids, '$user_in_cart_nids');
+
+  return;
+
+  // No example.
+
+  $order->commerce_line_items[LANGUAGE_NONE] = array(
+    0 => $order->commerce_line_items[LANGUAGE_NONE][0],
+  );
+  commerce_order_save($order);
+}
+
+function reiscout_property_commerce_commerce_cart_order_refresh($order_wrapper) {
+  // No example.
+}
+
