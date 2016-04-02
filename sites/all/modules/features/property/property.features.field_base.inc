@@ -31,6 +31,27 @@ function property_field_default_field_bases() {
     'type' => 'text_with_summary',
   );
 
+  // Exported field_base: 'field_address_access_product'.
+  $field_bases['field_address_access_product'] = array(
+    'active' => 1,
+    'cardinality' => 1,
+    'deleted' => 0,
+    'entity_types' => array(),
+    'field_name' => 'field_address_access_product',
+    'indexes' => array(
+      'product_id' => array(
+        0 => 'product_id',
+      ),
+    ),
+    'locked' => 0,
+    'module' => 'commerce_product_reference',
+    'settings' => array(
+      'options_list_limit' => '',
+    ),
+    'translatable' => 0,
+    'type' => 'commerce_product_reference',
+  );
+
   // Exported field_base: 'field_address_text'.
   $field_bases['field_address_text'] = array(
     'active' => 1,
@@ -306,6 +327,27 @@ function property_field_default_field_bases() {
     'type' => 'text',
   );
 
+  // Exported field_base: 'field_owner_info_product'.
+  $field_bases['field_owner_info_product'] = array(
+    'active' => 1,
+    'cardinality' => 1,
+    'deleted' => 0,
+    'entity_types' => array(),
+    'field_name' => 'field_owner_info_product',
+    'indexes' => array(
+      'product_id' => array(
+        0 => 'product_id',
+      ),
+    ),
+    'locked' => 0,
+    'module' => 'commerce_product_reference',
+    'settings' => array(
+      'options_list_limit' => '',
+    ),
+    'translatable' => 0,
+    'type' => 'commerce_product_reference',
+  );
+
   // Exported field_base: 'field_owner_lname'.
   $field_bases['field_owner_lname'] = array(
     'active' => 1,
@@ -346,30 +388,6 @@ function property_field_default_field_bases() {
     ),
     'translatable' => 0,
     'type' => 'text',
-  );
-
-  // Exported field_base: 'field_product'.
-  $field_bases['field_product'] = array(
-    'active' => 1,
-    'cardinality' => 1,
-    'deleted' => 0,
-    'entity_types' => array(),
-    'field_name' => 'field_product',
-    'field_permissions' => array(
-      'type' => 2,
-    ),
-    'indexes' => array(
-      'product_id' => array(
-        0 => 'product_id',
-      ),
-    ),
-    'locked' => 0,
-    'module' => 'commerce_product_reference',
-    'settings' => array(
-      'options_list_limit' => '',
-    ),
-    'translatable' => 0,
-    'type' => 'commerce_product_reference',
   );
 
   // Exported field_base: 'field_repairs_price'.

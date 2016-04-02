@@ -51,7 +51,7 @@ function property_field_group_info() {
   $field_group->parent_name = '';
   $field_group->data = array(
     'label' => 'Owner Info',
-    'weight' => '6',
+    'weight' => '8',
     'children' => array(
       0 => 'field_owner_fname',
       1 => 'field_owner_lname',
@@ -149,7 +149,7 @@ function property_field_group_info() {
   $field_group->parent_name = '';
   $field_group->data = array(
     'label' => 'Property Info',
-    'weight' => '7',
+    'weight' => '9',
     'children' => array(
       0 => 'field_size',
       1 => 'field_bedrooms',
