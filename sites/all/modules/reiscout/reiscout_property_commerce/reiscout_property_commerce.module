@@ -5,13 +5,23 @@
  * Customize commerce modules behaviours for reiscout project needs.
  *
  * Implements address access control.
+ *
+ * Implementation path:
+ * For each property create an individual product referencing the property
+ *   Property  can be referenced only once by each product type
+ *
+ * On product add to cart calculate its price and set to line item
+ *   https://drupalcommerce.org/discussions/2475/how-dynamically-calculate-sell-price-product-using-rules
+ * A rule to Limit each product quantity to 1 and shows the message that product already in cart
+ * Admin UI to set prices for new products and update for existed
+ * API that get all purchased nids by user of given product type
+ *   http://stackoverflow.com/questions/8148138/getting-all-products-owned-by-a-user
+ * Access hook that show address only if it is purchased
+ * Cart form alter that shows the right product type and only if it is not purchased already
  */
 
-define('REISCOUT_PROPERTY_COMMERCE_NODE_TYPE', 'property');
-define('REISCOUT_PROPERTY_COMMERCE_ADDRESS_ACCESS_PRODUCT_SKU', 'property-address-access');
-define('REISCOUT_PROPERTY_COMMERCE_ADDRESS_ACCESS_PRODUCT_ID', 1);
-define('REISCOUT_PROPERTY_COMMERCE_OWNER_INFO_PRODUCT_SKU', 'property-owner-info-for-seller');
-define('REISCOUT_PROPERTY_COMMERCE_OWNER_INFO_PRODUCT_ID', 2);
+define('REISCOUT_PROPERTY_COMMERCE_ADDRESS_ACCESS_PRODUCT_TYPE', 'reiscout_property_address_access');
+define('REISCOUT_PROPERTY_COMMERCE_OWNER_INFO_PRODUCT_TYPE', 'reiscout_property_address_access');
 
 require_once 'reiscout_property_commerce.inc';
 
@@ -49,7 +59,7 @@ function reiscout_property_commerce_field_access($op, $field, $entity_type, $ent
     }
 
     // Allow access if user purchased the node.
-    if (in_array($entity->nid, reiscout_property_commerce_get_order_product_display_nids(REISCOUT_PROPERTY_COMMERCE_ADDRESS_ACCESS_PRODUCT_SKU))) {
+    if (reiscout_property_commerce_is_node_purchased($entity->nid, REISCOUT_PROPERTY_COMMERCE_ADDRESS_ACCESS_PRODUCT_TYPE, $account->uid)) {
       return TRUE;
     }
 
@@ -74,10 +84,6 @@ function reiscout_property_commerce_node_presave($node) {
   if (!$node->type == 'REISCOUT_PROPERTY_COMMERCE_NODE_TYPE') {
     return;
   }
-  $node->field_product[LANGUAGE_NONE] = array(
-    0 => array('product_id' => REISCOUT_PROPERTY_COMMERCE_ADDRESS_ACCESS_PRODUCT_ID),
-    1 => array('product_id' => REISCOUT_PROPERTY_COMMERCE_OWNER_INFO_PRODUCT_ID),
-  );
 
 }
 
@@ -94,18 +100,19 @@ function reiscout_property_commerce_form_alter(&$form, &$form_state, $form_id) {
     $product_to_buy = '';
     // Check to allow user to buy owner info
     if ($node->uid == $GLOBALS['user']->uid
-      && !reiscout_property_commerce_is_display_node_purchased ($GLOBALS['user']->uid, $node->nid, REISCOUT_PROPERTY_COMMERCE_OWNER_INFO_PRODUCT_SKU)) {
+      && !reiscout_property_commerce_is_node_purchased ($node->nid, REISCOUT_PROPERTY_COMMERCE_OWNER_INFO_PRODUCT_TYPE, $GLOBALS['user']->uid)) {
       $product_to_buy = 'owner_info';
     }
 
     // Check to allow user to buy an address
     if ($node->uid != $GLOBALS['user']->uid
-      && !reiscout_property_commerce_is_display_node_purchased ($GLOBALS['user']->uid, $node->nid, REISCOUT_PROPERTY_COMMERCE_ADDRESS_ACCESS_PRODUCT_SKU)) {
+      && !reiscout_property_commerce_is_node_purchased ($node->nid, REISCOUT_PROPERTY_COMMERCE_ADDRESS_ACCESS_PRODUCT_TYPE, $GLOBALS['user']->uid)) {
       $product_to_buy = 'address';
     }
 
     if ($product_to_buy == 'owner_info') {
-      $form['product_id']['#default_value'] = REISCOUT_PROPERTY_COMMERCE_OWNER_INFO_PRODUCT_ID;
+      $product_id = 0;
+      $form['product_id']['#default_value'] = $product_id;
       $form['product_id']['#access'] = FALSE;
       $price = reiscout_property_commerce_get_owner_info_price();
       $form['submit']['#value'] = t('Request us to collect an Owner Info for @price @cur',
@@ -115,7 +122,8 @@ function reiscout_property_commerce_form_alter(&$form, &$form_state, $form_id) {
         )
       );
     } elseif ($product_to_buy == 'address') {
-      $form['product_id']['#default_value'] = REISCOUT_PROPERTY_COMMERCE_ADDRESS_ACCESS_PRODUCT_ID;
+      $product_id = 0;
+      $form['product_id']['#default_value'] = $product_id;
       $form['product_id']['#access'] = FALSE;
 
       $price = reiscout_property_commerce_get_property_address_price($node);
@@ -132,35 +140,6 @@ function reiscout_property_commerce_form_alter(&$form, &$form_state, $form_id) {
 
 }
 
-function reiscout_property_commerce_commerce_cart_product_add($order, $product, $quantity, $line_item) {
+function reiscout_property_commerce_init() {
 
-  return;
-
-  $user_purchased_nids = array_merge(
-    reiscout_property_commerce_get_order_product_display_nids(REISCOUT_PROPERTY_COMMERCE_ADDRESS_ACCESS_PRODUCT_SKU),
-    reiscout_property_commerce_get_order_product_display_nids(REISCOUT_PROPERTY_COMMERCE_OWNER_INFO_PRODUCT_SKU)
-  );
-
-  $user_in_cart_nids = array_merge(
-    reiscout_property_commerce_get_order_product_display_nids(REISCOUT_PROPERTY_COMMERCE_ADDRESS_ACCESS_PRODUCT_SKU, 'shopping_cart'),
-    reiscout_property_commerce_get_order_product_display_nids(REISCOUT_PROPERTY_COMMERCE_OWNER_INFO_PRODUCT_SKU, 'shopping_cart')
-  );
-
-  //dpm(func_get_args(), __FUNCTION__);
-  //dpm($user_purchased_nids, '$user_purchased_nids');
-  //dpm($user_in_cart_nids, '$user_in_cart_nids');
-
-  return;
-
-  // No example.
-
-  $order->commerce_line_items[LANGUAGE_NONE] = array(
-    0 => $order->commerce_line_items[LANGUAGE_NONE][0],
-  );
-  commerce_order_save($order);
 }
-
-function reiscout_property_commerce_commerce_cart_order_refresh($order_wrapper) {
-  // No example.
-}
-
