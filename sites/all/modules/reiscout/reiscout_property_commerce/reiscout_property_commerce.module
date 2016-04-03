@@ -24,9 +24,21 @@ define('REISCOUT_PROPERTY_COMMERCE_ADDRESS_ACCESS_PRODUCT_TYPE', 'reiscout_prope
 define('REISCOUT_PROPERTY_COMMERCE_OWNER_INFO_PRODUCT_TYPE', 'reiscout_property_owner_info');
 define('REISCOUT_PROPERTY_COMMERCE_NODE_TYPE', 'property');
 
-
-
 require_once 'reiscout_property_commerce.inc';
+
+function reiscout_property_commerce_menu () {
+  // Module settings.
+  $items['admin/commerce/config/reiscout'] = array(
+    'title' => 'Reiscout',
+    'description' => 'Reiscout settings.',
+    'page callback' => 'drupal_get_form',
+    'page arguments' => array('reiscout_property_commerce_settings_form'),
+    'access arguments' => array('access administration pages'),
+    'file' => 'reiscout_property_commerce.admin.inc',
+  );
+
+  return $items;
+}
 
 /**
  * List of fields to sell access to
