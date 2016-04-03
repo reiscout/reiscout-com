@@ -22,6 +22,9 @@
 
 define('REISCOUT_PROPERTY_COMMERCE_ADDRESS_ACCESS_PRODUCT_TYPE', 'reiscout_property_address_access');
 define('REISCOUT_PROPERTY_COMMERCE_OWNER_INFO_PRODUCT_TYPE', 'reiscout_property_owner_info');
+define('REISCOUT_PROPERTY_COMMERCE_NODE_TYPE', 'property');
+
+
 
 require_once 'reiscout_property_commerce.inc';
 
