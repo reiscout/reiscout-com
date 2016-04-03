@@ -84,7 +84,7 @@ function reiscout_property_commerce_form_property_node_form_alter(&$form, &$form
  */
 function reiscout_property_commerce_node_presave($node) {
   // Assign products to property nodes on save.
-  if (!$node->type == 'REISCOUT_PROPERTY_COMMERCE_NODE_TYPE') {
+  if (!($node->type == 'REISCOUT_PROPERTY_COMMERCE_NODE_TYPE')) {
     return;
   }
 
@@ -165,5 +165,4 @@ function reiscout_property_commerce_form_alter(&$form, &$form_state, $form_id) {
 }
 
 function reiscout_property_commerce_init() {
-
 }
