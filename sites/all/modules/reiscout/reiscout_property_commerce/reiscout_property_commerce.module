@@ -109,8 +109,6 @@ function reiscout_property_commerce_node_presave($node) {
 
     $node->field_address_access_product[LANGUAGE_NONE][0]['product_id'] = $address_access_product->product_id;
   }
-
-  dpm($node);
 }
 
 function reiscout_property_commerce_form_alter(&$form, &$form_state, $form_id) {
@@ -167,9 +165,5 @@ function reiscout_property_commerce_form_alter(&$form, &$form_state, $form_id) {
 }
 
 function reiscout_property_commerce_init() {
-  //$p = commerce_product_load(3);
-  //dpm($p);
 
-  $p = commerce_product_load(3);
-  dpm($p);
 }
