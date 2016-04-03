@@ -21,7 +21,7 @@
  */
 
 define('REISCOUT_PROPERTY_COMMERCE_ADDRESS_ACCESS_PRODUCT_TYPE', 'reiscout_property_address_access');
-define('REISCOUT_PROPERTY_COMMERCE_OWNER_INFO_PRODUCT_TYPE', 'reiscout_property_address_access');
+define('REISCOUT_PROPERTY_COMMERCE_OWNER_INFO_PRODUCT_TYPE', 'reiscout_property_owner_info');
 
 require_once 'reiscout_property_commerce.inc';
 
@@ -85,6 +85,29 @@ function reiscout_property_commerce_node_presave($node) {
     return;
   }
 
+  //reiscout_property_commerce_create_product()
+
+  if (empty($node->field_owner_info_product[LANGUAGE_NONE][0])) {
+
+    $owner_info_product = reiscout_property_commerce_load_product_by_property(REISCOUT_PROPERTY_COMMERCE_OWNER_INFO_PRODUCT_TYPE, $node->nid);
+
+    if (!$owner_info_product) {
+      $owner_info_product = reiscout_property_commerce_create_product(REISCOUT_PROPERTY_COMMERCE_OWNER_INFO_PRODUCT_TYPE, $node);
+    }
+
+    $node->field_owner_info_product[LANGUAGE_NONE][0]['product_id'] = $owner_info_product->product_id;
+  }
+
+  if (empty($node->field_address_access_product[LANGUAGE_NONE][0])) {
+    $address_access_product = reiscout_property_commerce_load_product_by_property(REISCOUT_PROPERTY_COMMERCE_ADDRESS_ACCESS_PRODUCT_TYPE, $node->nid);
+    if (!$address_access_product) {
+      $address_access_product = reiscout_property_commerce_create_product(REISCOUT_PROPERTY_COMMERCE_ADDRESS_ACCESS_PRODUCT_TYPE, $node);
+    }
+
+    $node->field_address_access_product[LANGUAGE_NONE][0]['product_id'] = $address_access_product->product_id;
+  }
+
+  dpm($node);
 }
 
 function reiscout_property_commerce_form_alter(&$form, &$form_state, $form_id) {
@@ -141,5 +164,9 @@ function reiscout_property_commerce_form_alter(&$form, &$form_state, $form_id) {
 }
 
 function reiscout_property_commerce_init() {
+  //$p = commerce_product_load(3);
+  //dpm($p);
 
+  $p = commerce_product_load(3);
+  dpm($p);
 }
