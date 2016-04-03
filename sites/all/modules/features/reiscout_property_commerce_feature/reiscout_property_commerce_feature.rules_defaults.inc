@@ -22,5 +22,40 @@ function reiscout_property_commerce_feature_default_rules_configuration() {
       ]
     }
   }');
+  $items['rules_reiscout_property_commerce_limit_line_items_quantity'] = entity_import('rules_config', '{ "rules_reiscout_property_commerce_limit_line_items_quantity" : {
+      "LABEL" : "Limit line items quantity to one item",
+      "PLUGIN" : "reaction rule",
+      "OWNER" : "rules",
+      "TAGS" : [ "reiscout" ],
+      "REQUIRES" : [ "rules", "entity" ],
+      "ON" : { "commerce_line_item_update" : [] },
+      "IF" : [
+        { "data_is" : { "data" : [ "commerce-line-item:type" ], "value" : "product" } },
+        { "OR" : [
+            { "data_is" : {
+                "data" : [ "commerce-line-item:commerce-product:type" ],
+                "value" : "reiscout_property_address_access"
+              }
+            },
+            { "data_is" : {
+                "data" : [ "commerce-line-item:commerce-product:type" ],
+                "value" : "reiscout_property_owner_info"
+              }
+            }
+          ]
+        },
+        { "data_is" : {
+            "data" : [ "commerce-line-item:quantity" ],
+            "op" : "\\u003E",
+            "value" : "1"
+          }
+        }
+      ],
+      "DO" : [
+        { "data_set" : { "data" : [ "commerce-line-item:quantity" ], "value" : "1" } },
+        { "drupal_message" : { "message" : "[commerce-line-item-unchanged:commerce_product] item already added to cart." } }
+      ]
+    }
+  }');
   return $items;
 }

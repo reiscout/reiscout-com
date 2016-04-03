@@ -117,7 +117,7 @@ function property_strongarm() {
       'display' => array(
         'product:sku' => array(
           'drupalgap' => array(
-            'weight' => '7',
+            'weight' => '10',
             'visible' => FALSE,
           ),
           'default' => array(
@@ -125,13 +125,13 @@ function property_strongarm() {
             'visible' => FALSE,
           ),
           'full' => array(
-            'weight' => '6',
+            'weight' => '9',
             'visible' => FALSE,
           ),
         ),
         'product:title' => array(
           'drupalgap' => array(
-            'weight' => '8',
+            'weight' => '11',
             'visible' => FALSE,
           ),
           'default' => array(
@@ -139,13 +139,13 @@ function property_strongarm() {
             'visible' => FALSE,
           ),
           'full' => array(
-            'weight' => '7',
+            'weight' => '10',
             'visible' => FALSE,
           ),
         ),
         'product:status' => array(
           'drupalgap' => array(
-            'weight' => '10',
+            'weight' => '12',
             'visible' => FALSE,
           ),
           'default' => array(
@@ -153,13 +153,13 @@ function property_strongarm() {
             'visible' => FALSE,
           ),
           'full' => array(
-            'weight' => '9',
+            'weight' => '12',
             'visible' => FALSE,
           ),
         ),
         'product:commerce_price' => array(
           'drupalgap' => array(
-            'weight' => '6',
+            'weight' => '9',
             'visible' => FALSE,
           ),
           'default' => array(
@@ -167,8 +167,18 @@ function property_strongarm() {
             'visible' => TRUE,
           ),
           'full' => array(
-            'weight' => '8',
+            'weight' => '11',
             'visible' => FALSE,
+          ),
+        ),
+        'product:field_property' => array(
+          'full' => array(
+            'weight' => '7',
+            'visible' => TRUE,
+          ),
+          'drupalgap' => array(
+            'weight' => '7',
+            'visible' => TRUE,
           ),
         ),
       ),

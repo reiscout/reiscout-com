@@ -29,3 +29,12 @@ By purchasing the product property submitter request the Reiscout Team to find a
   );
   return $items;
 }
+
+/**
+ * Implements hook_ctools_plugin_api().
+ */
+function reiscout_property_commerce_feature_ctools_plugin_api($module = NULL, $api = NULL) {
+  if ($module == "field_validation" && $api == "default_field_validation_rules") {
+    return array("version" => "2");
+  }
+}

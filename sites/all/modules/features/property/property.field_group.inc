@@ -21,7 +21,7 @@ function property_field_group_info() {
   $field_group->parent_name = '';
   $field_group->data = array(
     'label' => 'Owner Info',
-    'weight' => '4',
+    'weight' => '6',
     'children' => array(
       0 => 'field_owner_fname',
       1 => 'field_owner_lname',
@@ -82,7 +82,7 @@ function property_field_group_info() {
   $field_group->parent_name = '';
   $field_group->data = array(
     'label' => 'Owner Info',
-    'weight' => '4',
+    'weight' => '6',
     'children' => array(
       0 => 'field_owner_fname',
       1 => 'field_owner_lname',
@@ -112,7 +112,7 @@ function property_field_group_info() {
   $field_group->parent_name = '';
   $field_group->data = array(
     'label' => 'Property Info',
-    'weight' => '3',
+    'weight' => '5',
     'children' => array(
       0 => 'field_size',
       1 => 'field_bedrooms',
@@ -187,7 +187,7 @@ function property_field_group_info() {
   $field_group->parent_name = '';
   $field_group->data = array(
     'label' => 'Property Info',
-    'weight' => '3',
+    'weight' => '5',
     'children' => array(
       0 => 'field_size',
       1 => 'field_bedrooms',
