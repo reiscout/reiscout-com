@@ -1,0 +1,13 @@
+diff --git a/sites/all/themes/nexus/style.css b/sites/all/themes/nexus/style.css
+index 6e82966..70179e9 100644
+--- a/sites/all/themes/nexus/style.css
++++ b/sites/all/themes/nexus/style.css
+@@ -2,7 +2,7 @@
+ www.devsaran.com
+ */
+ 
+-@import url(http://fonts.googleapis.com/css?family=Oxygen:400,300,700);
++@import url(https://fonts.googleapis.com/css?family=Oxygen:400,300,700);
+ 
+ 
+ /* Reset

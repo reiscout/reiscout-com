@@ -65,7 +65,62 @@ function property_field_default_field_instances() {
         'summary_rows' => 5,
       ),
       'type' => 'text_textarea_with_summary',
-      'weight' => 4,
+      'weight' => 7,
+    ),
+  );
+
+  // Exported field_instance: 'node-property-field_address_access_product'.
+  $field_instances['node-property-field_address_access_product'] = array(
+    'bundle' => 'property',
+    'default_value' => NULL,
+    'deleted' => 0,
+    'description' => '',
+    'display' => array(
+      'default' => array(
+        'label' => 'above',
+        'module' => 'commerce_cart',
+        'settings' => array(
+          'combine' => TRUE,
+          'default_quantity' => 1,
+          'line_item_type' => 'product',
+          'show_quantity' => FALSE,
+          'show_single_product_attributes' => FALSE,
+        ),
+        'type' => 'commerce_cart_add_to_cart_form',
+        'weight' => 21,
+      ),
+      'drupalgap' => array(
+        'label' => 'above',
+        'settings' => array(),
+        'type' => 'hidden',
+        'weight' => 0,
+      ),
+      'full' => array(
+        'label' => 'above',
+        'settings' => array(),
+        'type' => 'hidden',
+        'weight' => 0,
+      ),
+    ),
+    'entity_type' => 'node',
+    'field_name' => 'field_address_access_product',
+    'label' => 'Buy Address Access',
+    'required' => FALSE,
+    'settings' => array(
+      'field_injection' => 1,
+      'referenceable_types' => array(
+        'product' => 0,
+        'reiscout_property_address_access' => 'reiscout_property_address_access',
+        'reiscout_property_owner_info' => 0,
+      ),
+      'user_register_form' => FALSE,
+    ),
+    'widget' => array(
+      'active' => 1,
+      'module' => 'commerce_product_reference',
+      'settings' => array(),
+      'type' => 'commerce_product_reference_hidden',
+      'weight' => 2,
     ),
   );
 
@@ -119,7 +174,7 @@ function property_field_default_field_instances() {
         'size' => 120,
       ),
       'type' => 'text_textfield',
-      'weight' => 3,
+      'weight' => 6,
     ),
   );
 
@@ -428,7 +483,7 @@ function property_field_default_field_instances() {
         'html5_geolocation' => 1,
       ),
       'type' => 'geofield_latlon',
-      'weight' => 2,
+      'weight' => 5,
     ),
   );
 
@@ -498,7 +553,7 @@ function property_field_default_field_instances() {
         'progress_indicator' => 'throbber',
       ),
       'type' => 'image_image',
-      'weight' => 1,
+      'weight' => 4,
     ),
   );
 
@@ -851,6 +906,61 @@ function property_field_default_field_instances() {
     ),
   );
 
+  // Exported field_instance: 'node-property-field_owner_info_product'.
+  $field_instances['node-property-field_owner_info_product'] = array(
+    'bundle' => 'property',
+    'default_value' => NULL,
+    'deleted' => 0,
+    'description' => '',
+    'display' => array(
+      'default' => array(
+        'label' => 'above',
+        'module' => 'commerce_cart',
+        'settings' => array(
+          'combine' => TRUE,
+          'default_quantity' => 1,
+          'line_item_type' => 'product',
+          'show_quantity' => FALSE,
+          'show_single_product_attributes' => FALSE,
+        ),
+        'type' => 'commerce_cart_add_to_cart_form',
+        'weight' => 20,
+      ),
+      'drupalgap' => array(
+        'label' => 'above',
+        'settings' => array(),
+        'type' => 'hidden',
+        'weight' => 0,
+      ),
+      'full' => array(
+        'label' => 'above',
+        'settings' => array(),
+        'type' => 'hidden',
+        'weight' => 0,
+      ),
+    ),
+    'entity_type' => 'node',
+    'field_name' => 'field_owner_info_product',
+    'label' => 'Buy Owner Info',
+    'required' => FALSE,
+    'settings' => array(
+      'field_injection' => 1,
+      'referenceable_types' => array(
+        'product' => 0,
+        'reiscout_property_address_access' => 0,
+        'reiscout_property_owner_info' => 'reiscout_property_owner_info',
+      ),
+      'user_register_form' => FALSE,
+    ),
+    'widget' => array(
+      'active' => 1,
+      'module' => 'commerce_product_reference',
+      'settings' => array(),
+      'type' => 'commerce_product_reference_hidden',
+      'weight' => 1,
+    ),
+  );
+
   // Exported field_instance: 'node-property-field_owner_lname'.
   $field_instances['node-property-field_owner_lname'] = array(
     'bundle' => 'property',
@@ -944,65 +1054,6 @@ function property_field_default_field_instances() {
       ),
       'type' => 'text_textfield',
       'weight' => 8,
-    ),
-  );
-
-  // Exported field_instance: 'node-property-field_product'.
-  $field_instances['node-property-field_product'] = array(
-    'bundle' => 'property',
-    'default_value' => NULL,
-    'deleted' => 0,
-    'description' => '',
-    'display' => array(
-      'default' => array(
-        'label' => 'above',
-        'module' => 'commerce_cart',
-        'settings' => array(
-          'combine' => TRUE,
-          'default_quantity' => 1,
-          'line_item_type' => 'product',
-          'show_quantity' => FALSE,
-          'show_single_product_attributes' => FALSE,
-        ),
-        'type' => 'commerce_cart_add_to_cart_form',
-        'weight' => 4,
-      ),
-      'drupalgap' => array(
-        'label' => 'above',
-        'settings' => array(),
-        'type' => 'hidden',
-        'weight' => 9,
-      ),
-      'full' => array(
-        'label' => 'above',
-        'settings' => array(),
-        'type' => 'hidden',
-        'weight' => 10,
-      ),
-      'teaser' => array(
-        'label' => 'above',
-        'settings' => array(),
-        'type' => 'hidden',
-        'weight' => 0,
-      ),
-    ),
-    'entity_type' => 'node',
-    'field_name' => 'field_product',
-    'label' => 'Product',
-    'required' => 0,
-    'settings' => array(
-      'field_injection' => 1,
-      'referenceable_types' => array(
-        'product' => 'product',
-      ),
-      'user_register_form' => FALSE,
-    ),
-    'widget' => array(
-      'active' => 1,
-      'module' => 'options',
-      'settings' => array(),
-      'type' => 'options_select',
-      'weight' => 5,
     ),
   );
 
@@ -1190,6 +1241,8 @@ function property_field_default_field_instances() {
   t('Assessed Value');
   t('Bathrooms');
   t('Bedrooms');
+  t('Buy Address Access');
+  t('Buy Owner Info');
   t('First Name');
   t('Last Name');
   t('Last Purchase');
@@ -1200,7 +1253,6 @@ function property_field_default_field_instances() {
   t('Phone');
   t('Photo');
   t('Position');
-  t('Product');
   t('Property Size');
   t('Repairs (estimated)');
   t('Under Contract');
