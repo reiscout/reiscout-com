@@ -1180,6 +1180,10 @@ body.page-onepage #masthead {
   max-width: 1255px;
 }
 
+body.page-onepage #main-menu a.active {
+  color: #777 !important;
+}
+
 #onepage .pane-mailchimp-signup-join-our-mailing-list {
   max-width: 520px;
   margin: 0 auto;
