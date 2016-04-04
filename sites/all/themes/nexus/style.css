@@ -1185,11 +1185,12 @@ body.page-onepage #masthead {
   margin: 0 auto;
 }
 
-#onepage .mailchimp-newsletter-mergefields {
-  max-width: 180px;
-  margin: 0 auto;
+#onepage .mailchimp-newsletter-mergefields,
+#onepage .mailchimp-signup-subscribe-form .form-actions {
+  max-width: 180px !important;
+  margin: 0 auto !important;
 }
-#onepage .mailchimp-signup-subscribe-form .form-actions
+
 
 #onepage .mailchimp-signup-subscribe-form-description {
   text-align: center;
