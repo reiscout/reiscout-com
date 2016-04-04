@@ -84,7 +84,49 @@ body.page-onepage #main-menu a.active:active {
   text-align: center;
 }
 
-#onepage #social-media,
+#onepage #social-media {
+  max-width: 600px;
+  margin: 0 auto;
+  text-align: center;
+}
+
+#onepage #social-media ul.social-links > li {
+  list-style: none;
+  padding: 0;
+  margin: 0 5px;
+  display: inline-block;
+  background-size: contain;
+  background-repeat: no-repeat;
+  background-position: left top;
+  background-size: contain;
+  line-height: 18px;
+}
+
+#onepage #social-media ul.social-links > li > span {
+  padding-left: 22px;
+  display: inline-block;
+}
+
+#onepage #social-media ul.social-links > li.facebook {
+  background-image: url("images/onepage/facebook.png");
+}
+
+#onepage #social-media ul.social-links > li.twitter {
+  background-image: url("images/onepage/twitter.png");
+}
+
+#onepage #social-media ul.social-links > li.googleplus {
+  background-image: url("images/onepage/googleplus.png");
+}
+
+#onepage #social-media ul.social-links > li.instagram {
+  background-image: url("images/onepage/instagram.png");
+}
+
+#onepage #social-media ul.social-links > li.pinterest {
+  background-image: url("images/onepage/pinterest.png");
+}
+
 #onepage #contact-info,
 #onepage #footer-links {
   max-width: 520px;
