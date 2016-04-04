@@ -1160,3 +1160,18 @@ border-left: 1px solid; border-right: 1px solid; height: 40px; margin-left: -36p
   }
 
 }
+
+#onepage {
+  max-width: 800px;
+  margin: 0 auto;
+}
+
+#onepage #contact-us {
+  max-width: 500px;
+  margin: 0 auto;
+}
+
+#onepage .panel-pane .pane-title {
+  text-align: center;
+  text-transform: uppercase;
+}
