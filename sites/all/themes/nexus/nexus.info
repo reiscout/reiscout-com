@@ -5,6 +5,7 @@ engine = phptemplate
 stylesheets[all][] = css/bootstrap.min.css
 stylesheets[all][] = css/flexslider.css
 stylesheets[all][] = style.css
+stylesheets[all][] = reiscout.css
 scripts[] = js/bootstrap.min.js
 scripts[] = js/superfish.js
 scripts[] = js/mobilemenu.js

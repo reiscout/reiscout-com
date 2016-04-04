@@ -1,0 +1,17 @@
+diff --git a/sites/all/themes/nexus/nexus.info b/sites/all/themes/nexus/nexus.info
+index fe598d4..bb8e405 100644
+--- a/sites/all/themes/nexus/nexus.info
++++ b/sites/all/themes/nexus/nexus.info
+@@ -5,6 +5,7 @@
+ stylesheets[all][] = css/bootstrap.min.css
+ stylesheets[all][] = css/flexslider.css
+ stylesheets[all][] = style.css
++stylesheets[all][] = reiscout.css
+ scripts[] = js/bootstrap.min.js
+ scripts[] = js/superfish.js
+ scripts[] = js/mobilemenu.js
+diff --git a/sites/all/themes/nexus/reiscout.css b/sites/all/themes/nexus/reiscout.css
+new file mode 100644
+index 0000000..e69de29
+--- /dev/null
++++ b/sites/all/themes/nexus/reiscout.css
