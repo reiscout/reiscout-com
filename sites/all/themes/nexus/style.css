@@ -1180,10 +1180,15 @@ body.page-onepage #masthead {
   max-width: 1255px;
 }
 
-#onepage .mailchimp-signup-subscribe-form {
+#onepage .pane-mailchimp-signup-join-our-mailing-list {
+  max-width: 520px;
+  margin: 0 auto;
+}
+
+#onepage .mailchimp-signup-subscribe-form-description {
   text-align: center;
 }
 
 #onepage .mailchimp-signup-subscribe-form .form-item label {
-  display: block;
+  display: block !important;
 }
