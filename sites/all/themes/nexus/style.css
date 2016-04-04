@@ -1175,3 +1175,7 @@ border-left: 1px solid; border-right: 1px solid; height: 40px; margin-left: -36p
   text-align: center;
   text-transform: uppercase;
 }
+
+body.page-onepage #masthead {
+  max-width: 1255px;
+}
