@@ -1,0 +1,107 @@
+#masthead {
+  max-width: 1255px;
+}
+
+h1#site-title {
+  font-size: 30px;
+}
+
+body.page-onepage #main-menu a.active:link,
+body.page-onepage #main-menu a.active:visited {
+  color: #777;
+}
+
+body.page-onepage #main-menu a.active:hover,
+body.page-onepage #main-menu a.active:active {
+  color: #ed564b;
+}
+
+#onepage {
+  max-width: 800px;
+  margin: 0 auto;
+}
+
+#onepage .panel-pane .pane-title {
+  text-align: center;
+  text-transform: uppercase;
+}
+
+#onepage #clients {
+  text-align: center;
+}
+
+#onepage #clients .clients-blocks {
+  width: 100%;
+  padding-top: 15px;
+}
+
+#onepage #clients .clients-block {
+  width: 33%;
+  display: inline-block;
+  vertical-align: top;
+  padding: 0 5px;
+}
+
+#onepage #join-our-mailing-list {
+  max-width: 520px;
+  margin: 0 auto;
+}
+
+#onepage #join-our-mailing-list .mailchimp-newsletter-mergefields,
+#onepage #join-our-mailing-list .form-actions {
+  max-width: 400px;
+  margin: 0 auto;
+}
+
+#onepage #join-our-mailing-list .form-actions {
+  text-align: center;
+}
+
+#onepage #join-our-mailing-list .mailchimp-signup-subscribe-form-description {
+  text-align: center;
+}
+
+#onepage #join-our-mailing-list .form-item label {
+  display: inline-block;
+}
+
+#onepage #join-our-mailing-list .form-item input,
+#onepage #join-our-mailing-list .form-item textarea {
+  width: 100%;
+}
+
+#onepage #contact-us {
+  max-width: 400px;
+  margin: 0 auto;
+}
+
+#onepage #contact-us .form-item input,
+#onepage #contact-us .form-item textarea {
+  width: 100%;
+}
+
+#onepage #contact-us .form-actions {
+  text-align: center;
+}
+
+#onepage #social-media,
+#onepage #contact-info,
+#onepage #footer-links {
+  max-width: 520px;
+  margin: 0 auto;
+  text-align: center;
+}
+
+#onepage #footer-links .link-block {
+  width: 50%;
+}
+
+#onepage #footer-links .left {
+  float: left;
+  text-align: left;
+}
+
+#onepage #footer-links .right {
+  float: left;
+  text-align: right;
+}
