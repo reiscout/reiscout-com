@@ -1179,3 +1179,11 @@ border-left: 1px solid; border-right: 1px solid; height: 40px; margin-left: -36p
 body.page-onepage #masthead {
   max-width: 1255px;
 }
+
+#onepage .mailchimp-signup-subscribe-form {
+  text-align: center;
+}
+
+#onepage .mailchimp-signup-subscribe-form .form-item label {
+  display: block;
+}
