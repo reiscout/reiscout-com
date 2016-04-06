@@ -96,7 +96,7 @@ function reiscout_property_commerce_form_property_node_form_alter(&$form, &$form
  */
 function reiscout_property_commerce_node_presave($node) {
   // Assign products to property nodes on save.
-  if (!($node->type == 'REISCOUT_PROPERTY_COMMERCE_NODE_TYPE')) {
+  if (!($node->type == REISCOUT_PROPERTY_COMMERCE_NODE_TYPE)) {
     return;
   }
 
@@ -123,45 +123,50 @@ function reiscout_property_commerce_node_presave($node) {
   }
 }
 
+/**
+ * Implements hook_form_alter().
+ */
 function reiscout_property_commerce_form_alter(&$form, &$form_state, $form_id) {
+  if (substr_count($form_id, 'commerce_cart_add_to_cart_form_') == 1) {
+    reiscout_property_commerce_form_commerce_cart_form_alter($form, $form_state, $form_id);
+  }
+}
 
-  if ('commerce_cart_add_to_cart_form_1_2' == $form_id) {
-    
-    // Do nothing for admin
-    if (user_access('administer site configuration')) {
-      return;
-    }
+/**
+ * It is NOT a hook and called from reiscout_property_commerce_form_alter
+ */
+function reiscout_property_commerce_form_commerce_cart_form_alter(&$form, &$form_state, $form_id) {
+  // Check that product type is the one needed to be processed.
+  $product = commerce_product_load($form['product_id']['#value']);
+  if (!in_array($product->type, array(
+    REISCOUT_PROPERTY_COMMERCE_ADDRESS_ACCESS_PRODUCT_TYPE,
+    REISCOUT_PROPERTY_COMMERCE_OWNER_INFO_PRODUCT_TYPE
+  ))) {
+    return;
+  }
 
-    $node = node_load($form_state['context']['entity_id']);
-    $product_to_buy = '';
+  $node = node_load($form_state['context']['entity_id']);
+  
+  if ($product->type == REISCOUT_PROPERTY_COMMERCE_OWNER_INFO_PRODUCT_TYPE) {
     // Check to allow user to buy owner info
     if ($node->uid == $GLOBALS['user']->uid
-      && !reiscout_property_commerce_is_node_purchased ($node->nid, REISCOUT_PROPERTY_COMMERCE_OWNER_INFO_PRODUCT_TYPE, $GLOBALS['user']->uid)) {
-      $product_to_buy = 'owner_info';
-    }
-
-    // Check to allow user to buy an address
-    if ($node->uid != $GLOBALS['user']->uid
-      && !reiscout_property_commerce_is_node_purchased ($node->nid, REISCOUT_PROPERTY_COMMERCE_ADDRESS_ACCESS_PRODUCT_TYPE, $GLOBALS['user']->uid)) {
-      $product_to_buy = 'address';
-    }
-
-    if ($product_to_buy == 'owner_info') {
-      $product_id = 0;
-      $form['product_id']['#default_value'] = $product_id;
-      $form['product_id']['#access'] = FALSE;
+      && !reiscout_property_commerce_is_node_purchased($node->nid, REISCOUT_PROPERTY_COMMERCE_OWNER_INFO_PRODUCT_TYPE, $GLOBALS['user']->uid)) {
       $price = reiscout_property_commerce_get_owner_info_price();
-      $form['submit']['#value'] = t('Request us to collect an Owner Info for @price @cur',
+      $form['submit']['#value'] = t('Buy Owner Info for @price @cur',
         array(
-          '@price' =>  commerce_currency_amount_to_decimal($price['amount'], $price['currency_code']),
+          '@price' => commerce_currency_amount_to_decimal($price['amount'], $price['currency_code']),
           '@cur' => $price['currency_code'],
         )
       );
-    } elseif ($product_to_buy == 'address') {
-      $product_id = 0;
-      $form['product_id']['#default_value'] = $product_id;
-      $form['product_id']['#access'] = FALSE;
+    } elseif(!user_access('administer site configuration')) {
+      $form['#access'] = FALSE;
+    }
+  }
 
+  if ($product->type == REISCOUT_PROPERTY_COMMERCE_ADDRESS_ACCESS_PRODUCT_TYPE) {
+    // Check to allow user to buy an address
+    if ($node->uid != $GLOBALS['user']->uid
+      && !reiscout_property_commerce_is_node_purchased($node->nid, REISCOUT_PROPERTY_COMMERCE_ADDRESS_ACCESS_PRODUCT_TYPE, $GLOBALS['user']->uid)) {
       $price = reiscout_property_commerce_get_property_address_price($node);
       $form['submit']['#value'] = t('Buy Property Address for @price @cur',
         array(
@@ -169,11 +174,10 @@ function reiscout_property_commerce_form_alter(&$form, &$form_state, $form_id) {
           '@cur' => $price['currency_code'],
         )
       );
-    } else {
+    } elseif(!user_access('administer site configuration')) {
       $form['#access'] = FALSE;
     }
   }
-
 }
 
 function reiscout_property_commerce_init() {

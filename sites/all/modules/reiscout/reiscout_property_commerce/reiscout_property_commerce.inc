@@ -90,9 +90,13 @@ function reiscout_property_commerce_load_product_by_property($product_type, $nid
  * Return owner info product price
  */
 function reiscout_property_commerce_get_owner_info_price() {
-  $product = commerce_product_load(REISCOUT_PROPERTY_COMMERCE_OWNER_INFO_PRODUCT_ID);
-  $price = $product->commerce_price[LANGUAGE_NONE][0];
-  return $price;
+
+  $price_decimal = variable_get('reiscout_property_commerce_owner_info_price', 10);
+
+  return array(
+    'amount' => $price_decimal * 100,
+    'currency_code' => 'USD',
+  );
 }
 
 /**
@@ -100,8 +104,9 @@ function reiscout_property_commerce_get_owner_info_price() {
  * ToDo: implement it.
  */
 function reiscout_property_commerce_get_property_address_price($node) {
-  $product = commerce_product_load(REISCOUT_PROPERTY_COMMERCE_ADDRESS_ACCESS_PRODUCT_ID);
-  $price = $product->commerce_price[LANGUAGE_NONE][0];
-  $price['amount'] = $node->nid;
-  return $price;
+  $price_decimal = variable_get('reiscout_property_commerce_address_access_basic_price', 10);
+  return array(
+    'amount' => $price_decimal * 100,
+    'currency_code' => 'USD',
+  );
 }
