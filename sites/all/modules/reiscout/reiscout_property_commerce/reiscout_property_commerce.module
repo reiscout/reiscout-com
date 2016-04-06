@@ -29,7 +29,7 @@ require_once 'reiscout_property_commerce.inc';
 function reiscout_property_commerce_menu () {
   // Module settings.
   $items['admin/commerce/config/reiscout'] = array(
-    'title' => 'Reiscout',
+    'title' => 'Reiscout Commerce Settings',
     'description' => 'Reiscout settings.',
     'page callback' => 'drupal_get_form',
     'page arguments' => array('reiscout_property_commerce_settings_form'),

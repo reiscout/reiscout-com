@@ -9,6 +9,10 @@
 function reiscout_property_commerce_settings_form($form, &$form_state) {
   $form = array();
 
+  $form['help'] = array(
+    '#markup' => t('Update the price for new created products below.'),
+  );
+
   $form['reiscout_property_commerce_address_access_basic_price'] = array(
     '#type' => 'textfield',
     '#title' => t('Address Access basic price'),
@@ -29,7 +33,7 @@ function reiscout_property_commerce_settings_form($form, &$form_state) {
 
   $form['submit'] = array(
     '#type' => 'submit',
-    '#value' => t('Submit'),
+    '#value' => t('Save'),
   );
 
   return $form;
