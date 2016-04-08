@@ -16,10 +16,12 @@ function reiscout_property_commerce_create_product($type, $reference_node) {
   if ($type == REISCOUT_PROPERTY_COMMERCE_ADDRESS_ACCESS_PRODUCT_TYPE) {
     $product->title = 'Address Access for '. $reference_node->title;
     $product->sku = 'address-access-for-property-node-'. $reference_node->nid;
+    $product->commerce_price[LANGUAGE_NONE][0] = reiscout_property_commerce_get_property_address_price($reference_node);
   }
   if ($type == REISCOUT_PROPERTY_COMMERCE_OWNER_INFO_PRODUCT_TYPE) {
     $product->title = 'Owner Info for '. $reference_node->title;
     $product->sku = 'owner-info-for-property-node-'. $reference_node->nid;
+    $product->commerce_price[LANGUAGE_NONE][0] = reiscout_property_commerce_get_owner_info_price();
   }
 
   commerce_product_save($product);
@@ -101,12 +103,81 @@ function reiscout_property_commerce_get_owner_info_price() {
 
 /**
  * Calculate and return property address price
- * ToDo: implement it.
  */
 function reiscout_property_commerce_get_property_address_price($node) {
-  $price_decimal = variable_get('reiscout_property_commerce_address_access_basic_price', 10);
+
+  // Load fields from fieldgroup? see field_group_load_field_group()
+  $fields_to_check = array(
+    'body',
+    'field_size',
+    'field_bedrooms',
+    'field_bathrooms',
+    'field_lot_size',
+    'field_last_purchase_price',
+    'field_last_purchase_time',
+    'field_assessed_value',
+    'field_mortgage_company',
+    'field_repairs_price',
+    'field_arv',
+    'field_under_contract'
+  );
+
+  $served_types = array(
+    'datetime', 'number_integer', 'list_integer', 'text', 'text_with_summary'
+  );
+
+  $filled_fields_count = 0;
+  foreach ($fields_to_check as $field) {
+    $field_info = field_info_field($field);
+    if (!in_array($field_info['type'], $served_types)) {
+      trigger_error($field_info['type'] . ' field type can\'t be handled', E_USER_WARNING);
+      continue;
+    }
+
+    if (in_array($field_info['type'], array('list_integer', 'number_integer'))) {
+      if (!isset($node->{$field}[LANGUAGE_NONE][0]['value'])) {
+        continue;
+      }
+
+      if (!empty($node->{$field}[LANGUAGE_NONE][0]['value'])
+      || $node->{$field}[LANGUAGE_NONE][0]['value'] == 0) {
+        $filled_fields_count++;
+      }
+
+    } else {
+      if (!empty($node->{$field}[LANGUAGE_NONE][0]['value'])) {
+        $filled_fields_count++;
+      }
+    }
+  }
+
+  $bace_price_decimal = variable_get('reiscout_property_commerce_address_access_basic_price', 10);
+  $per_field_price_decimal = variable_get('reiscout_property_commerce_address_access_per_field_price', 0.1);
+  $price = $bace_price_decimal + $per_field_price_decimal * $filled_fields_count;
   return array(
-    'amount' => $price_decimal * 100,
+    'amount' => $price * 100,
     'currency_code' => 'USD',
   );
+}
+
+/**
+ * Check is price for product should be updated and update if needed.
+ */
+function reiscout_property_commerce_update_price($product) {
+  $pw = entity_metadata_wrapper('commerce_product', $product);
+
+  if ($product->type == REISCOUT_PROPERTY_COMMERCE_ADDRESS_ACCESS_PRODUCT_TYPE) {
+    $new_price = reiscout_property_commerce_get_property_address_price($pw->field_property->value());
+  } elseif ($product->type == REISCOUT_PROPERTY_COMMERCE_OWNER_INFO_PRODUCT_TYPE) {
+    $new_price = reiscout_property_commerce_get_owner_info_price();
+  } else {
+    throw new Exception('Product of passed type can\'t be processed');
+  }
+
+  // Check is new price is different then existed and save.
+  if ($pw->commerce_price->amount->value() != $new_price['amount']
+  || $pw->commerce_price->currency_code->value() != $new_price['currency_code']) {
+    $pw->commerce_price->set($new_price);
+    $pw->save();
+  }
 }

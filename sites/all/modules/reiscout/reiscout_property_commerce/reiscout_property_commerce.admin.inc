@@ -22,6 +22,15 @@ function reiscout_property_commerce_settings_form($form, &$form_state) {
     '#required' => TRUE,
   );
 
+  $form['reiscout_property_commerce_address_access_per_field_price'] = array(
+    '#type' => 'textfield',
+    '#title' => t('Address Access price per field'),
+    '#default_value' => variable_get('reiscout_property_commerce_address_access_per_field_price', 0.10),
+    '#size' => 5,
+    '#maxlength' => 5,
+    '#required' => TRUE,
+  );
+
   $form['reiscout_property_commerce_owner_info_price'] = array(
     '#type' => 'textfield',
     '#title' => t('Owner Info product price'),
@@ -40,20 +49,30 @@ function reiscout_property_commerce_settings_form($form, &$form_state) {
 }
 
 function reiscout_property_commerce_settings_form_validate($form, &$form_state) {
-  $address_access_price = $form_state['values']['reiscout_property_commerce_address_access_basic_price'];
-  $owner_info_price = $form_state['values']['reiscout_property_commerce_owner_info_price'];
 
-  if (!is_numeric($address_access_price)) {
-    form_set_error('reiscout_property_commerce_address_access_basic_price', t('Price should be a number'));
-  }
+  $check_to_be_numeric = array(
+    'reiscout_property_commerce_address_access_basic_price',
+    'reiscout_property_commerce_owner_info_price',
+    'reiscout_property_commerce_address_access_per_field_price',
+  );
 
-  if (!is_numeric($owner_info_price)) {
-    form_set_error('reiscout_property_commerce_owner_info_price', t('Price should be a number'));
+  foreach ($check_to_be_numeric as $name) {
+    $value = $form_state['values'][ $name ];
+    if (!is_numeric($value)) {
+      form_set_error($name, 'field value should be numeric');
+    }
   }
 
 }
 
 function reiscout_property_commerce_settings_form_submit($form, &$form_state) {
-  variable_set('reiscout_property_commerce_address_access_basic_price', $form_state['values']['reiscout_property_commerce_address_access_basic_price']);
-  variable_set('reiscout_property_commerce_owner_info_price', $form_state['values']['reiscout_property_commerce_owner_info_price']);
+  $to_save = array(
+    'reiscout_property_commerce_address_access_basic_price',
+    'reiscout_property_commerce_owner_info_price',
+    'reiscout_property_commerce_address_access_per_field_price',
+  );
+
+  foreach ($to_save as $name) {
+    variable_set($name, $form_state['values'][ $name ]);
+  }
 }
