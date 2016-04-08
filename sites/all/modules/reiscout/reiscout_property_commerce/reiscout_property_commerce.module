@@ -103,7 +103,6 @@ function reiscout_property_commerce_node_presave($node) {
   // Looking for existed product or create one and attach to node if it is not attached yet
   if (empty($node->field_owner_info_product[LANGUAGE_NONE][0])) {
     $owner_info_product = reiscout_property_commerce_load_product_by_property(REISCOUT_PROPERTY_COMMERCE_OWNER_INFO_PRODUCT_TYPE, $node->nid);
-
     if (!$owner_info_product) {
       $owner_info_product = reiscout_property_commerce_create_product(REISCOUT_PROPERTY_COMMERCE_OWNER_INFO_PRODUCT_TYPE, $node);
     }
@@ -121,11 +120,9 @@ function reiscout_property_commerce_node_presave($node) {
   // Looking for existed product or create one and attach to node if it is not attached yet
   if (empty($node->field_address_access_product[LANGUAGE_NONE][0])) {
     $address_access_product = reiscout_property_commerce_load_product_by_property(REISCOUT_PROPERTY_COMMERCE_ADDRESS_ACCESS_PRODUCT_TYPE, $node->nid);
-    $address_access_product->commerce_price[LANGUAGE_NONE][0] = reiscout_property_commerce_get_property_address_price($node);
     if (!$address_access_product) {
       $address_access_product = reiscout_property_commerce_create_product(REISCOUT_PROPERTY_COMMERCE_ADDRESS_ACCESS_PRODUCT_TYPE, $node);
     }
-
     $node->field_address_access_product[LANGUAGE_NONE][0]['product_id'] = $address_access_product->product_id;
   }
   // Update price for existed attached product
@@ -194,5 +191,5 @@ function reiscout_property_commerce_form_commerce_cart_form_alter(&$form, &$form
 }
 
 function reiscout_property_commerce_init() {
-  
+
 }
