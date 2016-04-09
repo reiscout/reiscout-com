@@ -42,16 +42,24 @@ function reiscout_address_services_resources() {
   return $resource;
 }
 
+/**
+ * Access callback for addressapi resource.
+ */
 function reiscout_address_resource_access($nid) {
   $node = node_load($nid);
 
   return ($node && $node->type === 'property' && !user_is_anonymous() && $node->uid !== $GLOBALS['user']->uid);
 }
 
+/**
+ * Implements hook_entity_load().
+ */
 function reiscout_address_entity_load($entities, $type) {
   if ($type === 'node' && !user_is_anonymous()) {
     foreach ($entities as $entity) {
       if ($entity->type === 'property') {
+        // Set $entity->_flag_is_user_has_view to TRUE for property node is user its author or has flagged the node.
+        //  it is used by mobile App, see reiscout_address.js app module.
         $entity->_flag_is_user_has_view = ($entity->uid === $GLOBALS['user']->uid || reiscout_address_user_has_view($entity->nid));
       }
     }
@@ -65,7 +73,6 @@ function reiscout_address_entity_load($entities, $type) {
  */
 function reiscout_address_menu () {
   $items['reiscout_address_ajax_callback/%ctools_js/%node'] = array(
-    'title' => 'Hello World',
     'page callback' => 'reiscout_address_button_ajax_callback',
     'page arguments' => array(1, 2),
     'access callback' => TRUE,
@@ -75,10 +82,11 @@ function reiscout_address_menu () {
 }
 
 /**
- * Implements hook_action_info().
+ * Implements menu callback for ajax request to reiscout_address_ajax_callback/%ctools_js/%node path..
  */
 function reiscout_address_button_ajax_callback($js = NULL, $node) {
   if (user_is_anonymous()) {
+    // For anonymous show login modal.
     ctools_include('modal');
     ctools_include('ajax');
     $form_state = array(
@@ -94,7 +102,7 @@ function reiscout_address_button_ajax_callback($js = NULL, $node) {
     print ajax_render($output);
     exit;
   } else {
-    $account = $GLOBALS['user'];
+    // For logged in replace 'show address' button with the address itself.
     $address = reiscout_address_get_address($node);
     reiscout_address_set_view($node->nid);
     $commands[] = ajax_command_html('#address-ajax-placeholder', $address);
@@ -110,7 +118,7 @@ function reiscout_address_button_ajax_callback($js = NULL, $node) {
  * For authorized user who have the flag show the address
  * Hide for others
  */
-function reiscout_address_node_view ($node, $view_mode, $langcode) {
+function reiscout_address_node_view($node, $view_mode, $langcode) {
   if ($view_mode == 'full' && $node->type == 'property') {
     // For authorized user who have the flag (already viewed the address) show the address
     if (!user_is_anonymous() && ($node->uid === $GLOBALS['user']->uid || reiscout_address_user_has_view($node->nid))) {
@@ -129,15 +137,15 @@ function reiscout_address_node_view ($node, $view_mode, $langcode) {
   }
 }
 
-/*
- * set the flag that node has been viewed by the user
+/**
+ * Set the flag that node has been viewed by the user
  */
 function reiscout_address_set_view($nid, $account = NULL) {
   return flag('flag', REISCOUT_ADDRESS_VIEWED_FLAG, $nid, $account);
 }
 
-/*
- * set the flag that node has been viewed by the user
+/**
+ * Set the flag that node has been viewed by the user
  */
 function reiscout_address_user_has_view($nid, $uid = null) {
   $flags = flag_get_user_flags('node', $nid, $uid);
@@ -148,8 +156,8 @@ function reiscout_address_user_has_view($nid, $uid = null) {
   return FALSE;
 }
 
-/*
- * set the flag that node has been viewed by the user
+/**
+ * Set the flag that node has been viewed by the user
  */
 function reiscout_address_get_address($node) {
   return $node->field_address_text[LANGUAGE_NONE][0]['value'];
