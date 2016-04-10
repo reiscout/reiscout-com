@@ -1,9 +1,17 @@
 #masthead {
-  max-width: 1255px;
+  /*max-width: 1255px;*/
+}
+
+#masthead #logo {
+  width: 25%;
+}
+
+#masthead .mainmenu {
+  width: 75%;
 }
 
 h1#site-title {
-  font-size: 30px;
+  font-size: 18px;
 }
 
 body.page-onepage #main-menu a.active:link,
