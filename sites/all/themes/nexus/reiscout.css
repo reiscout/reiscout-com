@@ -26,6 +26,10 @@ body.page-onepage #main-menu a.active:active {
   text-transform: uppercase;
 }
 
+#onepage #how-it-works {
+  text-align: center;
+}
+
 #onepage #clients {
   text-align: center;
 }
