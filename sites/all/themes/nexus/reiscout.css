@@ -170,3 +170,29 @@ body.page-onepage #main-menu a.active:active {
   float: left;
   text-align: right;
 }
+
+.class-we-arent-ready-yet-popup.popup-element .popup-element-title {
+  background: none;
+}
+
+.class-we-arent-ready-yet-popup.popup-element-body {
+  background-color: #fff;
+}
+
+.class-we-arent-ready-yet-popup.popup-element-body .form-actions {
+  text-align: center;
+}
+
+.class-we-arent-ready-yet-popup.popup-element-body .mailchimp-signup-subscribe-form-description {
+  text-align: center;
+}
+
+.class-we-arent-ready-yet-popup.popup-element-body .form-item label {
+  display: inline-block;
+}
+
+.class-we-arent-ready-yet-popup.popup-element-body .form-item input,
+.class-we-arent-ready-yet-popup.popup-element-body .form-item textarea {
+  width: 100%;
+  border: 1px solid #ccc;
+}
