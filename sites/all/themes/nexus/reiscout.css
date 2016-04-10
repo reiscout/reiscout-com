@@ -1,7 +1,3 @@
-#masthead {
-  /*max-width: 1255px;*/
-}
-
 #masthead #logo {
   width: 25%;
 }
@@ -12,6 +8,21 @@
 
 h1#site-title {
   font-size: 18px;
+}
+
+@media screen and (max-width: 768px) {
+  h1#site-title{
+    font-size: 160%;
+    padding-top: 12px;
+  }
+
+  #masthead #logo {
+    width: 100%;
+  }
+
+  #masthead .mainmenu {
+    width: 100%;
+  }
 }
 
 body.page-onepage #main-menu a.active:link,
