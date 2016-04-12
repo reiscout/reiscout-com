@@ -43,7 +43,7 @@ function reiscout_address_services_resources() {
 }
 
 /**
- * Access callback for addressapi resource.
+ * Access callback for addressapi:setview action.
  */
 function reiscout_address_resource_access($nid) {
   $node = node_load($nid);

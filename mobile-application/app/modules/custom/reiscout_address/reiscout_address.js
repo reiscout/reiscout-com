@@ -6,6 +6,7 @@
  */
 function reiscout_address_install() {
   try {
+    // Add libs required by address autocomplete feature.
     var modulePath = drupalgap_get_path('module', 'reiscout_address');
     drupalgap_add_js('http://maps.googleapis.com/maps/api/js?libraries=places');
     drupalgap_add_js(modulePath + '/geocomplete/jquery.geocomplete' + (Drupal.settings.debug ? '' : '.min') + '.js');
@@ -44,6 +45,7 @@ function reiscout_address_form_alter(form, form_state, form_id) {
       form.submit = ['_reiscout_address_user_pass_form_submit'];
     }
     else if (form_id === 'node_edit' && form.bundle === 'property') {
+      // Implement address geocomplete for field_address_text
       var address, position, delta;
       var language = language_default();
       var elements = form.elements;
@@ -71,6 +73,9 @@ function reiscout_address_form_alter(form, form_state, form_id) {
         if (typeof elements.field_geo_position !== 'undefined') {
           if (elements.field_geo_position.type === 'geofield') {
             if (elements.field_geo_position.field_info_instance.widget.type === 'geofield_latlon') {
+              // Update standard 'Get location' button behaviour:
+              // after success geo coords retrieving it request the website for address (text) for the coords and
+              // put the address to field_address_text.
               position = elements.field_geo_position;
               position.field_info_instance.widget.module = 'reiscout_address';
               position.field_info_instance.widget.type = 'reiscout_' + position.field_info_instance.widget.type;
