@@ -144,6 +144,7 @@ function reiscout_property_commerce_node_view_alter(&$build) {
  * Implements hook_node_presave().
  */
 function reiscout_property_commerce_node_presave($node) {
+  return;
   // Assign products to property nodes on save.
   if (!($node->type == REISCOUT_PROPERTY_COMMERCE_NODE_TYPE)) {
     return;
