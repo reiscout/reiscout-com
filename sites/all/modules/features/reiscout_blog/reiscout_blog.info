@@ -59,7 +59,6 @@ features[variable][] = path_breadcrumbs_internal_render_themes
 features[variable][] = path_breadcrumbs_rich_snippets
 features[variable][] = path_breadcrumbs_truncate_title_length
 features[variable][] = path_breadcrumbs_url_cleaning_method
-features[variable][] = pathauto_blog_pattern
 features[variable][] = pathauto_case
 features[variable][] = pathauto_forum_pattern
 features[variable][] = pathauto_ignore_words
