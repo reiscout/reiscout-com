@@ -168,11 +168,10 @@ function reiscout_address_get_address($node) {
  */
 function reiscout_address_form_property_node_form_alter(&$form, &$form_state, $form_id) {
   static $fieldName = 'field_address_text';
-  
-  if (isset($form[$fieldName])) {
-    drupal_add_js(drupal_get_path('module', 'reiscout_address') . '/reiscout_address.js');
 
+  if (isset($form[$fieldName])) {
     $language = (empty($form[$fieldName]['#language']) ? LANGUAGE_NONE : $form[$fieldName]['#language']);
+    $autocomplete = [];
     
     if (isset($form[$fieldName][$language])) {
       foreach ($form[$fieldName][$language] as $delta => &$field) {
@@ -196,11 +195,20 @@ function reiscout_address_form_property_node_form_alter(&$form, &$form_state, $f
             'data-input-id' => 'edit-' . $idSuffix,
           ],
         ]);
-
+        
+        $autocomplete[] = 'edit-' . $idSuffix;
         $element['#field_suffix'] = $link . $element['#field_suffix'];
 
         unset($element, $field);
       }
     }
+
+    $modulePath = drupal_get_path('module', 'reiscout_address');
+
+    drupal_add_css($modulePath . '/reiscout_address.css');
+    drupal_add_js(array('reiscout_address_autocomplete' => $autocomplete), 'setting');
+    drupal_add_js('https://maps.googleapis.com/maps/api/js?libraries=places');
+    drupal_add_js($modulePath . '/geocomplete/jquery.geocomplete.min.js');
+    drupal_add_js($modulePath . '/reiscout_address.js');
   }
 }
