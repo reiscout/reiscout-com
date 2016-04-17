@@ -140,6 +140,17 @@ function reiscout_address_field_widget_form(form, form_state, field, instance, l
         markup: drupalgap_jqm_page_event_script_code({
           page_id: drupalgap_get_page_id(),
           jqm_page_event: 'pageshow',
+          jqm_page_event_callback: '_reiscout_address_clearable_field_pageshow',
+          jqm_page_event_args: JSON.stringify({
+              clearable_id: items[delta].id
+          })
+        })
+      });
+
+      items[delta].children.push({
+        markup: drupalgap_jqm_page_event_script_code({
+          page_id: drupalgap_get_page_id(),
+          jqm_page_event: 'pageshow',
           jqm_page_event_callback: '_reiscout_address_geocomplete_field_pageshow',
           jqm_page_event_args: JSON.stringify({
               geocomplete_id: items[delta].id
@@ -495,6 +506,45 @@ function _reiscout_address_user_request_address_info(button) {
     drupalgap.loading = false;
     
     console.log('_reiscout_address_user_request_address_info - ' + error);
+  }
+}
+
+function _reiscout_address_clearable_field_pageshow(options) {
+  try {
+    if (Drupal.settings.debug) {
+      console.log(['_reiscout_address_clearable_field_pageshow', options]);
+    }
+
+    $('#' + options.clearable_id).parent().append([
+      '<span style="position: relative; float: right; right: -4px; top: -50px; z-index: 1000;">',
+        theme('button_link', {
+          text: t('Clear Address'),
+          options: {
+            attributes: {
+              class: 'ui-mini ui-link ui-btn ui-btn-b ui-icon-delete ui-btn-icon-left ui-btn-inline ui-shadow ui-corner-all',
+              onclick: 'javascript:_reiscout_address_clear_address(this, \'' + options.clearable_id + '\');'
+            }
+          }
+        }),
+      '</span>'
+    ].join(''));
+  }
+  catch (error) {
+    console.log('_reiscout_address_clearable_field_pageshow - ' + error);
+  }
+}
+
+function _reiscout_address_clear_address(button, id) {
+  try {
+    if (Drupal.settings.debug) {
+      console.log(['_reiscout_address_clear_address', button, id]);
+    }
+
+    $(button).blur();
+    $('#' + id).val('');
+  }
+  catch (error) {
+    console.log('_reiscout_address_clear_address - ' + error);
   }
 }
 
