@@ -125,7 +125,15 @@ function theme_reiscout_address_editable(variables) {
             }),
           '</div>',
         '</div>',
-      '</div>'
+      '</div>',
+      drupalgap_jqm_page_event_script_code({
+        page_id: drupalgap_get_page_id(),
+        jqm_page_event: 'pageshow',
+        jqm_page_event_callback: '_reiscout_address_geocomplete_field_pageshow',
+        jqm_page_event_args: JSON.stringify({
+            geocomplete_id: 'editable-form-value'
+        })
+      })
     ].join('');
 
     return html;
