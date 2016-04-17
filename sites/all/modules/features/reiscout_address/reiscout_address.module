@@ -163,3 +163,44 @@ function reiscout_address_get_address($node) {
   return $node->field_address_text[LANGUAGE_NONE][0]['value'];
 }
 
+/**
+ * Implements hook_form_alter().
+ */
+function reiscout_address_form_property_node_form_alter(&$form, &$form_state, $form_id) {
+  static $fieldName = 'field_address_text';
+  
+  if (isset($form[$fieldName])) {
+    drupal_add_js(drupal_get_path('module', 'reiscout_address') . '/reiscout_address.js');
+
+    $language = (empty($form[$fieldName]['#language']) ? LANGUAGE_NONE : $form[$fieldName]['#language']);
+    
+    if (isset($form[$fieldName][$language])) {
+      foreach ($form[$fieldName][$language] as $delta => &$field) {
+        if (!isset($field['value'])) {
+          continue;
+        }
+
+        $element = &$field['value'];
+
+        if (!isset($element['#field_suffix'])) {
+          $element['#field_suffix'] = '';
+        }
+
+        $idPrefix = 'clear-address-button';
+        $idSuffix = drupal_html_id(implode('-', [$fieldName, $language, $delta, 'value']));
+        $link = l('Clear Address', current_path(), [
+          'fragment' => $idPrefix . '-' . $idSuffix,
+          'attributes' => [
+            'id' => $idPrefix . '-' . $idSuffix,
+            'class' => [$idPrefix],
+            'data-input-id' => 'edit-' . $idSuffix,
+          ],
+        ]);
+
+        $element['#field_suffix'] = $link . $element['#field_suffix'];
+
+        unset($element, $field);
+      }
+    }
+  }
+}
