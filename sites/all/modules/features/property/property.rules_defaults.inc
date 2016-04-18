@@ -12,6 +12,7 @@ function property_default_rules_configuration() {
   $items['rules_address_reverse_geocode'] = entity_import('rules_config', '{ "rules_address_reverse_geocode" : {
       "LABEL" : "Address reverse geocode",
       "PLUGIN" : "reaction rule",
+      "ACTIVE" : false,
       "OWNER" : "rules",
       "TAGS" : [ "reiscout" ],
       "REQUIRES" : [ "rules", "geocoder_rules" ],

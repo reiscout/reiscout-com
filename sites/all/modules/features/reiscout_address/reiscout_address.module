@@ -167,8 +167,7 @@ function reiscout_address_get_address($node) {
  * Implements hook_form_alter().
  */
 function reiscout_address_form_property_node_form_alter(&$form, &$form_state, $form_id) {
-  static $fieldName = 'field_address_text';
-
+  $fieldName = 'field_address_text';
   if (isset($form[$fieldName])) {
     $language = (empty($form[$fieldName]['#language']) ? LANGUAGE_NONE : $form[$fieldName]['#language']);
     $autocomplete = [];

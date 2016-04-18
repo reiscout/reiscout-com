@@ -176,7 +176,7 @@ function property_field_default_field_instances() {
     'entity_type' => 'node',
     'field_name' => 'field_address_text',
     'label' => 'Address',
-    'required' => 0,
+    'required' => 1,
     'settings' => array(
       'text_processing' => 0,
       'user_register_form' => FALSE,
@@ -494,7 +494,7 @@ function property_field_default_field_instances() {
       'active' => 1,
       'module' => 'geofield',
       'settings' => array(
-        'html5_geolocation' => 1,
+        'html5_geolocation' => 0,
       ),
       'type' => 'geofield_latlon',
       'weight' => 4,

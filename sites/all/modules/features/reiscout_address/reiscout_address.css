@@ -13,3 +13,7 @@
 .pac-icon-marker {
   display: none;
 }
+
+#property-node-form #edit-field-geo-position {
+  display: none;
+}
