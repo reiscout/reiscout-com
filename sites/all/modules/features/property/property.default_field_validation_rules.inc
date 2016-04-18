@@ -29,7 +29,7 @@ function property_default_field_validation_rule() {
       2 => 0,
       3 => 0,
     ),
-    'errors' => 0,
+    'errors' => 1,
     'condition' => 0,
     'condition_wrapper' => array(
       'condition_field' => '',
