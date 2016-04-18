@@ -8,13 +8,7 @@
 function _editableapi_resource_save($nid, $type, $field, $language, $delta, $value) {
   try {
     $node = node_load($nid);
-    //unset($node->field_geo_position);
     $node->{$field}[$language][$delta]['value'] = $value;
-
-    if ($type === 'property' && $field === 'field_address_text' && isset($node->title)) {
-      $node->title = filter_xss($value);
-    }
-
     node_save($node);
 
     $value  = '';

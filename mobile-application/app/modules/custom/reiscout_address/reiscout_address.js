@@ -374,7 +374,6 @@ function _reiscout_address_editable_address_form_save(button, nid, type, field, 
           }
 
           container.find('.editable-view .editable-value').text(result.value);
-          $('#node_' + nid + '_view_container h2:eq(0)').text(result.value);
           container.find('.editable-view, .editable-form').toggle();
           input.val('');
         },
