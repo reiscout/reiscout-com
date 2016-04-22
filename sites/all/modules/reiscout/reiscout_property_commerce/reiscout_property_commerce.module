@@ -177,16 +177,18 @@ function reiscout_property_commerce_node_view_alter(&$build) {
  * Implements hook_node_presave().
  */
 function reiscout_property_commerce_node_presave($node) {
-  return;
   // Assign products to property nodes on save.
-  if (!($node->type == REISCOUT_PROPERTY_COMMERCE_NODE_TYPE)) {
+  if (!($node->type == REISCOUT_PROPERTY_COMMERCE_NODE_TYPE) || $node->is_new) {
     return;
   }
 
   // Looking for existed product or create one and attach to node if it is not attached yet
   if (empty($node->field_owner_info_product[LANGUAGE_NONE][0])) {
-    $owner_info_product = reiscout_property_commerce_load_product_by_property(REISCOUT_PROPERTY_COMMERCE_OWNER_INFO_PRODUCT_TYPE, $node->nid);
-    if (!$owner_info_product) {
+    if (!empty($node->nid)) {
+      $owner_info_product = reiscout_property_commerce_load_product_by_property(REISCOUT_PROPERTY_COMMERCE_OWNER_INFO_PRODUCT_TYPE, $node->nid);
+    }
+
+    if (empty($owner_info_product)) {
       $owner_info_product = reiscout_property_commerce_create_product(REISCOUT_PROPERTY_COMMERCE_OWNER_INFO_PRODUCT_TYPE, $node);
     }
 
@@ -202,8 +204,11 @@ function reiscout_property_commerce_node_presave($node) {
   // The save as for above for address access product
   // Looking for existed product or create one and attach to node if it is not attached yet
   if (empty($node->field_address_access_product[LANGUAGE_NONE][0])) {
-    $address_access_product = reiscout_property_commerce_load_product_by_property(REISCOUT_PROPERTY_COMMERCE_ADDRESS_ACCESS_PRODUCT_TYPE, $node->nid);
-    if (!$address_access_product) {
+    if (!empty($node->nid)) {
+      $address_access_product = reiscout_property_commerce_load_product_by_property(REISCOUT_PROPERTY_COMMERCE_ADDRESS_ACCESS_PRODUCT_TYPE, $node->nid);
+    }
+
+    if (empty($address_access_product)) {
       $address_access_product = reiscout_property_commerce_create_product(REISCOUT_PROPERTY_COMMERCE_ADDRESS_ACCESS_PRODUCT_TYPE, $node);
     }
     $node->field_address_access_product[LANGUAGE_NONE][0]['product_id'] = $address_access_product->product_id;

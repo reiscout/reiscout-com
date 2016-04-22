@@ -6,6 +6,11 @@
  */
 
 function reiscout_property_commerce_create_product($type, $reference_node) {
+
+  if (empty($reference_node->nid)) {
+    throw new Exception('nid is required in passed node object');
+  }
+
   $product = commerce_product_new($type);
   $product->field_property[LANGUAGE_NONE][0]['target_id'] = $reference_node->nid;
   $product->commerce_price[LANGUAGE_NONE][0] = array(
@@ -94,7 +99,9 @@ function reiscout_property_commerce_load_product_by_property($product_type, $nid
 
   $result = $query->execute();
   if (!empty($result['commerce_product'])) {
-    return array_pop($result['commerce_product']);
+    $product = array_pop($result['commerce_product']);
+    $product = commerce_product_load($product->product_id);
+    return $product;
   } else {
     return FALSE;
   }
@@ -176,20 +183,26 @@ function reiscout_property_commerce_get_property_address_price($node) {
  * Check is price for product should be updated and update if needed.
  */
 function reiscout_property_commerce_update_price($product) {
-  $pw = entity_metadata_wrapper('commerce_product', $product);
+  // Add try..catch block to make system show a reasonable error,
+  // otherwise it will show entity_metadata exception with no reasonable call stack
+  try {
+    $pw = entity_metadata_wrapper('commerce_product', $product);
 
-  if ($product->type == REISCOUT_PROPERTY_COMMERCE_ADDRESS_ACCESS_PRODUCT_TYPE) {
-    $new_price = reiscout_property_commerce_get_property_address_price($pw->field_property->value());
-  } elseif ($product->type == REISCOUT_PROPERTY_COMMERCE_OWNER_INFO_PRODUCT_TYPE) {
-    $new_price = reiscout_property_commerce_get_owner_info_price();
-  } else {
-    throw new Exception('Product of passed type can\'t be processed');
-  }
+    if ($product->type == REISCOUT_PROPERTY_COMMERCE_ADDRESS_ACCESS_PRODUCT_TYPE) {
+      $new_price = reiscout_property_commerce_get_property_address_price($pw->field_property->value());
+    } elseif ($product->type == REISCOUT_PROPERTY_COMMERCE_OWNER_INFO_PRODUCT_TYPE) {
+      $new_price = reiscout_property_commerce_get_owner_info_price();
+    } else {
+      throw new Exception('Product of passed type can\'t be processed');
+    }
 
-  // Check is new price is different then existed and save.
-  if ($pw->commerce_price->amount->value() != $new_price['amount']
-  || $pw->commerce_price->currency_code->value() != $new_price['currency_code']) {
-    $pw->commerce_price->set($new_price);
-    $pw->save();
+    // Check is new price is different then existed and save.
+    if ($pw->commerce_price->amount->value() != $new_price['amount']
+      || $pw->commerce_price->currency_code->value() != $new_price['currency_code']) {
+      $pw->commerce_price->set($new_price);
+      $pw->save();
+    }
+  } catch (Exception $e) {
+    throw new Exception($e->getMessage());
   }
 }
