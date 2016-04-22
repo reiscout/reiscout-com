@@ -144,3 +144,26 @@ function reiscout_property_my_properties_view_empty(view) {
     console.log('reiscout_property_my_properties_view_empty - ' + error);
   }
 }
+
+/**
+ * Implements hook_entity_post_render_field().
+ * Called after drupalgap_entity_render_field() assembles the field content
+ * string. Use this to make modifications to the HTML output of the entity's
+ * field before it is displayed. The field content will be inside of
+ * reference.content, so to make modifications, change reference.content. For
+ * more info: http://stackoverflow.com/questions/518000/is-javascript-a-pass-by-reference-or-pass-by-value-language
+ */
+function reiscout_property_entity_post_render_field(entity, field_name, field, reference) {
+  try {
+    if (field.entity_type === 'node' && field.bundle === 'property') {
+      if (field_name === 'field_image') {
+        if (typeof entity._purchased_counter !== 'undefined') {
+          reference.content += 'This lead has been purchased: ' + (entity._purchased_counter == 1 ? '1 time' : entity._purchased_counter + ' times');
+        }
+      }
+    }
+  }
+  catch (error) {
+    console.log('reiscout_property_entity_post_render_field - ' + error);
+  }
+}

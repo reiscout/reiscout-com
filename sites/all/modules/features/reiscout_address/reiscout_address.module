@@ -186,7 +186,7 @@ function reiscout_address_form_property_node_form_alter(&$form, &$form_state, $f
 
         $idPrefix = 'clear-address-button';
         $idSuffix = drupal_html_id(implode('-', [$fieldName, $language, $delta, 'value']));
-        $link = l('Clear Address', current_path(), [
+        $link = l(t('Clear Address'), current_path(), [
           'fragment' => $idPrefix . '-' . $idSuffix,
           'attributes' => [
             'id' => $idPrefix . '-' . $idSuffix,
