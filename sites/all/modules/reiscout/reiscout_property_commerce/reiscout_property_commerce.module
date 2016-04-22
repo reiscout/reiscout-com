@@ -96,9 +96,22 @@ function reiscout_property_commerce_form_property_node_form_alter(&$form, &$form
  */
 function reiscout_property_commerce_entity_load($entities, $type) {
   if ($type === 'node' && !user_is_anonymous()) {
-    foreach ($entities as $entity) {
-      if ($entity->type === REISCOUT_PROPERTY_COMMERCE_NODE_TYPE) {
-        $entity->_purchased_counter = reiscout_property_commerce_get_purchased_count($entity->nid);
+    $nids = [];
+    foreach ($entities as $nid => $entity) {
+      if ($entity->type === REISCOUT_PROPERTY_COMMERCE_NODE_TYPE && !isset($entity->_purchased_counter)) {
+        $entity->_purchased_counter = 0;
+        $nids[] = $nid;
+      }
+    }
+
+    if ($nids) {
+      $counters = reiscout_property_commerce_get_purchased_counters($nids);
+      if ($counters) {
+        foreach ($counters as $counter) {
+          if (isset($entities[$counter->nid])) {
+            $entities[$counter->nid]->_purchased_counter = $counter->counter;
+          }
+        }
       }
     }
   }

@@ -61,16 +61,19 @@ function reiscout_property_commerce_get_purchased_nids($product_type, $uid = '')
   return $result->fetchCol();
 }
 
-function reiscout_property_commerce_get_purchased_count($nid) {
+function reiscout_property_commerce_get_purchased_counters($nids) {
   $query = db_select('field_data_field_property', 'fdfp');
   $query->join('commerce_product', 'cp', 'cp.product_id = fdfp.entity_id');
   $query->join('field_data_commerce_product', 'fdcp', 'fdcp.commerce_product_product_id = cp.product_id');
   $query->join('commerce_line_item', 'cli', 'cli.line_item_id = fdcp.entity_id');
   $query->join('commerce_order', 'co', 'co.order_id = cli.order_id');
-  $query->condition('fdfp.field_property_target_id', $nid, '=')->condition('co.status', 'completed', '=');
-  $query->addExpression('COUNT(DISTINCT fdfp.field_property_target_id)', 'conter');
+  $query->condition('fdfp.field_property_target_id', $nids, 'IN');
+  $query->condition('co.status', 'completed', '=');
+  $query->addField('fdfp', 'field_property_target_id', 'nid');
+  $query->addExpression('COUNT(DISTINCT co.order_id)', 'counter');
+  $query->groupBy('fdfp.field_property_target_id');
 
-  return $query->execute()->fetchField();
+  return $query->execute()->fetchAll();
 }
 
 function reiscout_property_commerce_is_node_purchased($nid, $product_type, $uid = '') {

@@ -157,7 +157,7 @@ function reiscout_property_entity_post_render_field(entity, field_name, field, r
   try {
     if (field.entity_type === 'node' && field.bundle === 'property') {
       if (field_name === 'field_image') {
-        if (typeof entity._purchased_counter !== 'undefined') {
+        if (Drupal.user.uid != 0 && typeof entity._purchased_counter !== 'undefined') {
           reference.content += 'This lead has been purchased: ' + (entity._purchased_counter == 1 ? '1 time' : entity._purchased_counter + ' times');
         }
       }
