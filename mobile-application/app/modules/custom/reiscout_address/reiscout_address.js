@@ -52,7 +52,7 @@ function reiscout_address_form_alter(form, form_state, form_id) {
 
       if (typeof elements.field_address_text !== 'undefined') {
         if (elements.field_address_text.type === 'text') {
-          if (elements.field_address_text.field_info_instance.widget.type === 'text_textfield') {
+          if (in_array(elements.field_address_text.field_info_instance.widget.type, ['text_textfield', 'reiscout_geocomplete'])) {
             address = elements.field_address_text;
             address.field_info_instance.widget.module = 'reiscout_address';
             address.field_info_instance.widget.type = 'reiscout_geocomplete';
@@ -72,13 +72,13 @@ function reiscout_address_form_alter(form, form_state, form_id) {
       if (module_exists('geofield')) {
         if (typeof elements.field_geo_position !== 'undefined') {
           if (elements.field_geo_position.type === 'geofield') {
-            if (elements.field_geo_position.field_info_instance.widget.type === 'geofield_latlon') {
+            if (in_array(elements.field_geo_position.field_info_instance.widget.type, ['geofield_latlon', 'reiscout_geofield_latlon'])) {
               // Update standard 'Get location' button behaviour:
               // after success geo coords retrieving it request the website for address (text) for the coords and
               // put the address to field_address_text.
               position = elements.field_geo_position;
               position.field_info_instance.widget.module = 'reiscout_address';
-              position.field_info_instance.widget.type = 'reiscout_' + position.field_info_instance.widget.type;
+              position.field_info_instance.widget.type = 'reiscout_geofield_latlon';
               position.reiscout_address_id = '';
               
               if (address && typeof address[language] !== 'undefined') {
