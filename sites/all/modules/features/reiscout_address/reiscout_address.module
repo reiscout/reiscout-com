@@ -8,6 +8,15 @@ include_once 'reiscout_address.features.inc';
 
 define('REISCOUT_ADDRESS_VIEWED_FLAG', 'reiscout_address_viewed_by_user');
 
+function reiscout_address_init() {
+  $modulePath = drupal_get_path('module', 'reiscout_address');
+
+  drupal_add_css($modulePath . '/reiscout_address.css');
+  drupal_add_js('https://maps.googleapis.com/maps/api/js?libraries=places');
+  drupal_add_js($modulePath . '/geocomplete/jquery.geocomplete.min.js');
+  drupal_add_js($modulePath . '/reiscout_address.js');
+}
+
 /**
  * Implements hook_services_resources().
  */
@@ -170,7 +179,6 @@ function reiscout_address_form_property_node_form_alter(&$form, &$form_state, $f
   $fieldName = 'field_address_text';
   if (isset($form[$fieldName])) {
     $language = (empty($form[$fieldName]['#language']) ? LANGUAGE_NONE : $form[$fieldName]['#language']);
-    $autocomplete = [];
     
     if (isset($form[$fieldName][$language])) {
       foreach ($form[$fieldName][$language] as $delta => &$field) {
@@ -184,7 +192,7 @@ function reiscout_address_form_property_node_form_alter(&$form, &$form_state, $f
           $element['#field_suffix'] = '';
         }
 
-        $idPrefix = 'clear-address-button';
+        $idPrefix = 'address-clear-button';
         $idSuffix = drupal_html_id(implode('-', [$fieldName, $language, $delta, 'value']));
         $link = l(t('Clear Address'), current_path(), [
           'fragment' => $idPrefix . '-' . $idSuffix,
@@ -195,19 +203,20 @@ function reiscout_address_form_property_node_form_alter(&$form, &$form_state, $f
           ],
         ]);
         
-        $autocomplete[] = 'edit-' . $idSuffix;
         $element['#field_suffix'] = $link . $element['#field_suffix'];
+
+        if (!isset($element['#attributes'])) {
+          $element['#attributes'] = array();
+        }
+
+        if (!isset($element['#attributes']['class'])) {
+          $element['#attributes']['class'] = array();
+        }
+
+        $element['#attributes']['class'][] = 'address-autocomplete';
 
         unset($element, $field);
       }
     }
-
-    $modulePath = drupal_get_path('module', 'reiscout_address');
-
-    drupal_add_css($modulePath . '/reiscout_address.css');
-    drupal_add_js(array('reiscout_address_autocomplete' => $autocomplete), 'setting');
-    drupal_add_js('https://maps.googleapis.com/maps/api/js?libraries=places');
-    drupal_add_js($modulePath . '/geocomplete/jquery.geocomplete.min.js');
-    drupal_add_js($modulePath . '/reiscout_address.js');
   }
 }
