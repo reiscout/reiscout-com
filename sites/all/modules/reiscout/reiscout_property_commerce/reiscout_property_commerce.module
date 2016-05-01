@@ -8,7 +8,7 @@
  *
  * Implementation path:
  * For each property create an individual product referencing the property
- *   Property  can be referenced only once by each product type
+ *   Property can be referenced only once by each product type
  *
  * On product add to cart calculate its price and set to line item
  *   https://drupalcommerce.org/discussions/2475/how-dynamically-calculate-sell-price-product-using-rules
@@ -37,15 +37,83 @@ function reiscout_property_commerce_menu () {
     'file' => 'reiscout_property_commerce.admin.inc',
   );
 
+  // AJAX callback to show login modal
+  $items['reiscout_property_commerce_login_modal_ajax_callback/%ctools_js/%node'] = array(
+    'page callback' => 'reiscout_property_commerce_login_modal_ajax_callback',
+    'page arguments' => array(1, 2),
+    'access callback' => TRUE,
+    'type' => MENU_CALLBACK,
+  );
+
   return $items;
 }
 
 /**
+ * Implements menu callback for ajax request to reiscout_property_commerce_login_modal_ajax_callback/%ctools_js/%node path..
+ */
+function reiscout_property_commerce_login_modal_ajax_callback($js = NULL, $node) {
+
+  // For anonymous show login modal.
+  if (!user_is_anonymous()) {
+    exit;
+  }
+
+  ctools_include('modal');
+  ctools_include('ajax');
+  $form_state = array(
+    'title' => t('Login'),
+    'ajax' => TRUE,
+  );
+  $output = ctools_modal_form_wrapper('user_login', $form_state);
+  if (!empty($form_state['executed'])) {
+    $commands[] = ctools_ajax_command_redirect('node/' . $node->nid, $delay = 0, $options = array());
+    print ajax_render($commands);
+    exit;
+  }
+  print ajax_render($output);
+  exit;
+}
+
+/**
+ * Implements hook_node_view
+ *
+ * For not authorized user show 'Get property info' button that trigger the modal to login
+ * Do nothing for authorized.
+ */
+function reiscout_property_commerce_node_view($node, $view_mode, $langcode) {
+  if ($view_mode == 'full' && $node->type == 'property') {
+
+    if (user_is_anonymous()) {
+      // Replace the address with the button for all others.
+      ctools_include('ajax');
+      // We may need a modal, so add modal required JS
+      ctools_include('modal');
+      ctools_modal_add_js();
+
+      $button = ctools_ajax_text_button(t('Get Property Address and Owner Info'),
+        "reiscout_property_commerce_login_modal_ajax_callback/nojs/".$node->nid, t(''), 'login-modal-button');
+      $button = '<span id="login-modal-button">'.$button.'</span>';
+
+      $node->content['login_modal_button'] = array(
+        '#markup' => $button,
+        '#weight' => -1,
+      );
+    }
+  }
+}
+
+/**
  * List of fields to sell access to
+ *
+ * @todo: handle that list via admin settings form
  */
 function reiscout_property_commerce_fields_access_to_sell() {
   return array(
     'field_address_text',
+    'field_owner_fname',
+    'field_owner_lname',
+    'field_owner_phone',
+    'field_owner_address',
   );
 }
 
@@ -53,20 +121,19 @@ function reiscout_property_commerce_fields_access_to_sell() {
  * Implements hook_field_access.
  */
 function reiscout_property_commerce_field_access($op, $field, $entity_type, $entity, $account) {
-
-  // Show property address fields only for
-  // - admin role
-  // - property owner
-  // - user purchased the address
-
-  // Do nothing if current user is admin
-  if ($account->uid == 1) {
-    return;
-  }
-
-  // Access control for field_address in picture node.
+  // Access control for property info fields (address and etc) in property node.
   if ($op == 'view' && $entity_type == 'node' && !empty($entity->type) && $entity->type == REISCOUT_PROPERTY_COMMERCE_NODE_TYPE
   &&  in_array($field['field_name'], reiscout_property_commerce_fields_access_to_sell() ) ) {
+
+    // Do nothing if current user is admin
+    if ($account->uid == 1) {
+      return;
+    }
+
+    // Show property info fields only for
+    // - admin role
+    // - property owner
+    // - user purchased the address
 
     // Allow access if user is an author.
     if ($entity->uid == $account->uid) {
@@ -81,6 +148,7 @@ function reiscout_property_commerce_field_access($op, $field, $entity_type, $ent
     // Deny access otherwise
     return FALSE;
   }
+
 }
 
 /**
@@ -122,6 +190,8 @@ function reiscout_property_commerce_entity_load($entities, $type) {
  */
 function reiscout_property_commerce_node_view_alter(&$build) {
   if (isset($build['#node']) && $build['#node']->type === REISCOUT_PROPERTY_COMMERCE_NODE_TYPE) {
+    // disable mailchimp subsribe forms for a while
+    return;
     $node = $build['#node'];
 
     if (isset($build['#view_mode']) && $build['#view_mode'] === 'full') {
@@ -256,8 +326,15 @@ function reiscout_property_commerce_form_commerce_cart_form_alter(&$form, &$form
     return;
   }
 
+  // Disable access for anonymous and exit
+  if (user_is_anonymous()) {
+    $form['#access'] = FALSE;
+    return;
+  }
+
   $node = node_load($form_state['context']['entity_id']);
-  
+
+  // Process Owner Info product
   if ($product->type == REISCOUT_PROPERTY_COMMERCE_OWNER_INFO_PRODUCT_TYPE) {
     // Check to allow user to buy owner info
     if ($node->uid == $GLOBALS['user']->uid
@@ -269,13 +346,16 @@ function reiscout_property_commerce_form_commerce_cart_form_alter(&$form, &$form
           '@cur' => $price['currency_code'],
         )
       );
-    } elseif(!user_access('administer site configuration')) {
+    } else {
       $form['#access'] = FALSE;
     }
   }
 
+  // Process Address Access product
   if ($product->type == REISCOUT_PROPERTY_COMMERCE_ADDRESS_ACCESS_PRODUCT_TYPE) {
-    // Check to allow user to buy an address
+    // Check to allow user to buy an address:
+    //  - user not an author AND
+    //  - user not purchased it already
     if ($node->uid != $GLOBALS['user']->uid
       && !reiscout_property_commerce_is_node_purchased($node->nid, REISCOUT_PROPERTY_COMMERCE_ADDRESS_ACCESS_PRODUCT_TYPE, $GLOBALS['user']->uid)) {
       $price = reiscout_property_commerce_get_property_address_price($node);
@@ -285,12 +365,8 @@ function reiscout_property_commerce_form_commerce_cart_form_alter(&$form, &$form
           '@cur' => $price['currency_code'],
         )
       );
-    } elseif(!user_access('administer site configuration')) {
+    } else {
       $form['#access'] = FALSE;
     }
   }
-}
-
-function reiscout_property_commerce_init() {
-
 }
