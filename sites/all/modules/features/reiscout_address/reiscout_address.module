@@ -125,3 +125,19 @@ function reiscout_address_form_property_node_form_alter(&$form, &$form_state, $f
     }
   }
 }
+
+/*
+ * this is a dummy func to escape erros on mApp.
+ * remove it when it is not needed anymore
+ */
+function reiscout_address_user_has_view ($arg) {
+
+}
+
+/*
+ * this is a dummy func to escape erros on mApp.
+ * remove it when it is not needed anymore
+ */
+function reiscout_address_set_view ($arg) {
+  
+}
