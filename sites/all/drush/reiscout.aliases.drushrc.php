@@ -6,14 +6,6 @@ $aliases['local'] = array(
   'path-aliases' => array(
     '%dump-dir' => '/tmp',
   ),
-  'command-specific' => array (
-    'sql-sync' => array (
-      'simulate' => '0',
-    ),
-    'rsync' => array (
-      'simulate' => '0',
-    ),
-  ),
 );
 
 $aliases['live'] = array (
@@ -33,11 +25,7 @@ $aliases['live'] = array (
   ),
   // No need to modify the following settings
   'command-specific' => array (
-    'rsync' => array (
-      'simulate' => '1',
-    ),
     'sql-sync' => array (
-      'simulate' => '1',
       'sanitize' => TRUE,
       'no-ordered-dump' => TRUE,
       'structure-tables' => array(
