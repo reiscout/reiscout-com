@@ -190,40 +190,43 @@ function reiscout_property_commerce_entity_load($entities, $type) {
  */
 function reiscout_property_commerce_node_view_alter(&$build) {
   if (isset($build['#node']) && $build['#node']->type === REISCOUT_PROPERTY_COMMERCE_NODE_TYPE) {
-    // disable mailchimp subsribe forms for a while
-    return;
     $node = $build['#node'];
 
+    // Do not disable commerce 'add to cart' buttons for a while.
+    $disable_commerce_add_to_cart_buttons = false;
+
     if (isset($build['#view_mode']) && $build['#view_mode'] === 'full') {
-      module_load_include('inc', 'popup', 'includes/popup.api');
+      // Disable commerce 'add to cart' buttons and replace them with 'we are not ready yet' subscribe form in popup.
+      if ($disable_commerce_add_to_cart_buttons) {
+        module_load_include('inc', 'popup', 'includes/popup.api');
 
-      $popupOptions = array(
-        'block' => true,
-        'module' => 'mailchimp_signup',
-        'delta' => 'we_arent_ready_yet',
-        'activate' => 'click',
-        'ajax' => true,
-        'close' => true,
-        'width' => 400,
-        'class' => 'we-arent-ready-yet-popup',
-      );
+        $popupOptions = array(
+          'block' => true,
+          'module' => 'mailchimp_signup',
+          'delta' => 'we_arent_ready_yet',
+          'activate' => 'click',
+          'ajax' => true,
+          'close' => true,
+          'width' => 400,
+          'class' => 'we-arent-ready-yet-popup',
+        );
 
-      $fields = array(
-        'field_address_access_product' => array(
+        $fields = array(
+          'field_address_access_product' => array(
             'title' => 'Buy Property Address for @price @cur',
             'price callback' => 'reiscout_property_commerce_get_property_address_price',
             'price callback args' => array($node),
-        ),
-        'field_owner_info_product' => array(
+          ),
+          'field_owner_info_product' => array(
             'title' => 'Buy Owner Info for @price @cur',
             'price callback' => 'reiscout_property_commerce_get_owner_info_price',
-        )
-      );
+          )
+        );
 
-      foreach ($fields as $field => $options) {
-        if (isset($build[$field])) {
-          $price = call_user_func_array($options['price callback'], (isset($options['price callback args']) ? $options['price callback args'] : array()));
-          $build[$field] = array(
+        foreach ($fields as $field => $options) {
+          if (isset($build[$field])) {
+            $price = call_user_func_array($options['price callback'], (isset($options['price callback args']) ? $options['price callback args'] : array()));
+            $build[$field] = array(
               '#markup' => popup(array_merge($popupOptions, array(
                 'title' => t($options['title'], array(
                   '@price' => commerce_currency_amount_to_decimal($price['amount'], $price['currency_code']),
@@ -233,10 +236,12 @@ function reiscout_property_commerce_node_view_alter(&$build) {
               '#prefix' => '<div>',
               '#suffix' => '</div>',
               '#weight' => $build[$field]['#weight'],
-          );
+            );
+          }
         }
       }
 
+      // Add to image field prefix message 'This lead has been purchased: X times'
       if (isset($build['field_image']) && !user_is_anonymous()) {
         if (!isset($build['field_image']['#suffix'])) {
           $build['field_image']['#suffix'] = '';
@@ -252,8 +257,10 @@ function reiscout_property_commerce_node_view_alter(&$build) {
           $build['field_image']['#suffix'] = $purchasedMessage . $build['field_image']['#suffix'];
         }
       }
-    }
-  }
+    } // ENDIF for view mode 'full'
+
+  } // ENDIF to check for node type 'property'
+
 }
 
 /**
