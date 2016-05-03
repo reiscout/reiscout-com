@@ -625,9 +625,6 @@ function commerce_checkout_customer_profile_copy_toggle() {
  */
 function commerce_cart_add_to_cart_form(form, form_state, product_display) {
   try {
-    dpm('commerce_cart_add_to_cart_form');
-    console.log('RUN >> commerce_cart_add_to_cart_form');
-    //dpm(product_display);
     
     // Set the global product display variable so we have access to it later.
     _commerce_product_display = product_display;
@@ -637,6 +634,10 @@ function commerce_cart_add_to_cart_form(form, form_state, product_display) {
     
     // Clear the referenced product id.
     _commerce_product_display_product_id = null;
+    // Hotfix for reiscout.com
+    if (typeof product_display.field_address_access_product !== undefined) {
+      _commerce_product_display_product_id = product_display.field_address_access_product;
+    }
     
     // Set the form entity type and bundle.
     form.entity_type = 'commerce_product';
@@ -648,14 +649,11 @@ function commerce_cart_add_to_cart_form(form, form_state, product_display) {
     // type.
 
     // @TODO - is this dynamic, or is it a static name chosen by the site builder?
-    var product_entities_field_name = 'field_product';
-    //dpm('commerce_cart_add_to_cart_form');
-    //dpm(product_display);
+    var product_entities_field_name = 'field_address_access_product';
     
     // If there are any product entities...
     if (product_display[product_entities_field_name]) {
-      
-      //dpm('commerce_product field_info_instances');
+
       var field_info_instances = drupalgap_field_info_instances('node', product_display.type);
       if (!field_info_instances) {
         // Failed to load the instances, throw some informative warnings.
@@ -767,7 +765,6 @@ function commerce_cart_add_to_cart_form(form, form_state, product_display) {
       type: 'submit',
       value: 'Add to cart'
     };
-    console.log('form >>', form);
     return form;
   }
   catch (error) { console.log('commerce_cart_add_to_cart_form - ' + error); }
@@ -836,9 +833,8 @@ function _commerce_cart_attribute_change() {
  */
 function _commerce_product_display_get_current_product_id() {
   try {
-
-    // Just return product id '1' until I fix it.
-    return 1;
+    // Hotfix for reiscout, Can handle only single product.
+    return _commerce_product_display_product_id;
 
     // Iterate over each attribute on the page, pull out the field_name and
     // value, and set them aside, so they can later be used to determine which
@@ -854,7 +850,7 @@ function _commerce_product_display_get_current_product_id() {
     // the the referenced product entities on the current product display.
     var product_id = null;
     // @TODO - this field name is dynamic, we can't use a static string here!
-    $.each(_commerce_product_display['field_product'], function(pid, product) {
+    $.each(_commerce_product_display['field_address_access_product'], function(pid, product) {
         var match = true;
         $.each(_commerce_product_attribute_field_names, function(index, field_name) {
             if (product[field_name] != attributes[field_name]) {
