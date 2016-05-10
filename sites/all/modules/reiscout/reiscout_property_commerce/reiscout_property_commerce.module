@@ -168,7 +168,8 @@ function reiscout_property_commerce_entity_load($entities, $type) {
     // in reiscout_property_commerce.js of the App module
     foreach ($entities as &$entity) {
       if ($entity->type === REISCOUT_PROPERTY_COMMERCE_NODE_TYPE) {
-        $avaliable_product = array_pop(reiscout_property_commerce_get_property_avaliable_products($entity));
+        $avaliable_products = reiscout_property_commerce_get_property_avaliable_products($entity);
+        $avaliable_product = array_pop($avaliable_products);
         $entity->_reiscout_property_commerce_product_id = $avaliable_product->product_id;
         $entity->_reiscout_property_commerce_product_type = $avaliable_product->type;
       }
