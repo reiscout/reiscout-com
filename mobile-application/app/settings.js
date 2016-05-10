@@ -6,7 +6,7 @@
 window.localStorage.clear();
 
 // Set to true to see console.log() messages. Set to false when publishing app.
-Drupal.settings.debug = true;
+Drupal.settings.debug = false;
 
 /****************************************|
  * Drupal Settings (provided by jDrupal) |
@@ -170,8 +170,7 @@ Drupal.modules.custom['reiscout_address'] = {
     {name: 'reiscout_address.forms'}
   ]
 };
-
-//Drupal.modules.custom['my_module'] = {};
+Drupal.modules.custom['reiscout_property_commerce'] = {};
 
 drupalgap.settings.stripe_api_key = 'pk_test_wbtsk9Um4YdkftiHOgfcPUWF';
 

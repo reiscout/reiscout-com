@@ -164,6 +164,17 @@ function reiscout_property_commerce_form_property_node_form_alter(&$form, &$form
  */
 function reiscout_property_commerce_entity_load($entities, $type) {
   if ($type === 'node' && !user_is_anonymous()) {
+    // This is related to reiscout_property_commerce_form_commerce_cart_add_to_cart_form_alter()
+    // in reiscout_property_commerce.js of the App module
+    foreach ($entities as &$entity) {
+      if ($entity->type === REISCOUT_PROPERTY_COMMERCE_NODE_TYPE) {
+        $avaliable_product = array_pop(reiscout_property_commerce_get_property_avaliable_products($entity));
+        $entity->_reiscout_property_commerce_product_id = $avaliable_product->product_id;
+        $entity->_reiscout_property_commerce_product_type = $avaliable_product->type;
+      }
+    }
+
+    // Add _purchased_counter
     $nids = [];
     foreach ($entities as $nid => $entity) {
       if ($entity->type === REISCOUT_PROPERTY_COMMERCE_NODE_TYPE && !isset($entity->_purchased_counter)) {
@@ -171,17 +182,18 @@ function reiscout_property_commerce_entity_load($entities, $type) {
         $nids[] = $nid;
       }
     }
-
     if ($nids) {
       $counters = reiscout_property_commerce_get_purchased_counters($nids);
       if ($counters) {
         foreach ($counters as $counter) {
           if (isset($entities[$counter->nid])) {
+            // @ToDo: rename _purchased_counter to _reiscout_property_commerce_purchased_counter
             $entities[$counter->nid]->_purchased_counter = $counter->counter;
           }
         }
       }
     }
+
   }
 }
 
@@ -376,4 +388,33 @@ function reiscout_property_commerce_form_commerce_cart_form_alter(&$form, &$form
       $form['#access'] = FALSE;
     }
   }
+}
+
+/**
+ * Get avaliable products for node
+ */
+function reiscout_property_commerce_get_property_avaliable_products($node) {
+
+  // No products for anonymous and exit
+  if (user_is_anonymous()) {
+    return array();
+  }
+
+  $avaliable_products = array();
+
+  // Is Owner Info product avaliable
+  if ($node->uid == $GLOBALS['user']->uid
+  && !reiscout_property_commerce_is_node_purchased($node->nid, REISCOUT_PROPERTY_COMMERCE_OWNER_INFO_PRODUCT_TYPE, $GLOBALS['user']->uid)
+  ) {
+    $avaliable_products[] = commerce_product_load($node->field_owner_info_product[LANGUAGE_NONE][0]['product_id']);
+  }
+
+  // Is Address Info product avaliable
+  if ($node->uid != $GLOBALS['user']->uid
+  && !reiscout_property_commerce_is_node_purchased($node->nid, REISCOUT_PROPERTY_COMMERCE_ADDRESS_ACCESS_PRODUCT_TYPE, $GLOBALS['user']->uid))
+  {
+    $avaliable_products[] = commerce_product_load($node->field_address_access_product[LANGUAGE_NONE][0]['product_id']);
+  }
+
+  return $avaliable_products;
 }

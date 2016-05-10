@@ -634,10 +634,6 @@ function commerce_cart_add_to_cart_form(form, form_state, product_display) {
     
     // Clear the referenced product id.
     _commerce_product_display_product_id = null;
-    // Hotfix for reiscout.com
-    if (typeof product_display.field_address_access_product !== undefined) {
-      _commerce_product_display_product_id = product_display.field_address_access_product;
-    }
     
     // Set the form entity type and bundle.
     form.entity_type = 'commerce_product';
