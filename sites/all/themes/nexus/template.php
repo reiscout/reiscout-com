@@ -114,4 +114,5 @@ function nexus_page_alter($page) {
 if (drupal_is_front_page()) {
   drupal_add_js(drupal_get_path('theme', 'nexus') . '/js/jquery.flexslider.js');
   drupal_add_js(drupal_get_path('theme', 'nexus') . '/js/slide.js');
+  drupal_add_js(drupal_get_path('theme', 'nexus') . '/js/sms_module.js');
 }
