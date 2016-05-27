@@ -1,0 +1,52 @@
+<?php
+
+/**
+ * Implements hook_block_info().
+ */
+function reiscout_sms_block_info()
+{
+    $blocks['reiscout_sms'] = array(
+        'info' => t('Reiscout sms'),
+        'cache' => DRUPAL_CACHE_PER_ROLE,
+    );
+    return $blocks;
+}
+
+function reiscout_sms_form($form, &$form_state)
+{
+    $form['sms_phone'] = array(
+        '#type' => 'textfield',
+        '#title' => t('Phone number'),
+        '#required' => TRUE,
+    );
+    $form['actions']['submit'] = array('#type' => 'submit', '#value' => t('Send'));
+
+    return $form;
+}
+
+function reiscout_sms_block_view($delta = '')
+{
+    //$block['subject'] = t('Reiscout sms');
+    $block['content'] = drupal_get_form('reiscout_sms_form');
+    return $block;
+}
+
+function reiscout_sms_form_validate($form, &$form_state)
+{
+    /**/
+}
+
+function reiscout_sms_form_submit($form, &$form_state)
+{
+    $path = libraries_get_path("twilio", true);
+    require(DRUPAL_ROOT . $path . "/Services/Twilio.php");
+    $accountSID = "AC653f300b3fd9da5ef1666111e709e489";
+    $authToken = "bdbee11bf41abccda5052298f01a6321";
+    $client = new Services_Twilio($accountSID, $authToken);
+    $from = "7708525277";
+
+    $phone = $form_state['values']['sms_phone'];
+    $client->account->sms_messages->create($from, $phone, "test sms");
+
+    return true;
+}

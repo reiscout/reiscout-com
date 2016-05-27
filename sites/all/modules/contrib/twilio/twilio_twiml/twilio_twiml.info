@@ -1,0 +1,12 @@
+name = Twilio TwiML
+description = Add TwiML support to the Twilio Module
+core = 7.x
+package = Twilio
+dependencies[] = twilio
+
+; Information added by Drupal.org packaging script on 2015-09-30
+version = "7.x-1.11"
+core = "7.x"
+project = "twilio"
+datestamp = "1443621240"
+
