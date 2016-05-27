@@ -19,7 +19,7 @@ function reiscout_sms_form($form, &$form_state)
         '#title' => t('Phone number'),
         '#required' => TRUE,
     );
-    $form['actions']['submit'] = array('#type' => 'submit', '#value' => t('Send'));
+    $form['actions']['submit'] = array('#type' => 'submit', '#value' => t('Get Link'));
 
     return $form;
 }
@@ -40,13 +40,48 @@ function reiscout_sms_form_submit($form, &$form_state)
 {
     $path = libraries_get_path("twilio", true);
     require(DRUPAL_ROOT . $path . "/Services/Twilio.php");
-    $accountSID = "AC653f300b3fd9da5ef1666111e709e489";
-    $authToken = "bdbee11bf41abccda5052298f01a6321";
-    $client = new Services_Twilio($accountSID, $authToken);
-    $from = "7708525277";
 
-    $phone = $form_state['values']['sms_phone'];
-    $client->account->sms_messages->create($from, $phone, "test sms");
+    $accountSID = variable_get('twilio_account');
+    $from = variable_get('twilio_number');
+    $authToken = variable_get('twilio_token');
+    if (!empty($accountSID) && !empty($authToken)) {
+        $client = new Services_Twilio($accountSID, $authToken);
+        $phone = $form_state['values']['sms_phone'];
+        $text = variable_get('reiscout_sms_text');
+        if (!empty($text) && !empty($from) && !empty($phone)) {
+            $client->account->sms_messages->create($from, $phone, $text);
+        }
+    }
 
     return true;
+}
+
+/**
+ * Implements hook_menu().
+ */
+function reiscout_sms_menu()
+{
+    $items = array();
+    $items['admin/config/content/reiscout_sms'] = array(
+        'title' => 'SMS text',
+        'description' => 'SMS text to send',
+        'page callback' => 'drupal_get_form',
+        'page arguments' => array('reiscout_sms_admin'),
+        'access arguments' => array('access administration pages'),
+        'type' => MENU_NORMAL_ITEM,
+    );
+    return $items;
+}
+
+function reiscout_sms_admin($form, &$form_state)
+{
+    $form['reiscout_sms_text'] = array(
+        '#type' => 'textarea',
+        '#title' => 'SMS text',
+        '#default_value' => variable_get('reiscout_sms_text', ''),
+        '#size' => 60,
+        '#maxlength' => 128,
+        '#required' => TRUE,
+    );
+    return system_settings_form($form);
 }
