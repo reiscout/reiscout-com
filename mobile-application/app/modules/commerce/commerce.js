@@ -625,7 +625,7 @@ function commerce_checkout_customer_profile_copy_toggle() {
  */
 function commerce_cart_add_to_cart_form(form, form_state, product_display) {
   try {
-    
+
     // Set the global product display variable so we have access to it later.
     _commerce_product_display = product_display;
     
@@ -1578,8 +1578,9 @@ function theme_commerce_cart_buttons(variables) {
  * Themes a commerce cart line item.
  */
 function theme_commerce_cart_line_item(variables) {
+  console.log(variables);
   try {
-    var html = '<h2>' + variables.line_item.line_item_label + '</h2>' +
+    var html = '<h2>' + variables.line_item.line_item_title + '</h2>' +
     '<p><strong>Price</strong>: ' + variables.line_item.commerce_unit_price_formatted + '</p>';
     if (variables.line_item.type != 'shipping') {
       html += theme('commerce_cart_line_item_quantity', {
