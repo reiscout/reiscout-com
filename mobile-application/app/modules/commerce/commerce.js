@@ -1578,7 +1578,6 @@ function theme_commerce_cart_buttons(variables) {
  * Themes a commerce cart line item.
  */
 function theme_commerce_cart_line_item(variables) {
-  console.log(variables);
   try {
     var html = '<h2>' + variables.line_item.line_item_title + '</h2>' +
     '<p><strong>Price</strong>: ' + variables.line_item.commerce_unit_price_formatted + '</p>';
