@@ -302,7 +302,7 @@ function reiscout_property_commerce_node_presave($node) {
     : $owner_info_product;
 
   // Its call is cheap as $node already in cache and wouldnt be loaded again and if prices are the theme product would not be saved.
-  reiscout_property_commerce_update_price($owner_info_product);
+  reiscout_property_commerce_update_price($node, $owner_info_product);
 
   // The save as for above for address access product
   // Looking for existed product or create one and attach to node if it is not attached yet
@@ -321,7 +321,7 @@ function reiscout_property_commerce_node_presave($node) {
     : $address_access_product;
 
   // Its call is cheap as $node already in cache and wouldnt be loaded again and if prices are the theme product would not be saved.
-  reiscout_property_commerce_update_price($address_access_product);
+  reiscout_property_commerce_update_price($node, $address_access_product);
 }
 
 /**

@@ -185,7 +185,7 @@ function reiscout_property_commerce_get_property_address_price($node) {
 /**
  * Check is price for product should be updated and update if needed.
  */
-function reiscout_property_commerce_update_price($product) {
+function reiscout_property_commerce_update_price($node, $product) {
   // Add try..catch block to make system show a reasonable error,
   // otherwise it will show entity_metadata exception with no reasonable call stack
   try {
@@ -203,8 +203,11 @@ function reiscout_property_commerce_update_price($product) {
     if ($pw->commerce_price->amount->value() != $new_price['amount']
       || $pw->commerce_price->currency_code->value() != $new_price['currency_code']) {
       $pw->commerce_price->set($new_price);
-      $pw->save();
     }
+
+    $pw->title->set(preg_replace("/#([\d]+)?/",'#'.$node->vid, $product->title));
+    $pw->save();
+
   } catch (Exception $e) {
     throw new Exception($e->getMessage());
   }
