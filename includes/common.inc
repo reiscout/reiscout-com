@@ -787,6 +787,10 @@ function drupal_access_denied() {
  *   - data: A string containing the response body that was received.
  */
 function drupal_http_request($url, array $options = array()) {
+
+  // this is a should be removed
+  watchdog(__FUNCTION__, 'Request to @url', array('@url' => $url));
+
   // Allow an alternate HTTP client library to replace Drupal's default
   // implementation.
   $override_function = variable_get('drupal_http_request_function', FALSE);
