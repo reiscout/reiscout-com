@@ -57,4 +57,7 @@ Disallow: /?q=user/login/
 Disallow: /?q=user/logout/
 
 # Mobile WebApp
-Disallow: /mobile-application
+Disallow: /mobile-application/
+
+# Batch
+Disallow: /batch
