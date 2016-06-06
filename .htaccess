@@ -108,6 +108,32 @@ DirectoryIndex index.php index.html index.htm
   # If your site is running in a VirtualDocumentRoot at http://example.com/,
   # uncomment the following line:
   # RewriteBase /
+  
+  ### BOOST START ###
+
+  # NORMAL - Cached css & js files
+  RewriteCond %{DOCUMENT_ROOT}/cache/perm/%{HTTP_HOST}%{REQUEST_URI}_\.css -s
+  RewriteRule .* cache/perm/%{HTTP_HOST}%{REQUEST_URI}_\.css [L,QSA,T=text/css]
+  RewriteCond %{DOCUMENT_ROOT}/cache/perm/%{HTTP_HOST}%{REQUEST_URI}_\.js -s
+  RewriteRule .* cache/perm/%{HTTP_HOST}%{REQUEST_URI}_\.js [L,QSA,T=text/javascript]
+
+  # Caching for anonymous users
+  # Skip boost IF not get request OR uri has wrong dir OR cookie is set OR request came from this server OR https request
+  RewriteCond %{REQUEST_METHOD} !^(GET|HEAD)$ [OR]
+  RewriteCond %{REQUEST_URI} (^/(admin|cache|misc|modules|sites|system|openid|themes|node/add|comment/reply))|(/(edit|user|user/(login|password|register))$) [OR]
+  RewriteCond %{HTTPS} on [OR]
+  RewriteCond %{HTTP_COOKIE} DRUPAL_UID
+  RewriteRule .* - [S=3]
+
+  # NORMAL
+  RewriteCond %{DOCUMENT_ROOT}/cache/normal/%{HTTP_HOST}%{REQUEST_URI}_%{QUERY_STRING}\.html -s
+  RewriteRule .* cache/normal/%{HTTP_HOST}%{REQUEST_URI}_%{QUERY_STRING}\.html [L,T=text/html]
+  RewriteCond %{DOCUMENT_ROOT}/cache/normal/%{HTTP_HOST}%{REQUEST_URI}_%{QUERY_STRING}\.xml -s
+  RewriteRule .* cache/normal/%{HTTP_HOST}%{REQUEST_URI}_%{QUERY_STRING}\.xml [L,T=text/xml]
+  RewriteCond %{DOCUMENT_ROOT}/cache/normal/%{HTTP_HOST}%{REQUEST_URI}_%{QUERY_STRING}\.json -s
+  RewriteRule .* cache/normal/%{HTTP_HOST}%{REQUEST_URI}_%{QUERY_STRING}\.json [L,T=text/javascript]
+
+  ### BOOST END ###
 
   # Pass all requests not referring directly to files in the filesystem to
   # index.php. Clean URLs are handled in drupal_environment_initialize().

@@ -16,3 +16,5 @@ nbproject
 
 .idea
 */.idea
+
+cache/*
