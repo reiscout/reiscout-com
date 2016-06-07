@@ -1,0 +1,8 @@
+name = Reiscout SMS sender
+description = some description
+package = Reiscout
+core = 7.x
+dependencies[] = twilio
+files[] = reiscout_sms.module
+
+configure = admin/config/content/reiscout_sms
