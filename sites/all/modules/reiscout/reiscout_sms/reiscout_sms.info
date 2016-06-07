@@ -1,5 +1,5 @@
 name = Reiscout SMS sender
-description = some description
+description = Reiscout SMS sender
 package = Reiscout
 core = 7.x
 dependencies[] = twilio
