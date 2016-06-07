@@ -49,7 +49,7 @@ function reiscout_info() {
  */
 function reiscout_commerce_cart_line_item(variables) {
   try {
-    var html = '<h2>' + variables.line_item.line_item_label + '</h2>' +
+    var html = '<h2>' + variables.line_item.line_item_title + '</h2>' +
         '<p><strong>Price</strong>: ' + variables.line_item.commerce_unit_price_formatted + '</p>';
     if (variables.line_item.type != 'shipping') {
       /*
@@ -71,3 +71,23 @@ function reiscout_commerce_cart_line_item(variables) {
   catch (error) { console.log('theme_commerce_cart_line_item - ' + error); }
 }
 
+/**
+ * Theme the commerce cart buttons.
+ */
+function reiscout_commerce_cart_buttons(variables) {
+  try {
+    var html =
+        theme('button_link', {
+          text: 'Checkout',
+          path: 'checkout/' + variables.order.order_id,
+          options: {
+            attributes: {
+              'data-icon': 'check',
+              'data-theme': 'b'
+            }
+          }
+        });
+    return html;
+  }
+  catch (error) { console.log('theme_commerce_cart_buttons - ' + error); }
+}
