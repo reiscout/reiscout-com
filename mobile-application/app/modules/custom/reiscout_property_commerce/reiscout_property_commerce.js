@@ -28,12 +28,15 @@ function reiscout_property_commerce_form_commerce_cart_add_to_cart_form_alter(fo
     // Update cart submit button in depend of product type
     if (typeof node._reiscout_property_commerce_product_id != undefined
     && node._reiscout_property_commerce_product_type == 'reiscout_property_address_access') {
-      form.elements.submit.value = 'Buy Property Info';
+      form.elements.submit.value = 'Buy Address Info';
     }
 
     if (node._reiscout_property_commerce_product_type != undefined
     && node._reiscout_property_commerce_product_type == 'reiscout_property_owner_info') {
       form.elements.submit.value = 'Buy Owner Info';
+    }
+    if (Drupal.user.uid == 0) {
+      form.elements.submit.access = false;
     }
 
   } catch (error) {
