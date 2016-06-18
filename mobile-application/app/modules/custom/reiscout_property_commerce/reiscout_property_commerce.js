@@ -15,6 +15,11 @@ function reiscout_property_commerce_form_alter(form, form_state, form_id) {
 
 function reiscout_property_commerce_form_commerce_cart_add_to_cart_form_alter(form, form_state) {
   try {
+    // Hide cart button for anon users.
+    if (Drupal.user.uid == 0) {
+      form.elements.submit.access = false;
+    }
+
     if (typeof form.arguments[0].nid == undefined) {
       throw new Error('Node entity undefined');
     }
@@ -34,9 +39,6 @@ function reiscout_property_commerce_form_commerce_cart_add_to_cart_form_alter(fo
     if (node._reiscout_property_commerce_product_type != undefined
     && node._reiscout_property_commerce_product_type == 'reiscout_property_owner_info') {
       form.elements.submit.value = 'Buy Owner Info';
-    }
-    if (Drupal.user.uid == 0) {
-      form.elements.submit.access = false;
     }
 
   } catch (error) {
