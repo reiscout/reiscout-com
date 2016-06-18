@@ -1,4 +1,6 @@
 name = Reiscout Address
 core = 7.x
 package = Reiscout
-
+dependencies[] = flag
+features[features_api][] = api:2
+features[flag][] = reiscout_address_viewed_by_user
