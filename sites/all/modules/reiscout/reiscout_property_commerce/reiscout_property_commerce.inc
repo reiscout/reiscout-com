@@ -212,3 +212,16 @@ function reiscout_property_commerce_update_price($node, $product) {
     throw new Exception($e->getMessage());
   }
 }
+
+/**
+ * Set product status to disabled.
+ */
+function reiscout_property_commerce_disable($product) {
+  try {
+    $pw = entity_metadata_wrapper('commerce_product', $product);
+    $pw->status->set(0);
+    $pw->save();
+  } catch (Exception $e) {
+    throw new Exception($e->getMessage());
+  }
+}

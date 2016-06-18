@@ -419,3 +419,20 @@ function reiscout_property_commerce_get_property_avaliable_products($node) {
 
   return $avaliable_products;
 }
+
+/**
+ * Implements hook_node_delete().
+ */
+function reiscout_property_commerce_node_delete($node) {
+  if ($node->type == REISCOUT_PROPERTY_COMMERCE_NODE_TYPE) {
+    $owner_info_product = reiscout_property_commerce_load_product_by_property(REISCOUT_PROPERTY_COMMERCE_OWNER_INFO_PRODUCT_TYPE, $node->nid);
+    if ($owner_info_product) {
+      reiscout_property_commerce_disable($owner_info_product);
+    }
+
+    $address_access_product = reiscout_property_commerce_load_product_by_property(REISCOUT_PROPERTY_COMMERCE_ADDRESS_ACCESS_PRODUCT_TYPE, $node->nid);
+    if ($address_access_product) {
+      reiscout_property_commerce_disable($address_access_product);
+    }
+  }
+}
