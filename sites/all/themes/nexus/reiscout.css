@@ -196,7 +196,14 @@ body.page-onepage #main-menu a.active:active {
   width: 100%;
   border: 1px solid #ccc;
 }
-
 .sms_block {
-  margin-left: 20%;
+  margin: 0 auto;
+  max-width: 400px;
+}
+
+#reiscout-sms-form label {
+  display: block;
+  font-size: 13px;
+  font-weight: bold;
+  text-align: left;
 }
