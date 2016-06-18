@@ -1,10 +1,8 @@
 <?php
 /**
  * @file
- * Code for the Reiscout Address feature.
+ * Drupal needs this blank file.
  */
-
-include_once 'reiscout_address.features.inc';
 
 function reiscout_address_init() {
   $modulePath = drupal_get_path('module', 'reiscout_address');
