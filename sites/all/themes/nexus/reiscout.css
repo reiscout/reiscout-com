@@ -196,9 +196,13 @@ body.page-onepage #main-menu a.active:active {
   width: 100%;
   border: 1px solid #ccc;
 }
-.sms_block {
+.pane-reiscout-sms-reiscout-sms {
   margin: 0 auto;
-  max-width: 400px;
+  max-width: 350px;
+}
+
+#reiscout-sms-form {
+  text-align: center;
 }
 
 #reiscout-sms-form label {
