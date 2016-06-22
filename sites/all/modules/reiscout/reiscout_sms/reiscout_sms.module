@@ -15,7 +15,10 @@ function reiscout_sms_block_info()
 function reiscout_sms_form($form, &$form_state)
 {
   $form['sms_phone'] = array(
-    '#type' => 'textfield',
+    '#type' => 'telfield',
+//      '#type' => 'telephone',
+    //'#pattern' => '\+?\d{12}',
+    '#size' => 60,
     '#title' => t('Phone number'),
     '#required' => TRUE,
   );
@@ -24,10 +27,17 @@ function reiscout_sms_form($form, &$form_state)
   return $form;
 }
 
+/**
+ * Implements hook_block_view().
+ */
 function reiscout_sms_block_view($delta = '')
 {
-  //$block['subject'] = t('Reiscout sms');
-  $block['content'] = drupal_get_form('reiscout_sms_form');
+  $block = array();
+  switch ($delta) {
+    case 'reiscout_sms':
+      $block['content'] = drupal_get_form('reiscout_sms_form');
+    break;
+  }
   return $block;
 }
 
@@ -53,7 +63,7 @@ function reiscout_sms_form_submit($form, &$form_state)
     if (!$res) {
       drupal_set_message('Something goes wrong', 'error');
     } else {
-      drupal_set_message('Message has been sent', 'status');
+      drupal_set_message('Message has been sent on your number, it may take a few minutes until you receive it.', 'status');
     }
   } catch (Exception $e) {
     drupal_set_message('Something goes wrong', 'error');
@@ -72,14 +82,14 @@ function reiscout_sms_menu()
     'title' => 'SMS text',
     'description' => 'SMS text to send',
     'page callback' => 'drupal_get_form',
-    'page arguments' => array('reiscout_sms_admin'),
+    'page arguments' => array('reiscout_sms_admin_form'),
     'access arguments' => array('access administration pages'),
     'type' => MENU_NORMAL_ITEM,
   );
   return $items;
 }
 
-function reiscout_sms_admin($form, &$form_state)
+function reiscout_sms_admin_form($form, &$form_state)
 {
   $form['reiscout_sms_text'] = array(
     '#type' => 'textarea',
