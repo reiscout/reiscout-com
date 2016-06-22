@@ -16,8 +16,6 @@ function reiscout_sms_form($form, &$form_state)
 {
   $form['sms_phone'] = array(
     '#type' => 'telfield',
-//      '#type' => 'telephone',
-    //'#pattern' => '\+?\d{12}',
     '#size' => 60,
     '#title' => t('Phone number'),
     '#required' => TRUE,
