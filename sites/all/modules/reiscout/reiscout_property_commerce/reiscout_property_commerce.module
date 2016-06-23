@@ -331,6 +331,9 @@ function reiscout_property_commerce_form_alter(&$form, &$form_state, $form_id) {
   if (substr_count($form_id, 'commerce_cart_add_to_cart_form_') == 1) {
     reiscout_property_commerce_form_commerce_cart_form_alter($form, $form_state, $form_id);
   }
+  if (substr_count($form_id, 'views_form_commerce_cart_form_') == 1) {
+    unset($form['actions']['submit']);
+  }
 }
 
 /**
