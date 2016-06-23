@@ -1,0 +1,5 @@
+name = Reiscout Property
+description = Reiscout Property
+package = Reiscout
+core = 7.x
+files[] = reiscout_property.module

@@ -1,0 +1,16 @@
+<?php
+
+/**
+ * Implements hook_form_FORM_ID_alter
+ */
+function reiscout_property_form_property_node_form_alter(&$form, &$form_state, $form_id) {
+  $form['field_zillow_mls'] = array(
+    '#type' => 'hidden',
+  );
+  $form['field_zillow_status'] = array(
+    '#type' => 'hidden',
+  );
+  $form['field_zillow_zpid'] = array(
+    '#type' => 'hidden',
+  );
+}
