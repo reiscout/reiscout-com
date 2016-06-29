@@ -65,7 +65,7 @@ function reiscout_sms_form_submit($form, &$form_state)
     }
   } catch (Exception $e) {
     drupal_set_message('Something goes wrong', 'error');
-    watchdog('error', $e->getMessage());
+    watchdog('reiscout sms error', $e->getMessage(), array(), WATCHDOG_ERROR);
   }
 
 }
