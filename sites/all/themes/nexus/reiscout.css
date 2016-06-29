@@ -205,6 +205,10 @@ body.page-onepage #main-menu a.active:active {
   text-align: center;
 }
 
+#edit-sms-phone {
+  width: 100%;
+}
+
 #reiscout-sms-form label {
   display: block;
   font-size: 13px;
