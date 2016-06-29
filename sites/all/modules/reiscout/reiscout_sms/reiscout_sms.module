@@ -15,7 +15,8 @@ function reiscout_sms_block_info()
 function reiscout_sms_form($form, &$form_state)
 {
   $form['sms_phone'] = array(
-    '#type' => 'textfield',
+    '#type' => 'telfield',
+    '#size' => 60,
     '#title' => t('Phone number'),
     '#required' => TRUE,
   );
@@ -24,31 +25,49 @@ function reiscout_sms_form($form, &$form_state)
   return $form;
 }
 
+/**
+ * Implements hook_block_view().
+ */
 function reiscout_sms_block_view($delta = '')
 {
-  //$block['subject'] = t('Reiscout sms');
-  $block['content'] = drupal_get_form('reiscout_sms_form');
+  $block = array();
+  switch ($delta) {
+    case 'reiscout_sms':
+      $block['content'] = drupal_get_form('reiscout_sms_form');
+    break;
+  }
   return $block;
+}
+
+/**
+ * Implements hook_form_validate().
+ */
+function reiscout_sms_form_validate($form, &$form_state) {
+  if (
+    strlen($form_state['values']['sms_phone']) != 12 ||
+    strpos($form_state['values']['sms_phone'], '+') === false
+  )
+  {
+    form_set_error('phone', t('Please use format +12223334444'));
+  }
 }
 
 function reiscout_sms_form_submit($form, &$form_state)
 {
-  $path = libraries_get_path("twilio", true);
-  require(DRUPAL_ROOT . $path . "/Services/Twilio.php");
-
-  $accountSID = variable_get('twilio_account');
-  $from = variable_get('twilio_number');
-  $authToken = variable_get('twilio_token');
-  if (!empty($accountSID) && !empty($authToken)) {
-    $client = new Services_Twilio($accountSID, $authToken);
+  try {
     $phone = $form_state['values']['sms_phone'];
     $text = variable_get('reiscout_sms_text');
-    if (!empty($text) && !empty($from) && !empty($phone)) {
-      $client->account->sms_messages->create($from, $phone, $text);
+    $res = twilio_send($phone, $text, '');
+    if (!$res) {
+      drupal_set_message('Something goes wrong', 'error');
+    } else {
+      drupal_set_message('Message has been sent on your number, it may take a few minutes until you receive it.', 'status');
     }
+  } catch (Exception $e) {
+    drupal_set_message('Something goes wrong', 'error');
+    watchdog('reiscout sms error', $e->getMessage(), array(), WATCHDOG_ERROR);
   }
 
-  return true;
 }
 
 /**
@@ -61,14 +80,14 @@ function reiscout_sms_menu()
     'title' => 'SMS text',
     'description' => 'SMS text to send',
     'page callback' => 'drupal_get_form',
-    'page arguments' => array('reiscout_sms_admin'),
+    'page arguments' => array('reiscout_sms_admin_form'),
     'access arguments' => array('access administration pages'),
     'type' => MENU_NORMAL_ITEM,
   );
   return $items;
 }
 
-function reiscout_sms_admin($form, &$form_state)
+function reiscout_sms_admin_form($form, &$form_state)
 {
   $form['reiscout_sms_text'] = array(
     '#type' => 'textarea',
