@@ -17,10 +17,8 @@ class Point extends Geometry
    * @param numeric $y The y coordinate (or latitude)
    * @param numeric $z The z coordinate (or altitude) - optional
    */
-  public function __construct($x, $y = NULL, $z = NULL) {
+  public function __construct($x, $y, $z = NULL) {
     // Basic validation on x and y
-    $x = floatval(str_replace(',', '.', str_replace('.', '', $x)));
-    $y = floatval(str_replace(',', '.', str_replace('.', '', $y)));
     if (!is_numeric($x) || !is_numeric($y)) {
       throw new Exception("Cannot construct Point. x and y should be numeric");
     }
@@ -28,7 +26,7 @@ class Point extends Geometry
     // Check to see if this is a 3D point
     if ($z !== NULL) {
       if (!is_numeric($z)) {
-       throw new Exception("Cannot construct Point. z should be numeric");
+        throw new Exception("Cannot construct Point. z should be numeric");
       }
       $this->dimention = 3;
     }
