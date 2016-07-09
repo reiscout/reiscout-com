@@ -82,7 +82,7 @@ function reiscout_property_listing_page() {
  */
 function reiscout_property_listing_row(view, row) {
   try {
-    if (row.image.src) {
+    if (row.image.src && typeof row.image.src !== "undefined") {
       var row_html = '';
       row_html += '<img src="' + row.image.src + '">';
       if (row.address && row.address.length) {
@@ -90,6 +90,8 @@ function reiscout_property_listing_row(view, row) {
       }
       row_html = l(row_html, 'node/' + row.nid);
       return '<div class="view-row">' + row_html + '</div>';
+    } else {
+      return '';
     }
   }
   catch (error) {
