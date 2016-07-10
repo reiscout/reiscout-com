@@ -215,3 +215,24 @@ body.page-onepage #main-menu a.active:active {
   font-weight: bold;
   text-align: left;
 }
+
+.modal-default .modal-content {
+  border: none !important;
+  box-shadow: none !important;
+  width: 100% !important;
+  height: 100% !important;
+}
+
+.modal-default .close {
+  font-size: 14px !important;
+}
+
+.modal-default div.ctools-modal-content .modal-title {
+  font-size: 100% !important;
+}
+
+.modal-default .modal-header img {
+  padding-left: 5px;
+  padding-top: 2px;
+}
+
