@@ -95,6 +95,13 @@ function commerce_drupalgap_stripe_form_submit(form, form_state) {
       cvc: form_state.values.card_cvc,
       exp_month: form_state.values.exp_month,
       exp_year: form_state.values.exp_year,
+      address_line1: $('#edit-commerce-checkout-view-billing-thoroughfare').val(),
+      address_line2: $('#edit-commerce-checkout-view-billing-premise').val(),
+      address_city: $('#edit-commerce-checkout-view-billing-locality').val(),
+      address_state: $('#edit-commerce-checkout-view-billing-administrative-area').val(),
+      address_zip: $('#edit-commerce-checkout-view-billing-postal-code').val(),
+      address_country: $('#edit-commerce-checkout-view-billing-country').val(),
+      name: $('#edit-commerce-checkout-view-billing-name-line').val()
     }, commerce_drupalgap_stripe_response);
   }
   catch (error) { console.log('commerce_drupalgap_stripe_form_submit - ' + error); }
