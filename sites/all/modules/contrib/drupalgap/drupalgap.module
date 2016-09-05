@@ -396,7 +396,7 @@ function drupalgap_sdk_form($form, &$form_state) {
       l(t('download'), 'admin/config/services/drupalgap/download-app', array('attributes' => array(
         'title' => t('Download a zip file of your app')
       ))) . ' | ' .
-      l(t('publish'), 'http://drupalgap.org/node/126', array('attributes' => array(
+      l(t('publish'), 'http://docs.drupalgap.org/7/Compiling_a_Mobile_Application', array('attributes' => array(
         'target' => '_blank',
         'title' => t('Learn how to publish your app for users to download')
       ))) . ')' .
@@ -448,8 +448,8 @@ function drupalgap_sdk_form_submit($form, &$form_state) {
   //$name = "DrupalGap-7.x-1.x";
 
   // Recommended release.
-  $source = "https://github.com/signalpoint/DrupalGap/archive/7.x-1.3.zip";
-  $name = "DrupalGap-7.x-1.3";
+  $source = "https://github.com/signalpoint/DrupalGap/archive/7.0.2.zip";
+  $name = "DrupalGap-7.0.2";
 
   // Download a zip file of the SDK from github.
   if (file_put_contents($file, file_get_contents($source)) === false) {

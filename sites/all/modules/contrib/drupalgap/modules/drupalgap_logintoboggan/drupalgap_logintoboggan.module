@@ -14,7 +14,7 @@ function drupalgap_logintoboggan_drupalgap_site_settings($names) {
  */
 function drupalgap_logintoboggan_services_resources_alter(&$resources, &$endpoint) {
   // Override the normal user login callback.
-  if (isset($resources['user']['actions']['login']['callback'])) {
+  if (variable_get('logintoboggan_login_with_email', 0) == 1 && isset($resources['user']['actions']['login']['callback'])) {
     $resources['user']['actions']['login']['callback'] = 'drupalgap_logintoboggan_services_login';
   }
 }

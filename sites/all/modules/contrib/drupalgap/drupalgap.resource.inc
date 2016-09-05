@@ -290,16 +290,16 @@ function _drupalgap_resource_user_permissions() {
       return $result->fetchAll();
     }
     else {
-      // The user has roles other than the 'authenticated user' role.
-      $query = db_select('users_roles', 'ur');
-      $query
-        ->condition('ur.uid', $uid)
-        ->fields('ur', array('rid'))
-        ->fields('r', array('name'))
-        ->innerJoin('role', 'r', 'ur.rid = r.rid');
+      // The user has roles other than the 'authenticated user' role, let's
+      // extract them then load their permissions.
+      $rids = array('2');
+      foreach ($results as $role) { $rids[] = $role->rid; }
+      $query = db_select('role_permission', 'rp');
+      $query->leftJoin('users_roles', 'ur', 'rp.rid = ur.rid');
       $query
         ->fields('rp', array('permission', 'module'))
-        ->innerJoin('role_permission', 'rp', 'rp.rid = r.rid');
+        ->fields('ur', array('rid'))
+        ->condition('rp.rid', $rids, 'IN');
       $result = $query->execute();
       return $result->fetchAll();
     }

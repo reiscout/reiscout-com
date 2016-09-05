@@ -1,0 +1,8 @@
+@@ -178,6 +207,7 @@
+ function geocoder_ctools_plugin_type() {
+   return array(
+     'geocoder_handler' => array(),
++    'geocoder_reverse_handler' => array(),
+   );
+ }
+ 
