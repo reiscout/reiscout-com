@@ -1,0 +1,18 @@
+<?php
+
+/**
+ * Implements hook_form_FORM_ID_alter
+ */
+function reiscout_misc_form_property_node_form_alter(&$form, &$form_state, $form_id) {
+  // Dummy buttons
+  $form['actions']['get_owner_info'] = array(
+    '#type' => 'button',
+    '#value' => t('Pull Owner Data'),
+    '#weignt' => 20,
+  );
+  $form['actions']['send_mailer'] = array(
+    '#type' => 'button',
+    '#value' => t('Send Mailer'),
+    '#weignt' => 21,
+  );
+}

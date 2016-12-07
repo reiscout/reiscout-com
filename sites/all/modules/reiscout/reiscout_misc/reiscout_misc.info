@@ -1,0 +1,5 @@
+name = Reiscout Misc
+description = Reiscout Misc
+package = Reiscout
+core = 7.x
+files[] = reiscout_misc.module
