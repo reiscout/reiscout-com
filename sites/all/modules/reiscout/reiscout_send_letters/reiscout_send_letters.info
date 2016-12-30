@@ -1,0 +1,5 @@
+name = Reiscout Send Letters
+description = Send letters to property owner via lob.com
+package = Reiscout
+core = 7.x
+files[] = reiscout_send_letters.module

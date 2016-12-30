@@ -1,0 +1,5 @@
+name = Reiscout Owner Info
+description = Getting property owner info via CoreLogic
+package = Reiscout
+core = 7.x
+files[] = reiscout_owner_info.module

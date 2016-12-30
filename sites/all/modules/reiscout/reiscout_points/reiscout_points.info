@@ -7,3 +7,6 @@ files[] = reiscout_points.module
 dependencies[] = userpoints
 dependencies[] = rules
 dependencies[] = rules_link
+
+dependencies[] = reiscout_owner_info
+dependencies[] = reiscout_send_letters

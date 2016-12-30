@@ -1,0 +1,14 @@
+<?php
+
+/**
+ * @file
+ * Reiscout Send Letters - Send letters to property owner via lob.com.
+ */
+
+/**
+ * Initialization.
+ * Just stub function currently.
+ */
+function reiscout_send_letters_initialize($nid) {
+  return "Letter's API initialized.";
+}
