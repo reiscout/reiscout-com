@@ -1,0 +1,84 @@
+<?php
+
+/**
+ * @file
+ * Reiscout Connect2data API - Getting property owner info via CoreLogic.
+ */
+
+
+/**
+ * Construct request to connect2data.com (CoreLogic)
+ * and parse response.
+ */
+function reiscout_connect2data_api_get_data($nid) {
+
+  // Url to testing server
+  $url = 'https://staging.connect2data.com/';
+
+  // Custom (testing) XML for request
+  $request = '<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE REQUEST_GROUP SYSTEM "C2DRequestv2.0.dtd">
+<REQUEST_GROUP MISMOVersionID="2.1">
+<REQUEST _ServicePassword="enter_value" _ServiceUsername="enter_value" _JobIdentifier="enter_value" LoginAccountPassword="enter_value" LoginAccountIdentifier="C2TU000003">
+<KEY _Value="12345" _Name="CEID"/>
+<KEY _Value="SaveDisclosureTest20151202U" _Name="LoanNumber"/>
+<KEY _Value="Tester" _Name="LenderName"/>
+<KEY _Value="1.0.0" _Name="ReportVersion"/>
+<KEY _Value="MortgageLoan" _Name="LoanType"/>
+<REQUESTDATA><PROPERTY_INFORMATION_REQUEST _ActionType="GetAuditReport">
+<_CONNECT2DATA_PRODUCT _ComplianceEase="Y" _IncludePDFIndicator="Y"/>
+            <EMBEDDED_FILE>
+     <DOCUMENT>
+<!—Embedded CE ComplianceAnalyzer payload -->
+     </DOCUMENT>
+            </EMBEDDED_FILE>
+</PROPERTY_INFORMATION_REQUEST>
+</REQUESTDATA>
+</REQUEST>
+</REQUEST_GROUP>';
+
+  // Send request and get response
+  $result = file_get_contents($url, false, stream_context_create(array(
+      'http' => array(
+          'method'  => 'POST',
+          'header'  => 'Content-type: application/x-www-form-urlencoded',
+          'content' => $request,
+      )
+  )));
+
+  // Check response
+  if ($result === FALSE) return NULL;
+
+  $xml = simplexml_load_string($result, 'simple_xml_extended');
+
+  // Check for valid XML
+  if ($xml === FALSE) return NULL;
+
+  // Parse returned XML and format output
+  $output = 'RESPONSE FROM CONNECT2DATA.COM:';
+  $output .= '<br />-------<br />';
+  $output .= $xml->RESPONSE->Attribute('ResponseDateTime');
+  $output .= '<br />';
+  $output .= 'Status: ' . $xml->RESPONSE->RESPONSE_DATA->PROPERTY_INFORMATION_RESPONSE->STATUS->Attribute('_Condition');
+  $output .= ' | Code: ' . $xml->RESPONSE->RESPONSE_DATA->PROPERTY_INFORMATION_RESPONSE->STATUS->Attribute('_Code');
+  $output .= '<br />';
+  $output .= $xml->RESPONSE->RESPONSE_DATA->PROPERTY_INFORMATION_RESPONSE->STATUS->Attribute('_Description');
+  $output .= '<br />-------';
+
+  return $output;
+}
+
+
+/**
+ * Extends SimpleXMLElement to get attributes
+ */
+class simple_xml_extended extends SimpleXMLElement {
+  public function Attribute($name)
+  {
+    foreach($this->Attributes() as $key=>$val)
+    {
+      if($key == $name)
+        return (string)$val;
+    }
+  }
+}

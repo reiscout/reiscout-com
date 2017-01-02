@@ -1,0 +1,66 @@
+<?php
+
+/**
+ * @file
+ * Reiscout Send Letters - Send letters to property owner via lob.com.
+ */
+
+// Define constants
+const LOB_API_KEY             = 'test_59faab2535ec17a77692ed3aa082164d263';
+const LOB_LETTER_DESCRIPTION  = 'A letter from reiscout.com';
+
+
+/**
+ * Initialization.
+ */
+function reiscout_lob_api_initialize($nid) {
+
+  // Url for POST request to lob.com
+  $url = 'https://api.lob.com/v1/letters';
+
+  $params = array(
+    'description'           => LOB_LETTER_DESCRIPTION,
+    'to[name]'              => 'Harry Zhang',
+    'to[address_line1]'     => '123 Test Street',
+    'to[address_city]'      => 'Mountain View',
+    'to[address_zip]'       => '94041',
+    'to[address_state]'     => 'CA',
+    'to[address_country]'   => 'US',
+    'from[name]'            => 'Ami Wang',
+    'from[address_line1]'   => '123 Test Avenue',
+    'from[address_city]'    => 'Mountain View',
+    'from[address_zip]'     => '94041',
+    'from[address_state]'   => 'CA',
+    'from[address_country]' => 'US',
+    //'file'                  => '<html style="padding-top: 3in; margin: .5in;">HTML Letter for {{name}}</html>',
+    'file'                  => '<html style="padding-top: 3in; margin: .5in;">Test letters from reiscout.com</html>',
+    'data[name]'            => 'Harry',
+    'color'                 => true
+  );
+
+  $defaults = array(
+      CURLOPT_URL             => $url,
+      CURLOPT_POST            => true,
+      CURLOPT_FRESH_CONNECT   => true,
+      CURLOPT_POSTFIELDS      => http_build_query($params),
+      CURLOPT_RETURNTRANSFER  => true,
+      CURLOPT_SSL_VERIFYPEER  => 0,
+      CURLOPT_SSL_VERIFYHOST  => 0,
+      CURLOPT_USERPWD         => LOB_API_KEY . ':',
+      CURLOPT_HTTPHEADER      => array(
+          'Accept' => 'application/json; charset=utf-8',
+      ),
+  );
+
+  $ch = curl_init();
+
+  curl_setopt_array($ch, $defaults);
+
+  if (!$result = curl_exec($ch)) {
+      return curl_error($ch);
+  }
+
+  curl_close($ch);
+
+  return $result;
+}

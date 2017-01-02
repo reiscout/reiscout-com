@@ -1,5 +1,11 @@
 name = Reiscout Send Letters
-description = Send letters to property owner via lob.com
+description = description = Display buttons and make control over points to send letters
 package = Reiscout
 core = 7.x
 files[] = reiscout_send_letters.module
+
+dependencies[] = userpoints
+dependencies[] = rules
+dependencies[] = rules_link
+
+dependencies[] = reiscout_lob_api

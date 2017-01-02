@@ -1,0 +1,5 @@
+name = Reiscout Connect2data API
+description = Getting property owner info via Connect2data API (CoreLogic)
+package = Reiscout
+core = 7.x
+files[] = reiscout_connect2data_api.module
