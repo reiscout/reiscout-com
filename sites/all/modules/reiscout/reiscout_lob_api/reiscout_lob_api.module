@@ -11,41 +11,68 @@ const LOB_LETTER_DESCRIPTION  = 'A letter from reiscout.com';
 
 
 /**
- * Initialization.
+ * Construct request to Lob API and parse response.
  */
-function reiscout_lob_api_initialize($nid) {
+function reiscout_lob_api_request($nid, $template_nid = NULL) {
+  global $user;
+
+  // Check "Owner postal address" field from current node
+  $node = node_load($nid);
+  if (!isset($node->field_owner_postal_address[LANGUAGE_NONE][0]) ||
+      empty($node->field_owner_postal_address[LANGUAGE_NONE][0])) {
+    drupal_set_message("Error: empty or incomplete Owner Postal Address (to).", "error");
+    return FALSE;
+  }
+
+  // Check "User postal address" field from user profile
+  $user_data = user_load($user->uid);
+  if (!isset($user_data->field_user_postal_address[LANGUAGE_NONE][0]) ||
+      empty($user_data->field_user_postal_address[LANGUAGE_NONE][0])) {
+    drupal_set_message("Error: empty or incomplete User Postal Address (from). Please fill up address fields in your user profile.", "error");
+    return FALSE;
+  }
+
+  // Fills up addresses arrays
+  $address_to = $node->field_owner_postal_address[LANGUAGE_NONE][0];
+  $address_from = $user_data->field_user_postal_address[LANGUAGE_NONE][0];
 
   // Url for POST request to lob.com
   $url = 'https://api.lob.com/v1/letters';
 
   $params = array(
     'description'           => LOB_LETTER_DESCRIPTION,
-    'to[name]'              => 'Harry Zhang',
-    'to[address_line1]'     => '123 Test Street',
-    'to[address_city]'      => 'Mountain View',
-    'to[address_zip]'       => '94041',
-    'to[address_state]'     => 'CA',
-    'to[address_country]'   => 'US',
-    'from[name]'            => 'Ami Wang',
-    'from[address_line1]'   => '123 Test Avenue',
-    'from[address_city]'    => 'Mountain View',
-    'from[address_zip]'     => '94041',
-    'from[address_state]'   => 'CA',
-    'from[address_country]' => 'US',
-    //'file'                  => '<html style="padding-top: 3in; margin: .5in;">HTML Letter for {{name}}</html>',
-    'file'                  => '<html style="padding-top: 3in; margin: .5in;">Test letters from reiscout.com</html>',
-    'data[name]'            => 'Harry',
+
+    'to[name]'              => $address_to['name_line'],
+    'to[address_line1]'     => $address_to['thoroughfare'],
+    'to[address_city]'      => $address_to['locality'],
+    'to[address_zip]'       => $address_to['postal_code'],
+    'to[address_state]'     => $address_to['administrative_area'],
+    'to[address_country]'   => $address_to['country'],
+
+    'from[name]'            => $address_from['name_line'],
+    'from[address_line1]'   => $address_from['thoroughfare'],
+    'from[address_city]'    => $address_from['locality'],
+    'from[address_zip]'     => $address_from['postal_code'],
+    'from[address_state]'   => $address_from['administrative_area'],
+    'from[address_country]' => $address_from['country'],
+
+    'file'                  => '<html style="padding-top: 3in; margin: .5in;">Test letter from reiscout.com</html>',
+
+    'data[property_title]'  => $node->title,
+    'data[owner_name]'      => $address_to['name_line'],
+    'data[my_name]'         => $address_from['name_line'],
+
     'color'                 => true
   );
 
   $defaults = array(
       CURLOPT_URL             => $url,
-      CURLOPT_POST            => true,
-      CURLOPT_FRESH_CONNECT   => true,
+      CURLOPT_POST            => TRUE,
+      CURLOPT_FRESH_CONNECT   => TRUE,
       CURLOPT_POSTFIELDS      => http_build_query($params),
-      CURLOPT_RETURNTRANSFER  => true,
-      CURLOPT_SSL_VERIFYPEER  => 0,
-      CURLOPT_SSL_VERIFYHOST  => 0,
+      CURLOPT_RETURNTRANSFER  => TRUE,
+      CURLOPT_SSL_VERIFYPEER  => FALSE,
+      CURLOPT_SSL_VERIFYHOST  => FALSE,
       CURLOPT_USERPWD         => LOB_API_KEY . ':',
       CURLOPT_HTTPHEADER      => array(
           'Accept' => 'application/json; charset=utf-8',
@@ -53,14 +80,36 @@ function reiscout_lob_api_initialize($nid) {
   );
 
   $ch = curl_init();
-
   curl_setopt_array($ch, $defaults);
 
-  if (!$result = curl_exec($ch)) {
-      return curl_error($ch);
+  // Send request to Lob API via curl()
+  if (!$response = curl_exec($ch)) {
+    watchdog('reiscout_lob_api', 'Network error: ' . curl_error($ch), array(), WATCHDOG_ERROR);
+    drupal_set_message("Network error: " . curl_error($ch), "error");
+    return FALSE;
   }
-
   curl_close($ch);
 
-  return $result;
+  // Decode returned JSON response to array
+  $result = json_decode($response, TRUE);
+  if (json_last_error() != JSON_ERROR_NONE) {
+    watchdog('reiscout_lob_api', 'Response decode error: ' . json_last_error_msg(), array(), WATCHDOG_ERROR);
+    drupal_set_message("Response decode error: " . json_last_error_msg(), "error");
+    return FALSE;
+  }
+
+  // Check if response has error
+  if (array_key_exists('error', $result)) {
+    watchdog('reiscout_lob_api', 'API request error: ' . $result['error']['message'], array(), WATCHDOG_ERROR);
+    drupal_set_message("API request error: " . $result['error']['message'], "error");
+    return FALSE;
+  }
+
+  // Display some returned data to administrator
+  $role = user_role_load_by_name('administrator');
+  if (user_has_role($role->rid)) {
+    drupal_set_message('Letter ID: <a href ="' . $result['url'] . '">' . $result['id'] . '</a> created at ' . $result['date_created']);
+  }
+
+  return TRUE;
 }
