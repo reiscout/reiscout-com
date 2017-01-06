@@ -2,7 +2,13 @@
 
 /**
  * @file
- * Reiscout Send Letters - Display buttons and make control over points to send letters.
+ * Reiscout Send Letters -
+ * 1. Displays apropriate action buttons and make control over points
+ * to send letters.
+ * 2. Builds the form to select a template for letter.
+ * 3. Make preview of each template in the form.
+ * 4. Alters template edit form and user profile form.
+ * 5. Saves user's default template to userprofile field.
  */
 
 // Define constants
@@ -15,9 +21,17 @@ const TERM_ID_POINTS_SEND_LETTERS = 2;
 function reiscout_send_letters_menu () {
 
   $items['send_letter/%'] = array(
-    'title' => 'Send a letter to Property Owner.',
+    'title' => 'Choose a template for letter',
+    'page callback' => 'drupal_get_form',
+    'page arguments' => array('reiscout_send_letters_select_template_form', 1),
+    'access callback' => TRUE,
+    'type' => MENU_CALLBACK,
+  );
+
+  $items['send_letter/%/%'] = array(
+    'title' => 'Send a letter to Property Owner',
     'page callback' => 'reiscout_send_letters_send_letter_callback',
-    'page arguments' => array(1),
+    'page arguments' => array(1, 2),
     'access callback' => TRUE,
     'type' => MENU_CALLBACK,
   );
@@ -27,13 +41,169 @@ function reiscout_send_letters_menu () {
 
 
 /**
- * Page callback for send_letter/%.
+ * Page callback for send_letter/% (step 1).
+ * 1. Builds the form to select a template for letter.
+ * 2. Make preview of each template in the form.
  */
-function reiscout_send_letters_send_letter_callback($nid, $template_nid = NULL) {
+function reiscout_send_letters_select_template_form($form, &$form_state, $nid) {
   global $user;
 
+  // Check if node exists and has type "property"
+  $node = node_load($nid);
+  if (!$node || $node->type != 'property') {
+    drupal_set_message("Incorrect node or node type.", "error");
+    drupal_goto();
+  }
+
+  // Check "Owner postal address" field from current node
+  if (!isset($node->field_owner_postal_address[LANGUAGE_NONE][0]) ||
+      empty($node->field_owner_postal_address[LANGUAGE_NONE][0])) {
+    drupal_set_message("Error: empty or incomplete Owner Postal Address (to).", "error");
+    drupal_goto();
+  }
+
+ // Check "User postal address" field from user profile
+  $user_data = user_load($user->uid);
+  if (!isset($user_data->field_user_postal_address[LANGUAGE_NONE][0]) ||
+      empty($user_data->field_user_postal_address[LANGUAGE_NONE][0])) {
+    drupal_set_message("Error: empty or incomplete User Postal Address (from). Please fill up address fields in your user profile.", "error");
+    drupal_goto();
+  }
+
+  // Get all templates marked by admin as "Global template" ("predefined")
+  $templates = db_select('node', 'n');
+  $templates->innerJoin('field_data_field_is_global_template', 't', 't.entity_id = n.nid');
+  $templates->innerJoin('field_data_body', 'b', 'b.entity_id = n.nid');
+  $templates->fields('n', array('nid', 'title'));
+  $templates->fields('b', array('body_value'));
+  $templates->condition('n.type', 'letter_template');
+  $templates->condition('t.field_is_global_template_value', 1);
+  $templates = $templates->execute()->fetchAllAssoc('nid');
+
+  if (empty($templates)) {
+    drupal_set_message("No letter templates found.", "error");
+    drupal_goto();
+  }
+
+  // Get all templates created by current user ("custom").
+  // Predefinded templates especially excluded for admin.
+  $user_templates = db_select('node', 'n');
+  $user_templates->innerJoin('field_data_field_is_global_template', 't', 't.entity_id = n.nid');
+  $user_templates->innerJoin('field_data_body', 'b', 'b.entity_id = n.nid');
+  $user_templates->fields('n', array('nid', 'title'));
+  $user_templates->fields('b', array('body_value'));
+  $user_templates->condition('n.type', 'letter_template');
+  $user_templates->condition('n.uid', $user->uid);
+  $user_templates->condition('t.field_is_global_template_value', 1, '<>');
+  $user_templates = $user_templates->execute()->fetchAllAssoc('nid');
+
+  //drupal_set_message( '<pre>' . var_export($templates, true) .  '</pre>');
+  //drupal_goto();
+
+  $form['promt'] = array(
+    '#markup' => '<p>Please select letter template below:</p>',
+  );
+
+  // Remember current destination.
+  $query = array('destination' => 'send_letter/' . $nid);
+
+  // Replacements for tokens
+  $tokens = array('{{property_title}}', '{{owner_name}}', '{{my_name}}');
+  $replaces = array($node->title,
+                    $node->field_owner_postal_address[LANGUAGE_NONE][0]['name_line'],
+                    $user_data->field_user_postal_address[LANGUAGE_NONE][0]['name_line']);
+
+  // Formats "predefined templates" options for radios field
+  foreach ($templates as $t_nid => $template) {
+    $template_body = str_replace($tokens, $replaces, $template->body_value);
+    $templates[$t_nid] =
+        'Predefined: ' . $template->title . ' | ' .
+        l('Create my own template based on this one', url('node/' . $t_nid . '/clone/confirm/', array('query' => $query, 'absolute' => TRUE)), array('html' => TRUE, 'attributes' => array('class' => 'clone-template'))) .
+        '<div class="template-sample template-predefined">' . $template_body . '</div>';
+  }
+
+  // Formats "custom templates" options for radios field
+  if (!empty($user_templates)) {
+    foreach ($user_templates as $t_nid => $template) {
+      $template_body = str_replace($tokens, $replaces, $template->body_value);
+      $templates[$t_nid] =
+          '<em>Custom:</em> ' . $template->title . ' | ' .
+          l('edit', url('node/' . $t_nid . '/edit/', array('query' => $query, 'absolute' => TRUE)), array('html' => TRUE, 'attributes' => array('class' => 'edit-template'))) .
+          ' | ' .
+          l('delete', url('node/' . $t_nid . '/delete/', array('query' => $query, 'absolute' => TRUE)), array('html' => TRUE, 'attributes' => array('class' => 'delete-template'))) .
+          '<div class="template-sample template-custom">' . $template_body . '</div>';
+    }
+  }
+
+  // Set currently selected to first item (default)
+  reset($templates);
+  $default_template_nid = key($templates);
+
+  // Get default template nid from user profile if exists
+  if (isset($user_data->field_default_template_nid[LANGUAGE_NONE][0]['value']) && !empty($user_data->field_default_template_nid[LANGUAGE_NONE][0]['value'])) {
+    if (array_key_exists($user_data->field_default_template_nid[LANGUAGE_NONE][0]['value'], $templates)) {
+      $default_template_nid = $user_data->field_default_template_nid[LANGUAGE_NONE][0]['value'];
+    }
+  }
+
+  $form['template_nid'] = array(
+    '#type' => 'radios',
+    '#title' => 'Available templates',
+    '#default_value' => $default_template_nid,
+    '#required' => TRUE,
+    '#options' => $templates,
+  );
+
+  $form_state['step_path'] = 'send_letter/'. $nid . '/';
+  $form_state['step_destination'] = drupal_get_path_alias('node/' . $nid);
+
+  $form['submit'] = array(
+    '#type' => 'submit',
+    '#value' => 'Send letter',
+  );
+
+  return $form;
+}
+
+
+/**
+ * Submit handler for select template form.
+ */
+function reiscout_send_letters_select_template_form_submit($form, &$form_state) {
+  global $user;
+
+  // Make redirect to step 2.
+  $form_state['rebuild'] = FALSE;
+  $form_state['redirect'] =
+          url($form_state['step_path'] . $form_state['values']['template_nid'] . '/',
+              array('query' => array('destination' => $form_state['step_destination']), 'absolute' => TRUE));
+
+  // Unset old destination to prevent default redirectiion.
+  unset($_GET['destination']);
+
+  // Save currently selected template nid as default for current user
+  $user_data = user_load($user->uid);
+  $user_data->field_default_template_nid[LANGUAGE_NONE][0]['value'] = $form_state['values']['template_nid'];
+  user_save($user_data);
+}
+
+
+/**
+ * Page callback for send_letter/%/% (step 2).
+ * 1. Make call to reiscout_lob_api.
+ * 2. Decrease userpoint by one.
+ */
+function reiscout_send_letters_send_letter_callback($nid, $template_nid) {
+  global $user;
+
+  // Check for valid nid of template
+  if (!isset($template_nid) || $template_nid == 0) {
+    drupal_set_message("Template not selected.", "error");
+    drupal_goto(url(drupal_get_path_alias('node/' . $nid)), array('absolute' => TRUE));
+  }
+
   // Call letters API request (see reiscout_lob_api.module)
-  $result = reiscout_lob_api_request($nid);
+  $result = reiscout_lob_api_request($nid, $template_nid);
 
   if (!$result) {
     drupal_set_message("Error sending letter.", "error");
@@ -43,13 +213,13 @@ function reiscout_send_letters_send_letter_callback($nid, $template_nid = NULL) 
   else {
     drupal_set_message("Letter sent successfuly.");
     // Decrease points by one
-    $params = array(
-      'uid' => $user->uid,
-      'points' => -1,
-      'tid' => TERM_ID_POINTS_SEND_LETTERS,
-      'operation' => 'Used 1 point to send letter.',
-    );
-    userpoints_userpointsapi($params);
+    //$params = array(
+    //  'uid' => $user->uid,
+    //  'points' => -1,
+    //  'tid' => TERM_ID_POINTS_SEND_LETTERS,
+    //  'operation' => 'Used 1 point to send letter.',
+    //);
+    //userpoints_userpointsapi($params);
     // Return to previous page
     drupal_goto();
   }
@@ -57,11 +227,52 @@ function reiscout_send_letters_send_letter_callback($nid, $template_nid = NULL) 
 
 
 /**
+ * Implements hook_form_alter
+ * 1. Restrict access to "Global template" checkbox for all users
+ * exclude administrators.
+ * 2. Restrict access to "Default template nid" field for all users
+ * exclude administrators.
+ * 3. Alters the submit handler of select template form
+ */
+function reiscout_send_letters_form_alter(&$form, &$form_state, $form_id) {
+  $role = user_role_load_by_name('administrator');
+  // Hide "Global template" checkbox on letter template node edit page
+  // for non-administrators. Also set status of checkbox to unchecked for non-administartors.
+  if ($form_id == 'letter_template_node_form') {
+    if (!user_has_role($role->rid)) {
+      $form['field_is_global_template'][LANGUAGE_NONE]['#default_value'] = 0;
+      $form['field_is_global_template']['#access'] = 0;
+    }
+  }
+  // Hide "Default template nid" field on user profile edit page
+  // for non-administrators.
+  if ($form_id == 'user_profile_form') {
+    if (!user_has_role($role->rid)) {
+      $form['field_default_template_nid']['#access'] = 0;
+    }
+  }
+  // Add new submit handler to select template form
+  // (needed for correct work of redirection).
+  if ($form_id == "reiscout_send_letters_select_template_form") {
+      $form['actions']['submit']['#submit'][] = 'reiscout_send_letters_select_template_form_submit';
+   }
+}
+
+
+/**
  * Implements hook_node_view
- *
+ * 1. Check for amount of userpoints
+ * 2. Add action button to send letter or to buy points as a commerce product
  */
 function reiscout_send_letters_node_view($node, $view_mode, $langcode) {
   if ($view_mode == 'full' && $node->type == 'property') {
+
+    // Do nothing if node does not contains filled owner address field
+    if (!isset($node->field_owner_postal_address[LANGUAGE_NONE][0]) ||
+        empty($node->field_owner_postal_address[LANGUAGE_NONE][0])) {
+      return;
+    }
+
     if (!user_is_anonymous()) {
       global $user;
       $link = '';
@@ -85,7 +296,7 @@ function reiscout_send_letters_node_view($node, $view_mode, $langcode) {
 
       // If user have points for current action
       if ($points > 0) {
-        $link = l($button_name, url($callback_path, array('html' => TRUE, 'query' => $destination, 'absolute' => TRUE)));
+        $link = l($button_name, url($callback_path, array('query' => $destination, 'absolute' => TRUE), array('html' => TRUE)));
         $node->content['commerce-buttons']['#markup'] .= '<div class="callback-link">' . $link . '</div>';
       }
       // If user have not points
