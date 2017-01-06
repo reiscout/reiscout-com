@@ -2,7 +2,9 @@
 
 /**
  * @file
- * Reiscout Connect2data API - Getting property owner info via CoreLogic.
+ * Reiscout Connect2data API -
+ * 1. Getting property owner info via CoreLogic.
+ * 2. Write received data to address field of property node.
  */
 
 // Define constants

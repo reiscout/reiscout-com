@@ -2,7 +2,10 @@
 
 /**
  * @file
- * Reiscout Owner Info - Display buttons and make control over points to get property owner info via CoreLogic.
+ * Reiscout Owner Info -
+ * 1. Displays apropriate action buttons and make control over points
+ * to get property owner info.
+ * 2. Make call to reiscout_connect2data_api
  */
 
 // Define constants
@@ -28,6 +31,8 @@ function reiscout_owner_info_menu () {
 
 /**
  * Page callback for get_owner_info/%.
+ * 1. Make call to reiscout_connect2data_api.
+ * 2. Decrease userpoint by one.
  */
 function reiscout_owner_info_get_owner_callback($nid) {
   global $user;
@@ -58,7 +63,8 @@ function reiscout_owner_info_get_owner_callback($nid) {
 
 /**
  * Implements hook_node_view
- *
+ * 1. Check for amount of userpoints.
+ * 2. Add action button to get info or to buy points as a commerce product.
  */
 function reiscout_owner_info_node_view($node, $view_mode, $langcode) {
   if ($view_mode == 'full' && $node->type == 'property') {
@@ -85,7 +91,7 @@ function reiscout_owner_info_node_view($node, $view_mode, $langcode) {
 
       // If user have points for current action
       if ($points > 0) {
-        $link = l($button_name, url($callback_path, array('html' => TRUE, 'query' => $destination, 'absolute' => TRUE)));
+        $link = l($button_name, url($callback_path, array('query' => $destination, 'absolute' => TRUE), array('html' => TRUE)));
         $node->content['commerce-buttons']['#markup'] .= '<div class="callback-link">' . $link . '</div>';
       }
       // If user have not points
