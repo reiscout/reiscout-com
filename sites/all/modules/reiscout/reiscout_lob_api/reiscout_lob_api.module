@@ -19,9 +19,6 @@ const LOB_LETTER_DESCRIPTION  = 'A letter from reiscout.com';
 function reiscout_lob_api_request($nid, $template_nid = 0) {
   global $user;
 
-  //drupal_set_message("Template selected: " . $template_nid);
-  //return FALSE;
-
   // Load selected template node
   $template = node_load($template_nid);
   // Check if template exists and has type "letter_template"
