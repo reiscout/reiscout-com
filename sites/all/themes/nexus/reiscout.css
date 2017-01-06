@@ -291,3 +291,10 @@ body.page-onepage #main-menu a.active:active {
 
   cursor: pointer;
 }
+
+.template-sample {
+  margin: 0.5em 2em 1.5em;
+  -moz-border-radius: 6px; -webkit-border-radius: 6px; -o-border-radius: 6px; -ms-border-radius: 6px; -khtml-border-radius: 6px; border-radius: 6px;
+  border: 1px solid #ccc;
+  padding: 1em;
+}
