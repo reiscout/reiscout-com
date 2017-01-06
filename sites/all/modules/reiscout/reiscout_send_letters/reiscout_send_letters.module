@@ -97,9 +97,6 @@ function reiscout_send_letters_select_template_form($form, &$form_state, $nid) {
   $user_templates->condition('t.field_is_global_template_value', 1, '<>');
   $user_templates = $user_templates->execute()->fetchAllAssoc('nid');
 
-  //drupal_set_message( '<pre>' . var_export($templates, true) .  '</pre>');
-  //drupal_goto();
-
   $form['promt'] = array(
     '#markup' => '<p>Please select letter template below:</p>',
   );
@@ -213,13 +210,13 @@ function reiscout_send_letters_send_letter_callback($nid, $template_nid) {
   else {
     drupal_set_message("Letter sent successfuly.");
     // Decrease points by one
-    //$params = array(
-    //  'uid' => $user->uid,
-    //  'points' => -1,
-    //  'tid' => TERM_ID_POINTS_SEND_LETTERS,
-    //  'operation' => 'Used 1 point to send letter.',
-    //);
-    //userpoints_userpointsapi($params);
+    $params = array(
+      'uid' => $user->uid,
+      'points' => -1,
+      'tid' => TERM_ID_POINTS_SEND_LETTERS,
+      'operation' => 'Used 1 point to send letter.',
+    );
+    userpoints_userpointsapi($params);
     // Return to previous page
     drupal_goto();
   }
