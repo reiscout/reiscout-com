@@ -9,3 +9,4 @@ dependencies[] = rules
 dependencies[] = rules_link
 
 dependencies[] = reiscout_lob_api
+dependencies[] = reiscout_property_commerce
