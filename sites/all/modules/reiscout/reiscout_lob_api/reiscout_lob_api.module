@@ -24,14 +24,14 @@ function reiscout_lob_api_request($nid, $template_nid = 0) {
   // Check if template exists and has type "letter_template"
   if (!$template || $template->type != 'letter_template') {
     drupal_set_message("Incorrect template.", "error");
-    drupal_goto();
+    return FALSE;
   }
 
   // Check if node exists and has type "property"
   $node = node_load($nid);
   if (!$node || $node->type != 'property') {
     drupal_set_message("Incorrect node or node type.", "error");
-    drupal_goto();
+    return FALSE;
   }
 
   // Check "Owner postal address" field from current node
@@ -58,9 +58,6 @@ function reiscout_lob_api_request($nid, $template_nid = 0) {
 
   // Adds template body to wrapper
   $template_wrapper = str_replace('{{body}}', $template->body[LANGUAGE_NONE][0]['value'], $template_wrapper);
-
-  //drupal_set_message( '<pre>' . var_export($template->body[LANGUAGE_NONE][0]['value'], true) .  '</pre>');
-  //return FALSE;
 
   // Fills up addresses arrays
   $address_to = $node->field_owner_postal_address[LANGUAGE_NONE][0];
