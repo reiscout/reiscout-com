@@ -1,4 +1,8 @@
 <?php
+/**
+ * @file
+ * The login history install/uninstall code.
+ */
 
 /**
  * Add some more data to the login_history table to provide for more features.
@@ -92,4 +96,11 @@ function login_history_schema() {
     ),
   );
   return $schema;
+}
+
+/**
+ * Clear the menu cache.
+ */
+function login_history_update_7101() {
+  menu_rebuild();
 }
