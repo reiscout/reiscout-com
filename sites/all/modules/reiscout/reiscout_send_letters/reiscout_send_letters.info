@@ -2,6 +2,8 @@ name = Reiscout Send Letters
 description = description = Display buttons and make control over points to send letters
 package = Reiscout
 core = 7.x
+
+; what is for it is here? as I know it make a sense to declare only files containing classes for autoloader.
 files[] = reiscout_send_letters.module
 
 dependencies[] = userpoints
