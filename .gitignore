@@ -8,6 +8,9 @@ sites/*/private
 # Ignore Netbeans project directory
 nbproject
 
+# Ignore DrupalGap directory because it is tracked alone.
+mobile-application
+
 .DS_Store
 */.DS_Store
 
