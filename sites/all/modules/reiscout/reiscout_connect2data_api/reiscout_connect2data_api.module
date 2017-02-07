@@ -7,13 +7,23 @@
  * 2. Write received data to address field of property node.
  */
 
+// ToDo: rename module to connect2data_api
+
+// ToDo: move all project specific code from this module
+
 // Define constants
+// ToDo: rename cont to modulename_API_URL
 const API_URL = 'https://staging.connect2data.com/';
 
 
 /**
  * Construct request to connect2data.com (CoreLogic)
  * and parse response.
+ *
+ * ToDo: this function should be moved to reiscout_owner_info module
+ * a it doing address specific things.
+ *
+ * reiscout_connect2data module should contain ONLY API code agnostic to project.
  */
 function reiscout_connect2data_api_get_data($nid) {
 
@@ -43,6 +53,7 @@ function reiscout_connect2data_api_get_data($nid) {
   $output .= '<br />-------';
 
   // Display output to administrator
+  // ToDo: create user_is_admin() and place in reicout_misc.
   $role = user_role_load_by_name('administrator');
   if (user_has_role($role->rid)) {
     drupal_set_message($output);
@@ -56,6 +67,7 @@ function reiscout_connect2data_api_get_data($nid) {
 
 /**
  * Write data to address field
+ * ToDo: Move it to reiscout_owner_info module.
  */
 function reiscout_connect2data_api_save_address($nid, $data = NULL) {
 
@@ -87,6 +99,7 @@ function reiscout_connect2data_api_save_address($nid, $data = NULL) {
   }
 
   // Set the new address field values
+  // ToDo: improve code reading, create $address var and put it to node once.
   $node->field_owner_postal_address[LANGUAGE_NONE][0]['first_name'] = $address['first_name'];
   $node->field_owner_postal_address[LANGUAGE_NONE][0]['last_name'] = $address['last_name'];
   $node->field_owner_postal_address[LANGUAGE_NONE][0]['name_line'] = $address['first_name'] . ' ' . $address['last_name'];
@@ -116,6 +129,8 @@ function reiscout_connect2data_api_save_address($nid, $data = NULL) {
 
 /**
  * Send request to connect2data.com
+ *
+ * This function under development
  */
 function reiscout_connect2data_api_send_request($params = NULL) {
 
@@ -151,6 +166,8 @@ function reiscout_connect2data_api_send_request($params = NULL) {
 
 /**
  * Build request to connect2data.com
+ * This function is still under development and not in use.
+ * We should use some xml builder here.
  */
 function reiscout_connect2data_api_build_request($params = NULL) {
   // Custom (testing) XML for request
@@ -179,6 +196,7 @@ function reiscout_connect2data_api_build_request($params = NULL) {
 
 /**
  * Extends SimpleXMLElement to get attributes
+ * ToDo: move class to separate file and declare it in info file for autoloading
  */
 class simple_xml_extended extends SimpleXMLElement {
   public function Attribute($name)
@@ -194,6 +212,7 @@ class simple_xml_extended extends SimpleXMLElement {
 
 /**
  * Fill up array of address values for debugging
+ * ToDo: move func to separate file and add modulename prefix.
  */
 function fillup_debug_adresses() {
   return array(

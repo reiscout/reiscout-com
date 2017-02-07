@@ -2,6 +2,8 @@ name = Reiscout Owner Info
 description = Display buttons and control over points to get owner info
 package = Reiscout
 core = 7.x
+
+; what is for it is here? as I know it make a sense to declare only files containing classes for autoloader.
 files[] = reiscout_owner_info.module
 files[] = reiscout_owner_info.inc
 

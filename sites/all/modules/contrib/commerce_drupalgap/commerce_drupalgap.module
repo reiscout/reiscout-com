@@ -56,7 +56,9 @@ function commerce_drupalgap_services_request_postprocess_alter($controller, $arg
     if (empty($tids)) { return; }
     $sql = "SELECT t.tid, t.name FROM {taxonomy_term_data} t WHERE t.tid IN (:tids)";
     $terms = db_query($sql, array(':tids' => $tids))->fetchAll();
-    if (empty($terms)) { continue; }
+    if (empty($terms)) {
+      return;
+    }
     foreach($result->field_product_entities as $product_id => $product) {
       $instances = field_info_instances('commerce_product', $product->type);
       foreach($instances as $field => $instance) {

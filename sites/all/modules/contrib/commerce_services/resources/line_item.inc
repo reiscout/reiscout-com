@@ -48,7 +48,7 @@ function commerce_services_line_item_retrieve_access($line_item_id) {
   // Attempt to load the line item.
   if ($line_item = commerce_line_item_load($line_item_id)) {
     // And perform the view access check.
-    if (commerce_line_item_access('view', $line_item)) {
+    if (user_access('use line-item/retrieve method') || commerce_line_item_access('view', $line_item)) {
       return TRUE;
     }
     else {
@@ -144,7 +144,7 @@ function commerce_services_line_item_create_access($data) {
   }
 
   // If the user has access to update the order...
-  if (commerce_order_access('update', $order)) {
+  if (user_access('use line-item/create method') || commerce_order_access('update', $order)) {
     return TRUE;
   }
   else {
@@ -226,7 +226,7 @@ function commerce_services_line_item_update_access($line_item_id) {
   // Attempt to load the line item.
   if ($line_item = commerce_line_item_load($line_item_id)) {
     // If the user has access to perform the operation...
-    if (commerce_line_item_access('update', $line_item)) {
+    if (user_access('use line-item/update method') || commerce_line_item_access('update', $line_item)) {
       return TRUE;
     }
     else {
@@ -261,7 +261,7 @@ function commerce_services_line_item_delete_access($line_item_id) {
   // Attempt to load the line item.
   if ($line_item = commerce_line_item_load($line_item_id)) {
     // If the user has access to perform the operation...
-    if (commerce_line_item_access('delete', $line_item)) {
+    if (user_access('use line-item/delete method') || commerce_line_item_access('delete', $line_item)) {
       return TRUE;
     }
     else {

@@ -5,6 +5,25 @@
  * Defines Services resources for Drupal Commerce entities and systems.
  */
 
+/**
+ * Implements hook_permission().
+ */
+function commerce_services_permission() {
+  return array(
+    'use line-item/retrieve method' => array(
+      'title' => t("Use 'retrieve' method of 'line-item' resource."),
+    ),
+    'use line-item/create method' => array(
+      'title' => t("Use 'create' method of 'line-item' resource."),
+    ),
+    'use line-item/update method' => array(
+      'title' => t("Use 'update' method of 'line-item' resource."),
+    ),
+    'use line-item/delete method' => array(
+      'title' => t("Use 'delete' method of 'line-item' resource."),
+    ),
+  );
+}
 
 /**
  * Implements hook_services_resources().

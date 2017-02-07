@@ -11,7 +11,7 @@
  * 5. Saves user's default template to userprofile field.
  */
 
-// Define constants
+// ToDo: place term in feature and use here uuis instead id.
 const TERM_ID_POINTS_SEND_LETTERS = 2;
 
 
@@ -20,7 +20,8 @@ const TERM_ID_POINTS_SEND_LETTERS = 2;
  */
 function reiscout_send_letters_menu () {
 
-  $items['send_letter/%'] = array(
+  // ToDo: move it to form submit handler
+  $items['send_letter/%node'] = array(
     'title' => 'Choose a template for letter',
     'page callback' => 'drupal_get_form',
     'page arguments' => array('reiscout_send_letters_select_template_form', 1),
@@ -29,7 +30,7 @@ function reiscout_send_letters_menu () {
     'type' => MENU_CALLBACK,
   );
 
-  $items['send_letter/%/%'] = array(
+  $items['send_letter/%node/%node'] = array(
     'title' => 'Send a letter to Property Owner',
     'page callback' => 'reiscout_send_letters_send_letter_callback',
     'page arguments' => array(1, 2),
@@ -91,11 +92,10 @@ function reiscout_send_letters_access($nid, $isPoints = false) {
  * 1. Builds the form to select a template for letter.
  * 2. Make preview of each template in the form.
  */
-function reiscout_send_letters_select_template_form($form, &$form_state, $nid) {
+function reiscout_send_letters_select_template_form($form, &$form_state, $node) {
   global $user;
 
   // Check if node exists and has type "property"
-  $node = node_load($nid);
   if (!$node || $node->type != 'property') {
     drupal_set_message("Incorrect node or node type.", "error");
     drupal_goto();
@@ -127,6 +127,7 @@ function reiscout_send_letters_select_template_form($form, &$form_state, $nid) {
   $templates = $templates->execute()->fetchAllAssoc('nid');
 
   if (empty($templates)) {
+    // ToDo: put in message info how to fix that.
     drupal_set_message("No letter templates found.", "error");
     drupal_goto();
   }
@@ -148,7 +149,7 @@ function reiscout_send_letters_select_template_form($form, &$form_state, $nid) {
   );
 
   // Remember current destination.
-  $query = array('destination' => 'send_letter/' . $nid);
+  $query = array('destination' => 'send_letter/' . $node->nid);
 
   // Replacements for tokens
   $tokens = array('{{property_title}}', '{{owner_name}}', '{{my_name}}');
@@ -169,6 +170,7 @@ function reiscout_send_letters_select_template_form($form, &$form_state, $nid) {
   if (!empty($user_templates)) {
     foreach ($user_templates as $t_nid => $template) {
       $template_body = str_replace($tokens, $replaces, $template->body_value);
+      // ToDo: use theme_table here instead.
       $templates[$t_nid] =
           '<em>Custom:</em> ' . $template->title . ' | ' .
           l('edit', url('node/' . $t_nid . '/edit/', array('query' => $query, 'absolute' => TRUE)), array('html' => TRUE, 'attributes' => array('class' => 'edit-template'))) .
@@ -197,9 +199,10 @@ function reiscout_send_letters_select_template_form($form, &$form_state, $nid) {
     '#options' => $templates,
   );
 
-  $form_state['step_path'] = 'send_letter/'. $nid . '/';
-  $form_state['step_destination'] = drupal_get_path_alias('node/' . $nid);
+  $form_state['step_path'] = 'send_letter/'. $node->nid . '/';
+  $form_state['step_destination'] = drupal_get_path_alias('node/' . $node->nid);
 
+  //ToDo: Use t() here and everywhere
   $form['submit'] = array(
     '#type' => 'submit',
     '#value' => 'Send letter',
@@ -216,6 +219,7 @@ function reiscout_send_letters_select_template_form_submit($form, &$form_state) 
   global $user;
 
   // Make redirect to step 2.
+  // ToDo: why we send letter in page callback instead right here?
   $form_state['rebuild'] = FALSE;
   $form_state['redirect'] =
           url($form_state['step_path'] . $form_state['values']['template_nid'] . '/',
@@ -235,18 +239,25 @@ function reiscout_send_letters_select_template_form_submit($form, &$form_state) 
  * Page callback for send_letter/%/% (step 2).
  * 1. Make call to reiscout_lob_api.
  * 2. Decrease userpoint by one.
+ *
+ * // ToDo: no sense of this menu callback, replace it by form sumbit handler
  */
-function reiscout_send_letters_send_letter_callback($nid, $template_nid, $isAjax = false) {
+function reiscout_send_letters_send_letter_callback($nid, $template_node, $isAjax = false) {
   global $user;
 
   // Check for valid nid of template
-  if (!isset($template_nid) || $template_nid == 0) {
+  if (!isset($template_node->nid) || $template_node->nid == 0) {
+    // This code is useless as I see..
+    // arg is required be menu callback declaration
+    // we need to check for right node type here
     drupal_set_message("Template not selected.", "error");
-    drupal_goto(url(drupal_get_path_alias('node/' . $nid)), array('absolute' => TRUE));
+    drupal_goto(url(drupal_get_path_alias('node/' . $node->nid)), array('absolute' => TRUE));
   }
 
   // Call letters API request (see reiscout_lob_api.module)
-  $result = reiscout_lob_api_request($nid, $template_nid);
+
+  // ToDo: code of reiscout_lob_api_request should be placed in this function.
+  $result = reiscout_lob_api_request($node->nid, $template_node->nid);
 
   if (!$result) {
     if (!$isAjax) {
@@ -257,6 +268,7 @@ function reiscout_send_letters_send_letter_callback($nid, $template_nid, $isAjax
       return false;
     }
   } else {
+    // ToDo: create function for points decrement
     // Decrease points by one
     $params = array(
       'uid' => $user->uid,
@@ -271,7 +283,7 @@ function reiscout_send_letters_send_letter_callback($nid, $template_nid, $isAjax
       // Return to previous page
       drupal_goto();
     } else {
-      return false;
+      return true;
     }
   }
 }
