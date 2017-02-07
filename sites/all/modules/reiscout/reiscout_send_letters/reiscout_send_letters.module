@@ -48,16 +48,15 @@ function reiscout_send_letters_menu () {
  * 2. Check if user have have purchased access to node
  * 3. Check if user have enought points
  */
-function reiscout_send_letters_access($nid) {
+function reiscout_send_letters_access($nid, $isPoints = false) {
   global $user;
   $node = node_load($nid);
 
   // First, check "Owner postal address" field from current node.
   // Return FALSE if node does not contains filled owner address field
-    if (!isset($node->field_owner_postal_address[LANGUAGE_NONE][0]) ||
-        empty($node->field_owner_postal_address[LANGUAGE_NONE][0])) {
-      return FALSE;
-    }
+  if (empty($node->field_owner_postal_address[LANGUAGE_NONE][0])) {
+    return FALSE;
+  }
 
   // Check if user is not anonymous
   if (!user_is_anonymous()) {
@@ -65,26 +64,25 @@ function reiscout_send_letters_access($nid) {
     if (!in_array('administrator', $user->roles)) {
       // Check if user have purchased access to node
       $node_purchased = reiscout_property_commerce_is_node_purchased($node->nid,
-                                                                     REISCOUT_PROPERTY_COMMERCE_ADDRESS_ACCESS_PRODUCT_TYPE,
-                                                                     $user->uid);
+          REISCOUT_PROPERTY_COMMERCE_ADDRESS_ACCESS_PRODUCT_TYPE,
+          $user->uid);
       // If user have not purchased access to node return FALSE.
       if (!$node_purchased) {
         return FALSE;
       }
     }
-  }
-  else {
+  } else {
     return FALSE;
   }
 
   // Check if user have enought points
   $points = userpoints_get_current_points($user->uid, TERM_ID_POINTS_SEND_LETTERS);
-  if ($points <= 0) {
-    drupal_set_message("Not enought points.", "error");
-    return FALSE;
+  if ($points == 0) {
+//    drupal_set_message("Not enought points.", "error");
+    return ($isPoints) ? TRUE : FALSE;
   }
 
-  return TRUE;
+  return ($isPoints) ? FALSE : TRUE;
 }
 
 
@@ -238,7 +236,7 @@ function reiscout_send_letters_select_template_form_submit($form, &$form_state) 
  * 1. Make call to reiscout_lob_api.
  * 2. Decrease userpoint by one.
  */
-function reiscout_send_letters_send_letter_callback($nid, $template_nid) {
+function reiscout_send_letters_send_letter_callback($nid, $template_nid, $isAjax = false) {
   global $user;
 
   // Check for valid nid of template
@@ -251,12 +249,14 @@ function reiscout_send_letters_send_letter_callback($nid, $template_nid) {
   $result = reiscout_lob_api_request($nid, $template_nid);
 
   if (!$result) {
-    drupal_set_message("Error sending letter.", "error");
-    // Return to previous page
-    drupal_goto();
-  }
-  else {
-    drupal_set_message("Letter sent successfuly.");
+    if (!$isAjax) {
+      drupal_set_message("Error sending letter.", "error");
+      // Return to previous page
+      drupal_goto();
+    } else {
+      return false;
+    }
+  } else {
     // Decrease points by one
     $params = array(
       'uid' => $user->uid,
@@ -265,8 +265,14 @@ function reiscout_send_letters_send_letter_callback($nid, $template_nid) {
       'operation' => 'Used 1 point to send letter.',
     );
     userpoints_userpointsapi($params);
-    // Return to previous page
-    drupal_goto();
+
+    if (!$isAjax) {
+      drupal_set_message("Letter sent successfuly.");
+      // Return to previous page
+      drupal_goto();
+    } else {
+      return false;
+    }
   }
 }
 
@@ -313,8 +319,7 @@ function reiscout_send_letters_node_view($node, $view_mode, $langcode) {
   if ($view_mode == 'full' && $node->type == 'property') {
 
     // Do nothing if node does not contains filled owner address field
-    if (!isset($node->field_owner_postal_address[LANGUAGE_NONE][0]) ||
-        empty($node->field_owner_postal_address[LANGUAGE_NONE][0])) {
+    if (empty($node->field_owner_postal_address[LANGUAGE_NONE][0])) {
       return;
     }
 
@@ -370,4 +375,39 @@ function reiscout_send_letters_node_view($node, $view_mode, $langcode) {
       }
     }
   }
+}
+
+/**
+ * Implementation of hook_services_resources().
+ */
+function reiscout_send_letters_services_resources() {
+  $file = array(
+    'type'   => 'inc',
+    'module' => 'reiscout_send_letters',
+    'name'   => 'reiscout_send_letters.resource'
+  );
+
+  $resource = array(
+    'sendletters' => array(
+      'actions' => array(
+        'sendLetter' => array(
+          'file' => $file,
+          'callback' => '_send_letter',
+          'access callback' => 'reiscout_send_letters_resource_access',
+          'args' => array(),
+        ),
+        'checkButtonShow' => array(
+          'file' => $file,
+          'callback' => '_get_show_button_info',
+          'access callback' => 'reiscout_send_letters_resource_access',
+          'args' => array(),
+        ),
+      ),
+    )
+  );
+  return $resource;
+}
+
+function reiscout_send_letters_resource_access() {
+  return true;
 }
