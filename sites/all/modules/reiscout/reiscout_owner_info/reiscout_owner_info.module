@@ -9,7 +9,6 @@
  */
 
 // Define constants
-// ToDo: put term to feature useing uuid and replace id here to uuid.
 const TERM_ID_POINTS_OWNER_INFO   = 1;
 
 
@@ -17,8 +16,8 @@ const TERM_ID_POINTS_OWNER_INFO   = 1;
  * Implements hook_menu().
  */
 function reiscout_owner_info_menu () {
-  // ToDo: repmove menu callback in favor or form.
-  $items['get_owner_info/%node'] = array(
+
+  $items['get_owner_info/%'] = array(
     'title' => 'Get Owner Info.',
     'page callback' => 'reiscout_owner_info_get_owner_callback',
     'page arguments' => array(1),
@@ -97,7 +96,6 @@ function reiscout_owner_info_get_owner_callback($nid, $isAjax = false) {
       return false;
     }
   } else {
-    // ToDo: move pints decreasing to function.
     // Decrease points by one
     $params = array(
       'uid' => $user->uid,
@@ -117,21 +115,6 @@ function reiscout_owner_info_get_owner_callback($nid, $isAjax = false) {
   }
 }
 
-/*
- * Form to buy an Owner Info
- */
-function reiscout_owner_info_buy_form($form, &$form_state) {
-  $form['submit'] = array(
-    '#type' => 'submit',
-    '#value' => t('Buy Owner Info'),
-    '#access' => true, // ToDo: place in form access callback all checks does it should appear
-  );
-  return $form;
-}
-
-function reiscout_owner_info_buy_form_submit($form, &$form_state) {
-  // Todo: move reiscout_owner_info_get_owner_callback() stuff here
-}
 
 /**
  * Implements hook_node_view
@@ -140,9 +123,6 @@ function reiscout_owner_info_buy_form_submit($form, &$form_state) {
  */
 function reiscout_owner_info_node_view($node, $view_mode, $langcode) {
   if ($view_mode == 'full' && $node->type == 'property') {
-    // ToDo: move of these to form.
-    // $node->content['buy_owner_info_form'] = drupal_get_form('reiscout_owner_info_buy_form');
-
     global $user;
 
     // First, check "Owner postal address" field from current node.
