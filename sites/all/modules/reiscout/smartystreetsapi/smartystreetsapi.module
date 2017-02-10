@@ -2,7 +2,7 @@
 
 /**
  * @file
- * Provides plugin for CKEditor module that allow to add annotations.
+ * Provides a wrapper for the SmartyStreets API.
  */
 
 /**

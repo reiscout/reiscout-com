@@ -2,7 +2,7 @@
 
 /**
  * @file
- * Provides plugin for CKEditor module that allow to add annotations.
+ * Allows to transform a freeform address to xNAL postal address in all existed Property nodes.
  */
 
 /**
