@@ -1,0 +1,4 @@
+name = Reiscout Transform Freeform Address
+description = Allows to transform a freeform address to xNAL postal address in all existed Property nodes.
+core = 7.x
+dependencies[] = smartystreetsapi
