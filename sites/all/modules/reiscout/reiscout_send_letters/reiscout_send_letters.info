@@ -9,6 +9,7 @@ files[] = reiscout_send_letters.module
 dependencies[] = userpoints
 dependencies[] = rules
 dependencies[] = rules_link
+dependencies[] = services
 
 dependencies[] = reiscout_lob_api
 dependencies[] = reiscout_property_commerce
