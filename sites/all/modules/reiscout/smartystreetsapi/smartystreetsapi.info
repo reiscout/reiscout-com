@@ -1,0 +1,5 @@
+name = SmartyStreets API
+description = Provides a wrapper for the SmartyStreets API.
+configure = admin/config/services/smartystreetsapi
+core = 7.x
+files[] = smartystreetsapi.class.inc

@@ -1,0 +1,100 @@
+<?php
+
+/**
+ * @file
+ * Provides a wrapper for the SmartyStreets API.
+ */
+
+/**
+ * Implements hook_permission().
+ */
+function smartystreetsapi_permission() {
+  return array(
+    'administer smartystreetsapi' =>  array(
+      'title' => t('Administer SmartyStreets API'),
+    ),
+  );
+}
+
+/**
+ * Implements hook_menu().
+ */
+function smartystreetsapi_menu() {
+  $items['admin/config/services/smartystreetsapi'] = array(
+    'title' => 'SmartyStreets API',
+    'description' => 'Configure SmartyStreets API settings.',
+    'page callback' => 'drupal_get_form',
+    'page arguments' => array('smartystreetsapi_admin_settings_form'),
+    'access arguments' => array('administer smartystreetsapi'),
+    'file' => 'smartystreetsapi.admin.inc',
+  );
+
+  return $items;
+}
+
+/**
+ * Makes a GET request to SmartyStreets 'US Street Address API'.
+ * This function is used to send a single address only.
+ */
+function smartystreetsapi_streetaddressapi($address) {
+  try {
+    $api = _smartystreetsapi_get_object();
+    $response_json = $api->requestData($address);
+    $data = $api->decodeData($response_json);
+    $data = array_shift($data);
+
+    $x_nal = array(
+      'address-line1' => $data->delivery_line_1,
+      'address-line2' => isset($data->delivery_line_2) ? $data->delivery_line_2 : '',
+      'locality' => $data->components->city_name,
+      'state' => $data->components->state_abbreviation,
+      'postal-code' => $data->components->zipcode,
+    );
+
+    return $x_nal;
+  }
+  catch (SmartyStreetsAPIException $e) {
+    watchdog_exception('smartystreetsapi_streetaddressapi', $e);
+  }
+}
+
+/**
+ * Makes a POST request to SmartyStreets 'US Street Address API'.
+ * This function is used to send multiple addresses.
+ */
+function smartystreetsapi_streetaddressapi_multiple($addresses) {
+  try {
+    $api = _smartystreetsapi_get_object();
+    $response_json = $api->requestDataMultiple($addresses);
+    $data = $api->decodeData($response_json);
+
+    $x_nal = array();
+    foreach ($data as $item) {
+      $x_nal[] = array(
+        'nid' => $item->input_id,
+        'address-line1' => $item->delivery_line_1,
+        'address-line2' => isset($item->delivery_line_2) ? $item->delivery_line_2 : '',
+        'locality' => $item->components->city_name,
+        'state' => $item->components->state_abbreviation,
+        'postal-code' => $item->components->zipcode,
+      );
+    }
+
+    return $x_nal;
+  }
+  catch (SmartyStreetsAPIException $e) {
+    watchdog_exception('smartystreetsapi_streetaddressapi', $e);
+  }
+}
+
+/**
+ * Returns an instance of the SmartyStreetsAPI_StreetAddressAPI class.
+ *
+ * @see smartystreetsapi_streetaddressapi()
+ * @see smartystreetsapi_streetaddressapi_multiple()
+ */
+function _smartystreetsapi_get_object() {
+  $auth_id = variable_get('smartystreetsapi_auth_id');
+  $auth_token = variable_get('smartystreetsapi_auth_token');
+  return new SmartyStreetsAPI_StreetAddressAPI($auth_id, $auth_token);
+}

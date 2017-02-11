@@ -1,0 +1,10 @@
+name = Reiscout Property Postal Address Field
+description = Provides a postal address field to a Property node
+core = 7.x
+package = Reiscout
+dependencies[] = addressfield
+dependencies[] = property
+features[features_api][] = api:2
+features[field_base][] = field_address
+features[field_instance][] = node-property-field_address
+features_exclude[dependencies][features] = features

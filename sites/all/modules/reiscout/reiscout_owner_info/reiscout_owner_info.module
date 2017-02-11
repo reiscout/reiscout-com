@@ -37,17 +37,15 @@ function reiscout_owner_info_menu () {
  * 2. Check if user have have purchased access to node
  * 3. Check if user have enought points
  */
-function reiscout_owner_info_access($nid) {
+function reiscout_owner_info_access($nid, $isPoints = false) {
   global $user;
   $node = node_load($nid);
 
   // First, check "Owner postal address" field from current node.
   // Return FALSE if node already contains filled owner address field.
-  if (isset($node->field_owner_postal_address[LANGUAGE_NONE][0]) ||
-      !empty($node->field_owner_postal_address[LANGUAGE_NONE][0])) {
+  if (!empty($node->field_owner_postal_address[LANGUAGE_NONE][0])) {
     return FALSE;
   }
-
   // Check if user is not anonymous
   if (!user_is_anonymous()) {
     // Check if user is not administrator
@@ -64,19 +62,18 @@ function reiscout_owner_info_access($nid) {
         }
       }
     }
-  }
-  else {
+  } else {
     return FALSE;
   }
 
   // Check if user have enought points
   $points = userpoints_get_current_points($user->uid, TERM_ID_POINTS_OWNER_INFO);
-  if ($points <= 0) {
-    drupal_set_message("Not enought points.", "error");
-    return FALSE;
+  if ($points == 0) {
+//    drupal_set_message("Not enought points.", "error");
+    return ($isPoints) ? TRUE : FALSE;
   }
 
-  return TRUE;
+  return ($isPoints) ? FALSE : TRUE;
 }
 
 
@@ -85,20 +82,22 @@ function reiscout_owner_info_access($nid) {
  * 1. Make call to reiscout_connect2data_api.
  * 2. Decrease userpoint by one.
  */
-function reiscout_owner_info_get_owner_callback($nid) {
+function reiscout_owner_info_get_owner_callback($nid, $isAjax = false) {
   global $user;
 
   // Getting owner's data (see reiscout_connect2data_api.module)
   $result = reiscout_connect2data_api_get_data($nid);
 
   if (!$result) {
-    drupal_set_message("Error while requesting owner info.", "error");
-    // Return to previous page
-    drupal_goto();
-  }
-  else {
+    if (!$isAjax) {
+      drupal_set_message("Error while requesting owner info.", "error");
+      // Return to previous page
+      drupal_goto();
+    } else {
+      return false;
+    }
+  } else {
     // ToDo: move pints decreasing to function.
-    drupal_set_message("Owner info received successfuly.");
     // Decrease points by one
     $params = array(
       'uid' => $user->uid,
@@ -107,8 +106,14 @@ function reiscout_owner_info_get_owner_callback($nid) {
       'operation' => 'Used 1 point to get access to owner.',
     );
     userpoints_userpointsapi($params);
-    // Return to previous page
-    drupal_goto();
+
+    if (!$isAjax) {
+      drupal_set_message("Owner info received successfuly.");
+      // Return to previous page
+      drupal_goto();
+    } else {
+      return true;
+    }
   }
 }
 
@@ -142,8 +147,7 @@ function reiscout_owner_info_node_view($node, $view_mode, $langcode) {
 
     // First, check "Owner postal address" field from current node.
     // Do nothing if node already contains filled owner address field.
-    if (isset($node->field_owner_postal_address[LANGUAGE_NONE][0]) ||
-        !empty($node->field_owner_postal_address[LANGUAGE_NONE][0])) {
+    if (!empty($node->field_owner_postal_address[LANGUAGE_NONE][0])) {
       return;
     }
 
@@ -154,9 +158,11 @@ function reiscout_owner_info_node_view($node, $view_mode, $langcode) {
         // If user is not author of node
         if ($user->uid != $node->uid) {
           // Check if user have purchased access to node
-          $node_purchased = reiscout_property_commerce_is_node_purchased($node->nid,
-                                                                         REISCOUT_PROPERTY_COMMERCE_ADDRESS_ACCESS_PRODUCT_TYPE,
-                                                                         $user->uid);
+          $node_purchased = reiscout_property_commerce_is_node_purchased(
+            $node->nid,
+            REISCOUT_PROPERTY_COMMERCE_ADDRESS_ACCESS_PRODUCT_TYPE,
+            $user->uid
+          );
           // If user have not purchased access to node then return (do nothing).
           if (!$node_purchased) {
             return;
@@ -201,3 +207,40 @@ function reiscout_owner_info_node_view($node, $view_mode, $langcode) {
     }
   }
 }
+
+/**
+ * Implementation of hook_services_resources().
+ */
+function reiscout_owner_info_services_resources() {
+  $file = array(
+      'type'   => 'inc',
+      'module' => 'reiscout_owner_info',
+      'name'   => 'reiscout_owner_info.resource'
+  );
+
+  $resource = array(
+    'ownerinfo' => array(
+      'actions' => array(
+        'getinfo' => array(
+          'file' => $file,
+          'callback' => '_get_info',
+          'access callback' => 'reiscout_owner_info_resource_access',
+          'args' => array(),
+        ),
+        'checkButtonShow' => array(
+          'file' => $file,
+          'callback' => '_get_show_button_info',
+          'access callback' => 'reiscout_owner_info_resource_access',
+          'args' => array(),
+        ),
+      ),
+    )
+  );
+  return $resource;
+}
+
+
+function reiscout_owner_info_resource_access() {
+  return true;
+}
+

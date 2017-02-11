@@ -1,0 +1,201 @@
+<?php
+
+/**
+ * @file
+ * Allows to transform a freeform address to xNAL postal address in all existed Property nodes.
+ */
+
+/**
+ * Implements hook_menu().
+ */
+function reiscout_transform_freeform_address_menu() {
+  $items['admin/config/content/reiscout_transform_freeform_address'] = array(
+    'title' => 'Transform addresses',
+    'description' => 'Transform a freeform address to xNAL postal address in Property nodes.',
+    'page callback' => 'drupal_get_form',
+    'page arguments' => array('reiscout_transform_freeform_address_form'),
+    'access arguments' => array('administer site configuration'),
+  );
+
+  return $items;
+}
+
+/**
+ * Form constructor.
+ *
+ * @see reiscout_transform_freeform_address_form_submit()
+ */
+function reiscout_transform_freeform_address_form($form, &$form_state) {
+  $nodes_amount_to_process = _reiscout_transform_freeform_address_get_nodes_amount_to_process();
+
+  if (!$nodes_amount_to_process) {
+    drupal_set_message(t('There are no any nodes to process.'), 'warning');
+    return;
+  }
+
+  $form['info'] = array(
+    '#markup' => $nodes_amount_to_process . ' nodes need to be processed.',
+  );
+
+  $form['actions'] = array(
+    '#type' => 'actions',
+  );
+
+  $form['actions']['submit'] = array(
+    '#type' => 'submit',
+    '#value' => t('Transform address in all nodes'),
+  );
+
+  return $form;
+}
+
+/**
+ * Form submission handler for reiscout_transform_freeform_address_form().
+ *
+ * @see reiscout_transform_freeform_address_form()
+ */
+function reiscout_transform_freeform_address_form_submit($form, &$form_state) {
+//  $processed_nodes_amount = _reiscout_transform_freeform_address_all_nodes_separately();
+  $processed_nodes_amount = _reiscout_transform_freeform_address_all_nodes();
+
+  if ($processed_nodes_amount) {
+    drupal_set_message(t('!amount nodes were processed.', array('!amount' => $processed_nodes_amount)));
+  }
+  else {
+    drupal_set_message(t('Some errors occurred during the process. Check the log messages!'), 'warning');
+  }
+}
+
+/**
+ * Processes all the nodes whose postal address field was not filled.
+ * Makes request to SmartyStreets API separately for each node.
+ *
+ * @see reiscout_transform_freeform_address_form_submit()
+ */
+function _reiscout_transform_freeform_address_all_nodes_separately() {
+  $processed_nodes_amount = 0;
+
+  $nodes = _reiscout_transform_freeform_address_get_nodes_to_process();
+  foreach ($nodes as $nid) {
+    $nw = entity_metadata_wrapper('node', $nid);
+
+    $address_text = $nw->field_address_text->value();
+    $address_text = _reiscout_transform_freeform_address_prepare($address_text);
+
+    if ($x_nal = smartystreetsapi_streetaddressapi($address_text)) {
+      $nw->field_address->country = 'US';
+      $nw->field_address->locality = $x_nal['locality'];
+      $nw->field_address->postal_code = $x_nal['postal-code'];
+      $nw->field_address->administrative_area = $x_nal['state'];
+      $nw->field_address->thoroughfare = $x_nal['address-line1'];
+      $nw->field_address->premise = $x_nal['address-line2'];
+      $nw->save();
+
+      ++$processed_nodes_amount;
+    }
+  }
+
+  return $processed_nodes_amount;
+}
+
+/**
+ * Processes all the nodes whose postal address field was not filled.
+ * Makes request to SmartyStreets API for set of nodes at once.
+ *
+ * @see reiscout_transform_freeform_address_form_submit()
+ */
+function _reiscout_transform_freeform_address_all_nodes() {
+  $processed_nodes_amount = 0;
+
+  $nodes = _reiscout_transform_freeform_address_get_nodes_to_process_with_address();
+
+  // Prepare data for a POST request to the API
+  for ($i = 0, $len = count($nodes); $i < $len; ++$i) {
+    $nodes[$i]->input_id = $nodes[$i]->nid;
+    $nodes[$i]->street = _reiscout_transform_freeform_address_prepare($nodes[$i]->address_text);
+    unset($nodes[$i]->nid);
+    unset($nodes[$i]->address_text);
+  }
+
+  if ($x_nal = smartystreetsapi_streetaddressapi_multiple($nodes)) {
+    foreach ($x_nal as $item) {
+      $nw = entity_metadata_wrapper('node', $item['nid']);
+
+      $nw->field_address->country = 'US';
+      $nw->field_address->locality = $item['locality'];
+      $nw->field_address->postal_code = $item['postal-code'];
+      $nw->field_address->administrative_area = $item['state'];
+      $nw->field_address->thoroughfare = $item['address-line1'];
+      $nw->field_address->premise = $item['address-line2'];
+      $nw->save();
+
+      ++$processed_nodes_amount;
+    }
+  }
+
+  return $processed_nodes_amount;
+}
+
+/**
+ * Removes a country information from a given freeform address
+ * because SmartyStreets API does not want this info in input.
+ *
+ * @see _reiscout_transform_freeform_address_all_nodes_separately()
+ * @see _reiscout_transform_freeform_address_all_nodes_set()
+ */
+function _reiscout_transform_freeform_address_prepare($address) {
+  $address = str_replace(', United States', '', $address);
+  $address = str_replace(', USA', '', $address);
+
+  return $address;
+}
+
+/**
+ * Returns amount of nodes whose postal address field was not filled.
+ *
+ * @see reiscout_transform_freeform_address_form()
+ */
+function _reiscout_transform_freeform_address_get_nodes_amount_to_process() {
+  $query = db_select('node', 'n');
+  $query->leftJoin('field_data_field_address', 'fa', 'n.nid = fa.entity_id');
+  $query
+    ->fields('n', array('nid'))
+    ->condition('n.type', 'property')
+    ->isNull('fa.field_address_locality');
+
+  return $query->countQuery()->execute()->fetchField();
+}
+
+/**
+ * Returns nodes whose postal address field was not filled.
+ *
+ * @see _reiscout_transform_freeform_address_all_nodes_separately()
+ */
+function _reiscout_transform_freeform_address_get_nodes_to_process() {
+  $query = db_select('node', 'n');
+  $query->leftJoin('field_data_field_address', 'fa', 'n.nid = fa.entity_id');
+  $query
+    ->fields('n', array('nid'))
+    ->condition('n.type', 'property')
+    ->isNull('fa.field_address_locality');
+
+  return $query->execute()->fetchCol();
+}
+
+/**
+ * Returns nodes whose postal address field was not filled.
+ *
+ * @see _reiscout_transform_freeform_address_all_nodes()
+ */
+function _reiscout_transform_freeform_address_get_nodes_to_process_with_address() {
+  $query = db_select('node', 'n');
+  $query->leftJoin('field_data_field_address', 'fa', 'n.nid = fa.entity_id');
+  $query->leftJoin('field_data_field_address_text', 'fat', 'n.nid = fat.entity_id');
+  $query->addField('fat', 'field_address_text_value', 'address_text');
+  $query
+    ->fields('n', array('nid'))
+    ->condition('n.type', 'property')
+    ->isNull('fa.field_address_locality');
+
+  return $query->execute()->fetchAll();
+}
