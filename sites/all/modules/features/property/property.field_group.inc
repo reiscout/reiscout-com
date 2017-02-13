@@ -57,6 +57,7 @@ function property_field_group_info() {
       1 => 'field_owner_lname',
       2 => 'field_owner_address',
       3 => 'field_owner_phone',
+      4 => 'field_owner_postal_address',
     ),
     'format_type' => 'fieldset',
     'format_settings' => array(
@@ -82,7 +83,7 @@ function property_field_group_info() {
   $field_group->parent_name = '';
   $field_group->data = array(
     'label' => 'Owner Info',
-    'weight' => '17',
+    'weight' => '7',
     'children' => array(
       0 => 'field_owner_fname',
       1 => 'field_owner_lname',
@@ -187,7 +188,7 @@ function property_field_group_info() {
   $field_group->parent_name = '';
   $field_group->data = array(
     'label' => 'Property Info',
-    'weight' => '5',
+    'weight' => '6',
     'children' => array(
       0 => 'field_size',
       1 => 'field_bedrooms',
