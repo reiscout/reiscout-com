@@ -1,0 +1,3 @@
+name = Reiscout Core Logic
+description = Provides a demo page with data from CoreLogic RealQuest on it.
+core = 7.x
