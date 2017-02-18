@@ -2,6 +2,7 @@ name = Property
 core = 7.x
 package = Reiscout
 dependencies[] = addressfield
+dependencies[] = addressfield_autocomplete
 dependencies[] = auto_entitylabel
 dependencies[] = colorbox
 dependencies[] = commerce_cart
