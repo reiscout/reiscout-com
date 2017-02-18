@@ -57,6 +57,47 @@ function reiscout_address_resource_access($nid) {
 }
 
 /**
+ * Implements hook_rest_server_request_parsed_alter().
+ */
+function reiscout_address_rest_server_request_parsed_alter(&$data, $controller) {
+  // If services was requested to create a Property node
+  if ('_node_resource_create' == $controller['callback'] && 'property' == $data['type']) {
+    _reiscout_address_prepare_data_to_address_autocomplete_widget($data);
+  }
+  // If services was requested to update a Property node
+  elseif ('_node_resource_update' == $controller['callback'] && 'property' == $data['node']['type']) {
+    _reiscout_address_prepare_data_to_address_autocomplete_widget($data['node']);
+  }
+}
+
+/**
+ * Prepares field data for 'Addressfield Autocomplete' widget.
+ *
+ * Data for the field_address field that comes from the mobile application is
+ * compatible with standard 'Dynamic address form' widget which provided by
+ * Address Field module. But we use 'Addressfield Autocomplete' widget which
+ * provided by Addressfield Autocomplete module. So we need to prepare data
+ * to the last widget before send it for saving.
+ */
+function _reiscout_address_prepare_data_to_address_autocomplete_widget(&$node) {
+  $node['field_address']['und'][0]['latitude'] = $node['field-address-und-0-value-latitude'];
+  $node['field_address']['und'][0]['longitude'] = $node['field-address-und-0-value-longitude'];
+  $node['field_address']['und'][0] = array(
+    'field_address' => array(
+      'reveal' => 0,
+      'autocomplete' => $node['field-address-und-0-value-autocomplete'],
+      'widget' => $node['field_address']['und'][0],
+    ),
+  );
+
+  // We don't need these auxiliary fields anymore.
+  unset($node['field-address-und-0-value-autocomplete']);
+  unset($node['field_address_autocomplete_markup']);
+  unset($node['field-address-und-0-value-latitude']);
+  unset($node['field-address-und-0-value-longitude']);
+}
+
+/**
  * Implements hook_entity_load().
  */
 function reiscout_address_entity_load($entities, $type) {
