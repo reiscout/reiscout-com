@@ -6,11 +6,7 @@
 
 function reiscout_address_init() {
   $modulePath = drupal_get_path('module', 'reiscout_address');
-
   drupal_add_css($modulePath . '/reiscout_address.css');
-  drupal_add_js('https://maps.googleapis.com/maps/api/js?libraries=places');
-  drupal_add_js($modulePath . '/geocomplete/jquery.geocomplete.min.js');
-  drupal_add_js($modulePath . '/reiscout_address.js');
 }
 
 /**
@@ -119,55 +115,6 @@ function reiscout_address_entity_load($entities, $type) {
           unset($data['zoom']);
           $entity->field_address[LANGUAGE_NONE][0]['data_json'] = json_encode($data);
         }
-      }
-    }
-  }
-}
-
-/**
- * Implements hook_form_alter().
- */
-function reiscout_address_form_property_node_form_alter(&$form, &$form_state, $form_id) {
-  $fieldName = 'field_address_text';
-  if (isset($form[$fieldName])) {
-    $language = (empty($form[$fieldName]['#language']) ? LANGUAGE_NONE : $form[$fieldName]['#language']);
-    
-    if (isset($form[$fieldName][$language])) {
-      foreach ($form[$fieldName][$language] as $delta => &$field) {
-        if (!isset($field['value'])) {
-          continue;
-        }
-
-        $element = &$field['value'];
-
-        if (!isset($element['#field_suffix'])) {
-          $element['#field_suffix'] = '';
-        }
-
-        $idPrefix = 'address-clear-button';
-        $idSuffix = drupal_html_id(implode('-', [$fieldName, $language, $delta, 'value']));
-        $link = l(t('Clear Address'), current_path(), [
-          'fragment' => $idPrefix . '-' . $idSuffix,
-          'attributes' => [
-            'id' => $idPrefix . '-' . $idSuffix,
-            'class' => [$idPrefix],
-            'data-input-id' => 'edit-' . $idSuffix,
-          ],
-        ]);
-        
-        $element['#field_suffix'] = $link . $element['#field_suffix'];
-
-        if (!isset($element['#attributes'])) {
-          $element['#attributes'] = array();
-        }
-
-        if (!isset($element['#attributes']['class'])) {
-          $element['#attributes']['class'] = array();
-        }
-
-        $element['#attributes']['class'][] = 'address-autocomplete';
-
-        unset($element, $field);
       }
     }
   }
