@@ -70,6 +70,14 @@ function reiscout_address_entity_load($entities, $type) {
 
         // this is a tmp placeholder to do not brake mApp part.
         $entity->_flag_is_user_has_view = true;
+
+        // We will use this data in mobile app to fill some of the fields that related to field_address field.
+        if (isset($entity->field_address[LANGUAGE_NONE][0])) {
+          $data = unserialize($entity->field_address[LANGUAGE_NONE][0]['data']);
+          // Prepare data
+          unset($data['zoom']);
+          $entity->field_address[LANGUAGE_NONE][0]['data_json'] = json_encode($data);
+        }
       }
     }
   }
