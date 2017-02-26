@@ -1,25 +1,33 @@
 <?php
 
-function _send_letter()
-{
-  $nid = (int)str_replace('"', '', array_keys($_POST)[0]);
-//  $result = reiscout_send_letters_send_letter_callback($nid, $template_nid)
-  $result = reiscout_send_letters_send_letter_callback($nid, null, true);
+/**
+ * Send letter
+ *
+ * @param $nid
+ * @return array
+ */
+function _reiscout_send_letters_send_letter($nid) {
+  $node = node_load($nid);
+  global $user;
 
-  return array('status' => $result);
+  $result = reiscout_send_letters_send_letter_drupalgap_callback($node, null);
+
+  return ['status' => $result];
 }
 
-function _get_show_button_info()
-{
+/**
+ * Checking view buttons
+ *
+ * @return array
+ */
+function _reiscout_send_letters_get_show_button_info($nid) {
   $viewBuyLettersPoints = $viewSendLetters = 0;
   if (user_is_logged_in()) {
-    $nodeId = (int)str_replace('"', '', array_keys($_POST)[0]);
-
-    if (reiscout_send_letters_access($nodeId, true)) {
+    if (reiscout_send_letters_access_points($nid)) {
       $viewBuyLettersPoints = 1;
     }
 
-    if ($viewBuyLettersPoints == 0 && reiscout_send_letters_access($nodeId, false)) {
+    if ($viewBuyLettersPoints == 0 && reiscout_send_letters_access($nid)) {
       $viewSendLetters = 1;
     }
   }

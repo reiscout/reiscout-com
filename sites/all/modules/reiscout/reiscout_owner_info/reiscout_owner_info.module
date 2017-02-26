@@ -37,7 +37,34 @@ function reiscout_owner_info_menu () {
  * 2. Check if user have have purchased access to node
  * 3. Check if user have enought points
  */
-function reiscout_owner_info_access($nid, $isPoints = false) {
+function reiscout_owner_info_access($nid) {
+  $points = reiscout_owner_info_access_common($nid);
+
+  if ($points === false || $points == 0) {
+    drupal_set_message("Not enought points.", "error");
+    return FALSE;
+  }
+
+  return TRUE;
+}
+
+/**
+ * Access callback
+ * 1. Check user roles
+ * 2. Check if user have have purchased access to node
+ * 3. Check if user have enought points
+ */
+function reiscout_owner_info_access_points($nid) {
+  $points = reiscout_owner_info_access_common($nid);
+
+  if ($points === false || $points != 0 ) {
+    return FALSE;
+  }
+
+  return TRUE;
+}
+
+function reiscout_owner_info_access_common($nid) {
   global $user;
   $node = node_load($nid);
 
@@ -54,8 +81,8 @@ function reiscout_owner_info_access($nid, $isPoints = false) {
       if ($user->uid != $node->uid) {
         // Check if user have purchased access to node
         $node_purchased = reiscout_property_commerce_is_node_purchased($node->nid,
-                                                                       REISCOUT_PROPERTY_COMMERCE_ADDRESS_ACCESS_PRODUCT_TYPE,
-                                                                       $user->uid);
+            REISCOUT_PROPERTY_COMMERCE_ADDRESS_ACCESS_PRODUCT_TYPE,
+            $user->uid);
         // If user have not purchased access to node return FALSE.
         if (!$node_purchased) {
           return FALSE;
@@ -68,12 +95,8 @@ function reiscout_owner_info_access($nid, $isPoints = false) {
 
   // Check if user have enought points
   $points = userpoints_get_current_points($user->uid, TERM_ID_POINTS_OWNER_INFO);
-  if ($points == 0) {
-//    drupal_set_message("Not enought points.", "error");
-    return ($isPoints) ? TRUE : FALSE;
-  }
 
-  return ($isPoints) ? FALSE : TRUE;
+  return $points;
 }
 
 
@@ -82,20 +105,16 @@ function reiscout_owner_info_access($nid, $isPoints = false) {
  * 1. Make call to reiscout_connect2data_api.
  * 2. Decrease userpoint by one.
  */
-function reiscout_owner_info_get_owner_callback($nid, $isAjax = false) {
+function reiscout_owner_info_get_owner_callback($nid) {
   global $user;
 
   // Getting owner's data (see reiscout_connect2data_api.module)
   $result = reiscout_connect2data_api_get_data($nid);
 
   if (!$result) {
-    if (!$isAjax) {
-      drupal_set_message("Error while requesting owner info.", "error");
-      // Return to previous page
-      drupal_goto();
-    } else {
-      return false;
-    }
+    drupal_set_message("Error while requesting owner info.", "error");
+    // Return to previous page
+    drupal_goto();
   } else {
     // ToDo: move pints decreasing to function.
     // Decrease points by one
@@ -107,13 +126,37 @@ function reiscout_owner_info_get_owner_callback($nid, $isAjax = false) {
     );
     userpoints_userpointsapi($params);
 
-    if (!$isAjax) {
-      drupal_set_message("Owner info received successfuly.");
-      // Return to previous page
-      drupal_goto();
-    } else {
-      return true;
-    }
+    drupal_set_message("Owner info received successfuly.");
+    // Return to previous page
+    drupal_goto();
+  }
+}
+
+/**
+ * Page callback for get_owner_info/%.
+ * 1. Make call to reiscout_connect2data_api.
+ * 2. Decrease userpoint by one.
+ */
+function reiscout_owner_info_get_owner_drupalgap_callback($nid) {
+  global $user;
+
+  // Getting owner's data (see reiscout_connect2data_api.module)
+  $result = reiscout_connect2data_api_get_data($nid);
+
+  if (!$result) {
+      return false;
+  } else {
+    // ToDo: move pints decreasing to function.
+    // Decrease points by one
+    $params = array(
+        'uid' => $user->uid,
+        'points' => -1,
+        'tid' => TERM_ID_POINTS_OWNER_INFO,
+        'operation' => 'Used 1 point to get access to owner.',
+    );
+    userpoints_userpointsapi($params);
+
+    return true;
   }
 }
 
@@ -223,15 +266,31 @@ function reiscout_owner_info_services_resources() {
       'actions' => array(
         'getinfo' => array(
           'file' => $file,
-          'callback' => '_get_info',
+          'help' => 'Get owner info',
+          'callback' => '_reiscout_owner_info_get_info',
           'access callback' => 'reiscout_owner_info_resource_access',
-          'args' => array(),
+          'args' => array(
+            array(
+              'name' => 'nid',
+              'optional' => FALSE,
+              'source' => array('data' => 'nid'),
+              'type' => 'int',
+            ),
+          ),
         ),
         'checkButtonShow' => array(
           'file' => $file,
-          'callback' => '_get_show_button_info',
+          'help' => 'Checking view buttons',
+          'callback' => '_reiscout_owner_info_get_show_button_info',
           'access callback' => 'reiscout_owner_info_resource_access',
-          'args' => array(),
+          'args' => array(
+            array(
+              'name' => 'nid',
+              'optional' => FALSE,
+              'source' => array('data' => 'nid'),
+              'type' => 'int',
+            ),
+          ),
         ),
       ),
     )
@@ -239,7 +298,11 @@ function reiscout_owner_info_services_resources() {
   return $resource;
 }
 
-
+/**
+ * Check user access
+ *
+ * @return bool
+ */
 function reiscout_owner_info_resource_access() {
   return true;
 }
