@@ -200,6 +200,18 @@ function reiscout_property_commerce_entity_load($entities, $type) {
           $entity->_reiscout_property_commerce_product_id = $avaliable_product->product_id;
           $entity->_reiscout_property_commerce_product_type = $avaliable_product->type;
         }
+
+        // Mobile application needs to know if user bought an 'Address Access' product.
+        $entity->_user_bought_address_access_product = reiscout_property_commerce_is_node_purchased(
+          $entity->nid,
+          REISCOUT_PROPERTY_COMMERCE_ADDRESS_ACCESS_PRODUCT_TYPE
+        );
+
+        // Mobile application needs to know if user bought an 'Owner Info' product.
+        $entity->_user_bought_owner_info_product = reiscout_property_commerce_is_node_purchased(
+          $entity->nid,
+          REISCOUT_PROPERTY_COMMERCE_OWNER_INFO_PRODUCT_TYPE
+        );
       }
     }
 

@@ -10,49 +10,6 @@ function reiscout_address_init() {
 }
 
 /**
- * Implements hook_services_resources().
- */
-function reiscout_address_services_resources() {
-  $file = array(
-    'type'   => 'inc',
-    'module' => 'reiscout_address',
-    'name'   => 'reiscout_address.resource'
-  );
-
-  $resource = array(
-    'addressapi' => array(
-      'actions' => array(
-        'setview' => array(
-          'help' => t('Save view address click statistics.'),
-          'callback' => 'reiscout_address_resource_action_view_address',
-          'access callback' => 'reiscout_address_resource_access',
-          'file' => $file,
-          'args' => array(
-            array(
-              'name' => 'nid',
-              'optional' => FALSE,
-              'source' => array('data' => 'nid'),
-              'type' => 'int',
-            ),
-          ),
-        )
-      ),
-    ),
-  );
-
-  return $resource;
-}
-
-/**
- * Access callback for addressapi:setview action.
- */
-function reiscout_address_resource_access($nid) {
-  $node = node_load($nid);
-
-  return ($node && $node->type === 'property' && !user_is_anonymous() && $node->uid !== $GLOBALS['user']->uid);
-}
-
-/**
  * Implements hook_rest_server_request_parsed_alter().
  */
 function reiscout_address_rest_server_request_parsed_alter(&$data, $controller) {
@@ -100,14 +57,6 @@ function reiscout_address_entity_load($entities, $type) {
   if ($type === 'node' && !user_is_anonymous()) {
     foreach ($entities as $entity) {
       if ($entity->type === 'property') {
-        // Set $entity->_flag_is_user_has_view to TRUE for property node is user its author or has flagged the node.
-        //  it is used by mobile App, see reiscout_address.js app module.
-        //$entity->_flag_is_user_has_view = ($entity->uid === $GLOBALS['user']->uid || reiscout_address_user_has_view($entity->nid));
-        // @todo: replace it to _purchased_property_info
-
-        // this is a tmp placeholder to do not brake mApp part.
-        $entity->_flag_is_user_has_view = true;
-
         // We will use this data in mobile app to fill some of the fields that related to field_address field.
         if (isset($entity->field_address[LANGUAGE_NONE][0])) {
           $data = unserialize($entity->field_address[LANGUAGE_NONE][0]['data']);
@@ -118,20 +67,4 @@ function reiscout_address_entity_load($entities, $type) {
       }
     }
   }
-}
-
-/*
- * this is a dummy func to escape erros on mApp.
- * remove it when it is not needed anymore
- */
-function reiscout_address_user_has_view ($arg) {
-
-}
-
-/*
- * this is a dummy func to escape erros on mApp.
- * remove it when it is not needed anymore
- */
-function reiscout_address_set_view ($arg) {
-  
 }
