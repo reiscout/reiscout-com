@@ -10,7 +10,7 @@ function _reiscout_send_letters_send_letter($nid) {
   $node = node_load($nid);
   global $user;
   $user_fields = user_load($user->uid);
-  $template_node = $user_fields->field_default_template_nid->viewSendLetters->und[0]->value;
+  $template_node = $user_fields->field_default_template_nid->und[0]->value;
 
   $result = reiscout_send_letters_send_letter_drupalgap_callback($node, $template_node);
 
