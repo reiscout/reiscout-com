@@ -10,8 +10,16 @@ function _reiscout_send_letters_send_letter($nid) {
   // ToDo: check is node by nid exists and for bundle.
   $node = node_load($nid);
   global $user;
-  $user_fields = user_load($user->uid);
-  $template_node = $user_fields->field_default_template_nid->und[0]->value;
+  $user = user_load($user->uid);
+  if (!empty($user->field_default_template_nid[LANGUAGE_NONE][0]['value'])) {
+    $template_node = $user->field_default_template_nid[LANGUAGE_NONE][0]['value'];
+  }
+
+  if (empty($template_node)) {
+    watchdog('reiscout_send_letters', 'Letter template for user @uid not found', array('@uid' => $user->uid), WATCHDOG_ERROR);
+    return ['status' => false];
+  }
+
 
   $result = reiscout_send_letters_send_letter_drupalgap_callback($node, $template_node);
 
