@@ -57,10 +57,31 @@ function reiscout_address_entity_load($entities, $type) {
   if ($type === 'node' && !user_is_anonymous()) {
     foreach ($entities as $entity) {
       if ($entity->type === 'property') {
-        // We will use this data in mobile app to fill some of the fields that related to field_address field.
-        if (isset($entity->field_address[LANGUAGE_NONE][0])) {
+        // When field_address field is being saved, _addressfield_autocomplete_widget_transform()
+        // generates an array with following values:
+        //   $data = array(
+        //     'latitude' => lat_val,
+        //     'longitude' => long_val,
+        //     'zoom' => zoom_val,
+        //     'formatted_address' => fm_val,
+        //   );
+        //
+        // and serializes the array:
+        //   $address['data'] = serialize($data);
+        //
+        // We use this data in the mobile application to fill fields related
+        // to field_address field on the Property's node_edit page:
+        // - address autocomplete;
+        // - latitude;
+        // - longitude.
+        //
+        // See reiscout_address_form_alter() in app/modules/custom/reiscout_address/reiscout_address.js
+        //
+        // We cannot use serialized string in the mobile application, so we
+        // unserialize the data and encode it as JSON.
+        if (!empty($entity->field_address[LANGUAGE_NONE][0]['data'])) {
           $data = unserialize($entity->field_address[LANGUAGE_NONE][0]['data']);
-          // Prepare data
+          // We do not need 'zoom' value
           unset($data['zoom']);
           $entity->field_address[LANGUAGE_NONE][0]['data_json'] = json_encode($data);
         }
