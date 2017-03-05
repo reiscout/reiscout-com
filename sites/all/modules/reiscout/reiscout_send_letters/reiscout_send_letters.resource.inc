@@ -7,6 +7,7 @@
  * @return array
  */
 function _reiscout_send_letters_send_letter($nid) {
+  // ToDo: check is node by nid exists and for bundle.
   $node = node_load($nid);
   global $user;
   $user_fields = user_load($user->uid);
@@ -23,6 +24,7 @@ function _reiscout_send_letters_send_letter($nid) {
  * @return array
  */
 function _reiscout_send_letters_get_show_button_info($nid) {
+  // ToDo: check is node by nid exists and for bundle.s
   $viewBuyLettersPoints = $viewSendLetters = 0;
   if (user_is_logged_in()) {
     if (reiscout_send_letters_access_points($nid)) {

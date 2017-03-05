@@ -4,6 +4,7 @@
  * Get owner info
  */
 function _reiscout_owner_info_get_info($nid) {
+  // ToDo: check is node by nid exists and for bundle.
   $result = reiscout_owner_info_get_owner_drupalgap_callback($nid);
 
   return ['status' => $result];
@@ -15,6 +16,7 @@ function _reiscout_owner_info_get_info($nid) {
  * @return array
  */
 function _reiscout_owner_info_get_show_button_info($nid) {
+  // ToDo: check is node by nid exists and for bundle.
   $viewBuyInfoPoints = $viewGetOwnerInfo = 0;
 
   if (user_is_logged_in()) {
