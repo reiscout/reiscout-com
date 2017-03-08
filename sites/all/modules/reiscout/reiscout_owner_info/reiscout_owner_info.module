@@ -5,7 +5,7 @@
  * Reiscout Owner Info -
  * 1. Displays apropriate action buttons and make control over points
  * to get property owner info.
- * 2. Make call to reiscout_connect2data_api
+ * 2. Make call to connect2data_api
  */
 
 // Define constants
@@ -138,7 +138,7 @@ function _reiscout_owner_info_build_property_criteria($node) {
 
 /**
  * Page callback for get_owner_info/%.
- * 1. Make call to reiscout_connect2data_api.
+ * 1. Make call to connect2data_api.
  * 2. Decrease userpoint by one.
  */
 function reiscout_owner_info_get_owner_callback($node) {
@@ -177,7 +177,7 @@ function reiscout_owner_info_get_owner_callback($node) {
 
 /**
  * Page callback for get_owner_info/%.
- * 1. Make call to reiscout_connect2data_api.
+ * 1. Make call to connect2data_api.
  * 2. Decrease userpoint by one.
  */
 function reiscout_owner_info_get_owner_drupalgap_callback($nid) {
