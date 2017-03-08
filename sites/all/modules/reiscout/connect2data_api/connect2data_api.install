@@ -1,0 +1,48 @@
+<?php
+
+/**
+ * @file
+ * Install, update and uninstall functions for the Connect2Data API module.
+ */
+
+/**
+ * Implements hook_schema().
+ */
+function connect2data_api_schema() {
+  $schema['c2d_detailed_subject_report'] = array(
+    'description' => 'Stores DetailedSubjectReport data that were got from an API requests.',
+    'fields' => array(
+      'request_hash' => array(
+        'type' => 'char',
+        'length' => 40,
+        'not null' => TRUE,
+        'description' => 'Unique request hash: SHA1 representation of property criteria that was used in a request.',
+      ),
+      'data' => array(
+        'type' => 'text',
+        'size' => 'medium',
+        'not null' => TRUE,
+        'description' => 'A DetailedSubjectReport data.',
+      ),
+      'created' => array(
+        'type' => 'int',
+        'not null' => TRUE,
+        'default' => 0,
+        'description' => 'Timestamp for when a record was saved.',
+      ),
+    ),
+    'unique keys' => array(
+      'request_hash' => array('request_hash'),
+    ),
+  );
+
+  return $schema;
+}
+
+/**
+ * Implements hook_uninstall().
+ */
+function connect2data_api_uninstall() {
+  variable_del('connect2data_api_login_account_id');
+  variable_del('connect2data_api_login_account_pw');
+}
