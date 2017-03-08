@@ -11,8 +11,6 @@
  * @see system_settings_form()
  */
 function connect2data_api_admin_settings_form() {
-  reiscout_owner_info_get_owner_drupalgap_callback(336);
-
   $form['login_data'] = array(
     '#type' => 'fieldset',
     '#title' => t('Login Data'),
