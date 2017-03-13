@@ -5,7 +5,7 @@
  * Reiscout Owner Info -
  * 1. Displays apropriate action buttons and make control over points
  * to get property owner info.
- * 2. Make call to reiscout_connect2data_api
+ * 2. Make call to connect2data_api
  */
 
 // Define constants
@@ -99,65 +99,125 @@ function reiscout_owner_info_access_common($nid) {
   return $points;
 }
 
+/**
+ * Fills Owner's Address field with info we received from the Connect2Data API.
+ */
+function reiscout_owner_info_save($node, $info) {
+  $nw = entity_metadata_wrapper('node', $node);
+
+  $nw->field_owner_postal_address->country = 'US';
+  $nw->field_owner_postal_address->name_line = trim($info->PROPERTY_OWNER->attributes()->_OwnerName);
+  $nw->field_owner_postal_address->thoroughfare = trim($info->PROPERTY_OWNER->attributes()->_MailingAddress);
+  $nw->field_owner_postal_address->postal_code = trim($info->PROPERTY_OWNER->attributes()->_MailingPostalCode);
+
+  if (preg_match('!(.+?)\s+([A-Z]{2})$!', $info->PROPERTY_OWNER->attributes()->_MailingCityAndState, $matches)) {
+    $nw->field_owner_postal_address->locality = $matches[1];
+    $nw->field_owner_postal_address->administrative_area = $matches[2];
+  }
+
+  $nw->save();
+}
 
 /**
- * Page callback for get_owner_info/%.
- * 1. Make call to reiscout_connect2data_api.
- * 2. Decrease userpoint by one.
+ * Builds data that is needed for request to the Connect2Data API.
  */
-function reiscout_owner_info_get_owner_callback($nid) {
-  global $user;
+function _reiscout_owner_info_build_property_criteria($node) {
+  $nw = entity_metadata_wrapper('node', $node);
 
-  // Getting owner's data (see reiscout_connect2data_api.module)
-  $result = reiscout_connect2data_api_get_data($nid);
-
-  if (!$result) {
-    drupal_set_message("Error while requesting owner info.", "error");
-    // Return to previous page
-    drupal_goto();
-  } else {
-    // ToDo: move pints decreasing to function.
-    // Decrease points by one
-    $params = array(
-      'uid' => $user->uid,
-      'points' => -1,
-      'tid' => TERM_ID_POINTS_OWNER_INFO,
-      'operation' => 'Used 1 point to get access to owner.',
-    );
-    userpoints_userpointsapi($params);
-
-    drupal_set_message("Owner info received successfuly.");
-    // Return to previous page
-    drupal_goto();
+  if (!$address = $nw->field_address->value()) {
+    return FALSE;
   }
+
+  return array(
+    'street_address' => $address['thoroughfare'],
+    'city' => $address['locality'],
+    'state' => $address['administrative_area'],
+    'postal_code' => $address['postal_code'],
+  );
 }
 
 /**
  * Page callback for get_owner_info/%.
- * 1. Make call to reiscout_connect2data_api.
+ * 1. Make call to connect2data_api.
+ * 2. Decrease userpoint by one.
+ */
+function reiscout_owner_info_get_owner_callback($node) {
+  global $user;
+
+  // Build data that is needed for request to the Connect2Data API
+  if (!$property_criteria = _reiscout_owner_info_build_property_criteria($node)) {
+    drupal_set_message("The information about property's owner cannot be requested because the property's address was not set.", 'error');
+    // Return to the previous page
+    drupal_goto();
+  }
+
+  // Make a request to the Connect2Data API to get full info about property
+  if (!$info = connect2data_api_get_detailed_subject_report($property_criteria)) {
+    drupal_set_message("An error occurred while requesting the information about property's owner.", 'error');
+    // Return to the previous page
+    drupal_goto();
+  }
+
+  reiscout_owner_info_save($node, $info);
+
+  // ToDo: move pints decreasing to function.
+  // Decrease points by one
+  $params = array(
+    'uid' => $user->uid,
+    'points' => -1,
+    'tid' => TERM_ID_POINTS_OWNER_INFO,
+    'operation' => 'Used 1 point to get access to owner.',
+  );
+  userpoints_userpointsapi($params);
+
+  drupal_set_message("Owner info received successfully.");
+  // Return to previous page
+  drupal_goto();
+}
+
+/**
+ * Page callback for get_owner_info/%.
+ * 1. Make call to connect2data_api.
  * 2. Decrease userpoint by one.
  */
 function reiscout_owner_info_get_owner_drupalgap_callback($nid) {
   global $user;
 
-  // Getting owner's data (see reiscout_connect2data_api.module)
-  $result = reiscout_connect2data_api_get_data($nid);
-
-  if (!$result) {
-      return false;
-  } else {
-    // ToDo: move pints decreasing to function.
-    // Decrease points by one
-    $params = array(
-        'uid' => $user->uid,
-        'points' => -1,
-        'tid' => TERM_ID_POINTS_OWNER_INFO,
-        'operation' => 'Used 1 point to get access to owner.',
+  // Build data that is needed for request to the Connect2Data API
+  if (!$property_criteria = _reiscout_owner_info_build_property_criteria($nid)) {
+    watchdog(
+      'reiscout_owner_info',
+      "The information about property's owner cannot be requested because the property's address was not set. Node ID: !nid",
+      array('!nid' => $nid),
+      WATCHDOG_ERROR
     );
-    userpoints_userpointsapi($params);
-
-    return true;
+    return FALSE;
   }
+
+  // Make a request to the Connect2Data API to get full info about property
+  if (!$info = connect2data_api_get_detailed_subject_report($property_criteria)) {
+    watchdog(
+      'reiscout_owner_info',
+      "An error occurred while requesting the information about property's owner.",
+      array(),
+      WATCHDOG_ERROR
+    );
+    return FALSE;
+  }
+
+  reiscout_owner_info_save($nid, $info);
+
+  // ToDo: move pints decreasing to function.
+  // Decrease points by one
+  $params = array(
+    'uid' => $user->uid,
+    'points' => -1,
+    'tid' => TERM_ID_POINTS_OWNER_INFO,
+    'operation' => 'Used 1 point to get access to owner.',
+  );
+  userpoints_userpointsapi($params);
+
+  return TRUE;
 }
 
 /*

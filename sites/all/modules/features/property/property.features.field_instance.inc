@@ -742,16 +742,8 @@ function property_field_default_field_instances() {
       ),
       'drupalgap' => array(
         'label' => 'above',
-        'module' => 'date',
-        'settings' => array(
-          'format_type' => 'long',
-          'fromto' => 'both',
-          'multiple_from' => '',
-          'multiple_number' => '',
-          'multiple_to' => '',
-          'show_remaining_days' => FALSE,
-        ),
-        'type' => 'date_default',
+        'settings' => array(),
+        'type' => 'hidden',
         'weight' => 11,
       ),
       'full' => array(
@@ -1219,12 +1211,12 @@ function property_field_default_field_instances() {
         'format_handlers' => array(
           'address' => 'address',
           'address-hide-country' => 'address-hide-country',
-          'name-full' => 'name-full',
+          'name-oneline' => 'name-oneline',
           'address-optional' => 'address-optional',
           'address-hide-postal-code' => 0,
           'address-hide-street' => 0,
           'organisation' => 0,
-          'name-oneline' => 0,
+          'name-full' => 0,
         ),
       ),
       'type' => 'addressfield_standard',

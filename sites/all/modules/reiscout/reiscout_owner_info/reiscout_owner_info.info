@@ -12,6 +12,6 @@ dependencies[] = rules
 dependencies[] = rules_link
 dependencies[] = services
 
-dependencies[] = reiscout_connect2data_api
+dependencies[] = connect2data_api
 dependencies[] = reiscout_property_commerce
 

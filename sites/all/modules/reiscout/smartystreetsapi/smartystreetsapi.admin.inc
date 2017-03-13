@@ -2,7 +2,7 @@
 
 /**
  * @file
- * Admin page callback file for the user module.
+ * Admin page callback file for the SmartyStreets API module.
  */
 
 /**
