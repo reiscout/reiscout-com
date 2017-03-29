@@ -14,17 +14,14 @@ class Connect2DataAPI {
   private $loginAccountPassword;
   private $propertyCriteria;
 
-  function __construct($loginAccountId, $loginAccountPw) {
-    if (!$loginAccountId) {
+  function __construct() {
+    if (!$this->loginAccountIdentifier = variable_get('connect2data_api_login_account_id')) {
       throw new Connect2DataAPIException(t('LoginAccountIdentifier is not set.'), 1);
     }
 
-    if (!$loginAccountPw) {
+    if (!$this->loginAccountPassword = variable_get('connect2data_api_login_account_pw')) {
       throw new Connect2DataAPIException(t('LoginAccountPassword is not set.'), 2);
     }
-
-    $this->loginAccountIdentifier = $loginAccountId;
-    $this->loginAccountPassword = $loginAccountPw;
   }
 
   /**

@@ -39,21 +39,10 @@ function connect2data_api_menu() {
  */
 function connect2data_api_get_detailed_subject_report($property_criteria) {
   try {
-    $api = connect2data_api_get_object();
+    $api = new Connect2DataAPI();
     return $api->getDetailedSubjectReport($property_criteria);
   }
   catch (Connect2DataAPIException $e) {
     watchdog_exception('connect2data_api_get_detailed_subject_report', $e);
   }
-}
-
-/**
- * Returns an instance of the Connect2DataAPI class.
- *
- * @see connect2data_api_get_detailed_subject_report()
- */
-function connect2data_api_get_object() {
-  $login_account_id = variable_get('connect2data_api_login_account_id');
-  $login_account_pw = variable_get('connect2data_api_login_account_pw');
-  return new Connect2DataAPI($login_account_id, $login_account_pw);
 }
