@@ -45,4 +45,5 @@ function connect2data_api_schema() {
 function connect2data_api_uninstall() {
   variable_del('connect2data_api_login_account_id');
   variable_del('connect2data_api_login_account_pw');
+  variable_del('connect2data_api_cache_lifetime_detailed_subject_report');
 }

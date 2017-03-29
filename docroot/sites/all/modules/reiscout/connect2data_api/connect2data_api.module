@@ -5,6 +5,8 @@
  * Provides a wrapper for the CoreLogic Connect2Data API.
  */
 
+define('CONNECT2DATA_API_CACHE_LIFETIME_DETAILED_SUBJECT_REPORT', 180);
+
 /**
  * Implements hook_permission().
  */
