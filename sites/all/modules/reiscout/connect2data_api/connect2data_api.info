@@ -1,0 +1,5 @@
+name = Connect2Data API
+description = Provides a wrapper for the CoreLogic Connect2Data API.
+configure = admin/config/services/connect2data_api
+core = 7.x
+files[] = connect2data_api.class.inc

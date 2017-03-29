@@ -1,0 +1,30 @@
+<?php
+
+/**
+ * @file
+ * Provides a demo page with data from CoreLogic RealQuest on it.
+ */
+
+/**
+ * Implements hook_menu().
+ */
+function reiscout_core_logic_menu() {
+  $items['property-cl/517'] = array(
+    'title' => 'Property #517',
+    'page callback' => 'reiscout_core_logic_page',
+    'access arguments' => array('access content'),
+  );
+
+  return $items;
+}
+
+/**
+ * Page callback.
+ */
+function reiscout_core_logic_page() {
+  $content['html'] = array(
+    '#markup' => file_get_contents(drupal_get_path('module', 'reiscout_core_logic') . '/content.html'),
+  );
+
+  return $content;
+}

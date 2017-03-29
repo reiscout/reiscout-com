@@ -1,25 +1,30 @@
 <?php
 
-function _get_info()
-{
-  $nid = (int)str_replace('"', '', array_keys($_POST)[0]);
-  $result = reiscout_owner_info_get_owner_callback($nid, true);
+/*
+ * Get owner info
+ */
+function _reiscout_owner_info_get_info($nid) {
+  // ToDo: check is node by nid exists and for bundle.
+  $result = reiscout_owner_info_get_owner_drupalgap_callback($nid);
 
-  return array('status' => $result);
+  return ['status' => $result];
 }
 
-function _get_show_button_info()
-{
+/**
+ * Checking view buttons
+ *
+ * @return array
+ */
+function _reiscout_owner_info_get_show_button_info($nid) {
+  // ToDo: check is node by nid exists and for bundle.
   $viewBuyInfoPoints = $viewGetOwnerInfo = 0;
 
   if (user_is_logged_in()) {
-    $nodeId = (int)str_replace('"', '', array_keys($_POST)[0]);
-
-    if (reiscout_owner_info_access($nodeId, true)) {
+    if (reiscout_owner_info_access_points($nid)) {
       $viewBuyInfoPoints = 1;
     }
 
-    if ($viewBuyInfoPoints == 0 && reiscout_owner_info_access($nodeId, false)) {
+    if ($viewBuyInfoPoints == 0 && reiscout_owner_info_access($nid)) {
       $viewGetOwnerInfo = 1;
     }
 

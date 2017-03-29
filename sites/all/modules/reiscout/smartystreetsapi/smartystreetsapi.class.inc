@@ -2,7 +2,7 @@
 
 /*
  * @file
- * Definition of the FieldInfo class.
+ * Definition of the SmartyStreetsAPI_StreetAddressAPI class.
  */
 
 class SmartyStreetsAPIException extends Exception {}

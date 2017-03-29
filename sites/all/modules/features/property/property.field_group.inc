@@ -57,6 +57,7 @@ function property_field_group_info() {
       1 => 'field_owner_lname',
       2 => 'field_owner_address',
       3 => 'field_owner_phone',
+      4 => 'field_owner_postal_address',
     ),
     'format_type' => 'fieldset',
     'format_settings' => array(
@@ -82,7 +83,7 @@ function property_field_group_info() {
   $field_group->parent_name = '';
   $field_group->data = array(
     'label' => 'Owner Info',
-    'weight' => '17',
+    'weight' => '7',
     'children' => array(
       0 => 'field_owner_fname',
       1 => 'field_owner_lname',
@@ -119,12 +120,11 @@ function property_field_group_info() {
       2 => 'field_bathrooms',
       3 => 'field_lot_size',
       4 => 'field_last_purchase_price',
-      5 => 'field_last_purchase_time',
-      6 => 'field_assessed_value',
-      7 => 'field_mortgage_company',
-      8 => 'field_repairs_price',
-      9 => 'field_arv',
-      10 => 'field_under_contract',
+      5 => 'field_assessed_value',
+      6 => 'field_mortgage_company',
+      7 => 'field_repairs_price',
+      8 => 'field_arv',
+      9 => 'field_under_contract',
     ),
     'format_type' => 'fieldset',
     'format_settings' => array(
@@ -187,7 +187,7 @@ function property_field_group_info() {
   $field_group->parent_name = '';
   $field_group->data = array(
     'label' => 'Property Info',
-    'weight' => '5',
+    'weight' => '6',
     'children' => array(
       0 => 'field_size',
       1 => 'field_bedrooms',

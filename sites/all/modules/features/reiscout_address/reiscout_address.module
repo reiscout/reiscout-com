@@ -6,54 +6,48 @@
 
 function reiscout_address_init() {
   $modulePath = drupal_get_path('module', 'reiscout_address');
-
   drupal_add_css($modulePath . '/reiscout_address.css');
-  drupal_add_js('https://maps.googleapis.com/maps/api/js?libraries=places');
-  drupal_add_js($modulePath . '/geocomplete/jquery.geocomplete.min.js');
-  drupal_add_js($modulePath . '/reiscout_address.js');
 }
 
 /**
- * Implements hook_services_resources().
+ * Implements hook_rest_server_request_parsed_alter().
  */
-function reiscout_address_services_resources() {
-  $file = array(
-    'type'   => 'inc',
-    'module' => 'reiscout_address',
-    'name'   => 'reiscout_address.resource'
-  );
+function reiscout_address_rest_server_request_parsed_alter(&$data, $controller) {
+  // If services was requested to create a Property node
+  if ('_node_resource_create' == $controller['callback'] && 'property' == $data['type']) {
+    _reiscout_address_prepare_data_to_address_autocomplete_widget($data);
+  }
+  // If services was requested to update a Property node
+  elseif ('_node_resource_update' == $controller['callback'] && 'property' == $data['node']['type']) {
+    _reiscout_address_prepare_data_to_address_autocomplete_widget($data['node']);
+  }
+}
 
-  $resource = array(
-    'addressapi' => array(
-      'actions' => array(
-        'setview' => array(
-          'help' => t('Save view address click statistics.'),
-          'callback' => 'reiscout_address_resource_action_view_address',
-          'access callback' => 'reiscout_address_resource_access',
-          'file' => $file,
-          'args' => array(
-            array(
-              'name' => 'nid',
-              'optional' => FALSE,
-              'source' => array('data' => 'nid'),
-              'type' => 'int',
-            ),
-          ),
-        )
-      ),
+/**
+ * Prepares field data for 'Addressfield Autocomplete' widget.
+ *
+ * Data for the field_address field that comes from the mobile application is
+ * compatible with standard 'Dynamic address form' widget which provided by
+ * Address Field module. But we use 'Addressfield Autocomplete' widget which
+ * provided by Addressfield Autocomplete module. So we need to prepare data
+ * to the last widget before send it for saving.
+ */
+function _reiscout_address_prepare_data_to_address_autocomplete_widget(&$node) {
+  $node['field_address']['und'][0]['latitude'] = $node['field-address-und-0-value-latitude'];
+  $node['field_address']['und'][0]['longitude'] = $node['field-address-und-0-value-longitude'];
+  $node['field_address']['und'][0] = array(
+    'field_address' => array(
+      'reveal' => 0,
+      'autocomplete' => $node['field-address-und-0-value-autocomplete'],
+      'widget' => $node['field_address']['und'][0],
     ),
   );
 
-  return $resource;
-}
-
-/**
- * Access callback for addressapi:setview action.
- */
-function reiscout_address_resource_access($nid) {
-  $node = node_load($nid);
-
-  return ($node && $node->type === 'property' && !user_is_anonymous() && $node->uid !== $GLOBALS['user']->uid);
+  // We don't need these auxiliary fields anymore.
+  unset($node['field-address-und-0-value-autocomplete']);
+  unset($node['field_address_autocomplete_markup']);
+  unset($node['field-address-und-0-value-latitude']);
+  unset($node['field-address-und-0-value-longitude']);
 }
 
 /**
@@ -63,79 +57,35 @@ function reiscout_address_entity_load($entities, $type) {
   if ($type === 'node' && !user_is_anonymous()) {
     foreach ($entities as $entity) {
       if ($entity->type === 'property') {
-        // Set $entity->_flag_is_user_has_view to TRUE for property node is user its author or has flagged the node.
-        //  it is used by mobile App, see reiscout_address.js app module.
-        //$entity->_flag_is_user_has_view = ($entity->uid === $GLOBALS['user']->uid || reiscout_address_user_has_view($entity->nid));
-        // @todo: replace it to _purchased_property_info
-
-        // this is a tmp placeholder to do not brake mApp part.
-        $entity->_flag_is_user_has_view = true;
+        // When field_address field is being saved, _addressfield_autocomplete_widget_transform()
+        // generates an array with following values:
+        //   $data = array(
+        //     'latitude' => lat_val,
+        //     'longitude' => long_val,
+        //     'zoom' => zoom_val,
+        //     'formatted_address' => fm_val,
+        //   );
+        //
+        // and serializes the array:
+        //   $address['data'] = serialize($data);
+        //
+        // We use this data in the mobile application to fill fields related
+        // to field_address field on the Property's node_edit page:
+        // - address autocomplete;
+        // - latitude;
+        // - longitude.
+        //
+        // See reiscout_address_form_alter() in app/modules/custom/reiscout_address/reiscout_address.js
+        //
+        // We cannot use serialized string in the mobile application, so we
+        // unserialize the data and encode it as JSON.
+        if (!empty($entity->field_address[LANGUAGE_NONE][0]['data'])) {
+          $data = unserialize($entity->field_address[LANGUAGE_NONE][0]['data']);
+          // We do not need 'zoom' value
+          unset($data['zoom']);
+          $entity->field_address[LANGUAGE_NONE][0]['data_json'] = json_encode($data);
+        }
       }
     }
   }
-}
-
-/**
- * Implements hook_form_alter().
- */
-function reiscout_address_form_property_node_form_alter(&$form, &$form_state, $form_id) {
-  $fieldName = 'field_address_text';
-  if (isset($form[$fieldName])) {
-    $language = (empty($form[$fieldName]['#language']) ? LANGUAGE_NONE : $form[$fieldName]['#language']);
-    
-    if (isset($form[$fieldName][$language])) {
-      foreach ($form[$fieldName][$language] as $delta => &$field) {
-        if (!isset($field['value'])) {
-          continue;
-        }
-
-        $element = &$field['value'];
-
-        if (!isset($element['#field_suffix'])) {
-          $element['#field_suffix'] = '';
-        }
-
-        $idPrefix = 'address-clear-button';
-        $idSuffix = drupal_html_id(implode('-', [$fieldName, $language, $delta, 'value']));
-        $link = l(t('Clear Address'), current_path(), [
-          'fragment' => $idPrefix . '-' . $idSuffix,
-          'attributes' => [
-            'id' => $idPrefix . '-' . $idSuffix,
-            'class' => [$idPrefix],
-            'data-input-id' => 'edit-' . $idSuffix,
-          ],
-        ]);
-        
-        $element['#field_suffix'] = $link . $element['#field_suffix'];
-
-        if (!isset($element['#attributes'])) {
-          $element['#attributes'] = array();
-        }
-
-        if (!isset($element['#attributes']['class'])) {
-          $element['#attributes']['class'] = array();
-        }
-
-        $element['#attributes']['class'][] = 'address-autocomplete';
-
-        unset($element, $field);
-      }
-    }
-  }
-}
-
-/*
- * this is a dummy func to escape erros on mApp.
- * remove it when it is not needed anymore
- */
-function reiscout_address_user_has_view ($arg) {
-
-}
-
-/*
- * this is a dummy func to escape erros on mApp.
- * remove it when it is not needed anymore
- */
-function reiscout_address_set_view ($arg) {
-  
 }

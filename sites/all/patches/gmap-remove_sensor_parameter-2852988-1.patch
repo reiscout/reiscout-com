@@ -1,0 +1,25 @@
+diff --git a/gmap.module b/gmap.module
+index a90ecfb..70aab54 100755
+--- a/gmap.module
++++ b/gmap.module
+@@ -1212,7 +1212,7 @@ function gmap_decimal($num) {
+  * @see http://drupal.org/node/1940474
+  */
+ function gmap_geocode($address, $tld = 'com') {
+-  $data = drupal_http_request(gmap_views_protocol() . '://maps.googleapis.' . $tld . '/maps/api/geocode/json?address=' . urlencode($address) . '&sensor=false');
++  $data = drupal_http_request(gmap_views_protocol() . '://maps.googleapis.' . $tld . '/maps/api/geocode/json?address=' . urlencode($address));
+   if ($data->code == 200) {
+     $data_decoded = json_decode($data->data);
+     if ($data_decoded->status == 'ZERO_RESULTS' || $data_decoded->status == 'OVER_QUERY_LIMIT') {
+diff --git a/lib/Drupal/gmap/GmapDefaults.php b/lib/Drupal/gmap/GmapDefaults.php
+index 4b36fc8..dc8f3d9 100644
+--- a/lib/Drupal/gmap/GmapDefaults.php
++++ b/lib/Drupal/gmap/GmapDefaults.php
+@@ -103,7 +103,6 @@ class GmapDefaults {
+     $query = array(
+       'v' => variable_get('gmap_api_version', GMAP_API_VERSION),
+       'language' => $langcode,
+-      'sensor' => 'false',
+       'libraries' => implode(array_merge(variable_get('gmap_api_libraries', array()), gmap_module_invoke('libraries', $m)), ','),
+     );
+     if ($key = gmap_get_key()) {

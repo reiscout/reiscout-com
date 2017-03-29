@@ -107,6 +107,9 @@ function property_strongarm() {
       'token' => array(
         'custom_settings' => FALSE,
       ),
+      'diff_standard' => array(
+        'custom_settings' => FALSE,
+      ),
     ),
     'extra_fields' => array(
       'form' => array(
@@ -124,11 +127,11 @@ function property_strongarm() {
             'visible' => FALSE,
           ),
           'default' => array(
-            'weight' => '23',
+            'weight' => '27',
             'visible' => FALSE,
           ),
           'full' => array(
-            'weight' => '24',
+            'weight' => '14',
             'visible' => FALSE,
           ),
         ),
@@ -138,11 +141,11 @@ function property_strongarm() {
             'visible' => FALSE,
           ),
           'default' => array(
-            'weight' => '24',
+            'weight' => '28',
             'visible' => FALSE,
           ),
           'full' => array(
-            'weight' => '25',
+            'weight' => '15',
             'visible' => FALSE,
           ),
         ),
@@ -152,11 +155,11 @@ function property_strongarm() {
             'visible' => FALSE,
           ),
           'default' => array(
-            'weight' => '25',
+            'weight' => '29',
             'visible' => FALSE,
           ),
           'full' => array(
-            'weight' => '27',
+            'weight' => '17',
             'visible' => FALSE,
           ),
         ),
@@ -170,21 +173,21 @@ function property_strongarm() {
             'visible' => TRUE,
           ),
           'full' => array(
-            'weight' => '26',
+            'weight' => '16',
             'visible' => FALSE,
           ),
         ),
         'product:field_property' => array(
           'full' => array(
-            'weight' => '22',
-            'visible' => TRUE,
+            'weight' => '12',
+            'visible' => FALSE,
           ),
           'drupalgap' => array(
             'weight' => '22',
             'visible' => TRUE,
           ),
           'default' => array(
-            'weight' => '22',
+            'weight' => '23',
             'visible' => TRUE,
           ),
         ),
