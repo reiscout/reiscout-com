@@ -22,6 +22,18 @@ class Connect2DataAPI {
     if (!$this->loginAccountPassword = variable_get('connect2data_api_login_account_pw')) {
       throw new Connect2DataAPIException(t('LoginAccountPassword is not set.'), 2);
     }
+
+    $this->collectGarbageDetailedSubjectReports();
+  }
+
+  /**
+   * Collects garbage for DetailedSubjectReport data.
+   */
+  private function collectGarbageDetailedSubjectReports() {
+    $cache_lifetime = variable_get('connect2data_api_cache_lifetime_detailed_subject_report', CONNECT2DATA_API_CACHE_LIFETIME_DETAILED_SUBJECT_REPORT);
+    db_delete('c2d_detailed_subject_report')
+      ->condition('created', REQUEST_TIME - $cache_lifetime, '<')
+      ->execute();
   }
 
   /**
