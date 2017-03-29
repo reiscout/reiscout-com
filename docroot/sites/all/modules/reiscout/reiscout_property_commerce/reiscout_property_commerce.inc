@@ -189,6 +189,10 @@ function reiscout_property_commerce_update_price($node, $product) {
   // Add try..catch block to make system show a reasonable error,
   // otherwise it will show entity_metadata exception with no reasonable call stack
   try {
+    if (!isset($product->uid)) {
+      $product->uid = '';
+    }
+
     $pw = entity_metadata_wrapper('commerce_product', $product);
 
     if ($product->type == REISCOUT_PROPERTY_COMMERCE_ADDRESS_ACCESS_PRODUCT_TYPE) {
