@@ -1,15 +1,5 @@
-# Ignore configuration files that may contain sensitive information.
-sites/*/settings*.php
-
-# Ignore paths that contain user-generated content.
-sites/*/files
-sites/*/private
-
 # Ignore Netbeans project directory
 nbproject
-
-# Ignore DrupalGap directory because it is tracked alone.
-mobile-application
 
 .DS_Store
 */.DS_Store
@@ -19,6 +9,3 @@ mobile-application
 
 .idea
 */.idea
-
-cache/*
-
