@@ -209,7 +209,7 @@ function reiscout_property_commerce_update_price($node, $product) {
       $pw->commerce_price->set($new_price);
     }
 
-    $pw->title->set(preg_replace("/#([\d]+)?/",'#'.$node->vid, $product->title));
+    $pw->title->set(preg_replace("/#([\d]+)?/",'#'.$node->nid, $product->title));
     $pw->save();
 
   } catch (Exception $e) {
