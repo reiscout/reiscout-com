@@ -449,6 +449,7 @@ function reiscout_property_commerce_get_property_avaliable_products($node) {
   // Is Owner Info product avaliable
   if ($node->uid == $GLOBALS['user']->uid
   && !reiscout_property_commerce_is_node_purchased($node->nid, REISCOUT_PROPERTY_COMMERCE_OWNER_INFO_PRODUCT_TYPE, $GLOBALS['user']->uid)
+  && !empty($node->field_owner_info_product)
   ) {
     $avaliable_products[] = commerce_product_load($node->field_owner_info_product[LANGUAGE_NONE][0]['product_id']);
   }

@@ -61,7 +61,7 @@ function auto_entitylabel_menu() {
             'page callback' => 'drupal_get_form',
             'page arguments' => array('auto_entitylabel_settings_form', $entity_type, $bundle_arg),
             'type' => MENU_LOCAL_TASK,
-            'weight' => 2.1,
+            'weight' => 2,
             'file' => 'auto_entitylabel.admin.inc',
           ) + $access;
           // Prefix comment entities, because otherwise there would be multiple
@@ -69,7 +69,7 @@ function auto_entitylabel_menu() {
           if ($entity_type == 'comment') {
             $items["$path/auto_label"]['title'] = '@type Auto label';
             $items["$path/auto_label"]['title arguments'] = array('@type' => $entity_info['label']);
-            $items["$path/auto_label"]['weight'] = 4.1;
+            $items["$path/auto_label"]['weight'] = 4;
           }
         }
       }
@@ -147,11 +147,11 @@ function auto_entitylabel_exit($destination = NULL) {
 
       if ($entity) {
         // Store the old label.
-        $old_label = $entity->$settings['title'];
+        $old_label = $entity->{$settings['title']};
         // Update the entity label.
         auto_entitylabel_set_title($entity, $entity_type);
         // Save it only if the title has changed.
-        if ($entity->$settings['title'] != $old_label) {
+        if ($entity->{$settings['title']} != $old_label) {
           entity_save($entity_type, $entity);
         }
       }
@@ -280,6 +280,9 @@ function auto_entitylabel_set_title(&$entity, $type) {
     $titles[LANGUAGE_NONE] = t('@bundle', array('@bundle' => $bundle));
   }
 
+  $clone = clone $entity;
+  drupal_alter('auto_entitylabel_title', $titles, $clone);
+
   // Ensure the generated title isn't too long.
   $max_length = auto_entitylabel_max_length($type, $settings['title']);
   foreach ($titles as $k => $v) {
@@ -333,7 +336,7 @@ function auto_entitylabel_action_info() {
  * @see auto_entitylabel_action_info()
  */
 function auto_entitylabel_entity_update_action(&$entity, &$context = array()) {
-  if (auto_entitylabel_is_needed($entity, $context['entity_type'])) {
+  if (auto_entitylabel_is_needed($entity, $context['entity_type'], TRUE)) {
     auto_entitylabel_set_title($entity, $context['entity_type']);
     // Only save if the title has actually changed.
     if (!empty($entity->auto_entitylabel_changed)) {
@@ -371,7 +374,7 @@ function auto_entitylabel_operations_update($nodes) {
   * @return
   *   A title string
   */
-function _auto_entitylabel_patternprocessor($pattern, $entity, $entity_type, $language = LANGUAGE_NONE) { 
+function _auto_entitylabel_patternprocessor($pattern, $entity, $entity_type, $language = LANGUAGE_NONE) {
   // Replace tokens.
   $info = entity_get_info($entity_type);
   $languages = language_list();
@@ -385,7 +388,10 @@ function _auto_entitylabel_patternprocessor($pattern, $entity, $entity_type, $la
     $output = auto_entitylabel_eval($output, $entity, $language);
   }
   // Strip tags.
-  $output = preg_replace('/[\t\n\r\0\x0B]/', '', strip_tags($output));
+  $strip_tags = variable_get('auto_entitylabel_strip_' . $entity_type . '_' . $entity->type, 1);
+  if ($strip_tags) {
+    $output = preg_replace('/[\t\n\r\0\x0B]/', '', strip_tags($output));
+  }
   return $output;
 }
 
@@ -421,7 +427,7 @@ function auto_entitylabel_field_attach_delete_bundle($entity_type, $bundle, $ins
   }
 }
 
-/** 
+/**
  * Implements hook_field_attach_rename_bundle().
  */
 function auto_entitylabel_field_attach_rename_bundle($entity_type, $bundle_old, $bundle_new) {

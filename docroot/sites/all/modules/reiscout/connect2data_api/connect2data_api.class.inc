@@ -14,17 +14,26 @@ class Connect2DataAPI {
   private $loginAccountPassword;
   private $propertyCriteria;
 
-  function __construct($loginAccountId, $loginAccountPw) {
-    if (!$loginAccountId) {
+  function __construct() {
+    if (!$this->loginAccountIdentifier = variable_get('connect2data_api_login_account_id')) {
       throw new Connect2DataAPIException(t('LoginAccountIdentifier is not set.'), 1);
     }
 
-    if (!$loginAccountPw) {
+    if (!$this->loginAccountPassword = variable_get('connect2data_api_login_account_pw')) {
       throw new Connect2DataAPIException(t('LoginAccountPassword is not set.'), 2);
     }
 
-    $this->loginAccountIdentifier = $loginAccountId;
-    $this->loginAccountPassword = $loginAccountPw;
+    $this->collectGarbageDetailedSubjectReports();
+  }
+
+  /**
+   * Collects garbage for DetailedSubjectReport data.
+   */
+  private function collectGarbageDetailedSubjectReports() {
+    $cache_lifetime = variable_get('connect2data_api_cache_lifetime_detailed_subject_report', CONNECT2DATA_API_CACHE_LIFETIME_DETAILED_SUBJECT_REPORT);
+    db_delete('c2d_detailed_subject_report')
+      ->condition('created', REQUEST_TIME - $cache_lifetime, '<')
+      ->execute();
   }
 
   /**
