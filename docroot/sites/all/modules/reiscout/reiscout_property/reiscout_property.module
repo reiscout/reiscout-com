@@ -1,5 +1,8 @@
 <?php
 
+define('REISCOUT_PROPERTY_NODE_TITLE_TO_CHANGE', 'Property #');
+define('REISCOUT_PROPERTY_MESSAGE_TO_CHANGE', 'Property <em class="placeholder">Property #</em> has been created.');
+
 /**
  * Implements hook_form_FORM_ID_alter
  */
@@ -13,4 +16,31 @@ function reiscout_property_form_property_node_form_alter(&$form, &$form_state, $
   $form['field_zillow_zpid'] = array(
     '#type' => 'hidden',
   );
+}
+
+/**
+ * Implements hook_node_update().
+ */
+function reiscout_property_node_update($node) {
+  if ('property' != $node->type) {
+    return;
+  }
+
+  // We use 'Automatic Entity Labels' module to automatic title creation for
+  // a Property node. The module uses 'hook_exit' hook to generating a node
+  // title and updating the node. But 'Node' module have already saved the node
+  // with token title and set a message about it. So here we look for the
+  // message and change it.
+  if (module_exists('auto_entitylabel')) {
+    if (REISCOUT_PROPERTY_NODE_TITLE_TO_CHANGE == $node->original->title
+      && REISCOUT_PROPERTY_NODE_TITLE_TO_CHANGE != $node->title) {
+      if (!empty($_SESSION['messages']['status'])) {
+        for ($i = 0, $len = count($_SESSION['messages']['status']); $i < $len; ++$i) {
+          if (REISCOUT_PROPERTY_MESSAGE_TO_CHANGE == $_SESSION['messages']['status'][$i]) {
+            $_SESSION['messages']['status'][$i] = t('Property %title has been created.', array('%title' => $node->title));
+          }
+        }
+      }
+    }
+  }
 }
