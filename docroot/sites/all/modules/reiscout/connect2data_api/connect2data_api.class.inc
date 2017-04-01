@@ -31,6 +31,7 @@ class Connect2DataAPI {
    */
   private function collectGarbageDetailedSubjectReports() {
     $cache_lifetime = variable_get('connect2data_api_cache_lifetime_detailed_subject_report', CONNECT2DATA_API_CACHE_LIFETIME_DETAILED_SUBJECT_REPORT);
+    $cache_lifetime *= 24 * 60 * 60;
     db_delete('c2d_detailed_subject_report')
       ->condition('created', REQUEST_TIME - $cache_lifetime, '<')
       ->execute();
