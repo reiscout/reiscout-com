@@ -1,0 +1,66 @@
+<?php
+
+/**
+ * @file
+ * Install, update and uninstall functions for Mortgage Rate module.
+ */
+
+/**
+ * Implements hook_schema().
+ */
+function mortgage_rate_schema() {
+  $schema['mortgage_rate_15'] = array(
+    'description' => 'Stores 15-year fixed-rate mortgages data.',
+    'fields' => array(
+      'date' => array(
+        'type' => 'int',
+        'unsigned' => TRUE,
+        'not null' => TRUE,
+        'description' => 'A timestamp for when a survey was collected.',
+      ),
+      'rate' => array(
+        'type' => 'numeric',
+        'unsigned' => TRUE,
+        'precision' => 4,
+        'scale' => 2,
+        'not null' => TRUE,
+        'description' => 'A mortgage rate.',
+      ),
+    ),
+    'unique keys' => array(
+      'date' => array('date'),
+    ),
+  );
+
+  $schema['mortgage_rate_30'] = array(
+    'description' => 'Stores 30-year fixed-rate mortgages data.',
+    'fields' => array(
+      'date' => array(
+        'type' => 'int',
+        'unsigned' => TRUE,
+        'not null' => TRUE,
+        'description' => 'A timestamp for when a survey was collected.',
+      ),
+      'rate' => array(
+        'type' => 'numeric',
+        'unsigned' => TRUE,
+        'precision' => 4,
+        'scale' => 2,
+        'not null' => TRUE,
+        'description' => 'A mortgage rate.',
+      ),
+    ),
+    'unique keys' => array(
+      'date' => array('date'),
+    ),
+  );
+
+  return $schema;
+}
+
+/**
+ * Implements hook_uninstall().
+ */
+function mortgage_rate_uninstall() {
+  variable_del('mortgage_rate_update_interval');
+}

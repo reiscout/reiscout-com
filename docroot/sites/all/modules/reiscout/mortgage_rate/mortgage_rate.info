@@ -1,0 +1,5 @@
+name = Mortgage Rate
+description = Collects, stores and provides mortgage rates data.
+configure = admin/config/services/mortgage_rate
+core = 7.x
+files[] = mortgage_rate.class.inc

@@ -1,0 +1,81 @@
+<?php
+
+/**
+ * @file
+ * Collects, stores and provides mortgage rates data.
+ */
+
+define('MORTGAGE_RATE_UPDATE_PERIOD', 10);
+
+/**
+ * Implements hook_permission().
+ */
+function mortgage_rate_permission() {
+  return array(
+    'administer mortgage_rate' =>  array(
+      'title' => t('Administer Mortgage Rate'),
+    ),
+  );
+}
+
+/**
+ * Implements hook_menu().
+ */
+function mortgage_rate_menu() {
+  $items['admin/config/services/mortgage_rate'] = array(
+    'title' => 'Mortgage Rate',
+    'description' => 'Configure Mortgage Rate settings.',
+    'page callback' => 'drupal_get_form',
+    'page arguments' => array('mortgage_rate_admin_settings_form'),
+    'access arguments' => array('administer mortgage_rate'),
+    'file' => 'mortgage_rate.admin.inc',
+  );
+
+  return $items;
+}
+
+/**
+ * Implements hook_cron().
+ */
+function mortgage_rate_cron() {
+  mortgage_rate_update_data();
+}
+
+/**
+ * Updates mortgage rates data.
+ */
+function mortgage_rate_update_data() {
+  try {
+    $mr = new MortgageRate();
+    return $mr->updateData();
+  }
+  catch (MortgageRateException $e) {
+    watchdog_exception('mortgage_rate', $e);
+  }
+}
+
+/**
+ * Returns a fixed mortgage rate for a term and date provided.
+ */
+function mortgage_rate_get($term, $date) {
+  try {
+    $mr = new MortgageRate();
+    return $mr->get($term, $date);
+  }
+  catch (MortgageRateException $e) {
+    watchdog_exception('mortgage_rate', $e);
+  }
+}
+
+/**
+ * Returns info about collected data.
+ */
+function mortgage_rate_get_statistics() {
+  try {
+    $mr = new MortgageRate();
+    return $mr->getStatistics();
+  }
+  catch (MortgageRateException $e) {
+    watchdog_exception('mortgage_rate', $e);
+  }
+}
