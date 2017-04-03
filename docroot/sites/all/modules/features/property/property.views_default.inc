@@ -143,11 +143,6 @@ function property_views_default_views() {
   $handler->display->display_options['filters']['type']['value'] = array(
     'property' => 'property',
   );
-  /* Filter criterion: Broken/missing handler */
-  $handler->display->display_options['filters']['field_address_text_value']['id'] = 'field_address_text_value';
-  $handler->display->display_options['filters']['field_address_text_value']['table'] = 'field_data_field_address_text';
-  $handler->display->display_options['filters']['field_address_text_value']['field'] = 'field_address_text_value';
-  $handler->display->display_options['filters']['field_address_text_value']['operator'] = 'not empty';
   $handler->display->display_options['path'] = 'property';
   $handler->display->display_options['menu']['type'] = 'normal';
   $handler->display->display_options['menu']['title'] = 'Property listing';
@@ -213,11 +208,6 @@ function property_views_default_views() {
   $handler->display->display_options['filters']['type']['value'] = array(
     'property' => 'property',
   );
-  /* Filter criterion: Broken/missing handler */
-  $handler->display->display_options['filters']['field_address_text_value']['id'] = 'field_address_text_value';
-  $handler->display->display_options['filters']['field_address_text_value']['table'] = 'field_data_field_address_text';
-  $handler->display->display_options['filters']['field_address_text_value']['field'] = 'field_address_text_value';
-  $handler->display->display_options['filters']['field_address_text_value']['operator'] = 'not empty';
   $handler->display->display_options['path'] = 'drupalgap/views_datasource/property-listing';
 
   /* Display: my properties json */
@@ -270,16 +260,24 @@ function property_views_default_views() {
   $handler->display->display_options['fields']['title']['table'] = 'node';
   $handler->display->display_options['fields']['title']['field'] = 'title';
   $handler->display->display_options['fields']['title']['label'] = 'title';
-  /* Field: Broken/missing handler */
-  $handler->display->display_options['fields']['field_address_text']['id'] = 'field_address_text';
-  $handler->display->display_options['fields']['field_address_text']['table'] = 'field_data_field_address_text';
-  $handler->display->display_options['fields']['field_address_text']['field'] = 'field_address_text';
-  $handler->display->display_options['fields']['field_address_text']['label'] = 'address';
   /* Field: Content: Nid */
   $handler->display->display_options['fields']['nid']['id'] = 'nid';
   $handler->display->display_options['fields']['nid']['table'] = 'node';
   $handler->display->display_options['fields']['nid']['field'] = 'nid';
   $handler->display->display_options['fields']['nid']['label'] = 'nid';
+  /* Field: Content: Address */
+  $handler->display->display_options['fields']['field_address']['id'] = 'field_address';
+  $handler->display->display_options['fields']['field_address']['table'] = 'field_data_field_address';
+  $handler->display->display_options['fields']['field_address']['field'] = 'field_address';
+  $handler->display->display_options['fields']['field_address']['label'] = '';
+  $handler->display->display_options['fields']['field_address']['element_label_colon'] = FALSE;
+  $handler->display->display_options['fields']['field_address']['click_sort_column'] = 'country';
+  $handler->display->display_options['fields']['field_address']['settings'] = array(
+    'use_widget_handlers' => 1,
+    'format_handlers' => array(
+      'address' => 'address',
+    ),
+  );
   $handler->display->display_options['defaults']['arguments'] = FALSE;
   /* Contextual filter: Content: Author uid */
   $handler->display->display_options['arguments']['uid']['id'] = 'uid';
@@ -343,12 +341,19 @@ function property_views_default_views() {
   $handler->display->display_options['fields']['title']['field'] = 'title';
   $handler->display->display_options['fields']['title']['label'] = '';
   $handler->display->display_options['fields']['title']['element_label_colon'] = FALSE;
-  /* Field: Broken/missing handler */
-  $handler->display->display_options['fields']['field_address_text']['id'] = 'field_address_text';
-  $handler->display->display_options['fields']['field_address_text']['table'] = 'field_data_field_address_text';
-  $handler->display->display_options['fields']['field_address_text']['field'] = 'field_address_text';
-  $handler->display->display_options['fields']['field_address_text']['label'] = '';
-  $handler->display->display_options['fields']['field_address_text']['element_label_colon'] = FALSE;
+  /* Field: Content: Address */
+  $handler->display->display_options['fields']['field_address']['id'] = 'field_address';
+  $handler->display->display_options['fields']['field_address']['table'] = 'field_data_field_address';
+  $handler->display->display_options['fields']['field_address']['field'] = 'field_address';
+  $handler->display->display_options['fields']['field_address']['label'] = '';
+  $handler->display->display_options['fields']['field_address']['element_label_colon'] = FALSE;
+  $handler->display->display_options['fields']['field_address']['click_sort_column'] = 'country';
+  $handler->display->display_options['fields']['field_address']['settings'] = array(
+    'use_widget_handlers' => 1,
+    'format_handlers' => array(
+      'address' => 'address',
+    ),
+  );
   $handler->display->display_options['defaults']['arguments'] = FALSE;
   /* Contextual filter: Content: Author uid */
   $handler->display->display_options['arguments']['uid']['id'] = 'uid';
