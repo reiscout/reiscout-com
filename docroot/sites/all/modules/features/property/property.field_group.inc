@@ -89,6 +89,7 @@ function property_field_group_info() {
       1 => 'field_owner_lname',
       2 => 'field_owner_address',
       3 => 'field_owner_phone',
+      4 => 'field_owner_postal_address',
     ),
     'format_type' => 'fieldset',
     'format_settings' => array(

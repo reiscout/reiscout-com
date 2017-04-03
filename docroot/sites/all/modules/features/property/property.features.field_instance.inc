@@ -217,60 +217,6 @@ function property_field_default_field_instances() {
     ),
   );
 
-  // Exported field_instance: 'node-property-field_address_text'.
-  $field_instances['node-property-field_address_text'] = array(
-    'bundle' => 'property',
-    'default_value' => NULL,
-    'deleted' => 0,
-    'description' => 'Legacy address fields with flat text. It is not supposed to be used and going to be removed.',
-    'display' => array(
-      'default' => array(
-        'label' => 'above',
-        'module' => 'text',
-        'settings' => array(),
-        'type' => 'text_default',
-        'weight' => 4,
-      ),
-      'drupalgap' => array(
-        'label' => 'hidden',
-        'module' => 'text',
-        'settings' => array(),
-        'type' => 'text_default',
-        'weight' => 3,
-      ),
-      'full' => array(
-        'label' => 'above',
-        'module' => 'text',
-        'settings' => array(),
-        'type' => 'text_default',
-        'weight' => 3,
-      ),
-      'teaser' => array(
-        'label' => 'above',
-        'settings' => array(),
-        'type' => 'hidden',
-        'weight' => 0,
-      ),
-    ),
-    'entity_type' => 'node',
-    'field_name' => 'field_address_text',
-    'label' => 'Address (legacy)',
-    'required' => 0,
-    'settings' => array(
-      'text_processing' => 0,
-      'user_register_form' => FALSE,
-    ),
-    'widget' => array(
-      'active' => 1,
-      'module' => 'text',
-      'settings' => array(
-        'size' => 120,
-      ),
-      'type' => 'text_textfield',
-      'weight' => 5,
-    ),
-  );
-
   // Exported field_instance: 'node-property-field_arv'.
   $field_instances['node-property-field_arv'] = array(
     'bundle' => 'property',
@@ -927,7 +873,7 @@ function property_field_default_field_instances() {
         'module' => 'text',
         'settings' => array(),
         'type' => 'text_default',
-        'weight' => 21,
+        'weight' => 22,
       ),
     ),
     'entity_type' => 'node',
@@ -1190,7 +1136,7 @@ function property_field_default_field_instances() {
           'use_widget_handlers' => 1,
         ),
         'type' => 'addressfield_default',
-        'weight' => 8,
+        'weight' => 21,
       ),
     ),
     'entity_type' => 'node',
@@ -1401,141 +1347,6 @@ function property_field_default_field_instances() {
     ),
   );
 
-  // Exported field_instance: 'node-property-field_zillow_mls'.
-  $field_instances['node-property-field_zillow_mls'] = array(
-    'bundle' => 'property',
-    'default_value' => NULL,
-    'deleted' => 0,
-    'description' => '',
-    'display' => array(
-      'default' => array(
-        'label' => 'above',
-        'module' => 'text',
-        'settings' => array(),
-        'type' => 'text_default',
-        'weight' => 24,
-      ),
-      'drupalgap' => array(
-        'label' => 'above',
-        'settings' => array(),
-        'type' => 'hidden',
-        'weight' => 0,
-      ),
-      'full' => array(
-        'label' => 'above',
-        'settings' => array(),
-        'type' => 'hidden',
-        'weight' => 11,
-      ),
-    ),
-    'entity_type' => 'node',
-    'field_name' => 'field_zillow_mls',
-    'label' => 'zillow_mls',
-    'required' => FALSE,
-    'settings' => array(
-      'text_processing' => 0,
-      'user_register_form' => FALSE,
-    ),
-    'widget' => array(
-      'module' => 'text',
-      'settings' => array(
-        'size' => 60,
-      ),
-      'type' => 'text_textfield',
-      'weight' => 11,
-    ),
-  );
-
-  // Exported field_instance: 'node-property-field_zillow_status'.
-  $field_instances['node-property-field_zillow_status'] = array(
-    'bundle' => 'property',
-    'default_value' => NULL,
-    'deleted' => 0,
-    'description' => '',
-    'display' => array(
-      'default' => array(
-        'label' => 'above',
-        'module' => 'text',
-        'settings' => array(),
-        'type' => 'text_default',
-        'weight' => 25,
-      ),
-      'drupalgap' => array(
-        'label' => 'above',
-        'settings' => array(),
-        'type' => 'hidden',
-        'weight' => 0,
-      ),
-      'full' => array(
-        'label' => 'above',
-        'settings' => array(),
-        'type' => 'hidden',
-        'weight' => 10,
-      ),
-    ),
-    'entity_type' => 'node',
-    'field_name' => 'field_zillow_status',
-    'label' => 'zillow_status',
-    'required' => FALSE,
-    'settings' => array(
-      'text_processing' => 0,
-      'user_register_form' => FALSE,
-    ),
-    'widget' => array(
-      'module' => 'text',
-      'settings' => array(
-        'size' => 60,
-      ),
-      'type' => 'text_textfield',
-      'weight' => 12,
-    ),
-  );
-
-  // Exported field_instance: 'node-property-field_zillow_zpid'.
-  $field_instances['node-property-field_zillow_zpid'] = array(
-    'bundle' => 'property',
-    'default_value' => NULL,
-    'deleted' => 0,
-    'description' => '',
-    'display' => array(
-      'default' => array(
-        'label' => 'above',
-        'module' => 'text',
-        'settings' => array(),
-        'type' => 'text_default',
-        'weight' => 26,
-      ),
-      'drupalgap' => array(
-        'label' => 'above',
-        'settings' => array(),
-        'type' => 'hidden',
-        'weight' => 0,
-      ),
-      'full' => array(
-        'label' => 'above',
-        'settings' => array(),
-        'type' => 'hidden',
-        'weight' => 9,
-      ),
-    ),
-    'entity_type' => 'node',
-    'field_name' => 'field_zillow_zpid',
-    'label' => 'zillow_zpid',
-    'required' => FALSE,
-    'settings' => array(
-      'text_processing' => 0,
-      'user_register_form' => FALSE,
-    ),
-    'widget' => array(
-      'module' => 'text',
-      'settings' => array(
-        'size' => 60,
-      ),
-      'type' => 'text_textfield',
-      'weight' => 13,
-    ),
-  );
-
   // Translatables
   // Included for use with string extractors like potx.
   t('ARV (estimated)');
@@ -1550,7 +1361,6 @@ function property_field_default_field_instances() {
   t('Last Name');
   t('Last Purchase');
   t('Last Purchase Price');
-  t('Legacy address fields with flat text. It is not supposed to be used and going to be removed.');
   t('Lot Size');
   t('Mortgage company');
   t('Notes');
@@ -1563,9 +1373,6 @@ function property_field_default_field_instances() {
   t('This is a legacy owner address field going to be removed.');
   t('Under Contract');
   t('Your current location (determined automatically)');
-  t('zillow_mls');
-  t('zillow_status');
-  t('zillow_zpid');
 
   return $field_instances;
 }
