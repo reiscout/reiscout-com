@@ -222,7 +222,7 @@ function property_field_default_field_instances() {
     'bundle' => 'property',
     'default_value' => NULL,
     'deleted' => 0,
-    'description' => '',
+    'description' => 'Legacy address fields with flat text. It is not supposed to be used and going to be removed.',
     'display' => array(
       'default' => array(
         'label' => 'above',
@@ -254,7 +254,7 @@ function property_field_default_field_instances() {
     ),
     'entity_type' => 'node',
     'field_name' => 'field_address_text',
-    'label' => 'Address',
+    'label' => 'Address (legacy)',
     'required' => 0,
     'settings' => array(
       'text_processing' => 0,
@@ -906,7 +906,7 @@ function property_field_default_field_instances() {
     'bundle' => 'property',
     'default_value' => NULL,
     'deleted' => 0,
-    'description' => '',
+    'description' => 'This is a legacy owner address field going to be removed.',
     'display' => array(
       'default' => array(
         'label' => 'above',
@@ -932,7 +932,7 @@ function property_field_default_field_instances() {
     ),
     'entity_type' => 'node',
     'field_name' => 'field_owner_address',
-    'label' => 'Address',
+    'label' => 'Address (legacy)',
     'required' => 0,
     'settings' => array(
       'text_processing' => 0,
@@ -1540,6 +1540,7 @@ function property_field_default_field_instances() {
   // Included for use with string extractors like potx.
   t('ARV (estimated)');
   t('Address');
+  t('Address (legacy)');
   t('Assessed Value');
   t('Bathrooms');
   t('Bedrooms');
@@ -1549,6 +1550,7 @@ function property_field_default_field_instances() {
   t('Last Name');
   t('Last Purchase');
   t('Last Purchase Price');
+  t('Legacy address fields with flat text. It is not supposed to be used and going to be removed.');
   t('Lot Size');
   t('Mortgage company');
   t('Notes');
@@ -1558,6 +1560,7 @@ function property_field_default_field_instances() {
   t('Position');
   t('Property Size');
   t('Repairs (estimated)');
+  t('This is a legacy owner address field going to be removed.');
   t('Under Contract');
   t('Your current location (determined automatically)');
   t('zillow_mls');
