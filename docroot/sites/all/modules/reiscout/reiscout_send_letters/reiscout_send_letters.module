@@ -426,8 +426,14 @@ function reiscout_send_letters_node_view($node, $view_mode, $langcode) {
         // Add link/button via rules to buy points as commerce product
         $rendered_link = rules_link_render($rules_buy_link, $node->nid, $destination, $parameters);
         if (!empty($rendered_link)) {
-          $link =  render($rendered_link);
+          $link = render($rendered_link);
           $node->content['commerce-buttons']['#markup'] .= $link;
+        } else {
+          $msg = t($rules_buy_link . ' rules link rendering failed.');
+          if (in_array('administrator', $user->roles)) {
+            drupal_set_message($msg, 'error');
+          }
+          watchdog('reiscout_send_letters', $msg, array(), WATCHDOG_ERROR);
         }
       }
     }
