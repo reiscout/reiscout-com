@@ -426,8 +426,14 @@ function reiscout_send_letters_node_view($node, $view_mode, $langcode) {
         // Add link/button via rules to buy points as commerce product
         $rendered_link = rules_link_render($rules_buy_link, $node->nid, $destination, $parameters);
         if (!empty($rendered_link)) {
-          $link =  render($rendered_link);
+          $link = render($rendered_link);
           $node->content['commerce-buttons']['#markup'] .= $link;
+        } else {
+          $msg = t($rules_buy_link . ' rules link rendering failed.');
+          if (in_array('administrator', $user->roles)) {
+            drupal_set_message($msg, 'error');
+          }
+          watchdog('reiscout_send_letters', $msg, array(), WATCHDOG_ERROR);
         }
       }
     }
@@ -452,6 +458,8 @@ function reiscout_send_letters_services_resources() {
           'help' => 'Send letter',
           'callback' => '_reiscout_send_letters_send_letter',
           'access callback' => 'reiscout_send_letters_resource_access',
+          'access arguments' => array('send_letter'),
+          'access arguments append' => TRUE,
           'args' => array(
             array(
               'name' => 'nid',
@@ -466,6 +474,8 @@ function reiscout_send_letters_services_resources() {
           'help' => 'Checking view buttons',
           'callback' => '_reiscout_send_letters_get_show_button_info',
           'access callback' => 'reiscout_send_letters_resource_access',
+          'access arguments' => array('show_send_letter_button'),
+          'access arguments append' => TRUE,
           'args' => array(
             array(
               'name' => 'nid',
@@ -484,8 +494,40 @@ function reiscout_send_letters_services_resources() {
 /**
  * Check user access
  *
+ * @param string $type
+ *  Action type.
+ *
+ * @param integer $nid
+ *  Node nid.
+ *
  * @return bool
  */
-function reiscout_send_letters_resource_access() {
-  return true;
+function reiscout_send_letters_resource_access($type, $nid) {
+  // For both cases user must be logged in.
+  if (user_is_anonymous()) {
+    return false;
+  }
+
+  // For both cases the node being checked must be purchased.
+  global $user;
+  $node = node_load($nid);
+  $node_purchased = reiscout_property_commerce_is_node_purchased($node->nid,
+    REISCOUT_PROPERTY_COMMERCE_ADDRESS_ACCESS_PRODUCT_TYPE,
+    $user->uid);
+  if (!$node_purchased) {
+    return false;
+  }
+
+  switch ($type) {
+    case 'show_send_letter_button':
+      return true;
+
+    case 'send_letter':
+      // Check is user has points to send the letter.
+      if (reiscout_send_letters_access_common($nid)) {
+        return true;
+      }
+  }
+
+  return false;
 }
