@@ -329,6 +329,8 @@ function reiscout_owner_info_services_resources() {
           'help' => 'Get owner info',
           'callback' => '_reiscout_owner_info_get_info',
           'access callback' => 'reiscout_owner_info_resource_access',
+          'access arguments' => array('getinfo'),
+          'access arguments append' => TRUE,
           'args' => array(
             array(
               'name' => 'nid',
@@ -343,6 +345,8 @@ function reiscout_owner_info_services_resources() {
           'help' => 'Checking view buttons',
           'callback' => '_reiscout_owner_info_get_show_button_info',
           'access callback' => 'reiscout_owner_info_resource_access',
+          'access arguments' => array('checkButtonShow'),
+          'access arguments append' => TRUE,
           'args' => array(
             array(
               'name' => 'nid',
@@ -361,9 +365,41 @@ function reiscout_owner_info_services_resources() {
 /**
  * Check user access
  *
+ * @param string $type
+ *  Action type.
+ *
+ * @param integer $nid
+ *  Node nid.
+ *
  * @return bool
  */
-function reiscout_owner_info_resource_access() {
-  return true;
+function reiscout_owner_info_resource_access($type, $nid) {
+  // For both cases user must be logged in.
+  if (user_is_anonymous()) {
+    return false;
+  }
+
+  // For both cases the node being checked must be purchased.
+  global $user;
+  $node = node_load($nid);
+  $node_purchased = reiscout_property_commerce_is_node_purchased($node->nid,
+    REISCOUT_PROPERTY_COMMERCE_ADDRESS_ACCESS_PRODUCT_TYPE,
+    $user->uid);
+  if (!$node_purchased) {
+    return false;
+  }
+
+  switch ($type) {
+    case 'checkButtonShow':
+      return true;
+
+    case 'getinfo':
+      // Check is user has points to requrst owner info.
+      if (reiscout_owner_info_access_common($nid)) {
+        return true;
+      }
+  }
+
+  return false;
 }
 
