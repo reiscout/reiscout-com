@@ -16,6 +16,7 @@ dependencies[] = field_validation
 dependencies[] = rules
 dependencies[] = views
 dependencies[] = views_infinite_scroll
+dependencies[] = views_json
 features[commerce_product_type][] = reiscout_property_address_access
 features[commerce_product_type][] = reiscout_property_owner_info
 features[context][] = reiscout_property_commerce_admin_form
