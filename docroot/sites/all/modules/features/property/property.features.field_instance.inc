@@ -847,102 +847,6 @@ function property_field_default_field_instances() {
     ),
   );
 
-  // Exported field_instance: 'node-property-field_owner_address'.
-  $field_instances['node-property-field_owner_address'] = array(
-    'bundle' => 'property',
-    'default_value' => NULL,
-    'deleted' => 0,
-    'description' => 'This is a legacy owner address field going to be removed.',
-    'display' => array(
-      'default' => array(
-        'label' => 'above',
-        'module' => 'text',
-        'settings' => array(),
-        'type' => 'text_default',
-        'weight' => 7,
-      ),
-      'drupalgap' => array(
-        'label' => 'above',
-        'module' => 'text',
-        'settings' => array(),
-        'type' => 'text_default',
-        'weight' => 21,
-      ),
-      'full' => array(
-        'label' => 'above',
-        'module' => 'text',
-        'settings' => array(),
-        'type' => 'text_default',
-        'weight' => 22,
-      ),
-    ),
-    'entity_type' => 'node',
-    'field_name' => 'field_owner_address',
-    'label' => 'Address (legacy)',
-    'required' => 0,
-    'settings' => array(
-      'text_processing' => 0,
-      'user_register_form' => FALSE,
-    ),
-    'widget' => array(
-      'active' => 1,
-      'module' => 'text',
-      'settings' => array(
-        'size' => 60,
-      ),
-      'type' => 'text_textfield',
-      'weight' => 10,
-    ),
-  );
-
-  // Exported field_instance: 'node-property-field_owner_fname'.
-  $field_instances['node-property-field_owner_fname'] = array(
-    'bundle' => 'property',
-    'default_value' => NULL,
-    'deleted' => 0,
-    'description' => '',
-    'display' => array(
-      'default' => array(
-        'label' => 'above',
-        'module' => 'text',
-        'settings' => array(),
-        'type' => 'text_default',
-        'weight' => 5,
-      ),
-      'drupalgap' => array(
-        'label' => 'above',
-        'module' => 'text',
-        'settings' => array(),
-        'type' => 'text_default',
-        'weight' => 18,
-      ),
-      'full' => array(
-        'label' => 'above',
-        'module' => 'text',
-        'settings' => array(),
-        'type' => 'text_default',
-        'weight' => 18,
-      ),
-    ),
-    'entity_type' => 'node',
-    'field_name' => 'field_owner_fname',
-    'label' => 'First Name',
-    'required' => 0,
-    'settings' => array(
-      'text_processing' => 0,
-      'user_register_form' => FALSE,
-    ),
-    'widget' => array(
-      'active' => 1,
-      'module' => 'text',
-      'settings' => array(
-        'size' => 60,
-      ),
-      'type' => 'text_textfield',
-      'weight' => 8,
-    ),
-  );
-
   // Exported field_instance: 'node-property-field_owner_info_product'.
   $field_instances['node-property-field_owner_info_product'] = array(
     'bundle' => 'property',
@@ -1002,54 +906,6 @@ function property_field_default_field_instances() {
       'settings' => array(),
       'type' => 'commerce_product_reference_hidden',
       'weight' => 0,
-    ),
-  );
-
-  // Exported field_instance: 'node-property-field_owner_lname'.
-  $field_instances['node-property-field_owner_lname'] = array(
-    'bundle' => 'property',
-    'default_value' => NULL,
-    'deleted' => 0,
-    'description' => '',
-    'display' => array(
-      'default' => array(
-        'label' => 'above',
-        'module' => 'text',
-        'settings' => array(),
-        'type' => 'text_default',
-        'weight' => 6,
-      ),
-      'drupalgap' => array(
-        'label' => 'above',
-        'module' => 'text',
-        'settings' => array(),
-        'type' => 'text_default',
-        'weight' => 19,
-      ),
-      'full' => array(
-        'label' => 'above',
-        'module' => 'text',
-        'settings' => array(),
-        'type' => 'text_default',
-        'weight' => 19,
-      ),
-    ),
-    'entity_type' => 'node',
-    'field_name' => 'field_owner_lname',
-    'label' => 'Last Name',
-    'required' => 0,
-    'settings' => array(
-      'text_processing' => 0,
-      'user_register_form' => FALSE,
-    ),
-    'widget' => array(
-      'active' => 1,
-      'module' => 'text',
-      'settings' => array(
-        'size' => 60,
-      ),
-      'type' => 'text_textfield',
-      'weight' => 9,
     ),
   );
 
@@ -1351,14 +1207,11 @@ function property_field_default_field_instances() {
   // Included for use with string extractors like potx.
   t('ARV (estimated)');
   t('Address');
-  t('Address (legacy)');
   t('Assessed Value');
   t('Bathrooms');
   t('Bedrooms');
   t('Buy Address Access');
   t('Buy Owner Info');
-  t('First Name');
-  t('Last Name');
   t('Last Purchase');
   t('Last Purchase Price');
   t('Lot Size');
@@ -1370,7 +1223,6 @@ function property_field_default_field_instances() {
   t('Position');
   t('Property Size');
   t('Repairs (estimated)');
-  t('This is a legacy owner address field going to be removed.');
   t('Under Contract');
   t('Your current location (determined automatically)');
 
