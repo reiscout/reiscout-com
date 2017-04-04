@@ -31,19 +31,6 @@ function reiscout_property_commerce_feature_default_rules_configuration() {
       "ON" : { "commerce_line_item_update" : [] },
       "IF" : [
         { "data_is" : { "data" : [ "commerce-line-item:type" ], "value" : "product" } },
-        { "OR" : [
-            { "data_is" : {
-                "data" : [ "commerce-line-item:commerce-product:type" ],
-                "value" : "reiscout_property_address_access"
-              }
-            },
-            { "data_is" : {
-                "data" : [ "commerce-line-item:commerce-product:type" ],
-                "value" : "reiscout_property_owner_info"
-              }
-            }
-          ]
-        },
         { "data_is" : {
             "data" : [ "commerce-line-item:quantity" ],
             "op" : "\\u003E",
