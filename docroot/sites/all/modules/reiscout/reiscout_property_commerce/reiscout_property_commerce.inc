@@ -66,6 +66,25 @@ function reiscout_property_commerce_get_purchased_nids($product_type, $uid = '')
   return $result->fetchCol();
 }
 
+/**
+ * Returns 'Property' nodes whose $type product was purchased.
+ */
+function reiscout_property_commerce_get_purchased_nodes($type) {
+  $query = db_select('commerce_order', 'ord');
+  $query->join('commerce_line_item', 'li', 'ord.order_id = li.order_id');
+  $query->join('field_data_commerce_product', 'li_prod', 'li.line_item_id = li_prod.entity_id');
+  $query->join('commerce_product', 'prod', 'prod.product_id = li_prod.commerce_product_product_id');
+  $query->join('field_data_field_property', 'prop_ref', 'prop_ref.entity_id = prod.product_id');
+  $query
+    ->fields('prop_ref', array('field_property_target_id'))
+    ->distinct()
+    ->condition('ord.status', 'completed')
+    ->condition('prod.type', $type)
+    ->orderBy('field_property_target_id');
+
+  return $query->execute()->fetchCol();
+}
+
 function reiscout_property_commerce_get_purchased_counters($nids) {
   $query = db_select('field_data_field_property', 'fdfp');
   $query->join('commerce_product', 'cp', 'cp.product_id = fdfp.entity_id');
