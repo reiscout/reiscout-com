@@ -3,4 +3,3 @@ description = Commerce behaviour cistomization related to property content type.
 package = Reiscout
 core = 7.x
 dependencies[] = popup_block
-files[] = reiscout_property_commerce.module
