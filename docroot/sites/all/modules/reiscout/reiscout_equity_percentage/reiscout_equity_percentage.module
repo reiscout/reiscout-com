@@ -197,6 +197,8 @@ function reiscout_equity_percentage_recalculate_in_property_by_nid($nid) {
 
   // Annual fixed interest rate for this mortgage
   if (!$mortgage_rate = mortgage_rate_get($mortgage_term, $sale_date)) {
+    $message = "Mortage rate is unknown for property !nid.";
+    watchdog('reiscout_equity_percentage', $message, array('!nid' => $nid), WATCHDOG_ERROR);
     return FALSE;
   }
 
