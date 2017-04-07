@@ -11,7 +11,6 @@ define('REISCOUT_EQUITY_PERCENTAGE_EP_APPRAISED_DEFAULT_VALUE', 60);
  * Implements hook_cron().
  */
 function reiscout_equity_percentage_cron() {
-return;
   $queue = DrupalQueue::get('reiscout_equity_percentage_recalculate');
 
   // The queue is not empty, so a recalculation process has been already running
