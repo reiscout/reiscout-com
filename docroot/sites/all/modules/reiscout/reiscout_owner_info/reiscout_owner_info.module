@@ -119,24 +119,6 @@ function reiscout_owner_info_save($node, $info) {
 }
 
 /**
- * Builds data that is needed for request to the Connect2Data API.
- */
-function _reiscout_owner_info_build_property_criteria($node) {
-  $nw = entity_metadata_wrapper('node', $node);
-
-  if (!$address = $nw->field_address->value()) {
-    return FALSE;
-  }
-
-  return array(
-    'street_address' => $address['thoroughfare'],
-    'city' => $address['locality'],
-    'state' => $address['administrative_area'],
-    'postal_code' => $address['postal_code'],
-  );
-}
-
-/**
  * Page callback for get_owner_info/%.
  * 1. Make call to connect2data_api.
  * 2. Decrease userpoint by one.
@@ -145,7 +127,7 @@ function reiscout_owner_info_get_owner_callback($node) {
   global $user;
 
   // Build data that is needed for request to the Connect2Data API
-  if (!$property_criteria = _reiscout_owner_info_build_property_criteria($node)) {
+  if (!$property_criteria = _reiscout_property_build_property_criteria($node)) {
     drupal_set_message("The information about property's owner cannot be requested because the property's address was not set.", 'error');
     // Return to the previous page
     drupal_goto();
@@ -184,7 +166,7 @@ function reiscout_owner_info_get_owner_drupalgap_callback($nid) {
   global $user;
 
   // Build data that is needed for request to the Connect2Data API
-  if (!$property_criteria = _reiscout_owner_info_build_property_criteria($nid)) {
+  if (!$property_criteria = _reiscout_property_build_property_criteria($nid)) {
     watchdog(
       'reiscout_owner_info',
       "The information about property's owner cannot be requested because the property's address was not set. Node ID: !nid",
@@ -409,4 +391,3 @@ function reiscout_owner_info_resource_access($type, $nid) {
 
   return false;
 }
-

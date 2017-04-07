@@ -44,3 +44,21 @@ function reiscout_property_node_update($node) {
     }
   }
 }
+
+/**
+ * Builds data that is needed for request to the Connect2Data API.
+ */
+function _reiscout_property_build_property_criteria($node) {
+  $nw = entity_metadata_wrapper('node', $node);
+
+  if (!$address = $nw->field_address->value()) {
+    return FALSE;
+  }
+
+  return array(
+    'street_address' => $address['thoroughfare'],
+    'city' => $address['locality'],
+    'state' => $address['administrative_area'],
+    'postal_code' => $address['postal_code'],
+  );
+}
