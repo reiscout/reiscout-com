@@ -48,10 +48,12 @@ function reiscout_property_node_update($node) {
 /**
  * Builds data that is needed for request to the Connect2Data API.
  */
-function _reiscout_property_build_property_criteria($node) {
-  $nw = entity_metadata_wrapper('node', $node);
+function _reiscout_property_build_property_criteria($nid) {
+  $nw = entity_metadata_wrapper('node', $nid);
 
   if (!$address = $nw->field_address->value()) {
+    $message = "The property's !nid address was not set.";
+    watchdog('reiscout_property', $message, array('!nid' => $nid), WATCHDOG_ERROR);
     return FALSE;
   }
 
@@ -61,4 +63,17 @@ function _reiscout_property_build_property_criteria($node) {
     'state' => $address['administrative_area'],
     'postal_code' => $address['postal_code'],
   );
+}
+
+/**
+ * Makes a request to the Connect2Data API and returns full info about property.
+ */
+function _reiscout_property_get_c2d_report_by_nid($nid) {
+  if ($property_criteria = _reiscout_property_build_property_criteria($nid)) {
+    if ($report = connect2data_api_get_detailed_subject_report($property_criteria)) {
+      return $report;
+    }
+  }
+
+  return FALSE;
 }

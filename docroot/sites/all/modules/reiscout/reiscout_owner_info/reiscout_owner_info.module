@@ -126,15 +126,8 @@ function reiscout_owner_info_save($node, $info) {
 function reiscout_owner_info_get_owner_callback($node) {
   global $user;
 
-  // Build data that is needed for request to the Connect2Data API
-  if (!$property_criteria = _reiscout_property_build_property_criteria($node)) {
-    drupal_set_message("The information about property's owner cannot be requested because the property's address was not set.", 'error');
-    // Return to the previous page
-    drupal_goto();
-  }
-
   // Make a request to the Connect2Data API to get full info about property
-  if (!$info = connect2data_api_get_detailed_subject_report($property_criteria)) {
+  if (!$info = _reiscout_property_get_c2d_report_by_nid($node->nid)) {
     drupal_set_message("An error occurred while requesting the information about property's owner.", 'error');
     // Return to the previous page
     drupal_goto();
@@ -165,25 +158,10 @@ function reiscout_owner_info_get_owner_callback($node) {
 function reiscout_owner_info_get_owner_drupalgap_callback($nid) {
   global $user;
 
-  // Build data that is needed for request to the Connect2Data API
-  if (!$property_criteria = _reiscout_property_build_property_criteria($nid)) {
-    watchdog(
-      'reiscout_owner_info',
-      "The information about property's owner cannot be requested because the property's address was not set. Node ID: !nid",
-      array('!nid' => $nid),
-      WATCHDOG_ERROR
-    );
-    return FALSE;
-  }
-
   // Make a request to the Connect2Data API to get full info about property
-  if (!$info = connect2data_api_get_detailed_subject_report($property_criteria)) {
-    watchdog(
-      'reiscout_owner_info',
-      "An error occurred while requesting the information about property's owner.",
-      array(),
-      WATCHDOG_ERROR
-    );
+  if (!$info = _reiscout_property_get_c2d_report_by_nid($nid)) {
+    $message = 'An error occurred while requesting the information about owner of property !nid.';
+    watchdog('reiscout_owner_info', $message, array('!nid' => $nid), WATCHDOG_ERROR);
     return FALSE;
   }
 
