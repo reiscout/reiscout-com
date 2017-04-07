@@ -1,0 +1,8 @@
+name = Reiscout Equity Percentage
+description = Calculates an equity percentage for a property.
+package = Reiscout
+core = 7.x
+dependencies[] = mortgage_rate
+dependencies[] = property
+dependencies[] = reiscout_property
+dependencies[] = reiscout_property_commerce

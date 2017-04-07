@@ -1,0 +1,292 @@
+<?php
+
+/**
+ * @file
+ * Calculates an equity percentage for a property.
+ */
+
+define('REISCOUT_EQUITY_PERCENTAGE_EP_APPRAISED_DEFAULT_VALUE', 60);
+
+/**
+ * Implements hook_cron().
+ */
+function reiscout_equity_percentage_cron() {
+return;
+  $queue = DrupalQueue::get('reiscout_equity_percentage_recalculate');
+
+  // The queue is not empty, so a recalculation process has been already running
+  if ($queue->numberOfItems()) {
+    return;
+  }
+
+  if (_reiscout_equity_percentage_values_must_be_recalculated()
+    && $nids = reiscout_property_commerce_get_purchased_nodes(REISCOUT_PROPERTY_COMMERCE_ADDRESS_ACCESS_PRODUCT_TYPE)) {
+    foreach ($nids as $nid) {
+      $queue->createItem($nid);
+    }
+  }
+}
+
+/**
+ * Implements hook_cron_queue_info().
+ */
+function reiscout_equity_percentage_cron_queue_info() {
+  $queues['reiscout_equity_percentage_set_default_appraised_value'] = array(
+    'worker callback' => 'reiscout_equity_percentage_set_default_appraised_value',
+  );
+
+  $queues['reiscout_equity_percentage_recalculate'] = array(
+    'worker callback' => 'reiscout_equity_percentage_recalculate',
+  );
+
+  return $queues;
+}
+
+/**
+ * Implements hook_commerce_checkout_complete().
+ */
+function reiscout_equity_percentage_commerce_checkout_complete($order) {
+  foreach ($order->commerce_line_items[LANGUAGE_NONE] as $line_item) {
+    $line_item = commerce_line_item_load($line_item['line_item_id']);
+    $product_id = $line_item->commerce_product[LANGUAGE_NONE][0]['product_id'];
+    $product = commerce_product_load($product_id);
+
+    // If there is an 'Address Access' product in the order,
+    // we get a nid of related Property node.
+    if (REISCOUT_PROPERTY_COMMERCE_ADDRESS_ACCESS_PRODUCT_TYPE == $product->type) {
+      $nid = $product->field_property[LANGUAGE_NONE][0]['target_id'];
+      $nw = entity_metadata_wrapper('node', $nid);
+      if (!$nw->field_ep_calculated->value()) {
+        reiscout_equity_percentage_recalculate_in_property_by_nid($nid);
+      }
+    }
+  }
+}
+
+/**
+ * Implements hook_field_access().
+ */
+function reiscout_equity_percentage_field_access($op, $field, $entity_type, $entity, $account) {
+  if ('view' == $op && 'node' == $entity_type && !empty($entity->type) && 'property' == $entity->type) {
+    if ('field_ep_calculated' == $field['field_name']) {
+      $nw = entity_metadata_wrapper('node', $entity);
+      if ($nw->field_ep_calculated->value()) {
+        return TRUE;
+      }
+      else {
+        return FALSE;
+      }
+    }
+
+    if ('field_ep_appraised' == $field['field_name']) {
+      $nw = entity_metadata_wrapper('node', $entity);
+      if ($nw->field_ep_calculated->value()) {
+        return FALSE;
+      }
+      else {
+        return TRUE;
+      }
+    }
+  }
+}
+
+/*
+ * Callback for hook_cron_queue_info().
+ *
+ * Sets a default value for an 'Appraised Equity Percentage'
+ * field in a given property.
+ */
+function reiscout_equity_percentage_set_default_appraised_value($nid) {
+  $nw = entity_metadata_wrapper('node', $nid);
+  $nw->field_ep_appraised = REISCOUT_EQUITY_PERCENTAGE_EP_APPRAISED_DEFAULT_VALUE;
+  $nw->save();
+}
+
+/*
+ * Callback for hook_cron_queue_info().
+ *
+ * Recalculates and updates a 'Calculated Equity Percentage'
+ * field in a given property.
+ */
+function reiscout_equity_percentage_recalculate($nid) {
+  $queue = DrupalQueue::get('reiscout_equity_percentage_recalculate');
+
+  // If it is the last item in the queue
+  if (1 == $queue->numberOfItems()) {
+    variable_set('reiscout_equity_percentage_last_calculated', time());
+  }
+
+  reiscout_equity_percentage_recalculate_in_property_by_nid($nid);
+}
+
+/**
+ * Updates a 'Calculated Equity Percentage' field.
+ *
+ * Calculates and updates a 'Calculated Equity Percentage' field
+ * in a given property.
+ */
+function reiscout_equity_percentage_recalculate_in_property_by_nid($nid) {
+  $node = node_load($nid);
+
+  // Make a request to the Connect2Data API to get full info about property
+  if (!$info = _reiscout_property_get_c2d_report_by_nid($nid)) {
+    $message = 'An error occurred while requesting the information about property !nid.';
+    watchdog('reiscout_equity_percentage', $message, array('!nid' => $nid), WATCHDOG_ERROR);
+    return FALSE;
+  }
+
+  // The date the property was sold
+  $sale_date = $info->_PROPERTY_HISTORY->_SALES_HISTORY->attributes()->_LastSalesDate->__toString();
+
+  if (!$sale_date) {
+    $message = "The _LastSalesDate field is blank in the report for property !nid.";
+    watchdog('reiscout_equity_percentage', $message, array('!nid' => $nid), WATCHDOG_ERROR);
+    return FALSE;
+  }
+
+  if (!strtotime($sale_date)) {
+    $message = "The _LastSalesDate field contains an invalid date value in the report for property !nid: @sale_date.";
+    watchdog('reiscout_equity_percentage', $message, array('!nid' => $nid, '@sale_date' => $sale_date), WATCHDOG_ERROR);
+    return FALSE;
+  }
+
+  // Assessed value amount, received from county, based on appraisal and/or market conditions
+  $market_value = $info->_PROPERTY_TAX->attributes()->_MarketValue->__toString();
+
+  if (!$market_value) {
+    $message = "The _MarketValue field is blank in the report for property !nid.";
+    watchdog('reiscout_equity_percentage', $message, array('!nid' => $nid), WATCHDOG_ERROR);
+    return FALSE;
+  }
+
+  if (!is_numeric($market_value)) {
+    $message = "The _MarketValue field contains an invalid value in the report for property !nid: @market_value.";
+    watchdog('reiscout_equity_percentage', $message, array('!nid' => $nid, '@market_value' => $market_value), WATCHDOG_ERROR);
+    return FALSE;
+  }
+
+  // Amount of money used to purchase a property which is funded through
+  // a mortgage with seniority over other loans on the property
+  $mortgage_amount = $info->_PROPERTY_HISTORY->_MORTGAGE_HISTORY->attributes()->_FirstMortgageAmount->__toString();
+
+  if (!$mortgage_amount) {
+    $message = "The _FirstMortgageAmount field is blank in the report for property !nid.";
+    watchdog('reiscout_equity_percentage', $message, array('!nid' => $nid), WATCHDOG_ERROR);
+    return FALSE;
+  }
+
+  if (!is_numeric($mortgage_amount)) {
+    $message = "The _FirstMortgageAmount field contains an invalid value in the report for property !nid: @mortgage_amount.";
+    watchdog('reiscout_equity_percentage', $message, array('!nid' => $nid, '@mortgage_amount' => $mortgage_amount), WATCHDOG_ERROR);
+    return FALSE;
+  }
+
+  // Amount of time from recording in which full payment of a mortgage is due
+  $mortgage_term = $info->_PROPERTY_HISTORY->_MORTGAGE_HISTORY->attributes()->_FirstMortgageTermNumber->__toString();
+
+  if (!$mortgage_term) {
+    $message = "The _FirstMortgageTermNumber field is blank in the report for property !nid.";
+    watchdog('reiscout_equity_percentage', $message, array('!nid' => $nid), WATCHDOG_ERROR);
+    return FALSE;
+  }
+
+  if (!is_numeric($mortgage_term)) {
+    $message = "The _FirstMortgageTermNumber field contains an invalid value in the report for property !nid: @mortgage_term.";
+    watchdog('reiscout_equity_percentage', $message, array('!nid' => $nid, '@mortgage_term' => $mortgage_term), WATCHDOG_ERROR);
+    return FALSE;
+  }
+
+  // Annual fixed interest rate for this mortgage
+  if (!$mortgage_rate = mortgage_rate_get($mortgage_term, $sale_date)) {
+    return FALSE;
+  }
+
+  if ($ep = _reiscout_equity_percentage_calculate($sale_date, $market_value, $mortgage_amount, $mortgage_term, $mortgage_rate)) {
+    $nw = entity_metadata_wrapper('node', $node);
+    $nw->field_ep_calculated = $ep;
+    $nw->save();
+
+    $message = 'An equity percentage was calculated for property !nid: !ep.';
+    watchdog('reiscout_equity_percentage', $message, array('!nid' => $nid, '!ep' => $ep), WATCHDOG_INFO);
+  }
+}
+
+/**
+ * Calculates a property equity percentage.
+ */
+function _reiscout_equity_percentage_calculate($sale_date, $market_value, $mortgage_amount, $mortgage_term, $mortgage_rate) {
+  $equity_percentage = 0;
+
+  $monthly_payment = _reiscout_equity_percentage_calculate_monthly_payment($mortgage_amount, $mortgage_term, $mortgage_rate);
+  $number_of_payments = $mortgage_term * 12;
+  $monthly_rate = $mortgage_rate / 12 / 100;
+
+  // The timestamp of the first day of the current month
+  $ts_first_day_of_current_month = strtotime('first day of this month 00:00:00');
+
+  // The timestamp of the first day of the first mortgage payment month
+  $ts = strtotime('first day of next month', strtotime($sale_date));
+
+  $principal_payment_total = 0;
+  $beginning_balance = $mortgage_amount;
+  for ($i = 0, $len = $number_of_payments; $i < $len; ++$i) {
+    // Payments calculations
+    $interest_payment = $beginning_balance * $monthly_rate;
+    $principal_payment = $monthly_payment - $interest_payment;
+    $principal_payment_total += $principal_payment;
+    $equity_percentage = (($market_value - $mortgage_amount + $principal_payment_total) / $market_value) * 100;
+    $beginning_balance -= $principal_payment;
+
+    // If this mortgage payment month is the current month
+    if ($ts_first_day_of_current_month == $ts) {
+      break;
+    }
+
+    // The timestamp of the first day of the next mortgage payment month
+    $ts = strtotime('first day of next month', $ts);
+  }
+
+  return $equity_percentage;
+}
+
+/**
+ * Calculates a monthly mortgage payment.
+ *
+ * https://en.wikipedia.org/wiki/Fixed-rate_mortgage#Pricing
+ *
+ * @param $amount - the amount borrowed, known as the loan's principal.
+ * @param $term - the loan's term in years.
+ * @param $rate - annual percentage rate.
+ * @return float
+ */
+function _reiscout_equity_percentage_calculate_monthly_payment($amount, $term, $rate) {
+  // Monthly percentage rate is simply the annual percentage rate
+  // divided by 12; dividing the monthly percentage rate by 100
+  // gives the monthly rate expressed as a decimal.
+  $monthly_rate = $rate / 12 / 100;
+
+  // The total number of monthly payments
+  $n = $term * 12;
+
+  return $monthly_rate * $amount / (1 - pow(1 + $monthly_rate, -$n));
+}
+
+/**
+ * Checks if it is time to recalculate equity percentage values.
+ */
+function _reiscout_equity_percentage_values_must_be_recalculated() {
+  // Equity percentage values have not yet been calculated
+  if (!$last_calculated = variable_get('reiscout_equity_percentage_last_calculated')) {
+    return TRUE;
+  }
+
+  // The timestamp of the first day of the current month
+  $ts_first_day_of_current_month = strtotime('first day of current month 00:00:00');
+
+  // Equity percentage values should be recalculated once a month
+  if ($last_calculated < $ts_first_day_of_current_month) {
+    return TRUE;
+  }
+
+  return FALSE;
+}

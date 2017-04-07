@@ -1,0 +1,52 @@
+<?php
+
+/**
+ * @file
+ * Install, update and uninstall functions for the Reiscout Equity Percentage module.
+ */
+
+/**
+ * Implements hook_install().
+ */
+function reiscout_equity_percentage_install() {
+  // If field_ep_appraised field exists
+  if (field_info_field('field_ep_appraised')) {
+    if ($nids = _reiscout_equity_percentage_get_nodes_to_process()) {
+      $queue = DrupalQueue::get('reiscout_equity_percentage_set_default_appraised_value');
+      foreach ($nids as $nid) {
+        $queue->createItem($nid);
+      }
+      if ($queue->numberOfItems()) {
+        $t_args = array('@field_title' => 'Appraised Equity Percentage');
+        drupal_set_message(t('@field_title field in all existing nodes must be set to it default value. These nodes have been queued for processing.', $t_args));
+      }
+    }
+  }
+}
+
+/**
+ * Implements hook_uninstall().
+ */
+function reiscout_equity_percentage_uninstall() {
+  // Remove any items from the reiscout_equity_percentage_set_default_appraised_value queue if still there.
+  DrupalQueue::get('reiscout_equity_percentage_set_default_appraised_value')->deleteQueue();
+
+  // Remove any items from the reiscout_equity_percentage_recalculate queue if still there.
+  DrupalQueue::get('reiscout_equity_percentage_recalculate')->deleteQueue();
+
+  variable_del('reiscout_equity_percentage_last_calculated');
+}
+
+/**
+ * Returns nodes whose 'Appraised Equity Percentage' field was not filled.
+ */
+function _reiscout_equity_percentage_get_nodes_to_process() {
+  $query = db_select('node', 'n');
+  $query->leftJoin('field_data_field_ep_appraised', 'fa', 'n.nid = fa.entity_id');
+  $query
+    ->fields('n', array('nid'))
+    ->condition('n.type', 'property')
+    ->isNull('fa.field_ep_appraised_value');
+
+  return $query->execute()->fetchCol();
+}
