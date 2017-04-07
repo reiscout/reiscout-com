@@ -51,13 +51,10 @@ function property_field_group_info() {
   $field_group->parent_name = '';
   $field_group->data = array(
     'label' => 'Owner Info',
-    'weight' => '8',
+    'weight' => '9',
     'children' => array(
-      0 => 'field_owner_fname',
-      1 => 'field_owner_lname',
-      2 => 'field_owner_address',
-      3 => 'field_owner_phone',
-      4 => 'field_owner_postal_address',
+      0 => 'field_owner_phone',
+      1 => 'field_owner_postal_address',
     ),
     'format_type' => 'fieldset',
     'format_settings' => array(
@@ -83,13 +80,10 @@ function property_field_group_info() {
   $field_group->parent_name = '';
   $field_group->data = array(
     'label' => 'Owner Info',
-    'weight' => '7',
+    'weight' => '8',
     'children' => array(
-      0 => 'field_owner_fname',
-      1 => 'field_owner_lname',
-      2 => 'field_owner_address',
-      3 => 'field_owner_phone',
-      4 => 'field_owner_postal_address',
+      0 => 'field_owner_phone',
+      1 => 'field_owner_postal_address',
     ),
     'format_type' => 'fieldset',
     'format_settings' => array(
@@ -150,7 +144,7 @@ function property_field_group_info() {
   $field_group->parent_name = '';
   $field_group->data = array(
     'label' => 'Property Info',
-    'weight' => '9',
+    'weight' => '10',
     'children' => array(
       0 => 'field_size',
       1 => 'field_bedrooms',
@@ -188,7 +182,7 @@ function property_field_group_info() {
   $field_group->parent_name = '';
   $field_group->data = array(
     'label' => 'Property Info',
-    'weight' => '6',
+    'weight' => '7',
     'children' => array(
       0 => 'field_size',
       1 => 'field_bedrooms',
