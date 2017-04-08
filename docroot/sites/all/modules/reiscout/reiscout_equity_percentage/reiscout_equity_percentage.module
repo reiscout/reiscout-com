@@ -42,6 +42,22 @@ function reiscout_equity_percentage_cron_queue_info() {
 }
 
 /**
+ * Implements hook_menu().
+ */
+function reiscout_equity_percentage_menu() {
+  $items['admin/reports/reiscout_equity_percentage'] = array(
+    'title' => 'Uncalculated purchased properties',
+    'description' => "Shows a list of properties whose 'Address Access' product was purchased, but whose 'Calculated Equity Percentage' field was not yet calculated.",
+    'page callback' => 'drupal_get_form',
+    'page arguments' => array('reiscout_equity_percentage_report_page'),
+    'access arguments' => array('access site reports'),
+    'file' => 'reiscout_equity_percentage.pages.inc',
+  );
+
+  return $items;
+}
+
+/**
  * Implements hook_commerce_checkout_complete().
  */
 function reiscout_equity_percentage_commerce_checkout_complete($order) {
