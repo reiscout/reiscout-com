@@ -117,7 +117,7 @@ function property_strongarm() {
           'weight' => '2',
         ),
         'path' => array(
-          'weight' => '10',
+          'weight' => '11',
         ),
       ),
       'display' => array(
@@ -131,7 +131,7 @@ function property_strongarm() {
             'visible' => FALSE,
           ),
           'full' => array(
-            'weight' => '14',
+            'weight' => '11',
             'visible' => FALSE,
           ),
         ),
@@ -145,7 +145,7 @@ function property_strongarm() {
             'visible' => FALSE,
           ),
           'full' => array(
-            'weight' => '15',
+            'weight' => '12',
             'visible' => FALSE,
           ),
         ),
@@ -159,7 +159,7 @@ function property_strongarm() {
             'visible' => FALSE,
           ),
           'full' => array(
-            'weight' => '17',
+            'weight' => '14',
             'visible' => FALSE,
           ),
         ),
@@ -173,13 +173,13 @@ function property_strongarm() {
             'visible' => TRUE,
           ),
           'full' => array(
-            'weight' => '16',
+            'weight' => '13',
             'visible' => FALSE,
           ),
         ),
         'product:field_property' => array(
           'full' => array(
-            'weight' => '12',
+            'weight' => '9',
             'visible' => FALSE,
           ),
           'drupalgap' => array(

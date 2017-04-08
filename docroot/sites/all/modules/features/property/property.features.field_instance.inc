@@ -36,7 +36,7 @@ function property_field_default_field_instances() {
         'module' => 'text',
         'settings' => array(),
         'type' => 'text_default',
-        'weight' => 5,
+        'weight' => 4,
       ),
       'teaser' => array(
         'label' => 'hidden',
@@ -104,7 +104,7 @@ function property_field_default_field_instances() {
           'use_widget_handlers' => 1,
         ),
         'type' => 'addressfield_default',
-        'weight' => 4,
+        'weight' => 3,
       ),
     ),
     'entity_type' => 'node',
@@ -144,7 +144,7 @@ function property_field_default_field_instances() {
         'visible_markers' => 0,
       ),
       'type' => 'addressfield_autocomplete',
-      'weight' => 6,
+      'weight' => 5,
     ),
   );
 
@@ -258,7 +258,7 @@ function property_field_default_field_instances() {
           'thousand_separator' => '',
         ),
         'type' => 'number_integer',
-        'weight' => 16,
+        'weight' => 17,
       ),
     ),
     'entity_type' => 'node',
@@ -322,7 +322,7 @@ function property_field_default_field_instances() {
           'thousand_separator' => '',
         ),
         'type' => 'number_integer',
-        'weight' => 13,
+        'weight' => 14,
       ),
     ),
     'entity_type' => 'node',
@@ -473,6 +473,126 @@ function property_field_default_field_instances() {
     ),
   );
 
+  // Exported field_instance: 'node-property-field_ep_appraised'.
+  $field_instances['node-property-field_ep_appraised'] = array(
+    'bundle' => 'property',
+    'default_value' => array(
+      0 => array(
+        'value' => 60,
+      ),
+    ),
+    'deleted' => 0,
+    'description' => '',
+    'display' => array(
+      'default' => array(
+        'label' => 'above',
+        'module' => 'number',
+        'settings' => array(
+          'decimal_separator' => '.',
+          'prefix_suffix' => TRUE,
+          'scale' => 2,
+          'thousand_separator' => '',
+        ),
+        'type' => 'number_decimal',
+        'weight' => 30,
+      ),
+      'drupalgap' => array(
+        'label' => 'above',
+        'settings' => array(),
+        'type' => 'hidden',
+        'weight' => 0,
+      ),
+      'full' => array(
+        'label' => 'above',
+        'module' => 'number',
+        'settings' => array(
+          'decimal_separator' => '.',
+          'prefix_suffix' => TRUE,
+          'scale' => 2,
+          'thousand_separator' => '',
+        ),
+        'type' => 'number_decimal',
+        'weight' => 6,
+      ),
+    ),
+    'entity_type' => 'node',
+    'field_name' => 'field_ep_appraised',
+    'label' => 'Appraised Equity Percentage',
+    'required' => 0,
+    'settings' => array(
+      'max' => '',
+      'min' => '',
+      'prefix' => '',
+      'suffix' => '%',
+      'user_register_form' => FALSE,
+    ),
+    'widget' => array(
+      'active' => 0,
+      'module' => 'number',
+      'settings' => array(),
+      'type' => 'number',
+      'weight' => 8,
+    ),
+  );
+
+  // Exported field_instance: 'node-property-field_ep_calculated'.
+  $field_instances['node-property-field_ep_calculated'] = array(
+    'bundle' => 'property',
+    'default_value' => NULL,
+    'deleted' => 0,
+    'description' => '',
+    'display' => array(
+      'default' => array(
+        'label' => 'above',
+        'module' => 'number',
+        'settings' => array(
+          'decimal_separator' => '.',
+          'prefix_suffix' => TRUE,
+          'scale' => 2,
+          'thousand_separator' => '',
+        ),
+        'type' => 'number_decimal',
+        'weight' => 29,
+      ),
+      'drupalgap' => array(
+        'label' => 'above',
+        'settings' => array(),
+        'type' => 'hidden',
+        'weight' => 0,
+      ),
+      'full' => array(
+        'label' => 'above',
+        'module' => 'number',
+        'settings' => array(
+          'decimal_separator' => '.',
+          'prefix_suffix' => TRUE,
+          'scale' => 2,
+          'thousand_separator' => '',
+        ),
+        'type' => 'number_decimal',
+        'weight' => 5,
+      ),
+    ),
+    'entity_type' => 'node',
+    'field_name' => 'field_ep_calculated',
+    'label' => 'Calculated Equity Percentage',
+    'required' => 0,
+    'settings' => array(
+      'max' => '',
+      'min' => '',
+      'prefix' => '',
+      'suffix' => '%',
+      'user_register_form' => FALSE,
+    ),
+    'widget' => array(
+      'active' => 0,
+      'module' => 'number',
+      'settings' => array(),
+      'type' => 'number',
+      'weight' => 7,
+    ),
+  );
+
   // Exported field_instance: 'node-property-field_geo_position'.
   $field_instances['node-property-field_geo_position'] = array(
     'bundle' => 'property',
@@ -499,7 +619,7 @@ function property_field_default_field_instances() {
         'label' => 'above',
         'settings' => array(),
         'type' => 'hidden',
-        'weight' => 13,
+        'weight' => 10,
       ),
       'teaser' => array(
         'label' => 'above',
@@ -643,7 +763,7 @@ function property_field_default_field_instances() {
           'thousand_separator' => '',
         ),
         'type' => 'number_integer',
-        'weight' => 10,
+        'weight' => 12,
       ),
     ),
     'entity_type' => 'node',
@@ -704,7 +824,7 @@ function property_field_default_field_instances() {
           'show_remaining_days' => FALSE,
         ),
         'type' => 'date_default',
-        'weight' => 11,
+        'weight' => 13,
       ),
     ),
     'entity_type' => 'node',
@@ -825,7 +945,7 @@ function property_field_default_field_instances() {
         'module' => 'text',
         'settings' => array(),
         'type' => 'text_default',
-        'weight' => 14,
+        'weight' => 15,
       ),
     ),
     'entity_type' => 'node',
@@ -1067,7 +1187,7 @@ function property_field_default_field_instances() {
           'thousand_separator' => '',
         ),
         'type' => 'number_integer',
-        'weight' => 15,
+        'weight' => 16,
       ),
     ),
     'entity_type' => 'node',
@@ -1184,7 +1304,7 @@ function property_field_default_field_instances() {
         'module' => 'list',
         'settings' => array(),
         'type' => 'list_default',
-        'weight' => 17,
+        'weight' => 18,
       ),
     ),
     'entity_type' => 'node',
@@ -1207,11 +1327,13 @@ function property_field_default_field_instances() {
   // Included for use with string extractors like potx.
   t('ARV (estimated)');
   t('Address');
+  t('Appraised Equity Percentage');
   t('Assessed Value');
   t('Bathrooms');
   t('Bedrooms');
   t('Buy Address Access');
   t('Buy Owner Info');
+  t('Calculated Equity Percentage');
   t('Last Purchase');
   t('Last Purchase Price');
   t('Lot Size');
