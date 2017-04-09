@@ -1,0 +1,4 @@
+name = Connect2Data Form
+description = Provides a form for requesting data from the CoreLogic Connect2Data.
+core = 7.x
+dependencies[] = connect2data_api
