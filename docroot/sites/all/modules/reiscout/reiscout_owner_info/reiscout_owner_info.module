@@ -37,8 +37,8 @@ function reiscout_owner_info_menu () {
  * 2. Check if user have have purchased access to node
  * 3. Check if user have enought points
  */
-function reiscout_owner_info_access($nid) {
-  $points = reiscout_owner_info_access_common($nid);
+function reiscout_owner_info_access($node) {
+  $points = reiscout_owner_info_access_common($node);
 
   if ($points === false || $points == 0) {
     drupal_set_message("Not enought points.", "error");
@@ -54,8 +54,8 @@ function reiscout_owner_info_access($nid) {
  * 2. Check if user have have purchased access to node
  * 3. Check if user have enought points
  */
-function reiscout_owner_info_access_points($nid) {
-  $points = reiscout_owner_info_access_common($nid);
+function reiscout_owner_info_access_points($node) {
+  $points = reiscout_owner_info_access_common($node);
 
   if ($points === false || $points != 0 ) {
     return FALSE;
@@ -64,9 +64,8 @@ function reiscout_owner_info_access_points($nid) {
   return TRUE;
 }
 
-function reiscout_owner_info_access_common($nid) {
+function reiscout_owner_info_access_common($node) {
   global $user;
-  $node = node_load($nid);
 
   // First, check "Owner postal address" field from current node.
   // Return FALSE if node already contains filled owner address field.
@@ -202,7 +201,6 @@ function reiscout_owner_info_buy_form_submit($form, &$form_state) {
  * 2. Add action button to get info or to buy points as a commerce product.
  */
 function reiscout_owner_info_node_view($node, $view_mode, $langcode) {
-  dpm(__FUNCTION__);
   if ($view_mode == 'full' && $node->type == 'property') {
     // ToDo: move of these to form.
     // $node->content['buy_owner_info_form'] = drupal_get_form('reiscout_owner_info_buy_form');
@@ -362,7 +360,7 @@ function reiscout_owner_info_resource_access($type, $nid) {
 
     case 'getinfo':
       // Check is user has points to requrst owner info.
-      if (reiscout_owner_info_access_common($nid)) {
+      if (reiscout_owner_info_access_common($node)) {
         return true;
       }
   }

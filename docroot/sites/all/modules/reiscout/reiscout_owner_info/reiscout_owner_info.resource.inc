@@ -19,8 +19,9 @@ function _reiscout_owner_info_get_show_button_info($nid) {
   // ToDo: check is node by nid exists and for bundle.
   $viewBuyInfoPoints = $viewGetOwnerInfo = 0;
 
+  $node = node_load($nid);
   if (user_is_logged_in()) {
-    if (reiscout_owner_info_access_points($nid)) {
+    if (reiscout_owner_info_access_points($node)) {
       $viewBuyInfoPoints = 1;
     }
 
