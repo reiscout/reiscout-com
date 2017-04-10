@@ -13,6 +13,7 @@ class Connect2DataAPI {
   private $loginAccountIdentifier;
   private $loginAccountPassword;
   private $propertyCriteria;
+  private $requestReason;
 
   function __construct() {
     if (!$this->loginAccountIdentifier = variable_get('connect2data_api_login_account_id')) {
@@ -56,7 +57,7 @@ class Connect2DataAPI {
    * If there is not, the function makes a request to the Connect2Data API
    * and then saves a response and the hash to DB.
    */
-  public function getDetailedSubjectReport($propertyCriteria) {
+  public function getDetailedSubjectReport($propertyCriteria, $requestReason) {
     if (empty($propertyCriteria['street_address'])
      || empty($propertyCriteria['city'])
      || empty($propertyCriteria['state'])
@@ -68,13 +69,23 @@ class Connect2DataAPI {
       throw new Connect2DataAPIException($errorMessage, 3);
     }
 
-    $hash = sha1(implode($propertyCriteria));
-    if ($data = $this->loadDetailedSubjectReport($hash)) {
-      return $data;
+    if (!$requestReason) {
+      throw new Connect2DataAPIException(t('A reason of a request was not provided.'), 4);
     }
 
     $this->setPropertyCriteria($propertyCriteria);
+    $this->setRequestReason($requestReason);
+
+    // Try to load a cached report from a database
+    $hash = sha1(implode($this->propertyCriteria));
+    if ($data = $this->loadDetailedSubjectReport($hash)) {
+      $this->logRequest(CONNECT2DATA_API_RESPONSE_SOURCE_CACHE);
+      return $data;
+    }
+
+    // Make a request to the Connect2Data API
     if ($xml = $this->requestDetailedSubjectReport()) {
+      $this->logRequest(CONNECT2DATA_API_RESPONSE_SOURCE_HTTP);
       $data = $this->parseDetailedSubjectReport($xml);
       $this->saveDetailedSubjectReport($hash, $data);
       return $data;
@@ -83,6 +94,10 @@ class Connect2DataAPI {
 
   private function setPropertyCriteria($propertyCriteria) {
     $this->propertyCriteria = $propertyCriteria;
+  }
+
+  private function setRequestReason($requestReason) {
+    $this->requestReason = $requestReason;
   }
 
   /**
@@ -104,6 +119,22 @@ class Connect2DataAPI {
     }
 
     return $data;
+  }
+
+  /**
+   * Saves information about request to DB.
+   */
+  private function logRequest($responseSource) {
+    global $user;
+
+    $record = new stdClass();
+    $record->request = serialize($this->propertyCriteria);
+    $record->reason = $this->requestReason;
+    $record->response_source = $responseSource;
+    $record->uid = $user->uid;
+    $record->timestamp = time();
+
+    drupal_write_record('c2d_request_history', $record);
   }
 
   /**
@@ -131,7 +162,7 @@ class Connect2DataAPI {
     $result = drupal_http_request($this::URL, $options);
 
     if (200 != $result->code) {
-      throw new Connect2DataAPIException(t('Bad Request.'), 4);
+      throw new Connect2DataAPIException(t('Bad Request.'), 6);
     }
 
     return $result->data;
@@ -142,7 +173,7 @@ class Connect2DataAPI {
    */
   private function parseDetailedSubjectReport($xml) {
     if (FALSE === $data = simplexml_load_string($xml)) {
-      throw new Connect2DataAPIException(t('XML parsing error: not a valid XML.'), 5);
+      throw new Connect2DataAPIException(t('XML parsing error: not a valid XML.'), 7);
     }
 
     $this->checkForStatusCodes($data->RESPONSE->RESPONSE_DATA);
@@ -164,7 +195,7 @@ class Connect2DataAPI {
 
     // Status code '0400' means that our request was processed successfully.
     if ('0400' != $code) {
-      throw new Connect2DataAPIException(t('Failure response status. Code: !code, message: !message.', array('!code' => $code, '!message' => $desc)), 6);
+      throw new Connect2DataAPIException(t('Failure response status. Code: !code, message: !message.', array('!code' => $code, '!message' => $desc)), 8);
     }
 
     // Check for a product (a report that we have requested) status.
@@ -182,7 +213,7 @@ class Connect2DataAPI {
           '!property_criteria' => print_r($this->propertyCriteria, TRUE),
         )
       );
-      throw new Connect2DataAPIException($errorMessage, 7);
+      throw new Connect2DataAPIException($errorMessage, 9);
     }
   }
 
