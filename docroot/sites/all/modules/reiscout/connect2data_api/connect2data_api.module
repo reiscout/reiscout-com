@@ -36,6 +36,14 @@ function connect2data_api_menu() {
     'file' => 'connect2data_api.admin.inc',
   );
 
+  $items['connect2data_api/history'] = array(
+    'title' => 'History of requests to the Connect2Data',
+    'description' => 'Displays a history of requests that were made to the Connect2Data API.',
+    'page callback' => 'connect2data_api_history_page',
+    'access arguments' => array('administer connect2data_api'),
+    'file' => 'connect2data_api.admin.inc',
+  );
+
   return $items;
 }
 
