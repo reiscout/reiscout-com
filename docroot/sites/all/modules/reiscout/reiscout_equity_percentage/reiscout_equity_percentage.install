@@ -17,8 +17,8 @@ function reiscout_equity_percentage_install() {
         $queue->createItem($nid);
       }
       if ($queue->numberOfItems()) {
-        $t_args = array('@field_title' => 'Appraised Equity Percentage');
-        drupal_set_message(t('@field_title field in all existing nodes must be set to it default value. These nodes have been queued for processing.', $t_args));
+        $t_args = array('%field_title' => 'Appraised Equity Percentage');
+        drupal_set_message(t('%field_title field in all existing nodes must be set to it default value. These nodes have been queued for processing.', $t_args));
       }
     }
   }

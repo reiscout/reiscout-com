@@ -298,3 +298,7 @@ body.page-onepage #main-menu a.active:active {
   border: 1px solid #ccc;
   padding: 1em;
 }
+
+#connect2data-form label:not(.option) {
+  display: block;
+}

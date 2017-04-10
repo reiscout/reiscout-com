@@ -12,8 +12,11 @@ define('CONNECT2DATA_API_CACHE_LIFETIME_DETAILED_SUBJECT_REPORT', 180);
  */
 function connect2data_api_permission() {
   return array(
-    'administer connect2data_api' =>  array(
+    'administer connect2data_api' => array(
       'title' => t('Administer Connect2Data API'),
+    ),
+    'make request to connect2data_api' => array(
+      'title' => t('Make a request to the Connect2Data API'),
     ),
   );
 }

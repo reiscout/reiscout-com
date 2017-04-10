@@ -4,6 +4,22 @@ define('REISCOUT_PROPERTY_NODE_TITLE_TO_CHANGE', 'Property #');
 define('REISCOUT_PROPERTY_MESSAGE_TO_CHANGE', 'Property <em class="placeholder">Property #</em> has been created.');
 
 /**
+ * Implements hook_menu().
+ */
+function reiscout_property_menu() {
+  $items['reiscout_property_get_c2d_report/%'] = array(
+    'title' => 'Connect2Data Report',
+    'description' => 'Returns a Connect2Data info for a property.',
+    'page callback' => 'reiscout_property_get_c2d_report_page',
+    'page arguments' => array(1),
+    'access arguments' => array('make request to connect2data_api'),
+    'file' => 'reiscout_property.pages.inc',
+  );
+
+  return $items;
+}
+
+/**
  * Implements hook_form_FORM_ID_alter
  */
 function reiscout_property_form_property_node_form_alter(&$form, &$form_state, $form_id) {

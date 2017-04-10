@@ -1,0 +1,22 @@
+<?php
+
+/**
+ * @file
+ * Provides a form for requesting data from the CoreLogic Connect2Data.
+ */
+
+/**
+ * Implements hook_menu().
+ */
+function connect2data_form_menu() {
+  $items['connect2data'] = array(
+    'title' => 'Connect2Data Form',
+    'description' => 'A form for requesting data from the CoreLogic Connect2Data.',
+    'page callback' => 'drupal_get_form',
+    'page arguments' => array('connect2data_form'),
+    'access arguments' => array('make request to connect2data_api'),
+    'file' => 'connect2data_form.pages.inc',
+  );
+
+  return $items;
+}
