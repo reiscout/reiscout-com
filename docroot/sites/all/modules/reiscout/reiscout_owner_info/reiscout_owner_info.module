@@ -126,7 +126,7 @@ function reiscout_owner_info_get_owner_callback($node) {
   global $user;
 
   // Make a request to the Connect2Data API to get full info about property
-  if (!$info = _reiscout_property_get_c2d_report_by_nid($node->nid)) {
+  if (!$info = _reiscout_property_get_c2d_report_by_nid($node->nid, 'owner_info')) {
     drupal_set_message("An error occurred while requesting the information about property's owner.", 'error');
     // Return to the previous page
     drupal_goto();
@@ -158,7 +158,7 @@ function reiscout_owner_info_get_owner_drupalgap_callback($nid) {
   global $user;
 
   // Make a request to the Connect2Data API to get full info about property
-  if (!$info = _reiscout_property_get_c2d_report_by_nid($nid)) {
+  if (!$info = _reiscout_property_get_c2d_report_by_nid($nid, 'owner_info')) {
     $message = 'An error occurred while requesting the information about owner of property !nid.';
     watchdog('reiscout_owner_info', $message, array('!nid' => $nid), WATCHDOG_ERROR);
     return FALSE;
