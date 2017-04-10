@@ -2,3 +2,4 @@ name = Reiscout Property
 description = Reiscout Property
 package = Reiscout
 core = 7.x
+dependencies[] = connect2data_api
