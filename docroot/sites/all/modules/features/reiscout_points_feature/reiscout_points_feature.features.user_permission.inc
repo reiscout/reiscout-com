@@ -13,14 +13,20 @@ function reiscout_points_feature_user_default_permissions() {
   // Exported permission: 'access rules link buy_owner_info'.
   $permissions['access rules link buy_owner_info'] = array(
     'name' => 'access rules link buy_owner_info',
-    'roles' => array(),
+    'roles' => array(
+      'administrator' => 'administrator',
+      'authenticated user' => 'authenticated user',
+    ),
     'module' => 'rules_link',
   );
 
   // Exported permission: 'access rules link buy_sending_letter'.
   $permissions['access rules link buy_sending_letter'] = array(
     'name' => 'access rules link buy_sending_letter',
-    'roles' => array(),
+    'roles' => array(
+      'administrator' => 'administrator',
+      'authenticated user' => 'authenticated user',
+    ),
     'module' => 'rules_link',
   );
 

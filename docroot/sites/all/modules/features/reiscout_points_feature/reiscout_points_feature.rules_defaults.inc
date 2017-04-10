@@ -76,8 +76,8 @@ function reiscout_points_feature_default_rules_configuration() {
                                   "points" : [ "int-points-result" ],
                                   "tid" : "1",
                                   "entity" : [ "" ],
-                                  "description" : "[commerce-order:owner] buy [result:value] points (owner info).",
-                                  "operation" : "[commerce-order:owner] buy [result:value] points (owner info).",
+                                  "description" : "[commerce-order:owner] bought [result:value] points (owner info).",
+                                  "operation" : "User bought [result:value] owner info points.",
                                   "display" : "1",
                                   "moderate" : "approved"
                                 }
@@ -159,8 +159,8 @@ function reiscout_points_feature_default_rules_configuration() {
                                   "points" : [ "int-points-result" ],
                                   "tid" : "2",
                                   "entity" : [ "" ],
-                                  "description" : "[commerce-order:owner] buy [result:value] points (sending letters).",
-                                  "operation" : "[commerce-order:owner] buy [result:value] points (sending letters).",
+                                  "description" : "[commerce-order:owner] bought [result:value] points (sending letters).",
+                                  "operation" : "User bought [result:value] (sending letters) points.",
                                   "display" : "1",
                                   "moderate" : "approved"
                                 }
