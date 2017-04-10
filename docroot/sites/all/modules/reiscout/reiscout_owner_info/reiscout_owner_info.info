@@ -8,7 +8,6 @@ dependencies[] = rules
 dependencies[] = rules_link
 dependencies[] = services
 
-dependencies[] = connect2data_api
 dependencies[] = reiscout_property
 dependencies[] = reiscout_property_commerce
 dependencies[] = reiscout_points_feature
