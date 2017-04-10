@@ -6,17 +6,6 @@
  */
 
 /**
- * Implements hook_permission().
- */
-function connect2data_form_permission() {
-  return array(
-    'use connect2data_form' =>  array(
-      'title' => t('Use Connect2Data Form'),
-    ),
-  );
-}
-
-/**
  * Implements hook_menu().
  */
 function connect2data_form_menu() {
@@ -25,7 +14,7 @@ function connect2data_form_menu() {
     'description' => 'A form for requesting data from the CoreLogic Connect2Data.',
     'page callback' => 'drupal_get_form',
     'page arguments' => array('connect2data_form'),
-    'access arguments' => array('use connect2data_form'),
+    'access arguments' => array('make request to connect2data_api'),
     'file' => 'connect2data_form.pages.inc',
   );
 
