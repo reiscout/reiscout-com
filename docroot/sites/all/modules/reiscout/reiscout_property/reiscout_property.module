@@ -84,9 +84,9 @@ function _reiscout_property_build_property_criteria($nid) {
 /**
  * Makes a request to the Connect2Data API and returns full info about property.
  */
-function _reiscout_property_get_c2d_report_by_nid($nid) {
+function _reiscout_property_get_c2d_report_by_nid($nid, $request_reason) {
   if ($property_criteria = _reiscout_property_build_property_criteria($nid)) {
-    if ($report = connect2data_api_get_detailed_subject_report($property_criteria)) {
+    if ($report = connect2data_api_get_detailed_subject_report($property_criteria, $request_reason)) {
       return $report;
     }
   }

@@ -10,7 +10,7 @@
  */
 function reiscout_property_get_c2d_report_page($nid) {
   // Make a request to the Connect2Data API to get full info about property
-  if (!$report = _reiscout_property_get_c2d_report_by_nid($nid)) {
+  if (!$report = _reiscout_property_get_c2d_report_by_nid($nid, 'c2d_report_page')) {
     $message = t('An error occurred while requesting the information about property.');
     drupal_set_message($message, 'error');
     return t('No data');

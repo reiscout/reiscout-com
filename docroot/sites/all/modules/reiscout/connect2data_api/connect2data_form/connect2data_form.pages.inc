@@ -70,7 +70,7 @@ function connect2data_form_submit($form, &$form_state) {
     'postal_code' => $form_state['values']['postal_code'],
   );
 
-  if (!$report = connect2data_api_get_detailed_subject_report($property_criteria)) {
+  if (!$report = connect2data_api_get_detailed_subject_report($property_criteria, 'c2d_form')) {
     $message = t('There are no data for the address provided. Please check if the address is valid.');
     drupal_set_message($message, 'error');
     return FALSE;

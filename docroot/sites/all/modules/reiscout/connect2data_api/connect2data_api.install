@@ -36,6 +36,62 @@ function connect2data_api_schema() {
     ),
   );
 
+  $schema['c2d_request_history'] = array(
+    'description' => 'Stores information about request to the Connect2Data API for statistics.',
+    'fields' => array(
+      'hid' => array(
+        'description' => 'The primary identifier for a record.',
+        'type' => 'serial',
+        'unsigned' => TRUE,
+        'not null' => TRUE,
+      ),
+      'request' => array(
+        'description' => 'Data that were used in this request.',
+        'type' => 'varchar',
+        'length' => 255,
+        'not null' => TRUE,
+      ),
+      'reason' => array(
+        'description' => 'The reason of this request.',
+        'type' => 'varchar',
+        'length' => 20,
+        'not null' => TRUE,
+      ),
+      'response_source' => array(
+        'description' => 'Whether a response for this request was taken from cache: 0 = yes, 1 = no.',
+        'type' => 'int',
+        'size' => 'tiny',
+        'unsigned' => TRUE,
+        'not null' => TRUE,
+      ),
+      'uid' => array(
+        'description' => 'The {users}.uid that made this request.',
+        'type' => 'int',
+        'unsigned' => TRUE,
+        'not null' => TRUE,
+      ),
+      'timestamp' => array(
+        'description' => 'Timestamp for when a request was made.',
+        'type' => 'int',
+        'unsigned' => TRUE,
+        'not null' => TRUE,
+      ),
+    ),
+    'primary key' => array('hid'),
+    'indexes' => array(
+      'reason' => array('reason'),
+      'response_source' => array('response_source'),
+      'uid' => array('uid'),
+      'timestamp' => array('timestamp'),
+    ),
+    'foreign keys' => array(
+      'requester' => array(
+        'table' => 'users',
+        'columns' => array('uid' => 'uid'),
+      ),
+    ),
+  );
+
   return $schema;
 }
 

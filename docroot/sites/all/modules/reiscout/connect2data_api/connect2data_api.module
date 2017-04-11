@@ -6,6 +6,8 @@
  */
 
 define('CONNECT2DATA_API_CACHE_LIFETIME_DETAILED_SUBJECT_REPORT', 180);
+define('CONNECT2DATA_API_RESPONSE_SOURCE_CACHE', 0);
+define('CONNECT2DATA_API_RESPONSE_SOURCE_HTTP', 1);
 
 /**
  * Implements hook_permission().
@@ -34,16 +36,24 @@ function connect2data_api_menu() {
     'file' => 'connect2data_api.admin.inc',
   );
 
+  $items['connect2data_api/history'] = array(
+    'title' => 'History of requests to the Connect2Data',
+    'description' => 'Displays a history of requests that were made to the Connect2Data API.',
+    'page callback' => 'connect2data_api_history_page',
+    'access arguments' => array('administer connect2data_api'),
+    'file' => 'connect2data_api.admin.inc',
+  );
+
   return $items;
 }
 
 /**
  * Makes a request to CoreLogic Connect2Data API.
  */
-function connect2data_api_get_detailed_subject_report($property_criteria) {
+function connect2data_api_get_detailed_subject_report($property_criteria, $request_reason) {
   try {
     $api = new Connect2DataAPI();
-    return $api->getDetailedSubjectReport($property_criteria);
+    return $api->getDetailedSubjectReport($property_criteria, $request_reason);
   }
   catch (Connect2DataAPIException $e) {
     watchdog_exception('connect2data_api_get_detailed_subject_report', $e);

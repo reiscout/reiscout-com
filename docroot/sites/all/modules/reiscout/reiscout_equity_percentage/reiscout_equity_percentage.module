@@ -144,7 +144,7 @@ function reiscout_equity_percentage_recalculate_in_property_by_nid($nid) {
   $node = node_load($nid);
 
   // Make a request to the Connect2Data API to get full info about property
-  if (!$info = _reiscout_property_get_c2d_report_by_nid($nid)) {
+  if (!$info = _reiscout_property_get_c2d_report_by_nid($nid, 'ep_calculation')) {
     $message = 'An error occurred while requesting the information about property !nid.';
     watchdog('reiscout_equity_percentage', $message, array('!nid' => $nid), WATCHDOG_ERROR);
     return FALSE;
