@@ -49,8 +49,8 @@ function reiscout_send_letters_menu () {
  * 2. Check if user have have purchased access to node
  * 3. Check if user have enought points
  */
-function reiscout_send_letters_access($nid) {
-  $points = reiscout_send_letters_access_common($nid);
+function reiscout_send_letters_access($node) {
+  $points = reiscout_send_letters_access_common($node);
 
   if ($points === false || $points == 0) {
     drupal_set_message("Not enought points.", "error");
@@ -66,8 +66,8 @@ function reiscout_send_letters_access($nid) {
  * 2. Check if user have have purchased access to node
  * 3. Check if user have enought points
  */
-function reiscout_send_letters_access_points($nid) {
-  $points = reiscout_send_letters_access_common($nid);
+function reiscout_send_letters_access_points($node) {
+  $points = reiscout_send_letters_access_common($node);
 
   if ($points === false || $points == 0) {
     return TRUE;
@@ -76,9 +76,8 @@ function reiscout_send_letters_access_points($nid) {
   return FALSE;
 }
 
-function reiscout_send_letters_access_common($nid) {
+function reiscout_send_letters_access_common($node) {
   global $user;
-  $node = node_load($nid);
 
   // First, check "Owner postal address" field from current node.
   // Return FALSE if node does not contains filled owner address field
@@ -524,7 +523,7 @@ function reiscout_send_letters_resource_access($type, $nid) {
 
     case 'send_letter':
       // Check is user has points to send the letter.
-      if (reiscout_send_letters_access_common($nid)) {
+      if (reiscout_send_letters_access_common($node)) {
         return true;
       }
   }

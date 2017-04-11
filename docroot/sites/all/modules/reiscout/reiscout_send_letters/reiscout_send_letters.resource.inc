@@ -34,12 +34,13 @@ function _reiscout_send_letters_send_letter($nid) {
 function _reiscout_send_letters_get_show_button_info($nid) {
   // ToDo: check is node by nid exists and for bundle.s
   $viewBuyLettersPoints = $viewSendLetters = 0;
+  $node = node_load($nid);
   if (user_is_logged_in()) {
-    if (reiscout_send_letters_access_points($nid)) {
+    if (reiscout_send_letters_access_points($node)) {
       $viewBuyLettersPoints = 1;
     }
 
-    if ($viewBuyLettersPoints == 0 && reiscout_send_letters_access($nid)) {
+    if ($viewBuyLettersPoints == 0 && reiscout_send_letters_access($node)) {
       $viewSendLetters = 1;
     }
   }
