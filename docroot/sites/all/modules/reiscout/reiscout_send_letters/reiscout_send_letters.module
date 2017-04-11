@@ -22,7 +22,7 @@ function reiscout_send_letters_menu () {
 
   // ToDo: move it to form submit handler
   $items['send_letter/%node'] = array(
-    'title' => 'Choose a template for letter',
+    'title' => 'Pick up a predefined template for your letter or create a custom one',
     'page callback' => 'drupal_get_form',
     'page arguments' => array('reiscout_send_letters_select_template_form', 1),
     'access callback' => 'reiscout_send_letters_access',
