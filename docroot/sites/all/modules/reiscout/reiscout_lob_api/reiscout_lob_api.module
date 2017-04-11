@@ -12,9 +12,53 @@
 
 // Define constants
 // ToDo: rename constants, add modulename prefix.
-const LOB_API_KEY             = 'test_59faab2535ec17a77692ed3aa082164d263';
+const REISCOUT_LOB_ENDPOINT = 'https://api.lob.com/v1/letters';
 const LOB_LETTER_DESCRIPTION  = 'A letter from reiscout.com';
 
+/**
+ * Implements hook_menu().
+ */
+function reiscout_lob_api_menu () {
+  $items['admin/config/reiscout_lob_api'] = array(
+    'title' => 'Reiscout LOB API settings',
+    'page callback' => 'drupal_get_form',
+    'page arguments' => array('reiscout_lob_api_settings_form'),
+    'access callback' => 'user_access',
+    'access arguments' => array('administer site configuration'),
+  );
+
+  return $items;
+}
+
+/**
+ * Implements settings form.
+ */
+function reiscout_lob_api_settings_form($form, &$form_state) {
+
+  // ToDo: place a ling to LOB API docs.
+  $form['reiscout_lob_api_key'] = array(
+    '#type' => 'textfield',
+    '#title' => t('API key'),
+    '#default_value' => variable_get('reiscout_lob_api_key', ''),
+    '#required' => TRUE,
+  );
+
+  // ToDo: place a description where this text is figuring out.
+  $form['reiscout_lob_api_letter_description'] = array(
+    '#type' => 'textfield',
+    '#title' => t('A letter from reiscout.com'),
+    '#default_value' => variable_get('reiscout_lob_api_letter_description', 'A letter from reiscout.com'),
+  );
+
+  $form['reiscout_lob_api_debug'] = array(
+    '#type' => 'checkbox',
+    '#title' => t('Debug mode on.'),
+    '#description' => t('Log to watchdog request and response.'),
+    '#default_value' => variable_get('reiscout_lob_api_debug', FALSE),
+  );
+
+  return system_settings_form($form);
+}
 
 /**
  * Construct request to Lob API and parse response.
@@ -29,6 +73,15 @@ function reiscout_lob_api_request($nid, $template_nid = 0) {
   // Check if template exists and has type "letter_template"
   if (!$template || $template->type != 'letter_template') {
     drupal_set_message("Incorrect template.", "error");
+    return FALSE;
+  }
+
+  if (!variable_get('reiscout_lob_api_key')) {
+    $msg = t("LOB API key is not defined. Set it on !settings page", array(
+      '!settings' => l('settings', 'admin/config/reiscout_lob_api'),
+    ));
+
+    drupal_set_message($msg, "error");
     return FALSE;
   }
 
@@ -71,8 +124,6 @@ function reiscout_lob_api_request($nid, $template_nid = 0) {
 
   // ToDo: move CURL and etc api specific stuff to separate function.
   // Url for POST request to lob.com
-  // ToDo: move it to const var.
-  $url = 'https://api.lob.com/v1/letters';
 
   $params = array(
     'description'           => LOB_LETTER_DESCRIPTION,
@@ -101,14 +152,14 @@ function reiscout_lob_api_request($nid, $template_nid = 0) {
   );
 
   $defaults = array(
-      CURLOPT_URL             => $url,
+      CURLOPT_URL             => REISCOUT_LOB_ENDPOINT,
       CURLOPT_POST            => TRUE,
       CURLOPT_FRESH_CONNECT   => TRUE,
       CURLOPT_POSTFIELDS      => http_build_query($params),
       CURLOPT_RETURNTRANSFER  => TRUE,
       CURLOPT_SSL_VERIFYPEER  => FALSE,
       CURLOPT_SSL_VERIFYHOST  => FALSE,
-      CURLOPT_USERPWD         => LOB_API_KEY . ':',
+      CURLOPT_USERPWD         => variable_get('reiscout_lob_api_key') . ':',
       CURLOPT_HTTPHEADER      => array(
           'Accept' => 'application/json; charset=utf-8',
       ),
@@ -116,9 +167,16 @@ function reiscout_lob_api_request($nid, $template_nid = 0) {
 
   $ch = curl_init();
   curl_setopt_array($ch, $defaults);
+  $response = curl_exec($ch);
+
+  if (variable_get('reiscout_lob_api_debug', FALSE)) {
+    watchdog('reiscout_lob_api', 'Request params: !var', array('!var' => '<pre>' . var_export($params, true) . '</pre>'));
+    watchdog('reiscout_lob_api', 'Sent headers: !var', array('!var' => '<pre>' . var_export($defaults, true) . '</pre>'));
+    watchdog('reiscout_lob_api', 'Response: !var', array('!var' => '<pre>' . var_export($response, true) . '</pre>'));
+  }
 
   // Send request to Lob API via curl()
-  if (!$response = curl_exec($ch)) {
+  if (!$response) {
     watchdog('reiscout_lob_api', 'Network error: ' . curl_error($ch), array(), WATCHDOG_ERROR);
     drupal_set_message("Network error: " . curl_error($ch), "error");
     return FALSE;
