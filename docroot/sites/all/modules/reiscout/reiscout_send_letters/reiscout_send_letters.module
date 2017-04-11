@@ -134,7 +134,9 @@ function reiscout_send_letters_select_template_form($form, &$form_state, $node) 
   $user_data = user_load($user->uid);
   if (!isset($user_data->field_user_postal_address[LANGUAGE_NONE][0]) ||
       empty($user_data->field_user_postal_address[LANGUAGE_NONE][0])) {
-    drupal_set_message("Error: empty or incomplete User Postal Address (from). Please fill up address fields in your user profile.", "error");
+    drupal_set_message(t("To send a letter to property owner you need to fill in your address for your !user profile.", array(
+      '!user' => l('user', 'user/' . $user->uid)
+    )), "error");
     drupal_goto();
   }
 
