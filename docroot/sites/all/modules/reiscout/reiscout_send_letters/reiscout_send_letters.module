@@ -130,16 +130,27 @@ function reiscout_send_letters_select_template_form($form, &$form_state, $node) 
     drupal_goto();
   }
 
+  $user_edit_link = l('user',
+    'user/' . $user->uid . '/edit',
+    array('query' => array('destination' => 'node/'. $node->nid))
+  );
+
  // Check "User postal address" field from user profile
   $user_data = user_load($user->uid);
   if (!isset($user_data->field_user_postal_address[LANGUAGE_NONE][0]) ||
       empty($user_data->field_user_postal_address[LANGUAGE_NONE][0])) {
 
-    $user_edit_link = l('user',
-      'user/' . $user->uid . '/edit',
-      array('query' => array('destination' => 'node/'. $node->nid))
-    );
     $msg = t("To send a letter to property owner you need to fill in your address for your !user profile.",
+      array('!user' => $user_edit_link)
+    );
+
+    drupal_set_message($msg, "error");
+    drupal_goto();
+  }
+
+  // Check if 'User Phone Number' field was filled
+  if (empty($user_data->field_user_phone_number[LANGUAGE_NONE][0])) {
+    $msg = t("To send a letter to property owner you need to fill in your phone number for your !user profile.",
       array('!user' => $user_edit_link)
     );
 
@@ -183,10 +194,19 @@ function reiscout_send_letters_select_template_form($form, &$form_state, $node) 
   $query = array('destination' => 'send_letter/' . $node->nid);
 
   // Replacements for tokens
-  $tokens = array('{{property_title}}', '{{owner_name}}', '{{my_name}}');
-  $replaces = array($node->title,
-                    $node->field_owner_postal_address[LANGUAGE_NONE][0]['name_line'],
-                    $user_data->field_user_postal_address[LANGUAGE_NONE][0]['name_line']);
+  $tokens = array(
+    '{{owner_name}}',
+    '{{street_address}}',
+    '{{city}}',
+    '{{my_phone}}'
+  );
+
+  $replaces = array(
+    $node->field_owner_postal_address[LANGUAGE_NONE][0]['name_line'],
+    $node->field_address[LANGUAGE_NONE][0]['thoroughfare'],
+    $node->field_address[LANGUAGE_NONE][0]['locality'],
+    $user_data->field_user_phone_number[LANGUAGE_NONE][0]['safe_value']
+  );
 
   // Formats "predefined templates" options for radios field
   foreach ($templates as $t_nid => $template) {

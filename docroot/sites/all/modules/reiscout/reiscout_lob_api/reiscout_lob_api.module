@@ -107,6 +107,12 @@ function reiscout_lob_api_request($nid, $template_nid = 0) {
     return FALSE;
   }
 
+  // Check if 'User Phone Number' field was filled
+  if (empty($user_data->field_user_phone_number[LANGUAGE_NONE][0])) {
+    drupal_set_message("Please fill in your phone number in your user profile.", "error");
+    return FALSE;
+  }
+
   // Load global HTML-wrapper (template.html)
   $template_wrapper = file_get_contents(drupal_get_path('module', 'reiscout_send_letters') . '/template.html');
   if ($template_wrapper === FALSE) {
@@ -144,9 +150,10 @@ function reiscout_lob_api_request($nid, $template_nid = 0) {
 
     'file'                  => $template_wrapper,
 
-    'data[property_title]'  => $node->title,
     'data[owner_name]'      => $address_to['name_line'],
-    'data[my_name]'         => $address_from['name_line'],
+    'data[street_address]'  => $node->field_address[LANGUAGE_NONE][0]['thoroughfare'],
+    'data[city]'            => $node->field_address[LANGUAGE_NONE][0]['locality'],
+    'data[my_phone]'        => $user_data->field_user_phone_number[LANGUAGE_NONE][0]['safe_value'],
 
     'color'                 => true
   );
