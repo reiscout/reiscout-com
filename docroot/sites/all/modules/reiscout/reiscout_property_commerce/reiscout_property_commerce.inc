@@ -75,6 +75,7 @@ function reiscout_property_commerce_get_purchased_nodes($type) {
   $query->join('field_data_commerce_product', 'li_prod', 'li.line_item_id = li_prod.entity_id');
   $query->join('commerce_product', 'prod', 'prod.product_id = li_prod.commerce_product_product_id');
   $query->join('field_data_field_property', 'prop_ref', 'prop_ref.entity_id = prod.product_id');
+  $query->join('node', 'n', 'n.nid = prop_ref.field_property_target_id');
   $query
     ->fields('prop_ref', array('field_property_target_id'))
     ->distinct()
