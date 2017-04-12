@@ -325,7 +325,7 @@ function reiscout_send_letters_send_letter_callback($node, $template_node) {
     );
     userpoints_userpointsapi($params);
 
-    drupal_set_message("Letter sent successfuly.");
+    drupal_set_message(t('Your letter has been sent successfully.'));
     // Return to previous page
     drupal_goto();
   }
