@@ -294,9 +294,72 @@ body.page-onepage #main-menu a.active:active {
 
 .template-sample {
   margin: 0.5em 2em 1.5em;
+  padding: 1em;
   -moz-border-radius: 6px; -webkit-border-radius: 6px; -o-border-radius: 6px; -ms-border-radius: 6px; -khtml-border-radius: 6px; border-radius: 6px;
   border: 1px solid #ccc;
-  padding: 1em;
+  max-width: 5.3in;
+  font-family: Helvetica, Arial, sans-serif;
+  font-weight: normal;
+  font-size: 11pt;
+  color: #000;
+}
+
+.template-sample #top {
+  font-size: 14.5pt;
+  font-weight: bold;
+  line-height: 26px;
+}
+
+.template-sample #middle {
+  margin: 15pt 0 15pt 0;
+  text-align: center;
+  font-weight: bold;
+}
+
+.template-sample #middle .title {
+  margin-bottom: 12pt;
+  font-size: 18pt;
+  font-style: italic;
+  text-decoration: underline;
+  color: #2E74B5;
+}
+
+.template-sample #middle .body {
+  line-height: 13pt;
+}
+
+.template-sample #columns {
+  margin-bottom: 10pt;
+  line-height: 19px;
+}
+.template-sample #columns::after {
+  content: "";
+  clear: both;
+  display: table;
+}
+
+.template-sample #columns .left {
+  float: left;
+  margin-left: 25pt;
+}
+
+.template-sample #columns .right {
+  float: right;
+  margin-right: 25pt;
+}
+
+.template-sample #bottom {
+  padding: 0;
+  background: none;
+  border: none;
+  font-size: 14pt;
+  text-align: center;
+}
+
+.template-sample #phone {
+  font-size: 20pt;
+  font-weight: bold;
+  text-align: center;
 }
 
 #connect2data-form label:not(.option) {
