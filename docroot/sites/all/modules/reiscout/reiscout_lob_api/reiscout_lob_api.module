@@ -211,5 +211,5 @@ function reiscout_lob_api_request($nid, $template_nid = 0) {
     drupal_set_message('Letter ID: <a href ="' . $result['url'] . '">' . $result['id'] . '</a> created at ' . $result['date_created']);
   }
 
-  return TRUE;
+  return $result;
 }

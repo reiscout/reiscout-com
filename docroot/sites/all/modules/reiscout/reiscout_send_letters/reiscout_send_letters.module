@@ -325,7 +325,14 @@ function reiscout_send_letters_send_letter_callback($node, $template_node) {
     );
     userpoints_userpointsapi($params);
 
-    drupal_set_message(t('Your letter has been sent successfully.'));
+    $t_args = array(
+      '!url' => $result['url'],
+      '%carrier' => $result['carrier'],
+      '%date' => $result['expected_delivery_date'],
+    );
+    $message = t('Your <a href="!url" target="_blank">letter</a> will be sent via %carrier. Expected delivery date is %date', $t_args);
+    drupal_set_message($message);
+
     // Return to previous page
     drupal_goto();
   }
