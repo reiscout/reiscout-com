@@ -155,6 +155,7 @@ function reiscout_lob_api_request($nid, $template_nid = 0) {
     'data[city]'            => $node->field_address[LANGUAGE_NONE][0]['locality'],
     'data[my_phone]'        => $user_data->field_user_phone_number[LANGUAGE_NONE][0]['safe_value'],
 
+    'double_sided'          => false,
     'color'                 => true
   );
 
