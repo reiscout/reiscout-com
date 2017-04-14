@@ -325,6 +325,8 @@ function reiscout_send_letters_send_letter_callback($node, $template_node) {
     );
     userpoints_userpointsapi($params);
 
+    reiscout_send_letters_log($node->nid, $template_node->nid, $result['id']);
+
     $t_args = array(
       '!url' => $result['url'],
       '%carrier' => $result['carrier'],
@@ -336,6 +338,22 @@ function reiscout_send_letters_send_letter_callback($node, $template_node) {
     // Return to previous page
     drupal_goto();
   }
+}
+
+/**
+ * Saves information about letter sending to DB.
+ */
+function reiscout_send_letters_log($property_nid, $template_nid, $lob_api_letter_id) {
+  global $user;
+
+  $record = new stdClass();
+  $record->uid = $user->uid;
+  $record->pnid = $property_nid;
+  $record->tnid = $template_nid;
+  $record->lob_api_letter_id = $lob_api_letter_id;
+  $record->timestamp = time();
+
+  drupal_write_record('reiscout_send_letters_history', $record);
 }
 
 /**
