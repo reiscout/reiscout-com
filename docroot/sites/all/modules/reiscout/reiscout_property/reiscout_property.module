@@ -32,6 +32,12 @@ function reiscout_property_form_property_node_form_alter(&$form, &$form_state, $
   $form['field_zillow_zpid'] = array(
     '#type' => 'hidden',
   );
+
+  $role_admin = user_role_load_by_name('administrator');
+  if (!user_has_role($role_admin->rid)) {
+    $form['field_ep_appraised']['#access'] = FALSE;
+    $form['field_ep_calculated']['#access'] = FALSE;
+  }
 }
 
 /**
