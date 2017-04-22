@@ -44,5 +44,32 @@ function reiscout_property_commerce_feature_default_rules_configuration() {
       ]
     }
   }');
+  $items['rules_reiscout_property_order_email_to_admin'] = entity_import('rules_config', '{ "rules_reiscout_property_order_email_to_admin" : {
+      "LABEL" : "Send an order notification e-mail to admin",
+      "PLUGIN" : "reaction rule",
+      "OWNER" : "rules",
+      "TAGS" : [ "reiscout" ],
+      "REQUIRES" : [ "commerce_order", "rules", "commerce_checkout" ],
+      "ON" : { "commerce_checkout_complete" : [] },
+      "IF" : [
+        { "commerce_order_contains_product_type" : {
+            "commerce_order" : [ "commerce_order" ],
+            "product_type" : { "value" : { "reiscout_property_address_access" : "reiscout_property_address_access" } },
+            "operator" : "\\u003E=",
+            "value" : "1"
+          }
+        }
+      ],
+      "DO" : [
+        { "mail" : {
+            "to" : "boris@reiscout.com",
+            "subject" : "A new order [commerce-order:order-number] at [site:name]",
+            "message" : "\\u0027Address Access\\u0027 product was purchased.\\r\\n\\r\\nOrder number: [commerce-order:order-number]\\r\\nOrder link: [commerce-order:admin-url]",
+            "language" : [ "commerce-order:state" ]
+          }
+        }
+      ]
+    }
+  }');
   return $items;
 }

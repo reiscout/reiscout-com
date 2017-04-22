@@ -33,5 +33,6 @@ features[field_instance][] = commerce_product-reiscout_property_owner_info-field
 features[field_validation_rule][] = unique_property_nid
 features[rules_config][] = commerce_checkout_reiscout_property_commerce_checkout_completion
 features[rules_config][] = rules_reiscout_property_commerce_limit_line_items_quantity
+features[rules_config][] = rules_reiscout_property_order_email_to_admin
 features[views_view][] = reiscout_property_commerce_purchased_nodes
 features_exclude[dependencies][features] = features
