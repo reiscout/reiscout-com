@@ -82,24 +82,34 @@ function reiscout_equity_percentage_commerce_checkout_complete($order) {
  * Implements hook_field_access().
  */
 function reiscout_equity_percentage_field_access($op, $field, $entity_type, $entity, $account) {
-  if ('view' == $op && 'node' == $entity_type && !empty($entity->type) && 'property' == $entity->type) {
-    if ('field_ep_calculated' == $field['field_name']) {
-      $nw = entity_metadata_wrapper('node', $entity);
-      if ($nw->field_ep_calculated->value()) {
-        return TRUE;
+  if ('node' == $entity_type && !empty($entity->type) && 'property' == $entity->type) {
+    if ('view' == $op) {
+      if ('field_ep_calculated' == $field['field_name']) {
+        $nw = entity_metadata_wrapper('node', $entity);
+        if ($nw->field_ep_calculated->value()) {
+          return TRUE;
+        }
+        else {
+          return FALSE;
+        }
       }
-      else {
-        return FALSE;
+
+      if ('field_ep_appraised' == $field['field_name']) {
+        $nw = entity_metadata_wrapper('node', $entity);
+        if ($nw->field_ep_calculated->value()) {
+          return FALSE;
+        }
+        else {
+          return TRUE;
+        }
       }
     }
-
-    if ('field_ep_appraised' == $field['field_name']) {
-      $nw = entity_metadata_wrapper('node', $entity);
-      if ($nw->field_ep_calculated->value()) {
-        return FALSE;
-      }
-      else {
-        return TRUE;
+    else if ('edit' == $op) {
+      if ('field_ep_calculated' == $field['field_name'] || 'field_ep_appraised' == $field['field_name']) {
+        $role_admin = user_role_load_by_name('administrator');
+        if (!user_has_role($role_admin->rid)) {
+          return FALSE;
+        }
       }
     }
   }
