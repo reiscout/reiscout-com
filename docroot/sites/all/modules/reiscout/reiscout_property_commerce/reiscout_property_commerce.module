@@ -124,6 +124,13 @@ function reiscout_property_commerce_node_view($node, $view_mode, $langcode) {
         '#markup' => $button,
         '#weight' => -1,
       );
+
+      $t_args = array(
+        '!url_login' => url('user/login', array('query' => array('destination' => 'node/' . $node->nid))),
+        '!url_video' => url('/', array('fragment' => 'how-it-works')),
+      );
+      $message = t('<a href="!url_login">Log In</a> to be available to get current property address and owner info. <a href="!url_video">Watch our video about how it works</a>', $t_args);
+      drupal_set_message($message);
     }
   }
 }
