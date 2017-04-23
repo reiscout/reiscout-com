@@ -109,7 +109,7 @@ function property_node_info() {
       'description' => t('A real property object.'),
       'has_title' => '1',
       'title_label' => t('Name'),
-      'help' => '',
+      'help' => t('You will be able to change this data later.'),
     ),
   );
   drupal_alter('node_info', $items);

@@ -74,7 +74,7 @@ function property_field_default_field_instances() {
     'bundle' => 'property',
     'default_value' => NULL,
     'deleted' => 0,
-    'description' => '',
+    'description' => 'Enter property address. It will be visible only for users bought the access to this property.',
     'display' => array(
       'default' => array(
         'label' => 'above',
@@ -135,10 +135,10 @@ function property_field_default_field_instances() {
         ),
         'geolocation' => TRUE,
         'html5_geocode' => 0,
-        'manual_text' => 'Enter one manually',
+        'manual_text' => 'Enter the address manually',
         'map' => 0,
         'restrict_country' => array(),
-        'reveal' => 1,
+        'reveal' => 0,
         'reverse_geocode' => 0,
         'types' => 'geocode',
         'visible_markers' => 0,
@@ -650,7 +650,7 @@ function property_field_default_field_instances() {
   $field_instances['node-property-field_image'] = array(
     'bundle' => 'property',
     'deleted' => 0,
-    'description' => '',
+    'description' => 'Upload property photo. ',
     'display' => array(
       'default' => array(
         'label' => 'above',
@@ -698,13 +698,13 @@ function property_field_default_field_instances() {
     'entity_type' => 'node',
     'field_name' => 'field_image',
     'label' => 'Photo',
-    'required' => 0,
+    'required' => 1,
     'settings' => array(
       'alt_field' => 0,
       'default_image' => 0,
-      'file_directory' => '',
+      'file_directory' => 'properties',
       'file_extensions' => 'png gif jpg jpeg',
-      'max_filesize' => '',
+      'max_filesize' => '12 MB',
       'max_resolution' => '',
       'min_resolution' => '',
       'title_field' => 0,
@@ -964,68 +964,6 @@ function property_field_default_field_instances() {
       ),
       'type' => 'text_textfield',
       'weight' => 20,
-    ),
-  );
-
-  // Exported field_instance: 'node-property-field_owner_info_product'.
-  $field_instances['node-property-field_owner_info_product'] = array(
-    'bundle' => 'property',
-    'default_value' => NULL,
-    'deleted' => 0,
-    'description' => '',
-    'display' => array(
-      'default' => array(
-        'label' => 'above',
-        'module' => 'commerce_cart',
-        'settings' => array(
-          'combine' => TRUE,
-          'default_quantity' => 1,
-          'line_item_type' => 'product',
-          'show_quantity' => FALSE,
-          'show_single_product_attributes' => FALSE,
-        ),
-        'type' => 'commerce_cart_add_to_cart_form',
-        'weight' => 21,
-      ),
-      'drupalgap' => array(
-        'label' => 'hidden',
-        'settings' => array(),
-        'type' => 'hidden',
-        'weight' => 1,
-      ),
-      'full' => array(
-        'label' => 'hidden',
-        'module' => 'commerce_cart',
-        'settings' => array(
-          'combine' => TRUE,
-          'default_quantity' => 1,
-          'line_item_type' => 'product',
-          'show_quantity' => FALSE,
-          'show_single_product_attributes' => FALSE,
-        ),
-        'type' => 'commerce_cart_add_to_cart_form',
-        'weight' => 1,
-      ),
-    ),
-    'entity_type' => 'node',
-    'field_name' => 'field_owner_info_product',
-    'label' => 'Buy Owner Info',
-    'required' => FALSE,
-    'settings' => array(
-      'field_injection' => 1,
-      'referenceable_types' => array(
-        'product' => 0,
-        'reiscout_property_address_access' => 0,
-        'reiscout_property_owner_info' => 'reiscout_property_owner_info',
-      ),
-      'user_register_form' => FALSE,
-    ),
-    'widget' => array(
-      'active' => 1,
-      'module' => 'commerce_product_reference',
-      'settings' => array(),
-      'type' => 'commerce_product_reference_hidden',
-      'weight' => 0,
     ),
   );
 
@@ -1332,8 +1270,8 @@ function property_field_default_field_instances() {
   t('Bathrooms');
   t('Bedrooms');
   t('Buy Address Access');
-  t('Buy Owner Info');
   t('Calculated Equity Percentage');
+  t('Enter property address. It will be visible only for users bought the access to this property.');
   t('Last Purchase');
   t('Last Purchase Price');
   t('Lot Size');
@@ -1346,6 +1284,7 @@ function property_field_default_field_instances() {
   t('Property Size');
   t('Repairs (estimated)');
   t('Under Contract');
+  t('Upload property photo. ');
   t('Your current location (determined automatically)');
 
   return $field_instances;
