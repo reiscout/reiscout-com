@@ -209,7 +209,7 @@ function reiscout_lob_api_request($nid, $template_nid = 0) {
   // Display some returned data to administrator
   $role = user_role_load_by_name('administrator');
   if (user_has_role($role->rid)) {
-    drupal_set_message('Letter ID: <a href ="' . $result['url'] . '">' . $result['id'] . '</a> created at ' . $result['date_created']);
+    drupal_set_message('Letter ID: <a href="' . $result['url'] . '">' . $result['id'] . '</a> created at ' . $result['date_created']);
   }
 
   return $result;
