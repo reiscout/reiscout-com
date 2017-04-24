@@ -406,11 +406,16 @@ function reiscout_property_commerce_form_commerce_cart_form_alter(&$form, &$form
 
   $node = node_load($form_state['context']['entity_id']);
 
+  $is_user_bought_property_address = reiscout_property_commerce_is_node_purchased($node->nid, REISCOUT_PROPERTY_COMMERCE_ADDRESS_ACCESS_PRODUCT_TYPE, $GLOBALS['user']->uid);
+  $is_user_bought_owner_info = reiscout_property_commerce_is_node_purchased($node->nid, REISCOUT_PROPERTY_COMMERCE_OWNER_INFO_PRODUCT_TYPE, $GLOBALS['user']->uid);
+
   // Process Owner Info product
   if ($product->type == REISCOUT_PROPERTY_COMMERCE_OWNER_INFO_PRODUCT_TYPE) {
-    // Check to allow user to buy owner info
-    if ($node->uid == $GLOBALS['user']->uid
-      && !reiscout_property_commerce_is_node_purchased($node->nid, REISCOUT_PROPERTY_COMMERCE_OWNER_INFO_PRODUCT_TYPE, $GLOBALS['user']->uid)) {
+    // A user may buy info about a property's owner if:
+    //  - he is the property's author OR he has bought the property's address
+    //    AND
+    //  - he has not yet bought the info about property's owner.
+    if (($node->uid == $GLOBALS['user']->uid || $is_user_bought_property_address) && !$is_user_bought_owner_info) {
       $price = reiscout_property_commerce_get_owner_info_price();
       $form['submit']['#value'] = t('Buy Owner Info for @price @cur',
         array(
@@ -425,11 +430,11 @@ function reiscout_property_commerce_form_commerce_cart_form_alter(&$form, &$form
 
   // Process Address Access product
   if ($product->type == REISCOUT_PROPERTY_COMMERCE_ADDRESS_ACCESS_PRODUCT_TYPE) {
-    // Check to allow user to buy an address:
-    //  - user not an author AND
-    //  - user not purchased it already
-    if ($node->uid != $GLOBALS['user']->uid
-      && !reiscout_property_commerce_is_node_purchased($node->nid, REISCOUT_PROPERTY_COMMERCE_ADDRESS_ACCESS_PRODUCT_TYPE, $GLOBALS['user']->uid)) {
+    // A user may buy a property's address if:
+    //  - he is not the property's author
+    //    AND
+    //  - he has not yet bought the property's address.
+    if ($node->uid != $GLOBALS['user']->uid && !$is_user_bought_property_address) {
       $price = reiscout_property_commerce_get_property_address_price($node);
       $form['submit']['#value'] = t('Buy Property Address for @price @cur',
         array(
