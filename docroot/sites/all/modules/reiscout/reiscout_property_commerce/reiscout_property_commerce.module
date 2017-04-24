@@ -391,10 +391,8 @@ function reiscout_property_commerce_form_alter(&$form, &$form_state, $form_id) {
 function reiscout_property_commerce_form_commerce_cart_form_alter(&$form, &$form_state, $form_id) {
   // Check that product type is the one needed to be processed.
   $product = commerce_product_load($form['product_id']['#value']);
-  if (!in_array($product->type, array(
-    REISCOUT_PROPERTY_COMMERCE_ADDRESS_ACCESS_PRODUCT_TYPE,
-    REISCOUT_PROPERTY_COMMERCE_OWNER_INFO_PRODUCT_TYPE
-  ))) {
+
+  if (REISCOUT_PROPERTY_COMMERCE_ADDRESS_ACCESS_PRODUCT_TYPE != $product->type) {
     return;
   }
 
@@ -407,26 +405,6 @@ function reiscout_property_commerce_form_commerce_cart_form_alter(&$form, &$form
   $node = node_load($form_state['context']['entity_id']);
 
   $is_user_bought_property_address = reiscout_property_commerce_is_node_purchased($node->nid, REISCOUT_PROPERTY_COMMERCE_ADDRESS_ACCESS_PRODUCT_TYPE, $GLOBALS['user']->uid);
-  $is_owner_info_filled = _reiscout_property_commerce_is_property_owner_info_filled($node->nid);
-
-  // Process Owner Info product
-  if ($product->type == REISCOUT_PROPERTY_COMMERCE_OWNER_INFO_PRODUCT_TYPE) {
-    // A user may buy info about a property's owner if:
-    //  - he is the property's author OR he has bought the property's address
-    //    AND
-    //  - info about the property's owner has not been filled out yet.
-    if (($node->uid == $GLOBALS['user']->uid || $is_user_bought_property_address) && !$is_owner_info_filled) {
-      $price = reiscout_property_commerce_get_owner_info_price();
-      $form['submit']['#value'] = t('Buy Owner Info for @price @cur',
-        array(
-          '@price' => commerce_currency_amount_to_decimal($price['amount'], $price['currency_code']),
-          '@cur' => $price['currency_code'],
-        )
-      );
-    } else {
-      $form['#access'] = FALSE;
-    }
-  }
 
   // Process Address Access product
   if ($product->type == REISCOUT_PROPERTY_COMMERCE_ADDRESS_ACCESS_PRODUCT_TYPE) {
@@ -446,23 +424,6 @@ function reiscout_property_commerce_form_commerce_cart_form_alter(&$form, &$form
       $form['#access'] = FALSE;
     }
   }
-}
-
-/**
- * Checks if info about property's owner has been filled out.
- */
-function _reiscout_property_commerce_is_property_owner_info_filled($nid) {
-  $nw = entity_metadata_wrapper('node', $nid);
-
-  if (!$nw->field_owner_postal_address->value()) {
-    return FALSE;
-  }
-
-  return $nw->field_owner_postal_address->name_line->value()
-      && $nw->field_owner_postal_address->thoroughfare->value()
-      && $nw->field_owner_postal_address->locality->value()
-      && $nw->field_owner_postal_address->administrative_area->value()
-      && $nw->field_owner_postal_address->postal_code->value();
 }
 
 /**
