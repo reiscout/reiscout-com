@@ -142,13 +142,9 @@ function reiscout_property_commerce_node_view($node, $view_mode, $langcode) {
  */
 function reiscout_property_commerce_fields_access_to_sell() {
   return array(
-    'field_address_text',
     'field_address',
-    'field_owner_fname',
-    'field_owner_lname',
-    'field_owner_phone',
-    'field_owner_address',
     'field_owner_postal_address',
+    'field_owner_phone',
   );
 }
 
@@ -160,22 +156,23 @@ function reiscout_property_commerce_field_access($op, $field, $entity_type, $ent
   if ($op == 'view' && $entity_type == 'node' && !empty($entity->type) && $entity->type == REISCOUT_PROPERTY_COMMERCE_NODE_TYPE
   &&  in_array($field['field_name'], reiscout_property_commerce_fields_access_to_sell() ) ) {
 
-    // Do nothing if current user is admin
-    if ($account->uid == 1) {
-      return;
-    }
-
     // Show property info fields only for
     // - admin role
     // - property owner
-    // - user purchased the address
+    // - user who purchased the address
 
-    // Allow access if user is an author.
+    // User is an administrator
+    $role_admin = user_role_load_by_name('administrator');
+    if (user_has_role($role_admin->rid, $account)) {
+      return TRUE;
+    }
+
+    // User is a property's author
     if ($entity->uid == $account->uid) {
       return TRUE;
     }
 
-    // Allow access if user purchased the node.
+    // User has bought a property's address
     if (reiscout_property_commerce_is_node_purchased($entity->nid, REISCOUT_PROPERTY_COMMERCE_ADDRESS_ACCESS_PRODUCT_TYPE, $account->uid)) {
       return TRUE;
     }
@@ -183,7 +180,6 @@ function reiscout_property_commerce_field_access($op, $field, $entity_type, $ent
     // Deny access otherwise
     return FALSE;
   }
-
 }
 
 /**
