@@ -10,13 +10,12 @@
 
 // Define constants
 // ToDo: put term to feature useing uuid and replace id here to uuid.
-const TERM_ID_POINTS_OWNER_INFO   = 1;
-
+define('TERM_ID_POINTS_OWNER_INFO', 1);
 
 /**
  * Implements hook_menu().
  */
-function reiscout_owner_info_menu () {
+function reiscout_owner_info_menu() {
   // ToDo: repmove menu callback in favor or form.
   $items['get_owner_info/%node'] = array(
     'title' => 'Get Owner Info.',
@@ -30,18 +29,22 @@ function reiscout_owner_info_menu () {
   return $items;
 }
 
-
 /**
  * Access callback
  * 1. Check user roles
- * 2. Check if user have have purchased access to node
- * 3. Check if user have enought points
+ * 2. Check if user has purchased access to node
+ * 3. Check if user has enough points
  */
 function reiscout_owner_info_access($node) {
-  $points = reiscout_owner_info_access_common($node);
+  global $user;
 
-  if ($points === false || $points == 0) {
-    drupal_set_message("Not enought points.", "error");
+  if (!reiscout_owner_info_access_common($node)) {
+    return FALSE;
+  }
+
+  // If user has not enough points
+  if (0 >= userpoints_get_current_points($user->uid, TERM_ID_POINTS_OWNER_INFO)) {
+    drupal_set_message(t('Not enough points.'), 'error');
     return FALSE;
   }
 
@@ -51,98 +54,77 @@ function reiscout_owner_info_access($node) {
 /**
  * Access callback
  * 1. Check user roles
- * 2. Check if user have have purchased access to node
- * 3. Check if user have enought points
+ * 2. Check if user has purchased access to node
+ * 3. Check if user has enough points
  */
 function reiscout_owner_info_access_points($node) {
-  $points = reiscout_owner_info_access_common($node);
+  global $user;
 
-  if ($points === false || $points != 0 ) {
+  if (!reiscout_owner_info_access_common($node)) {
+    return FALSE;
+  }
+
+  // If user has points
+  if (0 < userpoints_get_current_points($user->uid, TERM_ID_POINTS_OWNER_INFO)) {
     return FALSE;
   }
 
   return TRUE;
 }
 
+/**
+ * Checks if a user may buy info about a property's owner.
+ *
+ * A user may buy info about a property's owner if:
+ * - he is the property's author OR he has bought the property's address
+ *   AND
+ * - info about the property's owner has not been filled out yet.
+ */
 function reiscout_owner_info_access_common($node) {
   global $user;
 
-  // First, check "Owner postal address" field from current node.
-  // Return FALSE if node already contains filled owner address field.
-  if (!empty($node->field_owner_postal_address[LANGUAGE_NONE][0])) {
+  if (user_is_anonymous()) {
     return FALSE;
   }
-  // Check if user is not anonymous
-  if (!user_is_anonymous()) {
-    // Check if user is not administrator
-    if (!in_array('administrator', $user->roles)) {
-      // If user is not author of node
-      if ($user->uid != $node->uid) {
-        // Check if user have purchased access to node
-        $node_purchased = reiscout_property_commerce_is_node_purchased($node->nid,
-            REISCOUT_PROPERTY_COMMERCE_ADDRESS_ACCESS_PRODUCT_TYPE,
-            $user->uid);
-        // If user have not purchased access to node return FALSE.
-        if (!$node_purchased) {
-          return FALSE;
-        }
+
+  // If the "Owner postal address" field has been filled out
+  // already, we do not need to do it again.
+  if (_reiscout_owner_info_is_filled_by_nid($node->nid)) {
+    return FALSE;
+  }
+
+  // If user is not an administrator
+  if (!in_array('administrator', $user->roles)) {
+    // And if he is not a property's author
+    if ($user->uid != $node->uid) {
+      // And he has not bought the property's address
+      $node_purchased = reiscout_property_commerce_is_node_purchased($node->nid,
+          REISCOUT_PROPERTY_COMMERCE_ADDRESS_ACCESS_PRODUCT_TYPE,
+          $user->uid);
+      if (!$node_purchased) {
+        return FALSE;
       }
     }
-  } else {
-    return FALSE;
   }
 
-  // Check if user have enought points
-  $points = userpoints_get_current_points($user->uid, TERM_ID_POINTS_OWNER_INFO);
-
-  return $points;
-}
-
-/**
- * Fills Owner's Address field with info we received from the Connect2Data API.
- */
-function reiscout_owner_info_save($node, $info) {
-  $nw = entity_metadata_wrapper('node', $node);
-
-  $nw->field_owner_postal_address->country = 'US';
-  $nw->field_owner_postal_address->name_line = trim($info->PROPERTY_OWNER->attributes()->_OwnerName);
-  $nw->field_owner_postal_address->thoroughfare = trim($info->PROPERTY_OWNER->attributes()->_MailingAddress);
-  $nw->field_owner_postal_address->postal_code = trim($info->PROPERTY_OWNER->attributes()->_MailingPostalCode);
-
-  if (preg_match('!(.+?)\s+([A-Z]{2})$!', $info->PROPERTY_OWNER->attributes()->_MailingCityAndState, $matches)) {
-    $nw->field_owner_postal_address->locality = $matches[1];
-    $nw->field_owner_postal_address->administrative_area = $matches[2];
-  }
-
-  $nw->save();
+  return TRUE;
 }
 
 /**
  * Page callback for get_owner_info/%.
- * 1. Make call to connect2data_api.
- * 2. Decrease userpoint by one.
+ * 1. Makes call to connect2data_api.
+ * 2. Decreases the amount of user points by one.
  */
 function reiscout_owner_info_get_owner_callback($node) {
-  global $user;
-
   // Make a request to the Connect2Data API to get full info about property
   if (!$info = _reiscout_property_get_c2d_report_by_nid($node->nid, 'owner_info')) {
-    drupal_set_message("An error occurred while requesting the information about property's owner.", 'error');
+    drupal_set_message(t("An error occurred while requesting the information about property's owner.", 'error'));
     // Return to the previous page
     drupal_goto();
   }
 
-  reiscout_owner_info_save($node, $info);
-
-  // ToDo: move pints decreasing to function.
-  // Decrease points by one
-  $params = array(
-    'uid' => $user->uid,
-    'points' => -1,
-    'tid' => TERM_ID_POINTS_OWNER_INFO,
-    'operation' => 'Used 1 point to get access to owner.',
-  );
-  userpoints_userpointsapi($params);
+  _reiscout_owner_info_save($node, $info);
+  _reiscout_owner_info_decrease_user_points();
 
   drupal_set_message("Owner info received successfully.");
   // Return to previous page
@@ -151,12 +133,10 @@ function reiscout_owner_info_get_owner_callback($node) {
 
 /**
  * Page callback for get_owner_info/%.
- * 1. Make call to connect2data_api.
- * 2. Decrease userpoint by one.
+ * 1. Makes call to connect2data_api.
+ * 2. Decreases the amount of user points by one.
  */
 function reiscout_owner_info_get_owner_drupalgap_callback($nid) {
-  global $user;
-
   // Make a request to the Connect2Data API to get full info about property
   if (!$info = _reiscout_property_get_c2d_report_by_nid($nid, 'owner_info')) {
     $message = 'An error occurred while requesting the information about owner of property !nid.';
@@ -164,17 +144,8 @@ function reiscout_owner_info_get_owner_drupalgap_callback($nid) {
     return FALSE;
   }
 
-  reiscout_owner_info_save($nid, $info);
-
-  // ToDo: move pints decreasing to function.
-  // Decrease points by one
-  $params = array(
-    'uid' => $user->uid,
-    'points' => -1,
-    'tid' => TERM_ID_POINTS_OWNER_INFO,
-    'operation' => 'Used 1 point to get access to owner.',
-  );
-  userpoints_userpointsapi($params);
+  _reiscout_owner_info_save($nid, $info);
+  _reiscout_owner_info_decrease_user_points();
 
   return TRUE;
 }
@@ -207,70 +178,45 @@ function reiscout_owner_info_node_view($node, $view_mode, $langcode) {
 
     global $user;
 
-    // First, check "Owner postal address" field from current node.
-    // Do nothing if node already contains filled owner address field.
-    if (!empty($node->field_owner_postal_address[LANGUAGE_NONE][0])) {
+    if (!reiscout_owner_info_access_common($node)) {
       return;
     }
 
-    // Check if user is not anonymous
-    if (!user_is_anonymous()) {
-      // Check if user is not administrator
-      if (!in_array('administrator', $user->roles)) {
-        // If user is not author of node
-        if ($user->uid != $node->uid) {
-          // Check if user have purchased access to node
-          $node_purchased = reiscout_property_commerce_is_node_purchased(
-            $node->nid,
-            REISCOUT_PROPERTY_COMMERCE_ADDRESS_ACCESS_PRODUCT_TYPE,
-            $user->uid
-          );
-          // If user have not purchased access to node then return (do nothing).
-          if (!$node_purchased) {
-            return;
-          }
-        }
+    // Prepare HTML-container for action buttons
+    if (!isset($node->content['commerce-buttons'])) {
+      $node->content['commerce-buttons'] = array(
+        '#prefix' => '<div class="commerce-buttons">',
+        '#suffix' => '</div>',
+        '#markup' => '',
+        '#weight' => -1,
+      );
+    }
+
+    $points = userpoints_get_current_points($user->uid, TERM_ID_POINTS_OWNER_INFO);
+    $button_name = 'Get Property Owner' . ' (' . $points . ' points left)';
+    $callback_path = 'get_owner_info/' . $node->nid;
+    $rules_buy_link = 'buy_owner_info';
+
+    // If user has enough points for current action
+    if ($points > 0) {
+      $url = url($callback_path, array('query' => drupal_get_destination(), 'absolute' => TRUE), array('html' => TRUE));
+      $link = l($button_name, $url);
+      $node->content['commerce-buttons']['#markup'] .= '<div class="callback-link">' . $link . '</div>';
+    }
+    // If not
+    else {
+      // Add link/button via rules to buy points as a commerce product
+      $rendered_link = rules_link_render($rules_buy_link, $node->nid, drupal_get_destination(), array());
+      if ($rendered_link) {
+        $link = drupal_render($rendered_link);
+        $node->content['commerce-buttons']['#markup'] .= $link;
       }
-
-      $link = '';
-
-      // Prepare HTML-container for action buttons
-      if (!isset($node->content['commerce-buttons'])) {
-        $node->content['commerce-buttons'] = array(
-          '#prefix' => '<div class="commerce-buttons">',
-          '#suffix' => '</div>',
-          '#markup' => '',
-          '#weight' => -1,
-        );
-      }
-
-      $points = userpoints_get_current_points($user->uid, TERM_ID_POINTS_OWNER_INFO);
-      $button_name = 'Get Property Owner' . ' (' . $points . ' points left)';
-      $callback_path = 'get_owner_info/' . $node->nid . '/';
-      $rules_buy_link = 'buy_owner_info';
-
-      $destination = drupal_get_destination();
-
-      // If user have points for current action
-      if ($points > 0) {
-        $link = l($button_name, url($callback_path, array('query' => $destination, 'absolute' => TRUE), array('html' => TRUE)));
-        $node->content['commerce-buttons']['#markup'] .= '<div class="callback-link">' . $link . '</div>';
-      }
-      // If user have not points
       else {
-        $parameters = array();
-        // Add link/button via rules to buy points as commerce product
-        $rendered_link = rules_link_render($rules_buy_link, $node->nid, $destination, $parameters);
-        if (!empty($rendered_link)) {
-          $link = render($rendered_link);
-          $node->content['commerce-buttons']['#markup'] .= $link;
-        } else {
-          $msg = t($rules_buy_link . ' rules link rendering failed.');
-          if (in_array('administrator', $user->roles)) {
-            drupal_set_message($msg, 'error');
-          }
-          watchdog('reiscout_owner_info', $msg, array(), WATCHDOG_ERROR);
+        $msg = t($rules_buy_link . ' rules link rendering failed.');
+        if (in_array('administrator', $user->roles)) {
+          drupal_set_message($msg, 'error');
         }
+        watchdog('reiscout_owner_info', $msg, array(), WATCHDOG_ERROR);
       }
     }
   }
@@ -281,9 +227,9 @@ function reiscout_owner_info_node_view($node, $view_mode, $langcode) {
  */
 function reiscout_owner_info_services_resources() {
   $file = array(
-      'type'   => 'inc',
-      'module' => 'reiscout_owner_info',
-      'name'   => 'reiscout_owner_info.resource'
+    'type'   => 'inc',
+    'module' => 'reiscout_owner_info',
+    'name'   => 'reiscout_owner_info.resource'
   );
 
   $resource = array(
@@ -324,6 +270,7 @@ function reiscout_owner_info_services_resources() {
       ),
     )
   );
+
   return $resource;
 }
 
@@ -383,4 +330,39 @@ function _reiscout_owner_info_is_filled_by_nid($nid) {
     && $nw->field_owner_postal_address->locality->value()
     && $nw->field_owner_postal_address->administrative_area->value()
     && $nw->field_owner_postal_address->postal_code->value();
+}
+
+/**
+ * Fills Owner's Address field with info we received from the Connect2Data API.
+ */
+function _reiscout_owner_info_save($node, $info) {
+  $nw = entity_metadata_wrapper('node', $node);
+
+  $nw->field_owner_postal_address->country = 'US';
+  $nw->field_owner_postal_address->name_line = trim($info->PROPERTY_OWNER->attributes()->_OwnerName);
+  $nw->field_owner_postal_address->thoroughfare = trim($info->PROPERTY_OWNER->attributes()->_MailingAddress);
+  $nw->field_owner_postal_address->postal_code = trim($info->PROPERTY_OWNER->attributes()->_MailingPostalCode);
+
+  if (preg_match('!(.+?)\s+([A-Z]{2})$!', $info->PROPERTY_OWNER->attributes()->_MailingCityAndState, $matches)) {
+    $nw->field_owner_postal_address->locality = $matches[1];
+    $nw->field_owner_postal_address->administrative_area = $matches[2];
+  }
+
+  $nw->save();
+}
+
+/**
+ * Decreases the amount of user points.
+ */
+function _reiscout_owner_info_decrease_user_points() {
+  global $user;
+
+  $params = array(
+    'uid' => $user->uid,
+    'points' => -1,
+    'tid' => TERM_ID_POINTS_OWNER_INFO,
+    'operation' => '1 point was used to get access to owner.',
+  );
+
+  userpoints_userpointsapi($params);
 }
