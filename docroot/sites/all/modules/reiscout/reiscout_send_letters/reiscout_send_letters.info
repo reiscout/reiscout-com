@@ -11,3 +11,4 @@ dependencies[] = services
 dependencies[] = reiscout_lob_api
 dependencies[] = reiscout_property_commerce
 dependencies[] = reiscout_points_feature
+dependencies[] = reiscout_owner_info
