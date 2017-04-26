@@ -1,6 +1,6 @@
 <?php
 
-/*
+/**
  * Requests info about a property's owner and saves it
  */
 function _reiscout_owner_info_get_info($data = array()) {
