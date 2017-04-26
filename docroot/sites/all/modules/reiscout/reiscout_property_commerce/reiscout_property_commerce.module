@@ -206,6 +206,13 @@ function reiscout_property_commerce_entity_load($entities, $type) {
           $entity->_reiscout_property_commerce_product_type = $avaliable_product->type;
         }
 
+        // This title is used by the mobile application for displaying of the title of 'Buy Property Address' button.
+        // See reiscout_property_commerce_form_commerce_cart_add_to_cart_form_alter() function.
+        $price = reiscout_property_commerce_get_property_address_price($entity);
+        $entity->_price_title = commerce_currency_amount_to_decimal($price['amount'], $price['currency_code'])
+                              . ' '
+                              . $price['currency_code'];
+
         // Mobile application needs to know if user bought an 'Address Access' product.
         $entity->_user_bought_address_access_product = reiscout_property_commerce_is_node_purchased(
           $entity->nid,
