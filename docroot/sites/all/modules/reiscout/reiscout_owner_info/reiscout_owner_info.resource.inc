@@ -30,7 +30,7 @@ function _reiscout_owner_info_get_show_button_info($data = array()) {
   $nid = $data['nid'];
   $node = node_load($nid);
 
-  if (reiscout_owner_info_access_common($node)) {
+  if (_reiscout_owner_info_is_user_can_buy($node)) {
     $points = userpoints_get_current_points($user->uid, TERM_ID_POINTS_OWNER_INFO);
 
     // If user has enough points
