@@ -1,35 +1,48 @@
 <?php
 
 /*
- * Get owner info
+ * Requests info about a property's owner and saves it
  */
-function _reiscout_owner_info_get_info($nid) {
+function _reiscout_owner_info_get_info($data = array()) {
   // ToDo: check is node by nid exists and for bundle.
+  $nid = $data['nid'];
+
   $result = reiscout_owner_info_get_owner_drupalgap_callback($nid);
 
-  return ['status' => $result];
+  return array('status' => $result);
 }
 
 /**
- * Checking view buttons
+ * Checks which forms a user have an access to
  *
  * @return array
  */
-function _reiscout_owner_info_get_show_button_info($nid) {
+function _reiscout_owner_info_get_show_button_info($data = array()) {
+  global $user;
+
+  $info = array(
+    'viewGetOwnerInfo' => 0,
+    'btnGetOwnerInfoTitle' => '',
+    'viewBuyInfoPoints' => 0,
+  );
+
   // ToDo: check is node by nid exists and for bundle.
-  $viewBuyInfoPoints = $viewGetOwnerInfo = 0;
-
+  $nid = $data['nid'];
   $node = node_load($nid);
-  if (user_is_logged_in()) {
-    if (reiscout_owner_info_access_points($node)) {
-      $viewBuyInfoPoints = 1;
-    }
 
-    if ($viewBuyInfoPoints == 0 && reiscout_owner_info_access($nid)) {
-      $viewGetOwnerInfo = 1;
-    }
+  if (reiscout_owner_info_access_common($node)) {
+    $points = userpoints_get_current_points($user->uid, TERM_ID_POINTS_OWNER_INFO);
 
+    // If user has enough points
+    if ($points > 0) {
+      $info['viewGetOwnerInfo'] = 1;
+      $info['btnGetOwnerInfoTitle'] = t('Get Property Owner (!points points left)', array('!points' => $points));
+    }
+    // If not
+    else {
+      $info['viewBuyInfoPoints'] = 1;
+    }
   }
 
-  return ['viewBuyInfoPoints' => $viewBuyInfoPoints, 'viewGetOwnerInfo' => $viewGetOwnerInfo];
+  return $info;
 }
