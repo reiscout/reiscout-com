@@ -52,27 +52,6 @@ function reiscout_owner_info_access($node) {
 }
 
 /**
- * Access callback
- * 1. Check user roles
- * 2. Check if user has purchased access to node
- * 3. Check if user has enough points
- */
-function reiscout_owner_info_access_points($node) {
-  global $user;
-
-  if (!reiscout_owner_info_access_common($node)) {
-    return FALSE;
-  }
-
-  // If user has points
-  if (0 < userpoints_get_current_points($user->uid, TERM_ID_POINTS_OWNER_INFO)) {
-    return FALSE;
-  }
-
-  return TRUE;
-}
-
-/**
  * Checks if a user may buy info about a property's owner.
  *
  * A user may buy info about a property's owner if:
