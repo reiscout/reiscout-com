@@ -144,7 +144,7 @@ function property_strongarm() {
       'display' => array(
         'product:sku' => array(
           'drupalgap' => array(
-            'weight' => '25',
+            'weight' => '24',
             'visible' => FALSE,
           ),
           'default' => array(
@@ -158,7 +158,7 @@ function property_strongarm() {
         ),
         'product:title' => array(
           'drupalgap' => array(
-            'weight' => '26',
+            'weight' => '25',
             'visible' => FALSE,
           ),
           'default' => array(
@@ -172,7 +172,7 @@ function property_strongarm() {
         ),
         'product:status' => array(
           'drupalgap' => array(
-            'weight' => '27',
+            'weight' => '26',
             'visible' => FALSE,
           ),
           'default' => array(
@@ -186,7 +186,7 @@ function property_strongarm() {
         ),
         'product:commerce_price' => array(
           'drupalgap' => array(
-            'weight' => '24',
+            'weight' => '23',
             'visible' => FALSE,
           ),
           'default' => array(
@@ -204,7 +204,7 @@ function property_strongarm() {
             'visible' => FALSE,
           ),
           'drupalgap' => array(
-            'weight' => '22',
+            'weight' => '20',
             'visible' => TRUE,
           ),
           'default' => array(
