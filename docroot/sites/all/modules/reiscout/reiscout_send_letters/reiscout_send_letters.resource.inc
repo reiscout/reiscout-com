@@ -1,48 +1,58 @@
 <?php
 
 /**
- * Send letter
+ * Sends a letter to a property's owner
  *
  * @param $nid
  * @return array
  */
-function _reiscout_send_letters_send_letter($nid) {
-  // ToDo: check is node by nid exists and for bundle.
-  $node = node_load($nid);
+function _reiscout_send_letters_send_letter($data = array()) {
   global $user;
-  $user = user_load($user->uid);
-  if (!empty($user->field_default_template_nid[LANGUAGE_NONE][0]['value'])) {
-    $template_node = $user->field_default_template_nid[LANGUAGE_NONE][0]['value'];
+
+  // ToDo: check is node by nid exists and for bundle.
+  $nid = $data['nid'];
+  $tnid = _reiscout_send_letters_get_template_nid_by_uid($user->uid);
+  $result = reiscout_send_letters_send_letter_drupalgap_callback($nid, $tnid);
+
+  if (!$result) {
+    return array('status' => FALSE);
   }
-
-  if (empty($template_node)) {
-    watchdog('reiscout_send_letters', 'Letter template for user @uid not found', array('@uid' => $user->uid), WATCHDOG_ERROR);
-    return ['status' => false];
+  else {
+    return array('status' => TRUE, 'message' => $result);
   }
-
-
-  $result = reiscout_send_letters_send_letter_drupalgap_callback($node, $template_node);
-
-  return ['status' => $result];
 }
 
 /**
- * Checking view buttons
+ * Checks which forms a user have an access to
  *
  * @return array
  */
-function _reiscout_send_letters_get_show_button_info($nid) {
-  // ToDo: check is node by nid exists and for bundle.s
-  $viewBuyLettersPoints = $viewSendLetters = 0;
-  $node = node_load($nid);
-  if (user_is_logged_in()) {
-    if (reiscout_send_letters_access_points($node)) {
-      $viewBuyLettersPoints = 1;
-    }
+function _reiscout_send_letters_get_show_button_info($data = array()) {
+  global $user;
 
-    if ($viewBuyLettersPoints == 0 && reiscout_send_letters_access($node)) {
-      $viewSendLetters = 1;
+  $info = array(
+    'viewSendLetters' => 0,
+    'btnSendLetterTitle' => '',
+    'viewBuyLettersPoints' => 0,
+  );
+
+  // ToDo: check is node by nid exists and for bundle.
+  $nid = $data['nid'];
+  $node = node_load($nid);
+
+  if (_reiscout_send_letters_is_user_can_send($node)) {
+    $points = userpoints_get_current_points($user->uid, TERM_ID_POINTS_SEND_LETTERS);
+
+    // If user has enough points
+    if ($points > 0) {
+      $info['viewSendLetters'] = 1;
+      $info['btnSendLetterTitle'] = t('Send a letter to Property Owner (!points points left)', array('!points' => $points));
+    }
+    // If not
+    else {
+      $info['viewBuyLettersPoints'] = 1;
     }
   }
-  return ['viewBuyLettersPoints' => $viewBuyLettersPoints, 'viewSendLetters' => $viewSendLetters];
+
+  return $info;
 }

@@ -13,6 +13,8 @@
 
 // ToDo: place term in feature and use here uuis instead id.
 define('TERM_ID_POINTS_SEND_LETTERS', 2);
+// ToDo: move it to an admin settings form
+define('REISCOUT_SEND_LETTERS_DEFAULT_TEMPLATE_NID', 468);
 
 /**
  * Implements hook_menu().
@@ -49,34 +51,13 @@ function reiscout_send_letters_menu() {
 function reiscout_send_letters_access($node) {
   global $user;
 
-  if (!reiscout_send_letters_access_common($node)) {
+  if (!_reiscout_send_letters_is_user_can_send($node)) {
     return FALSE;
   }
 
   // If user has not enough points
   if (0 >= userpoints_get_current_points($user->uid, TERM_ID_POINTS_SEND_LETTERS)) {
     drupal_set_message(t('Not enough points.'), 'error');
-    return FALSE;
-  }
-
-  return TRUE;
-}
-
-/**
- * Access callback
- * 1. Check user roles
- * 2. Check if user has purchased access to node
- * 3. Check if user has enough points
- */
-function reiscout_send_letters_access_points($node) {
-  global $user;
-
-  if (!reiscout_send_letters_access_common($node)) {
-    return FALSE;
-  }
-
-  // If user has points
-  if (0 < userpoints_get_current_points($user->uid, TERM_ID_POINTS_SEND_LETTERS)) {
     return FALSE;
   }
 
@@ -91,7 +72,7 @@ function reiscout_send_letters_access_points($node) {
  * - he has bought the property's address AND
  * - info about the property's owner has been filled out.
  */
-function reiscout_send_letters_access_common($node) {
+function _reiscout_send_letters_is_user_can_send($node) {
   global $user;
 
   if (user_is_anonymous()) {
@@ -345,18 +326,24 @@ function reiscout_send_letters_send_letter_callback($node, $template_node) {
  *
  * // ToDo: no sense of this menu callback, replace it by form sumbit handler
  */
-function reiscout_send_letters_send_letter_drupalgap_callback($node, $template_node) {
+function reiscout_send_letters_send_letter_drupalgap_callback($nid, $template_nid) {
   // ToDo: code of reiscout_lob_api_request should be placed in this function.
-  $result = reiscout_lob_api_request($node->nid, $template_node->nid);
+  $result = reiscout_lob_api_request($nid, $template_nid);
 
   if (!$result) {
-    return false;
+    return FALSE;
   }
-  else {
-    _reiscout_send_letters_decrease_user_points();
-    _reiscout_send_letters_log($node->nid, $template_node->nid, $result['id']);
-    return true;
-  }
+
+  _reiscout_send_letters_decrease_user_points();
+  _reiscout_send_letters_log($nid, $template_nid, $result['id']);
+
+  $t_args = array(
+    '%carrier' => $result['carrier'],
+    '%date' => $result['expected_delivery_date'],
+  );
+  $message = t('Your letter will be sent via %carrier. Expected delivery date is %date', $t_args);
+
+  return $message;
 }
 
 /**
@@ -400,7 +387,7 @@ function reiscout_send_letters_node_view($node, $view_mode, $langcode) {
   if ($view_mode == 'full' && $node->type == 'property') {
     global $user;
 
-    if (!reiscout_send_letters_access_common($node)) {
+    if (!_reiscout_send_letters_is_user_can_send($node)) {
       return;
     }
 
@@ -460,33 +447,35 @@ function reiscout_send_letters_services_resources() {
       'actions' => array(
         'sendLetter' => array(
           'file' => $file,
-          'help' => 'Send letter',
+          'help' => "Sends a letter to a property's owner.",
           'callback' => '_reiscout_send_letters_send_letter',
-          'access callback' => 'reiscout_send_letters_resource_access',
+          'access callback' => '_reiscout_send_letters_resource_access',
           'access arguments' => array('send_letter'),
           'access arguments append' => TRUE,
           'args' => array(
             array(
-              'name' => 'nid',
+              'name' => 'params',
+              'type' => 'array',
+              'source' => 'data',
               'optional' => FALSE,
-              'source' => array('data' => 'nid'),
-              'type' => 'int',
+              'description' => 'The nid of the Property node',
             ),
           ),
         ),
         'checkButtonShow' => array(
           'file' => $file,
-          'help' => 'Checking view buttons',
+          'help' => 'Checks which forms a user have an access to.',
           'callback' => '_reiscout_send_letters_get_show_button_info',
-          'access callback' => 'reiscout_send_letters_resource_access',
+          'access callback' => '_reiscout_send_letters_resource_access',
           'access arguments' => array('show_send_letter_button'),
           'access arguments append' => TRUE,
           'args' => array(
             array(
-              'name' => 'nid',
+              'name' => 'params',
+              'type' => 'array',
+              'source' => 'data',
               'optional' => FALSE,
-              'source' => array('data' => 'nid'),
-              'type' => 'int',
+              'description' => 'The nid of the Property node',
             ),
           ),
         ),
@@ -507,34 +496,27 @@ function reiscout_send_letters_services_resources() {
  *
  * @return bool
  */
-function reiscout_send_letters_resource_access($type, $nid) {
-  // For both cases user must be logged in.
-  if (user_is_anonymous()) {
-    return false;
-  }
-
-  // For both cases the node being checked must be purchased.
+function _reiscout_send_letters_resource_access($op, $args = array()) {
   global $user;
+
+  if ('show_send_letter_button' == $op) {
+    return TRUE;
+  }
+
+  $data = $args[0];
+  $nid = $data['nid'];
   $node = node_load($nid);
-  $node_purchased = reiscout_property_commerce_is_node_purchased($node->nid,
-    REISCOUT_PROPERTY_COMMERCE_ADDRESS_ACCESS_PRODUCT_TYPE,
-    $user->uid);
-  if (!$node_purchased) {
-    return false;
+
+  if (_reiscout_send_letters_is_user_can_send($node)) {
+    $points = userpoints_get_current_points($user->uid, TERM_ID_POINTS_SEND_LETTERS);
+
+    // If user has enough points
+    if ($points > 0) {
+      return TRUE;
+    }
   }
 
-  switch ($type) {
-    case 'show_send_letter_button':
-      return true;
-
-    case 'send_letter':
-      // Check is user has points to send the letter.
-      if (reiscout_send_letters_access_common($node)) {
-        return true;
-      }
-  }
-
-  return false;
+  return FALSE;
 }
 
 /**
@@ -567,4 +549,14 @@ function _reiscout_send_letters_log($property_nid, $template_nid, $lob_api_lette
   $record->timestamp = time();
 
   drupal_write_record('reiscout_send_letters_history', $record);
+}
+
+/**
+ * Returns an ID of letter template for a given user.
+ */
+function _reiscout_send_letters_get_template_nid_by_uid($uid) {
+  $uw = entity_metadata_wrapper('user', $uid);
+  $tnid = $uw->field_default_template_nid->value();
+
+  return $tnid ? $tnid : REISCOUT_SEND_LETTERS_DEFAULT_TEMPLATE_NID;
 }
