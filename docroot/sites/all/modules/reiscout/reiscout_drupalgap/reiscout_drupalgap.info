@@ -1,0 +1,4 @@
+name = Reiscout Drupalgap
+description = Fixes some problems with drupalgap.
+package = Reiscout
+core = 7.x

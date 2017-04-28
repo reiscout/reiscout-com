@@ -1,0 +1,73 @@
+<?php
+
+/**
+ * @file
+ * Fixes some problems with drupalgap.
+ */
+
+/**
+ * Implements hook_services_resources_alter().
+ */
+function reiscout_drupalgap_services_resources_alter(&$resources, &$endpoint) {
+  if (isset($resources['commerce-payment-stripe']['operations']['create'])) {
+    $resources['commerce-payment-stripe']['operations']['create']['access callback'] = '_reiscout_drupalgap_commerce_payment_stripe_access';
+  }
+
+  if (isset($resources['checkout_complete']['operations']['create'])) {
+    $resources['checkout_complete']['operations']['create']['access callback'] = '_reiscout_drupalgap_checkout_complete_access';
+  }
+}
+
+/**
+ * Access callback to create the new payment transaction.
+ */
+function _reiscout_drupalgap_commerce_payment_stripe_access($data) {
+  global $user;
+
+  // Load the order from the data array to determine access to create payments
+  // on it.
+  $order = NULL;
+
+  if (!empty($data['order_id'])) {
+    $order = commerce_order_load($data['order_id']);
+  }
+
+  if (empty($order)) {
+    return services_error(t('You must specify a valid order ID'), 400);
+  }
+
+  // If the user has access to update the order...
+  if ($user->uid == $order->uid || commerce_order_access('update', $order)) {
+    return TRUE;
+  }
+  else {
+    return services_error(t('Access to this operation not granted'), 401);
+  }
+}
+
+/**
+ * Access callback to invoke a 'commerce_checkout_complete' hook.
+ */
+function _reiscout_drupalgap_checkout_complete_access($data) {
+  global $user;
+
+  // Load the order from the data array to determine access to create payments
+  // on it.
+  $order = NULL;
+
+  if (!empty($data['order_id'])) {
+    $order = commerce_order_load($data['order_id']);
+  }
+
+  if (empty($order)) {
+    return services_error(t('You must specify a valid order ID'), 400);
+  }
+
+  // If the user has access to update the order...
+  if ($user->uid == $order->uid || commerce_order_access('update', $order)) {
+    return TRUE;
+  }
+  else {
+    return services_error(t('Access to this operation not granted'), 401);
+  }
+}
