@@ -154,7 +154,7 @@ function reiscout_send_letters_select_template_form($form, &$form_state, $node) 
   $templates->innerJoin('field_data_field_is_global_template', 't', 't.entity_id = n.nid');
   $templates->innerJoin('field_data_body', 'b', 'b.entity_id = n.nid');
   $templates->fields('n', array('nid', 'title'));
-  $templates->fields('b', array('body_value'));
+  $templates->fields('b', array('body_value', 'body_format'));
   $templates->condition('n.type', 'letter_template');
   $templates->condition('t.field_is_global_template_value', 1);
   $templates = $templates->execute()->fetchAllAssoc('nid');
@@ -171,7 +171,7 @@ function reiscout_send_letters_select_template_form($form, &$form_state, $node) 
   $user_templates->innerJoin('field_data_field_is_global_template', 't', 't.entity_id = n.nid');
   $user_templates->innerJoin('field_data_body', 'b', 'b.entity_id = n.nid');
   $user_templates->fields('n', array('nid', 'title'));
-  $user_templates->fields('b', array('body_value'));
+  $user_templates->fields('b', array('body_value', 'body_format'));
   $user_templates->condition('n.type', 'letter_template');
   $user_templates->condition('n.uid', $user->uid);
   $user_templates->condition('t.field_is_global_template_value', 1, '<>');
@@ -201,7 +201,8 @@ function reiscout_send_letters_select_template_form($form, &$form_state, $node) 
 
   // Formats "predefined templates" options for radios field
   foreach ($templates as $t_nid => $template) {
-    $template_body = str_replace($tokens, $replaces, $template->body_value);
+    $template_body = check_markup($template->body_value, $template->body_format);
+    $template_body = str_replace($tokens, $replaces, $template_body);
     $clone_token = clone_get_token($t_nid);
     $clone_url = url('node/' . $t_nid . '/clone/' . $clone_token . '/', array('query' => $query, 'absolute' => TRUE));
     $templates[$t_nid] =
@@ -213,7 +214,8 @@ function reiscout_send_letters_select_template_form($form, &$form_state, $node) 
   // Formats "custom templates" options for radios field
   if (!empty($user_templates)) {
     foreach ($user_templates as $t_nid => $template) {
-      $template_body = str_replace($tokens, $replaces, $template->body_value);
+      $template_body = check_markup($template->body_value, $template->body_format);
+      $template_body = str_replace($tokens, $replaces, $template_body);
       // ToDo: use theme_table here instead.
       $templates[$t_nid] =
           '<em>Custom:</em> ' . $template->title . ' | ' .
