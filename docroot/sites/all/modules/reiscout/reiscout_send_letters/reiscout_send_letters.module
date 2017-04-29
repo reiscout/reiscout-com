@@ -295,7 +295,13 @@ function reiscout_send_letters_send_letter_callback($node, $template_node) {
   // Call letters API request (see reiscout_lob_api.module)
 
   // ToDo: code of reiscout_lob_api_request should be placed in this function.
-  $result = reiscout_lob_api_request($node->nid, $template_node->nid);
+  try {
+    $result = reiscout_lob_api_request($node->nid, $template_node->nid);
+  } catch (Exception $e) {
+    watchdog('reiscout_lob_api', $e->getMessage(), WATCHDOG_ERROR);
+    $result = false;
+  }
+
 
   if (!$result) {
     drupal_set_message("Error sending letter.", "error");
@@ -328,7 +334,14 @@ function reiscout_send_letters_send_letter_callback($node, $template_node) {
  */
 function reiscout_send_letters_send_letter_drupalgap_callback($nid, $template_nid) {
   // ToDo: code of reiscout_lob_api_request should be placed in this function.
-  $result = reiscout_lob_api_request($nid, $template_nid);
+  try {
+    $result = reiscout_lob_api_request($nid, $template_nid);
+  } catch (Exception $e) {
+    $result = false;
+    watchdog('reiscout_lob_api', $e->getMessage(), WATCHDOG_ERROR);
+    return FALSE;
+  }
+
 
   if (!$result) {
     return FALSE;

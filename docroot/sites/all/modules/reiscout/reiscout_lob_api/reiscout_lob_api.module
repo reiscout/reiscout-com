@@ -72,52 +72,49 @@ function reiscout_lob_api_request($nid, $template_nid = 0) {
   $template = node_load($template_nid);
   // Check if template exists and has type "letter_template"
   if (!$template || $template->type != 'letter_template') {
-    drupal_set_message("Incorrect template.", "error");
-    return FALSE;
+    throw new Exception("Incorrect template.");
   }
 
   if (!variable_get('reiscout_lob_api_key')) {
     $msg = t("LOB API key is not defined. Set it on !settings page", array(
       '!settings' => l('settings', 'admin/config/reiscout_lob_api'),
     ));
-
-    drupal_set_message($msg, "error");
-    return FALSE;
+    throw new Exception($msg);
   }
 
   // Check if node exists and has type "property"
   $node = node_load($nid);
   if (!$node || $node->type != 'property') {
-    drupal_set_message("Incorrect node or node type.", "error");
-    return FALSE;
+    $msg = "Incorrect node or node type.";
+    throw new Exception($msg);
   }
 
   // Check "Owner postal address" field from current node
   if (!isset($node->field_owner_postal_address[LANGUAGE_NONE][0]) ||
       empty($node->field_owner_postal_address[LANGUAGE_NONE][0])) {
-    drupal_set_message("Error: empty or incomplete Owner Postal Address (to).", "error");
-    return FALSE;
+    $msg = "Error: empty or incomplete Owner Postal Address (to).";
+    throw new Exception($msg);
   }
 
   // Check "User postal address" field from user profile
   $user_data = user_load($user->uid);
   if (!isset($user_data->field_user_postal_address[LANGUAGE_NONE][0]) ||
       empty($user_data->field_user_postal_address[LANGUAGE_NONE][0])) {
-    drupal_set_message("Error: empty or incomplete User Postal Address (from). Please fill up address fields in your user profile.", "error");
-    return FALSE;
+    $msg = "Error: empty or incomplete User Postal Address (from). Please fill up address fields in your user profile.";
+    throw new Exception($msg);
   }
 
   // Check if 'User Phone Number' field was filled
   if (empty($user_data->field_user_phone_number[LANGUAGE_NONE][0])) {
-    drupal_set_message("Please fill in your phone number in your user profile.", "error");
-    return FALSE;
+    $msg = "Please fill in your phone number in your user profile.";
+    throw new Exception($msg);
   }
 
   // Load global HTML-wrapper (template.html)
   $template_wrapper = file_get_contents(drupal_get_path('module', 'reiscout_send_letters') . '/template.html');
   if ($template_wrapper === FALSE) {
-    drupal_set_message("Error: Cannot load template.html.", "error");
-    return FALSE;
+    $msg = "Error: Cannot load template.html.";
+    throw new Exception($msg);
   }
 
   // Adds template body to wrapper
@@ -185,25 +182,22 @@ function reiscout_lob_api_request($nid, $template_nid = 0) {
 
   // Send request to Lob API via curl()
   if (!$response) {
-    watchdog('reiscout_lob_api', 'Network error: ' . curl_error($ch), array(), WATCHDOG_ERROR);
-    drupal_set_message("Network error: " . curl_error($ch), "error");
-    return FALSE;
+    $msg = 'Network error: ' . curl_error($ch);
+    throw new Exception($msg);
   }
   curl_close($ch);
 
   // Decode returned JSON response to array
   $result = json_decode($response, TRUE);
   if (json_last_error() != JSON_ERROR_NONE) {
-    watchdog('reiscout_lob_api', 'Response decode error: ' . json_last_error_msg(), array(), WATCHDOG_ERROR);
-    drupal_set_message("Response decode error: " . json_last_error_msg(), "error");
-    return FALSE;
+    $msg = 'Response decode error: ' . json_last_error_msg();
+    throw new Exception($msg);
   }
 
   // Check if response has error
   if (array_key_exists('error', $result)) {
-    watchdog('reiscout_lob_api', 'API request error: ' . $result['error']['message'], array(), WATCHDOG_ERROR);
-    drupal_set_message("API request error: " . $result['error']['message'], "error");
-    return FALSE;
+    $msg = "API request error: " . $result['error']['message'];
+    throw new Exception($msg);
   }
 
   // Display some returned data to administrator
