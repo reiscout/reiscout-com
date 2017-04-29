@@ -202,9 +202,11 @@ function reiscout_send_letters_select_template_form($form, &$form_state, $node) 
   // Formats "predefined templates" options for radios field
   foreach ($templates as $t_nid => $template) {
     $template_body = str_replace($tokens, $replaces, $template->body_value);
+    $clone_token = clone_get_token($t_nid);
+    $clone_url = url('node/' . $t_nid . '/clone/' . $clone_token . '/', array('query' => $query, 'absolute' => TRUE));
     $templates[$t_nid] =
         'Predefined: ' . $template->title . ' | ' .
-        l('Create my own template based on this one', url('node/' . $t_nid . '/clone/confirm/', array('query' => $query, 'absolute' => TRUE)), array('html' => TRUE, 'attributes' => array('class' => 'clone-template'))) .
+        l(t('Create my own template based on this one'), $clone_url, array('html' => TRUE, 'attributes' => array('class' => 'clone-template'))) .
         '<div class="template-sample template-predefined">' . $template_body . '</div>';
   }
 
