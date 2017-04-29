@@ -35,6 +35,32 @@ function reiscout_property_form_property_node_form_alter(&$form, &$form_state, $
 }
 
 /**
+ * Implements hook_node_validate().
+ */
+function reiscout_property_node_validate($node, $form, &$form_state) {
+  $nw = entity_metadata_wrapper('node', $node);
+
+  if (!$nw->field_address->value()) {
+    return;
+  }
+
+  // Check if there is already another property with the same address
+  $query = new EntityFieldQuery;
+  $count = $query->entityCondition('entity_type', 'node')
+    ->entityCondition('bundle', 'property')
+    ->fieldCondition('field_address', 'thoroughfare', $nw->field_address->thoroughfare->value())
+    ->fieldCondition('field_address', 'locality', $nw->field_address->locality->value())
+    ->fieldCondition('field_address', 'administrative_area', $nw->field_address->administrative_area->value())
+    ->fieldCondition('field_address', 'postal_code', $nw->field_address->postal_code->value())
+    ->count()
+    ->execute();
+
+  if ($count) {
+    form_set_error('field_address', t('A property with the same address already exists.'));
+  }
+}
+
+/**
  * Implements hook_node_update().
  */
 function reiscout_property_node_update($node) {
