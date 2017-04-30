@@ -118,7 +118,7 @@ function reiscout_lob_api_request($nid, $template_nid = 0) {
   }
 
   // Adds template body to wrapper
-  $template_wrapper = str_replace('{{body}}', filter_xss_admin($template->body[LANGUAGE_NONE][0]['value']), $template_wrapper);
+  $template_wrapper = str_replace('{{body}}', filter_xss_admin($template->body[LANGUAGE_NONE][0]['safe_value']), $template_wrapper);
 
   // Fills up addresses arrays
   $address_to = $node->field_owner_postal_address[LANGUAGE_NONE][0];
