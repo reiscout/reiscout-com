@@ -121,18 +121,15 @@ function reiscout_send_letters_select_template_form($form, &$form_state, $node) 
     drupal_goto();
   }
 
-  $user_edit_link = l('user',
-    'user/' . $user->uid . '/edit',
-    array('query' => array('destination' => 'node/'. $node->nid))
-  );
+  $user_edit_link = url('user/' . $user->uid . '/edit', array('query' => array('destination' => 'node/'. $node->nid)));
 
  // Check "User postal address" field from user profile
   $user_data = user_load($user->uid);
   if (!isset($user_data->field_user_postal_address[LANGUAGE_NONE][0]) ||
       empty($user_data->field_user_postal_address[LANGUAGE_NONE][0])) {
 
-    $msg = t("To send a letter to property owner you need to fill in your address for your !user profile.",
-      array('!user' => $user_edit_link)
+    $msg = t("Please fill in your postal address to be able to sent a letter to the property's owner for <a href='!user_profile'>your profile</a>.",
+      array('!user_profile' => $user_edit_link)
     );
 
     drupal_set_message($msg, "error");
@@ -141,8 +138,8 @@ function reiscout_send_letters_select_template_form($form, &$form_state, $node) 
 
   // Check if 'User Phone Number' field was filled
   if (empty($user_data->field_user_phone_number[LANGUAGE_NONE][0])) {
-    $msg = t("To send a letter to property owner you need to fill in your phone number for your !user profile.",
-      array('!user' => $user_edit_link)
+    $msg = t("Please fill in your phone number to be able to sent a letter to the property's owner for <a href='!user_profile'>your profile</a>.",
+      array('!user_profile' => $user_edit_link)
     );
 
     drupal_set_message($msg, "error");
@@ -340,6 +337,7 @@ function reiscout_send_letters_send_letter_drupalgap_callback($nid, $template_ni
   // ToDo: code of reiscout_lob_api_request should be placed in this function.
   try {
     $result = reiscout_lob_api_request($nid, $template_nid);
+
   } catch (Exception $e) {
     $result = false;
     watchdog_exception('reiscout_lob_api', $e);
@@ -354,10 +352,12 @@ function reiscout_send_letters_send_letter_drupalgap_callback($nid, $template_ni
   _reiscout_send_letters_log($nid, $template_nid, $result['id']);
 
   $t_args = array(
+    '!url_letter' => $result['url'],
     '%carrier' => $result['carrier'],
     '%date' => $result['expected_delivery_date'],
+    '!url_login' => url('/user'),
   );
-  $message = t('Your letter will be sent via %carrier. Expected delivery date is %date', $t_args);
+  $message = t('Your <a href="!url_letter" target="_blank">letter</a> will be sent via %carrier. Expected delivery date is %date. <br><a href="!url_login" target="_blank">Log in to reiscout.com</a> with the same credentials and create your own letter template.', $t_args);
 
   return $message;
 }
