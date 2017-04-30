@@ -299,7 +299,7 @@ function reiscout_send_letters_send_letter_callback($node, $template_node) {
   try {
     $result = reiscout_lob_api_request($node->nid, $template_node->nid);
   } catch (Exception $e) {
-    watchdog_exception('reiscout_lob_api', $e);
+    watchdog_exception('reiscout_send_letters', $e);
     $result = false;
   }
 
@@ -334,32 +334,51 @@ function reiscout_send_letters_send_letter_callback($node, $template_node) {
  * // ToDo: no sense of this menu callback, replace it by form sumbit handler
  */
 function reiscout_send_letters_send_letter_drupalgap_callback($nid, $template_nid) {
+  global $user;
+
   // ToDo: code of reiscout_lob_api_request should be placed in this function.
   try {
     $result = reiscout_lob_api_request($nid, $template_nid);
 
-  } catch (Exception $e) {
-    $result = false;
-    watchdog_exception('reiscout_lob_api', $e);
-    return FALSE;
+    _reiscout_send_letters_decrease_user_points();
+    _reiscout_send_letters_log($nid, $template_nid, $result['id']);
+
+    $t_args = array(
+      '!url_letter' => $result['url'],
+      '%carrier' => $result['carrier'],
+      '%date' => $result['expected_delivery_date'],
+      '!url_login' => url('/user'),
+    );
+    $message = t('Your <a href="!url_letter" target="_blank">letter</a> will be sent via %carrier. Expected delivery date is %date. <br><a href="!url_login" target="_blank">Log in to reiscout.com</a> with the same credentials and create your own letter template.', $t_args);
+
+    $data = array(
+      'status' => TRUE,
+      'message' => $message,
+    );
+  }
+  catch (Exception $e) {
+    watchdog_exception('reiscout_send_letters', $e);
+
+    switch ($e->getCode()) {
+      case REISCOUT_LOB_API_EXCEPTION_USER_ADDRESS_IS_NOT_SET:
+        $t_args = array('!user_edit_link' => 'user/' . $user->uid . '/edit');
+        $message = t("Please fill in your postal address to be able to sent a letter to the property's owner for <a href='#' onclick='javascript:drupalgap_goto(\"!user_edit_link\", {});'>your profile</a>.", $t_args);
+        break;
+      case REISCOUT_LOB_API_EXCEPTION_USER_PHONE_IS_NOT_SET:
+        $t_args = array('!user_edit_link' => 'user/' . $user->uid . '/edit');
+        $message = t("Please fill in your phone number to be able to sent a letter to the property's owner for <a href='#' onclick='javascript:drupalgap_goto(\"!user_edit_link\", {});'>your profile</a>.", $t_args);
+        break;
+      default:
+        $message = t("Letter to the property's owner cannot be sent. Please, try again later or contact technical support for assistance!");
+    }
+
+    $data = array(
+      'status' => FALSE,
+      'message' => $message,
+    );
   }
 
-  if (!$result) {
-    return FALSE;
-  }
-
-  _reiscout_send_letters_decrease_user_points();
-  _reiscout_send_letters_log($nid, $template_nid, $result['id']);
-
-  $t_args = array(
-    '!url_letter' => $result['url'],
-    '%carrier' => $result['carrier'],
-    '%date' => $result['expected_delivery_date'],
-    '!url_login' => url('/user'),
-  );
-  $message = t('Your <a href="!url_letter" target="_blank">letter</a> will be sent via %carrier. Expected delivery date is %date. <br><a href="!url_login" target="_blank">Log in to reiscout.com</a> with the same credentials and create your own letter template.', $t_args);
-
-  return $message;
+  return $data;
 }
 
 /**

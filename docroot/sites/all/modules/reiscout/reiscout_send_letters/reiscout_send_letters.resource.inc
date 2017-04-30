@@ -12,14 +12,8 @@ function _reiscout_send_letters_send_letter($data = array()) {
   // ToDo: check is node by nid exists and for bundle.
   $nid = $data['nid'];
   $tnid = _reiscout_send_letters_get_template_nid_by_uid($user->uid);
-  $result = reiscout_send_letters_send_letter_drupalgap_callback($nid, $tnid);
 
-  if (!$result) {
-    return array('status' => FALSE);
-  }
-  else {
-    return array('status' => TRUE, 'message' => $result);
-  }
+  return reiscout_send_letters_send_letter_drupalgap_callback($nid, $tnid);
 }
 
 /**
