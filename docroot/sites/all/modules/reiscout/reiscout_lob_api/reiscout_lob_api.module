@@ -8,6 +8,17 @@
  * 3. Send letters to property owner via lob.com API.
  */
 
+define('REISCOUT_LOB_API_EXCEPTION_API_KEY_IS_NOT_SET', 0);
+define('REISCOUT_LOB_API_EXCEPTION_INVALID_TEMPLATE_NODE', 1);
+define('REISCOUT_LOB_API_EXCEPTION_INVALID_PROPERTY_NODE', 2);
+define('REISCOUT_LOB_API_EXCEPTION_OWNER_ADDRESS_IS_NOT_SET', 3);
+define('REISCOUT_LOB_API_EXCEPTION_USER_ADDRESS_IS_NOT_SET', 4);
+define('REISCOUT_LOB_API_EXCEPTION_USER_PHONE_IS_NOT_SET', 5);
+define('REISCOUT_LOB_API_EXCEPTION_TEMPLATE_FILE_NOT_READABLE', 6);
+define('REISCOUT_LOB_API_EXCEPTION_CURL_ERROR', 7);
+define('REISCOUT_LOB_API_EXCEPTION_JSON_ERROR', 8);
+define('REISCOUT_LOB_API_EXCEPTION_REQUEST_ERROR', 9);
+
 // ToDo: rename module to lob_api
 
 // Define constants
@@ -68,53 +79,53 @@ function reiscout_lob_api_settings_form($form, &$form_state) {
 function reiscout_lob_api_request($nid, $template_nid = 0) {
   global $user;
 
-  // Load selected template node
-  $template = node_load($template_nid);
-  // Check if template exists and has type "letter_template"
-  if (!$template || $template->type != 'letter_template') {
-    throw new Exception("Incorrect template.");
-  }
-
   if (!variable_get('reiscout_lob_api_key')) {
-    $msg = t("LOB API key is not defined. Set it on !settings page", array(
+    $msg = t('LOB API key is not set. Set it on !settings page', array(
       '!settings' => l('settings', 'admin/config/reiscout_lob_api'),
     ));
-    throw new Exception($msg);
+    throw new Exception($msg, REISCOUT_LOB_API_EXCEPTION_API_KEY_IS_NOT_SET);
+  }
+
+  // Check if node exists and has type "letter_template"
+  $template = node_load($template_nid);
+  if (!$template || $template->type != 'letter_template') {
+    $msg = t('Template node is invalid.');
+    throw new Exception($msg, REISCOUT_LOB_API_EXCEPTION_INVALID_TEMPLATE_NODE);
   }
 
   // Check if node exists and has type "property"
   $node = node_load($nid);
   if (!$node || $node->type != 'property') {
-    $msg = "Incorrect node or node type.";
-    throw new Exception($msg);
+    $msg = t('Property node is invalid.');
+    throw new Exception($msg, REISCOUT_LOB_API_EXCEPTION_INVALID_PROPERTY_NODE);
   }
 
   // Check "Owner postal address" field from current node
   if (!isset($node->field_owner_postal_address[LANGUAGE_NONE][0]) ||
       empty($node->field_owner_postal_address[LANGUAGE_NONE][0])) {
-    $msg = "Error: empty or incomplete Owner Postal Address (to).";
-    throw new Exception($msg);
+    $msg = t("Property's owner postal address is empty or incomplete.");
+    throw new Exception($msg, REISCOUT_LOB_API_EXCEPTION_OWNER_ADDRESS_IS_NOT_SET);
   }
 
   // Check "User postal address" field from user profile
   $user_data = user_load($user->uid);
   if (!isset($user_data->field_user_postal_address[LANGUAGE_NONE][0]) ||
       empty($user_data->field_user_postal_address[LANGUAGE_NONE][0])) {
-    $msg = "Error: empty or incomplete User Postal Address (from). Please fill up address fields in your user profile.";
-    throw new Exception($msg);
+    $msg = t('User postal address is empty or incomplete.');
+    throw new Exception($msg, REISCOUT_LOB_API_EXCEPTION_USER_ADDRESS_IS_NOT_SET);
   }
 
   // Check if 'User Phone Number' field was filled
   if (empty($user_data->field_user_phone_number[LANGUAGE_NONE][0])) {
-    $msg = "Please fill in your phone number in your user profile.";
-    throw new Exception($msg);
+    $msg = t('User phone number is not set.');
+    throw new Exception($msg, REISCOUT_LOB_API_EXCEPTION_USER_PHONE_IS_NOT_SET);
   }
 
   // Load global HTML-wrapper (template.html)
   $template_wrapper = file_get_contents(drupal_get_path('module', 'reiscout_send_letters') . '/template.html');
   if ($template_wrapper === FALSE) {
-    $msg = "Error: Cannot load template.html.";
-    throw new Exception($msg);
+    $msg = t('template.html file is not readable.');
+    throw new Exception($msg, REISCOUT_LOB_API_EXCEPTION_TEMPLATE_FILE_NOT_READABLE);
   }
 
   // Adds template body to wrapper
@@ -182,22 +193,22 @@ function reiscout_lob_api_request($nid, $template_nid = 0) {
 
   // Send request to Lob API via curl()
   if (!$response) {
-    $msg = 'Network error: ' . curl_error($ch);
-    throw new Exception($msg);
+    $msg = t('CURL error: !error', array('!error' => curl_error($ch)));
+    throw new Exception($msg, REISCOUT_LOB_API_EXCEPTION_CURL_ERROR);
   }
   curl_close($ch);
 
   // Decode returned JSON response to array
   $result = json_decode($response, TRUE);
   if (json_last_error() != JSON_ERROR_NONE) {
-    $msg = 'Response decode error: ' . json_last_error_msg();
-    throw new Exception($msg);
+    $msg = t('JSON decode error: !error', array('!error' => json_last_error_msg()));
+    throw new Exception($msg, REISCOUT_LOB_API_EXCEPTION_JSON_ERROR);
   }
 
   // Check if response has error
   if (array_key_exists('error', $result)) {
-    $msg = "API request error: " . $result['error']['message'];
-    throw new Exception($msg);
+    $msg = t('LOB API request error: !error', array('!error' => $result['error']['message']));
+    throw new Exception($msg, REISCOUT_LOB_API_EXCEPTION_REQUEST_ERROR);
   }
 
   // Display some returned data to administrator
