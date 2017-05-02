@@ -50,15 +50,19 @@ function reiscout_property_node_validate($node, $form, &$form_state) {
 
   // Check if there is already another property with the same address
   $query = new EntityFieldQuery;
-  $count = $query->entityCondition('entity_type', 'node')
+  $query->entityCondition('entity_type', 'node')
     ->entityCondition('bundle', 'property')
     ->fieldCondition('field_address', 'thoroughfare', $nw->field_address->thoroughfare->value())
     ->fieldCondition('field_address', 'locality', $nw->field_address->locality->value())
     ->fieldCondition('field_address', 'administrative_area', $nw->field_address->administrative_area->value())
-    ->fieldCondition('field_address', 'postal_code', $nw->field_address->postal_code->value())
-    ->count()
-    ->execute();
+    ->fieldCondition('field_address', 'postal_code', $nw->field_address->postal_code->value());
 
+  // We do not want to compare a node with itself
+  if ($node->nid) {
+    $query->propertyCondition('nid', $node->nid, '!=');
+  }
+
+  $count = $query->count()->execute();
   if ($count) {
     form_set_error('field_address', t('A property with the same address already exists.'));
   }
