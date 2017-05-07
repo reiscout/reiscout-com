@@ -349,7 +349,7 @@ function reiscout_send_letters_send_letter_drupalgap_callback($nid, $template_ni
       '%date' => $result['expected_delivery_date'],
       '!url_login' => url('/user'),
     );
-    $message = t('Your <a href="!url_letter" target="_blank">letter</a> will be sent via %carrier. Expected delivery date is %date. <br><a href="!url_login" target="_blank">Log in to reiscout.com</a> with the same credentials and create your own letter template.', $t_args);
+    $message = t('Your <a href="!url_letter" target="_blank">letter</a> will be sent via %carrier. Expected delivery date is %date. <br><a onclick="javascript:window.open(\'!url_login\', \'_blank\', \'location=yes\');">Log in to reiscout.com</a> with the same credentials and create your own letter template.', $t_args);
 
     $data = array(
       'status' => TRUE,
