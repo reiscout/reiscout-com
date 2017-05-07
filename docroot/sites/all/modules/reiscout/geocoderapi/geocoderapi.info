@@ -1,5 +1,5 @@
 name = Reiscout Geocoder API
-description = Reiscout Geocoder API
+description = Provides a Services resource for geocoding.
 package = Reiscout
 core = 7.x
 dependencies[] = geocoder

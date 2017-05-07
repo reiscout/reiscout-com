@@ -1,5 +1,10 @@
 <?php
 
+/**
+ * @file
+ * Provides a Services resource for geocoding.
+ */
+
 function geocoderapi_permission() {
   return array(
     'use geocoder api' => array(
