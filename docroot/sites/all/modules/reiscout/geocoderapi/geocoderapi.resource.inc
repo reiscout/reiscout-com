@@ -13,13 +13,7 @@ function _geocoderapi_action_geocode_reverse($latitude, $longitude, array $optio
       services_error('Could not detect address', 500);
     }
 
-    return array(
-      'address'   => $address->address,
-      'accuracy'  => $address->data['geocoder_accuracy'],
-      'distance'  => $address->data['distance'],
-      'latitude'  => $address->y(),
-      'longitude' => $address->x(),
-    );
+    return $address;
   }
   catch (Exception $e) {
     services_error('Could not proccess geocoding', 500);

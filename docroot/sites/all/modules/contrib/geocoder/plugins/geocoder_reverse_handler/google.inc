@@ -24,31 +24,33 @@ function geocoder_reverse_google($lat, $long, $options = array()) {
   try {
     geophp_load();
 
-    $orig_location = new Point($long, $lat);
-
+    // See https://developers.google.com/maps/documentation/geocoding/intro#ReverseGeocoding
+    // for description of parameters that is used in a request.
     $query = array(
-      'latlng' => "$lat,$long",
-      'sensor' => 'false',
+      'latlng' => $lat . ',' . $long,
+      'location_type' => 'ROOFTOP',
+      'result_type' => 'street_address|premise',
+      'language' => 'en',
     );
 
-    // add language if exist
-    if (isset($options['language'])) {
-      $query['language'] = $options['language'];
+    if ($google_map_api_key = variable_get('geocoder_apikey_google')) {
+      $query['key'] = $google_map_api_key;
     }
 
-    $url = url("http://maps.googleapis.com/maps/api/geocode/json", array('query' => $query));
-    $result = drupal_http_request($url);
+    // Build the URL.
+    $url = url('https://maps.googleapis.com/maps/api/geocode/json', array('query' => $query));
+    $response = drupal_http_request($url);
 
-    if (isset($result->error)) {
+    if (isset($response->error)) {
       $args = array(
-        '@code' => $result->code,
-        '@error' => $result->error,
+        '@code' => $response->code,
+        '@error' => $response->error,
       );
       $msg = t('HTTP request to google API failed.\nCode: @code\nError: @error', $args);
       throw new Exception($msg);
     }
 
-    $data = json_decode($result->data);
+    $data = json_decode($response->data);
 
     if ($data->status != 'OK') {
       $args = array('@status' => $data->status);
@@ -56,48 +58,17 @@ function geocoder_reverse_google($lat, $long, $options = array()) {
       throw new Exception($msg);
     }
 
-    $addresses = array();
-
-    foreach ($data->results as $item) {
-      // Check if we should reject these results
-      if (isset($options['reject_results'])) {
-        if (in_array($item->geometry->location_type, $options['reject_results'], TRUE)) {
-          continue;
-        }
-      }
-
-      // Reject this result if it is too far
-      $address = new Point($item->geometry->location->lng, $item->geometry->location->lat);
-      $distance = $orig_location->distance($address);
-      if (isset($options['reject_distance']) && $distance > $options['reject_distance']) {
-        continue;
-      }
-
-      $address->address = $item->formatted_address;
-
-      // Add additional metadata to the geometry - it might be useful!
-      $address->data = array();
-      $address->data['geocoder_accuracy'] = $item->geometry->location_type;
-      $address->data['geocoder_formatted_address'] = $item->formatted_address;
-      $address->data['geocoder_address_components'] = $item->address_components;
-      $address->data['distance'] = $distance;
-
-      $addresses[] = $address;
+    if (empty($data->results)) {
+      return FALSE;
     }
 
-    if (empty($addresses)) {
-      return;
-    }
+    $address = array(
+      'location' => $data->results[0]->geometry->location,
+      'formatted_address' => $data->results[0]->formatted_address,
+      'address_components' => $data->results[0]->address_components,
+    );
 
-    // The connonical geometry is the first result (best guesse)
-    $result = array_shift($addresses);
-
-    // If there are any other addresses, these are auxiliary addresses that represent "alternatives"
-    if (count($addresses)) {
-      $result->data['geocoder_alternatives'] = $addresses;
-    }
-
-    return $result;
+    return $address;
   }
   catch (Exception $e) {
     watchdog_exception('geocoder', $e);

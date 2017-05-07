@@ -32,6 +32,7 @@ function geocoder_reverse($handler, $lat, $long, $options = array(), $cache_type
   }
 
   $processor = ctools_get_plugins('geocoder', 'geocoder_reverse_handler', $handler);
+  module_load_include('inc', 'geocoder', 'plugins/geocoder_reverse_handler/google');
   $address = call_user_func($processor['callback'], $lat, $long, $options);
 
   if ($cache_type) {
@@ -210,6 +211,9 @@ function geocoder_ctools_plugin_directory($module, $plugin) {
 function geocoder_ctools_plugin_type() {
   return array(
     'geocoder_handler' => array(
+      'cache' => TRUE,
+    ),
+    'geocoder_reverse_handler' => array(
       'cache' => TRUE,
     ),
   );
