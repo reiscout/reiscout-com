@@ -1,0 +1,15 @@
+diff --git a/commerce_services/commerce_services.module b/commerce_services/commerce_services.module
+index 0bf79de..4e60b67 100644
+--- a/commerce_services/commerce_services.module
++++ b/commerce_services/commerce_services.module
+@@ -1095,6 +1095,10 @@ function commerce_services_services_request_preprocess_alter($controller, &$args
+   // values their numeric key in the $args array.
+   $arg_names = array();
+ 
++  if (!isset($controller['args'])) {
++    return;
++  }
++
+   foreach ($controller['args'] as $key => $value) {
+     $arg_names[$value['name']] = $key;
+   }
