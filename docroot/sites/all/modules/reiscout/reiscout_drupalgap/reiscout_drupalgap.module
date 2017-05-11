@@ -19,6 +19,42 @@ function reiscout_drupalgap_services_resources_alter(&$resources, &$endpoint) {
 }
 
 /**
+ * Implements hook_rest_server_request_parsed_alter().
+ */
+function reiscout_drupalgap_rest_server_request_parsed_alter(&$data, $controller) {
+  // If services was requested to log in user
+  if ('_user_resource_login' == $controller['callback']) {
+    // If user can register an account and e-mail verification is not required,
+    // he will be logged in immediately upon registering.
+    //
+    // See user.module file, user_register_submit() function, line 3940:
+    //
+    //    elseif (!$admin && !variable_get('user_email_verification', TRUE) && $account->status) {
+    //      _user_mail_notify('register_no_approval_required', $account);
+    //      $form_state['uid'] = $account->uid;
+    //      user_login_submit(array(), $form_state);
+    //      ...
+    //    }
+    //
+    // So, after the mobile application's user will fill out the 'user_register'
+    // form and send it to a server, the server will create a new user account
+    // and this account will be logged in immediately on the server. But the
+    // mobile application does not know about it, so it will try to make a
+    // request to the user/login.json Services resource to log in a new user,
+    // using an old CSRF token which was valid for not authorized user. That
+    // will cause a 'CSRF validation failed' error.
+    //
+    // See service.module file, _services_sessions_authenticate_call(), line 589.
+    //
+    // In order to bypass this bug we need to force the current user to anonymous.
+    if (user_is_logged_in()) {
+      global $user;
+      $user = drupal_anonymous_user();
+    }
+  }
+}
+
+/**
  * Access callback to create the new payment transaction.
  */
 function _reiscout_drupalgap_commerce_payment_stripe_access($data) {
