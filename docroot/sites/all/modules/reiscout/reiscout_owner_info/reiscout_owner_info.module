@@ -68,7 +68,7 @@ function _reiscout_owner_info_is_user_can_buy($node) {
 
   // If the "Owner postal address" field has been filled out
   // already, we do not need to do it again.
-  if (_reiscout_owner_info_is_filled_by_nid($node->nid)) {
+  if (_reiscout_property_is_owner_address_filled_by_nid($node->nid)) {
     return FALSE;
   }
 
@@ -287,23 +287,6 @@ function _reiscout_owner_info_resource_access($op, $args = array()) {
   }
 
   return FALSE;
-}
-
-/**
- * Checks if info about a property's owner has been filled out.
- */
-function _reiscout_owner_info_is_filled_by_nid($nid) {
-  $nw = entity_metadata_wrapper('node', $nid);
-
-  if (!$nw->field_owner_postal_address->value()) {
-    return FALSE;
-  }
-
-  return $nw->field_owner_postal_address->name_line->value()
-    && $nw->field_owner_postal_address->thoroughfare->value()
-    && $nw->field_owner_postal_address->locality->value()
-    && $nw->field_owner_postal_address->administrative_area->value()
-    && $nw->field_owner_postal_address->postal_code->value();
 }
 
 /**

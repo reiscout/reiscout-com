@@ -81,7 +81,7 @@ function _reiscout_send_letters_is_user_can_send($node) {
 
   // If the "Owner postal address" field has not been filled out,
   // user cannot send a letter.
-  if (!_reiscout_owner_info_is_filled_by_nid($node->nid)) {
+  if (!_reiscout_property_is_owner_address_filled_by_nid($node->nid)) {
     return FALSE;
   }
 
