@@ -1,7 +1,7 @@
 name = Reiscout Mail Postcard
 description = Provides 'HTML template for a postcard' content type and 'Postcard template' text format
 core = 7.x
-package = Features
+package = Reiscout
 dependencies[] = filter
 dependencies[] = node
 dependencies[] = text
