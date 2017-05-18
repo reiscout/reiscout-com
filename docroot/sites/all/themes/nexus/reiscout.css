@@ -365,3 +365,7 @@ body.page-onepage #main-menu a.active:active {
 #connect2data-form label:not(.option) {
   display: block;
 }
+
+.form-item-template-nid label .header {
+  display: inline;
+}
