@@ -1,5 +1,10 @@
 <?php
 
+class ReiscoutPropertyAddressIsNotSet extends Exception {}
+class ReiscoutPropertyOwnerAddressIsNotSet extends Exception {}
+class ReiscoutPropertyUserAddressIsNotSet extends Exception {}
+class ReiscoutPropertyUserPhoneNumberIsNotSet extends Exception {}
+
 define('REISCOUT_PROPERTY_NODE_TITLE_TO_CHANGE', 'Property #');
 define('REISCOUT_PROPERTY_MESSAGE_TO_CHANGE', 'Property <em class="placeholder">Property #</em> has been created.');
 
@@ -129,6 +134,36 @@ function _reiscout_property_get_c2d_report_by_nid($nid, $request_reason) {
 }
 
 /**
+ * Checks if an address of a property has been filled out.
+ */
+function _reiscout_property_is_address_filled_by_nid($nid) {
+  $nw = entity_metadata_wrapper('node', $nid);
+
+  if (!$nw->field_address->value()) {
+    return FALSE;
+  }
+
+  return $nw->field_address->thoroughfare->value()
+    && $nw->field_address->locality->value()
+    && $nw->field_address->administrative_area->value()
+    && $nw->field_address->postal_code->value();
+}
+
+/**
+ * Returns an address of a property.
+ */
+function _reiscout_property_get_address_by_nid($nid) {
+  if (!_reiscout_property_is_address_filled_by_nid($nid)) {
+    $msg = t("An address of a property is empty or incomplete.");
+    throw new ReiscoutPropertyAddressIsNotSet($msg);
+  }
+
+  $nw = entity_metadata_wrapper('node', $nid);
+
+  return $nw->field_address;
+}
+
+/**
  * Checks if an address of a property's owner has been filled out.
  */
 function _reiscout_property_is_owner_address_filled_by_nid($nid) {
@@ -143,4 +178,81 @@ function _reiscout_property_is_owner_address_filled_by_nid($nid) {
     && $nw->field_owner_postal_address->locality->value()
     && $nw->field_owner_postal_address->administrative_area->value()
     && $nw->field_owner_postal_address->postal_code->value();
+}
+
+/**
+ * Returns an address of a property's owner.
+ */
+function _reiscout_property_get_owner_address_by_nid($nid) {
+  if (!_reiscout_property_is_owner_address_filled_by_nid($nid)) {
+    $msg = t("An address of a property's owner is empty or incomplete.");
+    throw new ReiscoutPropertyOwnerAddressIsNotSet($msg);
+  }
+
+  $nw = entity_metadata_wrapper('node', $nid);
+
+  return $nw->field_owner_postal_address;
+}
+
+/**
+ * Checks if an address of a user has been filled out.
+ */
+function _reiscout_property_is_user_address_filled($uid = NULL) {
+  global $user;
+
+  if (!isset($uid)) {
+    $uid = $user->uid;
+  }
+
+  $uw = entity_metadata_wrapper('user', $uid);
+
+  if (!$uw->field_user_postal_address->value()) {
+    return FALSE;
+  }
+
+  return $uw->field_user_postal_address->name_line->value()
+    && $uw->field_user_postal_address->thoroughfare->value()
+    && $uw->field_user_postal_address->locality->value()
+    && $uw->field_user_postal_address->administrative_area->value()
+    && $uw->field_user_postal_address->postal_code->value();
+}
+
+/**
+ * Returns an address of a user.
+ */
+function _reiscout_property_get_user_address($uid = NULL) {
+  global $user;
+
+  if (!isset($uid)) {
+    $uid = $user->uid;
+  }
+
+  if (!_reiscout_property_is_user_address_filled($uid)) {
+    $msg = t('User postal address is empty or incomplete.');
+    throw new ReiscoutPropertyUserAddressIsNotSet($msg);
+  }
+
+  $uw = entity_metadata_wrapper('user', $uid);
+
+  return $uw->field_user_postal_address;
+}
+
+/**
+ * Returns a phone number of a user.
+ */
+function _reiscout_property_get_user_phone($uid = NULL) {
+  global $user;
+
+  if (!isset($uid)) {
+    $uid = $user->uid;
+  }
+
+  $uw = entity_metadata_wrapper('user', $uid);
+
+  if (!$phone_number = $uw->field_user_phone_number->value()) {
+    $msg = t('User phone number is not set.');
+    throw new ReiscoutPropertyUserPhoneNumberIsNotSet($msg);
+  }
+
+  return $phone_number;
 }
