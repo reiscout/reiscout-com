@@ -1,0 +1,5 @@
+name = Lob API
+description = Provides a wrapper for the Lob API.
+configure = admin/config/services/lob_api
+core = 7.x
+dependencies[] = libraries

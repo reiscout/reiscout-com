@@ -1,0 +1,65 @@
+<?php
+
+/**
+ * @file
+ * Provides a wrapper for the Lob API.
+ */
+
+class LobApiException extends Exception {}
+
+/**
+ * Implements hook_permission().
+ */
+function lob_api_permission() {
+  return array(
+    'administer lob_api' => array(
+      'title' => t('Administer Lob API'),
+    ),
+  );
+}
+
+/**
+ * Implements hook_menu().
+ */
+function lob_api_menu() {
+  $items['admin/config/services/lob_api'] = array(
+    'title' => 'Lob API',
+    'description' => 'Configure Lob API settings.',
+    'page callback' => 'drupal_get_form',
+    'page arguments' => array('lob_api_admin_settings_form'),
+    'access arguments' => array('administer lob_api'),
+    'file' => 'lob_api.admin.inc',
+  );
+
+  return $items;
+}
+
+/**
+ * Makes a request to the Lob API to print and mail a postcard.
+ */
+function lob_api_send_postcard($data) {
+  try {
+    require_once libraries_get_path('lob') . '/vendor/autoload.php';
+
+    $lob_api_key = variable_get('lob_api_key');
+    $lob = new \Lob\Lob($lob_api_key);
+    $postcard = $lob->postcards()->create($data);
+    _lob_api_log_debug_data($data, $postcard);
+
+    return $postcard;
+  }
+  catch (Exception $e) {
+    watchdog_exception('lob_api', $e);
+    throw new LobApiException($e);
+  }
+}
+
+/**
+ * Logs to the watchdog a request and a response.
+ */
+function _lob_api_log_debug_data($request, $response) {
+  if (variable_get('lob_api_debug_enabled')) {
+    watchdog('lob_api', 'Request: !data', array('!data' => '<pre>' . var_export($request, true) . '</pre>'));
+    watchdog('lob_api', 'Response: !data', array('!data' => '<pre>' . var_export($response, true) . '</pre>'));
+  }
+}
