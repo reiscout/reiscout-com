@@ -1,0 +1,100 @@
+.template {
+    margin-top: 10px;
+}
+
+.template .front, .template .back {
+    display: inline-block;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+    font: normal 11pt Helvetica, Arial, sans-serif;
+    background: #fff110;
+    color: #000;
+}
+
+.template .front {
+    width: 6in;
+    height: 4.25in;
+    margin: 0 0 0;
+    padding: 25px;
+}
+
+.template .front #top {
+    font-size: 14.5pt;
+    font-weight: bold;
+}
+
+.template .front #middle {
+    margin: 10pt 0 15pt 0;
+    text-align: center;
+    font-weight: bold;
+}
+
+.template .front #middle .title {
+    margin-bottom: 8pt;
+    font-size: 18pt;
+    font-style: italic;
+    text-decoration: underline;
+    color: #2E74B5;
+}
+
+.template .front #middle .body {
+    line-height: 13pt;
+}
+
+.template .front #columns {
+    margin-bottom: 10pt;
+}
+.template .front #columns::after {
+    content: "";
+    clear: both;
+    display: table;
+}
+
+.template .front #columns .left {
+    float: left;
+    margin-left: 25pt;
+}
+
+.template .front #columns .right {
+    float: right;
+    margin-right: 25pt;
+}
+
+.template .front #bottom {
+    padding: 0;
+    background: none;
+    border: none;
+    font-size: 14pt;
+    text-align: center;
+}
+
+.template .front #phone {
+    font-size: 20pt;
+    font-weight: bold;
+    text-align: center;
+}
+
+.template .back {
+    float: right;
+    width: 6in;
+    height: 4.25in;
+    padding: 85px 0 0 25px;
+}
+
+.template .back #title,
+.template .back #subtitle,
+.template .back #text {
+    width: 200px;
+}
+
+.template .back #title {
+    font-size: 14.5pt;
+    font-weight: bold;
+    text-align: center;
+}
+
+.template .back #subtitle {
+    margin: 10pt 0 15pt 0;
+    text-align: center;
+    font-weight: bold;
+}

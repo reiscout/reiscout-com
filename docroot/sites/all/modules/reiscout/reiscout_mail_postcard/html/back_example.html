@@ -1,0 +1,72 @@
+<html>
+<head>
+  <meta charset="UTF-8">
+  <title>reiscout.com 4x6 postcard back</title>
+  <style>
+    *, *:before, *:after {
+      -webkit-box-sizing: border-box;
+      -moz-box-sizing: border-box;
+      box-sizing: border-box;
+    }
+
+    body {
+      width: 6.25in;
+      height: 4.25in;
+      margin: 0;
+      padding: 0;
+      background: yellow;
+    }
+
+    #safe-area {
+      position: absolute;
+      width: 5.875in;
+      height: 3.875in;
+      left: 0.1875in;
+      top: 0.1875in;
+    }
+
+    #ink-free {
+      position: absolute;
+      width: 3.5in;
+      height: 2.7in;
+      right: -0.1875in;
+      bottom: -0.1875in;
+      background-color: white;
+    }
+
+    .text {
+      margin: 70px 10px 10px 25px;
+      width: 200px;
+      font-family: Helvetica, Arial, sans-serif;
+      font-size: 11pt;
+    }
+
+    #title {
+      font-size: 14.5pt;
+      font-weight: bold;
+      text-align: center;
+    }
+
+    #subtitle {
+      margin: 10pt 0 15pt 0;
+      text-align: center;
+      font-weight: bold;
+    }
+  </style>
+</head>
+<body>
+  <div id="safe-area">
+    <!-- All text should appear within the safe area. -->
+    <div class="text">
+      <div id="title">WE WANT TO BUY YOUR HOUSE</div>
+      <div id="subtitle">We pay and close quickly! </div>
+      <div id="text">
+        Size, location and price range doesn’t matter. We are private investors. There are no fees involved and we do all of the paperwork. It’s quick and easy and you can get on with your life.
+      </div>
+    </div>
+    <div id="ink-free">
+      <!-- Do not place any artwork or text in the ink free area. Address and postage will be automatically printed here. Delete this div before submitting your postcard! -->
+    </div>
+  </div>
+</body>
+</html>

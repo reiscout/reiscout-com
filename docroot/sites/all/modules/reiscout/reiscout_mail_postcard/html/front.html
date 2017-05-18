@@ -1,0 +1,96 @@
+<html>
+<head>
+  <meta charset="UTF-8">
+  <title>reiscout.com 4x6 postcard front</title>
+  <style>
+    *, *:before, *:after {
+      -webkit-box-sizing: border-box;
+      -moz-box-sizing: border-box;
+      box-sizing: border-box;
+    }
+
+    body {
+      width: 6.25in;
+      height: 4.25in;
+      margin: 0;
+      padding: 0;
+      background: yellow;
+    }
+
+    #safe-area {
+      position: absolute;
+      width: 5.875in;
+      height: 3.875in;
+      left: 0.1875in;
+      top: 0.1875in;
+    }
+
+    .text {
+      padding: 10px 20px;
+      font-family: Helvetica, Arial, sans-serif;
+      font-size: 11pt;
+    }
+
+    #top {
+      font-size: 14.5pt;
+      font-weight: bold;
+    }
+
+    #middle {
+      margin: 10pt 0 15pt 0;
+      text-align: center;
+      font-weight: bold;
+    }
+
+    #middle .title {
+      margin-bottom: 8pt;
+      font-size: 18pt;
+      font-style: italic;
+      text-decoration: underline;
+      color: #2E74B5;
+    }
+
+    #middle .body {
+      line-height: 13pt;
+    }
+
+    #columns {
+      margin-bottom: 10pt;
+    }
+    #columns::after {
+      content: "";
+      clear: both;
+      display: table;
+    }
+
+    #columns .left {
+      float: left;
+      margin-left: 25pt;
+    }
+
+    #columns .right {
+      float: right;
+      margin-right: 25pt;
+    }
+
+    #bottom {
+      font-size: 14pt;
+      text-align: center;
+    }
+
+    #phone {
+      font-size: 20pt;
+      font-weight: bold;
+      text-align: center;
+    }
+  </style>
+</head>
+<body>
+  <div id="safe-area">
+    <!-- All text should appear within the safe area. -->
+    <div class="text">
+      {{content}}
+    </div>
+  </div>
+</body>
+</html>

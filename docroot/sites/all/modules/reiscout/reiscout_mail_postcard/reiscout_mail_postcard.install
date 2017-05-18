@@ -1,0 +1,77 @@
+<?php
+
+/**
+ * @file
+ * Install, update and uninstall functions for the Reiscout Mail Postcard module.
+ */
+
+/**
+ * Implements hook_schema().
+ */
+function reiscout_mail_postcard_schema() {
+  $schema['reiscout_mail_postcard_history'] = array(
+    'description' => "Stores information about sending a postcard to a property's owner.",
+    'fields' => array(
+      'hid' => array(
+        'description' => 'The primary identifier for a record.',
+        'type' => 'serial',
+        'unsigned' => TRUE,
+        'not null' => TRUE,
+      ),
+      'uid' => array(
+        'description' => 'The {users}.uid that sent this postcard.',
+        'type' => 'int',
+        'unsigned' => TRUE,
+        'not null' => TRUE,
+      ),
+      'pnid' => array(
+        'description' => 'The {node}.nid of the property whose owner this postcard was sent to.',
+        'type' => 'int',
+        'unsigned' => TRUE,
+        'not null' => TRUE,
+      ),
+      'tnid' => array(
+        'description' => "The {node}.nid of the template that was used for generating a postcard's body.",
+        'type' => 'int',
+        'unsigned' => TRUE,
+        'not null' => TRUE,
+      ),
+      'lob_api_postcard_id' => array(
+        'description' => 'The unique postcard ID that was returned by the Lob API.',
+        'type' => 'char',
+        'length' => 50,
+        'not null' => TRUE,
+      ),
+      'timestamp' => array(
+        'description' => 'Timestamp for when a postcard was sent.',
+        'type' => 'int',
+        'unsigned' => TRUE,
+        'not null' => TRUE,
+      ),
+    ),
+    'primary key' => array('hid'),
+    'indexes' => array(
+      'uid' => array('uid'),
+      'property_nid' => array('pnid'),
+      'template_nid' => array('tnid'),
+      'lob_api_postcard_id' => array('lob_api_postcard_id'),
+      'postcard_sent' => array('timestamp'),
+    ),
+    'foreign keys' => array(
+      'postcard_sender' => array(
+        'table' => 'users',
+        'columns' => array('uid' => 'uid'),
+      ),
+      'property' => array(
+        'table' => 'node',
+        'columns' => array('pnid' => 'nid'),
+      ),
+      'template' => array(
+        'table' => 'node',
+        'columns' => array('tnid' => 'nid'),
+      ),
+    ),
+  );
+
+  return $schema;
+}
