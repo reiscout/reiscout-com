@@ -65,7 +65,7 @@ function property_field_default_field_instances() {
         'summary_rows' => 5,
       ),
       'type' => 'text_textarea_with_summary',
-      'weight' => 6,
+      'weight' => 5,
     ),
   );
 
@@ -86,7 +86,7 @@ function property_field_default_field_instances() {
           'use_widget_handlers' => 1,
         ),
         'type' => 'addressfield_default',
-        'weight' => 28,
+        'weight' => 19,
       ),
       'drupalgap' => array(
         'label' => 'above',
@@ -150,7 +150,7 @@ function property_field_default_field_instances() {
         'visible_markers' => 0,
       ),
       'type' => 'addressfield_autocomplete',
-      'weight' => 5,
+      'weight' => 4,
     ),
   );
 
@@ -172,7 +172,7 @@ function property_field_default_field_instances() {
           'show_single_product_attributes' => FALSE,
         ),
         'type' => 'commerce_cart_add_to_cart_form',
-        'weight' => 22,
+        'weight' => 17,
       ),
       'drupalgap' => array(
         'label' => 'hidden',
@@ -219,7 +219,7 @@ function property_field_default_field_instances() {
       'module' => 'commerce_product_reference',
       'settings' => array(),
       'type' => 'commerce_product_reference_hidden',
-      'weight' => 1,
+      'weight' => 0,
     ),
   );
 
@@ -240,7 +240,7 @@ function property_field_default_field_instances() {
           'thousand_separator' => '',
         ),
         'type' => 'number_integer',
-        'weight' => 19,
+        'weight' => 15,
       ),
       'drupalgap' => array(
         'label' => 'above',
@@ -283,7 +283,7 @@ function property_field_default_field_instances() {
       'module' => 'number',
       'settings' => array(),
       'type' => 'number',
-      'weight' => 22,
+      'weight' => 23,
     ),
   );
 
@@ -304,7 +304,7 @@ function property_field_default_field_instances() {
           'thousand_separator' => '',
         ),
         'type' => 'number_integer',
-        'weight' => 16,
+        'weight' => 12,
       ),
       'drupalgap' => array(
         'label' => 'above',
@@ -347,7 +347,7 @@ function property_field_default_field_instances() {
       'module' => 'number',
       'settings' => array(),
       'type' => 'number',
-      'weight' => 19,
+      'weight' => 20,
     ),
   );
 
@@ -368,7 +368,7 @@ function property_field_default_field_instances() {
           'thousand_separator' => '',
         ),
         'type' => 'number_integer',
-        'weight' => 12,
+        'weight' => 8,
       ),
       'drupalgap' => array(
         'label' => 'above',
@@ -432,7 +432,7 @@ function property_field_default_field_instances() {
           'thousand_separator' => '',
         ),
         'type' => 'number_integer',
-        'weight' => 11,
+        'weight' => 7,
       ),
       'drupalgap' => array(
         'label' => 'above',
@@ -500,7 +500,7 @@ function property_field_default_field_instances() {
           'thousand_separator' => '',
         ),
         'type' => 'number_decimal',
-        'weight' => 30,
+        'weight' => 21,
       ),
       'drupalgap' => array(
         'label' => 'above',
@@ -564,7 +564,7 @@ function property_field_default_field_instances() {
           'thousand_separator' => '',
         ),
         'type' => 'number_decimal',
-        'weight' => 29,
+        'weight' => 20,
       ),
       'drupalgap' => array(
         'label' => 'above',
@@ -660,7 +660,7 @@ function property_field_default_field_instances() {
         'html5_geolocation' => 0,
       ),
       'type' => 'geofield_latlon',
-      'weight' => 4,
+      'weight' => 3,
     ),
   );
 
@@ -736,7 +736,7 @@ function property_field_default_field_instances() {
         'progress_indicator' => 'throbber',
       ),
       'type' => 'image_image',
-      'weight' => 3,
+      'weight' => 2,
     ),
   );
 
@@ -757,7 +757,7 @@ function property_field_default_field_instances() {
           'thousand_separator' => '',
         ),
         'type' => 'number_integer',
-        'weight' => 14,
+        'weight' => 10,
       ),
       'drupalgap' => array(
         'label' => 'above',
@@ -822,7 +822,7 @@ function property_field_default_field_instances() {
           'show_remaining_days' => FALSE,
         ),
         'type' => 'date_default',
-        'weight' => 15,
+        'weight' => 11,
       ),
       'drupalgap' => array(
         'label' => 'above',
@@ -890,7 +890,7 @@ function property_field_default_field_instances() {
           'thousand_separator' => '',
         ),
         'type' => 'number_integer',
-        'weight' => 13,
+        'weight' => 9,
       ),
       'drupalgap' => array(
         'label' => 'above',
@@ -949,7 +949,7 @@ function property_field_default_field_instances() {
         'module' => 'text',
         'settings' => array(),
         'type' => 'text_default',
-        'weight' => 17,
+        'weight' => 13,
       ),
       'drupalgap' => array(
         'label' => 'above',
@@ -981,7 +981,7 @@ function property_field_default_field_instances() {
         'size' => 60,
       ),
       'type' => 'text_textfield',
-      'weight' => 20,
+      'weight' => 21,
     ),
   );
 
@@ -997,7 +997,7 @@ function property_field_default_field_instances() {
         'module' => 'text',
         'settings' => array(),
         'type' => 'text_default',
-        'weight' => 9,
+        'weight' => 5,
       ),
       'drupalgap' => array(
         'label' => 'above',
@@ -1050,7 +1050,7 @@ function property_field_default_field_instances() {
           'use_widget_handlers' => 1,
         ),
         'type' => 'addressfield_default',
-        'weight' => 8,
+        'weight' => 4,
       ),
       'drupalgap' => array(
         'label' => 'above',
@@ -1108,6 +1108,54 @@ function property_field_default_field_instances() {
     ),
   );
 
+  // Exported field_instance: 'node-property-field_place_on_marketplace'.
+  $field_instances['node-property-field_place_on_marketplace'] = array(
+    'bundle' => 'property',
+    'default_value' => array(
+      0 => array(
+        'value' => 0,
+      ),
+    ),
+    'deleted' => 0,
+    'description' => 'Turn on to make this lead available for all the other users.',
+    'display' => array(
+      'default' => array(
+        'label' => 'above',
+        'settings' => array(),
+        'type' => 'hidden',
+        'weight' => 22,
+      ),
+      'drupalgap' => array(
+        'label' => 'above',
+        'settings' => array(),
+        'type' => 'hidden',
+        'weight' => 0,
+      ),
+      'full' => array(
+        'label' => 'above',
+        'settings' => array(),
+        'type' => 'hidden',
+        'weight' => 0,
+      ),
+    ),
+    'entity_type' => 'node',
+    'field_name' => 'field_place_on_marketplace',
+    'label' => 'Place this lead on the marketplace',
+    'required' => 0,
+    'settings' => array(
+      'user_register_form' => FALSE,
+    ),
+    'widget' => array(
+      'active' => 1,
+      'module' => 'options',
+      'settings' => array(
+        'display_label' => 1,
+      ),
+      'type' => 'options_onoff',
+      'weight' => 6,
+    ),
+  );
+
   // Exported field_instance: 'node-property-field_repairs_price'.
   $field_instances['node-property-field_repairs_price'] = array(
     'bundle' => 'property',
@@ -1125,7 +1173,7 @@ function property_field_default_field_instances() {
           'thousand_separator' => '',
         ),
         'type' => 'number_integer',
-        'weight' => 18,
+        'weight' => 14,
       ),
       'drupalgap' => array(
         'label' => 'above',
@@ -1168,7 +1216,7 @@ function property_field_default_field_instances() {
       'module' => 'number',
       'settings' => array(),
       'type' => 'number',
-      'weight' => 21,
+      'weight' => 22,
     ),
   );
 
@@ -1189,7 +1237,7 @@ function property_field_default_field_instances() {
           'thousand_separator' => '',
         ),
         'type' => 'number_integer',
-        'weight' => 10,
+        'weight' => 6,
       ),
       'drupalgap' => array(
         'label' => 'above',
@@ -1252,7 +1300,7 @@ function property_field_default_field_instances() {
         'module' => 'list',
         'settings' => array(),
         'type' => 'list_default',
-        'weight' => 20,
+        'weight' => 16,
       ),
       'drupalgap' => array(
         'label' => 'above',
@@ -1281,7 +1329,7 @@ function property_field_default_field_instances() {
       'module' => 'options',
       'settings' => array(),
       'type' => 'options_select',
-      'weight' => 23,
+      'weight' => 24,
     ),
   );
 
@@ -1304,9 +1352,11 @@ function property_field_default_field_instances() {
   t('Owner Address');
   t('Owner Phone');
   t('Photo');
+  t('Place this lead on the marketplace');
   t('Position');
   t('Property Size');
   t('Repairs (estimated)');
+  t('Turn on to make this lead available for all the other users.');
   t('Under Contract');
   t('Upload property photo. ');
   t('Your current location (determined automatically)');

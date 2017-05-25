@@ -135,7 +135,7 @@ function property_strongarm() {
     'extra_fields' => array(
       'form' => array(
         'title' => array(
-          'weight' => '2',
+          'weight' => '1',
         ),
         'path' => array(
           'weight' => '11',
@@ -148,7 +148,7 @@ function property_strongarm() {
             'visible' => FALSE,
           ),
           'default' => array(
-            'weight' => '27',
+            'weight' => '23',
             'visible' => FALSE,
           ),
           'full' => array(
@@ -162,7 +162,7 @@ function property_strongarm() {
             'visible' => FALSE,
           ),
           'default' => array(
-            'weight' => '28',
+            'weight' => '24',
             'visible' => FALSE,
           ),
           'full' => array(
@@ -176,7 +176,7 @@ function property_strongarm() {
             'visible' => FALSE,
           ),
           'default' => array(
-            'weight' => '29',
+            'weight' => '25',
             'visible' => FALSE,
           ),
           'full' => array(
@@ -208,7 +208,7 @@ function property_strongarm() {
             'visible' => TRUE,
           ),
           'default' => array(
-            'weight' => '23',
+            'weight' => '18',
             'visible' => TRUE,
           ),
         ),
