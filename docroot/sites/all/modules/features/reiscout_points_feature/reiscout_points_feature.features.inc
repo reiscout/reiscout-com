@@ -52,7 +52,7 @@ function reiscout_points_feature_default_rules_link() {
   }');
   $items['buy_sending_letter'] = entity_import('rules_link', '{
     "settings" : {
-      "text" : "Buy Ability to Send Letter",
+      "text" : "Buy Ability to Send Mail",
       "link_type" : "token",
       "bundles" : { "property" : "property" },
       "entity_link" : 0,
@@ -61,7 +61,7 @@ function reiscout_points_feature_default_rules_link() {
       "confirm_description" : ""
     },
     "name" : "buy_sending_letter",
-    "label" : "Buy Ability to Send Letter",
+    "label" : "Buy Ability to Send Mail",
     "path" : "buy_sending_letter",
     "entity_type" : "node",
     "rdf_mapping" : []
