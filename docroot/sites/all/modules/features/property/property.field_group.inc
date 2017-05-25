@@ -33,7 +33,7 @@ function property_field_group_info() {
       ),
     ),
   );
-  $field_groups['group_owner_info|node|property|drupalgap'] = $field_group;
+  $field_groups[''] = $field_group;
 
   $field_group = new stdClass();
   $field_group->disabled = FALSE; /* Edit this to true to make a default field_group disabled initially */
@@ -62,7 +62,7 @@ function property_field_group_info() {
       ),
     ),
   );
-  $field_groups['group_owner_info|node|property|form'] = $field_group;
+  $field_groups[''] = $field_group;
 
   $field_group = new stdClass();
   $field_group->disabled = FALSE; /* Edit this to true to make a default field_group disabled initially */
@@ -90,7 +90,7 @@ function property_field_group_info() {
       ),
     ),
   );
-  $field_groups['group_owner_info|node|property|full'] = $field_group;
+  $field_groups[''] = $field_group;
 
   $field_group = new stdClass();
   $field_group->disabled = FALSE; /* Edit this to true to make a default field_group disabled initially */
@@ -115,7 +115,7 @@ function property_field_group_info() {
       ),
     ),
   );
-  $field_groups['group_property_info|node|property|drupalgap'] = $field_group;
+  $field_groups[''] = $field_group;
 
   $field_group = new stdClass();
   $field_group->disabled = FALSE; /* Edit this to true to make a default field_group disabled initially */
@@ -153,7 +153,7 @@ function property_field_group_info() {
       ),
     ),
   );
-  $field_groups['group_property_info|node|property|form'] = $field_group;
+  $field_groups[''] = $field_group;
 
   $field_group = new stdClass();
   $field_group->disabled = FALSE; /* Edit this to true to make a default field_group disabled initially */
@@ -190,7 +190,7 @@ function property_field_group_info() {
       ),
     ),
   );
-  $field_groups['group_property_info|node|property|full'] = $field_group;
+  $field_groups[''] = $field_group;
 
   // Translatables
   // Included for use with string extractors like potx.
