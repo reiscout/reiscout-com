@@ -101,6 +101,84 @@ function reiscout_property_node_update($node) {
 }
 
 /**
+ * Implements hook_node_access_records().
+ *
+ * We want to force these access rules:
+ * - a user, who has an 'administrator' user role, can view the node;
+ * - a user, who is the author of the node, can view the node;
+ * - all the other users can view the node only if it is published and the
+ *   'Place this lead on the marketplace' field of the node is set to true.
+ */
+function reiscout_property_node_access_records($node) {
+  if ('property' == $node->type) {
+    $grants = array();
+
+    // We use GID 0 here for a user, who has an 'administrator' user role
+    $grants[] = array(
+      'realm' => 'reiscout_property',
+      'gid' => 0,
+      'grant_view' => 1,
+      'grant_update' => 0,
+      'grant_delete' => 0,
+      'priority' => 0,
+    );
+
+    // We use $node->uid as GID here for a user, who is the author of the node.
+    // We do not need to check if the super user has an access.
+    if (1 != $node->uid) {
+      $grants[] = array(
+        'realm' => 'reiscout_property',
+        'gid' => $node->uid,
+        'grant_view' => 1,
+        'grant_update' => 0,
+        'grant_delete' => 0,
+        'priority' => 0,
+      );
+    }
+
+    // We use GID 1 here for all the other users
+    $nw = entity_metadata_wrapper('node', $node);
+    if ($nw->status->value() && $nw->field_place_on_marketplace->value()) {
+      $grants[] = array(
+        'realm' => 'reiscout_property',
+        'gid' => 1,
+        'grant_view' => 1,
+        'grant_update' => 0,
+        'grant_delete' => 0,
+        'priority' => 0,
+      );
+    }
+
+    return $grants;
+  }
+}
+
+/**
+ * Implements hook_node_grants().
+ */
+function reiscout_property_node_grants($account, $op) {
+  $grants = array();
+
+  if ('view' == $op) {
+    // For all the users we want to check their access using GID 1
+    $grants['reiscout_property'][] = 1;
+
+    // If the user is logged in, check his access using his UID as a GID
+    if ($account->uid) {
+      $grants['reiscout_property'][] = $account->uid;
+    }
+
+    // If the user has an 'administrator' role, check his access using GID 0
+    $role_admin = user_role_load_by_name('administrator');
+    if (user_has_role($role_admin->rid, $account)) {
+      $grants['reiscout_property'][] = 0;
+    }
+  }
+
+  return $grants;
+}
+
+/**
  * Builds data that is needed for request to the Connect2Data API.
  */
 function _reiscout_property_build_property_criteria($nid) {
