@@ -195,6 +195,26 @@ function reiscout_property_field_access($op, $field, $entity_type, $entity, $acc
 }
 
 /**
+ * Implements hook_node_access().
+ */
+function reiscout_property_node_access($node, $op, $account) {
+  $type = is_string($node) ? $node : $node->type;
+
+  if ('property' == $type) {
+    if ('update' == $op) {
+      if (is_object($node)) {
+        $nw = entity_metadata_wrapper('node', $node);
+        if ($nw->field_data_locked->value()) {
+          return NODE_ACCESS_DENY;
+        }
+      }
+    }
+  }
+
+  return NODE_ACCESS_IGNORE;
+}
+
+/**
  * Builds data that is needed for request to the Connect2Data API.
  */
 function _reiscout_property_build_property_criteria($nid) {
