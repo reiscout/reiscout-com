@@ -179,6 +179,22 @@ function reiscout_property_node_grants($account, $op) {
 }
 
 /**
+ * Implements hook_field_access().
+ */
+function reiscout_property_field_access($op, $field, $entity_type, $entity, $account) {
+  if ('node' == $entity_type && !empty($entity->type) && 'property' == $entity->type) {
+    if ('edit' == $op) {
+      if ('field_data_locked' == $field['field_name']) {
+        $role_admin = user_role_load_by_name('administrator');
+        if (!user_has_role($role_admin->rid, $account)) {
+          return FALSE;
+        }
+      }
+    }
+  }
+}
+
+/**
  * Builds data that is needed for request to the Connect2Data API.
  */
 function _reiscout_property_build_property_criteria($nid) {
