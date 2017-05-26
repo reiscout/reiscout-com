@@ -138,7 +138,7 @@ function property_strongarm() {
           'weight' => '1',
         ),
         'path' => array(
-          'weight' => '11',
+          'weight' => '12',
         ),
       ),
       'display' => array(
@@ -148,7 +148,7 @@ function property_strongarm() {
             'visible' => FALSE,
           ),
           'default' => array(
-            'weight' => '23',
+            'weight' => '24',
             'visible' => FALSE,
           ),
           'full' => array(
@@ -162,7 +162,7 @@ function property_strongarm() {
             'visible' => FALSE,
           ),
           'default' => array(
-            'weight' => '24',
+            'weight' => '25',
             'visible' => FALSE,
           ),
           'full' => array(
@@ -176,7 +176,7 @@ function property_strongarm() {
             'visible' => FALSE,
           ),
           'default' => array(
-            'weight' => '25',
+            'weight' => '26',
             'visible' => FALSE,
           ),
           'full' => array(

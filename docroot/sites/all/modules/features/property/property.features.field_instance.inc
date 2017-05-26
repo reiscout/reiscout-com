@@ -479,6 +479,54 @@ function property_field_default_field_instances() {
     ),
   );
 
+  // Exported field_instance: 'node-property-field_data_locked'.
+  $field_instances['node-property-field_data_locked'] = array(
+    'bundle' => 'property',
+    'default_value' => array(
+      0 => array(
+        'value' => 0,
+      ),
+    ),
+    'deleted' => 0,
+    'description' => 'Turn on to prevent user from editing the property data.',
+    'display' => array(
+      'default' => array(
+        'label' => 'above',
+        'settings' => array(),
+        'type' => 'hidden',
+        'weight' => 23,
+      ),
+      'drupalgap' => array(
+        'label' => 'above',
+        'settings' => array(),
+        'type' => 'hidden',
+        'weight' => 0,
+      ),
+      'full' => array(
+        'label' => 'above',
+        'settings' => array(),
+        'type' => 'hidden',
+        'weight' => 0,
+      ),
+    ),
+    'entity_type' => 'node',
+    'field_name' => 'field_data_locked',
+    'label' => 'Lock data',
+    'required' => 0,
+    'settings' => array(
+      'user_register_form' => FALSE,
+    ),
+    'widget' => array(
+      'active' => 1,
+      'module' => 'options',
+      'settings' => array(
+        'display_label' => 1,
+      ),
+      'type' => 'options_onoff',
+      'weight' => 11,
+    ),
+  );
+
   // Exported field_instance: 'node-property-field_ep_appraised'.
   $field_instances['node-property-field_ep_appraised'] = array(
     'bundle' => 'property',
@@ -1346,6 +1394,7 @@ function property_field_default_field_instances() {
   t('Enter property address. It will be visible only for users bought the access to this property.');
   t('Last Purchase');
   t('Last Purchase Price');
+  t('Lock data');
   t('Lot Size');
   t('Mortgage company');
   t('Notes');
@@ -1357,6 +1406,7 @@ function property_field_default_field_instances() {
   t('Property Size');
   t('Repairs (estimated)');
   t('Turn on to make this lead available for all the other users.');
+  t('Turn on to prevent user from editing the property data.');
   t('Under Contract');
   t('Upload property photo. ');
   t('Your current location (determined automatically)');
