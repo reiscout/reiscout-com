@@ -169,7 +169,7 @@ function reiscout_property_node_grants($account, $op) {
 function reiscout_property_field_access($op, $field, $entity_type, $entity, $account) {
   if ('node' == $entity_type && !empty($entity->type) && 'property' == $entity->type) {
     if ('edit' == $op) {
-      if ('field_data_locked' == $field['field_name']) {
+      if ('field_data_locked' == $field['field_name'] || 'field_data_verified' == $field['field_name']) {
         $role_admin = user_role_load_by_name('administrator');
         if (!user_has_role($role_admin->rid, $account)) {
           return FALSE;
