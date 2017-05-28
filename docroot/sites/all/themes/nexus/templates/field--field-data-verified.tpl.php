@@ -46,7 +46,7 @@
 ?>
 <?php if ($items): ?>
 <div class="<?php print $classes ?>">
-  <div class="data-verified-container ">
+  <div class="data-verified-container">
     <i class="icon"></i><div class="text">Reiscout data</div>
   </div>
 </div>
