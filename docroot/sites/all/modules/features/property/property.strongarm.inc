@@ -138,7 +138,7 @@ function property_strongarm() {
           'weight' => '1',
         ),
         'path' => array(
-          'weight' => '12',
+          'weight' => '13',
         ),
       ),
       'display' => array(
