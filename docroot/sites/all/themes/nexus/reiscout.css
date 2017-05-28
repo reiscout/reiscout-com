@@ -369,3 +369,8 @@ body.page-onepage #main-menu a.active:active {
 .form-item-template-nid label .header {
   display: inline;
 }
+
+.view-property-listing .views-row:not(.views-row-last),
+.view-reiscout-property-commerce-purchased-nodes .views-row:not(.views-row-last) {
+  margin-bottom: 25px;
+}
