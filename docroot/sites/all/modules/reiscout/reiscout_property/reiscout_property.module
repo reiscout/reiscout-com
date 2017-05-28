@@ -200,6 +200,31 @@ function reiscout_property_node_access($node, $op, $account) {
 }
 
 /**
+ * Implements hook_node_presave().
+ */
+function reiscout_property_node_presave($node) {
+  if ('property' != $node->type) {
+    return;
+  }
+
+  $is_data_verified = FALSE;
+
+  // Check if the author of a node has an 'administrator' role
+  $node_author = user_load($node->uid);
+  $role_admin = user_role_load_by_name('administrator');
+  if (user_has_role($role_admin->rid, $node_author)) {
+    $is_data_verified = TRUE;
+  }
+
+  // Check if the 'Locked data' field of a node is set to true
+  if (!empty($node->field_data_locked[LANGUAGE_NONE][0]['value'])) {
+    $is_data_verified = TRUE;
+  }
+
+  $node->field_data_verified[LANGUAGE_NONE][0]['value'] = (int) $is_data_verified;
+}
+
+/**
  * Builds data that is needed for request to the Connect2Data API.
  */
 function _reiscout_property_build_property_criteria($nid) {
