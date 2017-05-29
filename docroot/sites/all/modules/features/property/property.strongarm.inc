@@ -144,7 +144,7 @@ function property_strongarm() {
       'display' => array(
         'product:sku' => array(
           'drupalgap' => array(
-            'weight' => '24',
+            'weight' => '27',
             'visible' => FALSE,
           ),
           'default' => array(
@@ -152,31 +152,17 @@ function property_strongarm() {
             'visible' => FALSE,
           ),
           'full' => array(
-            'weight' => '11',
+            'weight' => '13',
             'visible' => FALSE,
           ),
         ),
         'product:title' => array(
           'drupalgap' => array(
-            'weight' => '25',
+            'weight' => '28',
             'visible' => FALSE,
           ),
           'default' => array(
             'weight' => '25',
-            'visible' => FALSE,
-          ),
-          'full' => array(
-            'weight' => '12',
-            'visible' => FALSE,
-          ),
-        ),
-        'product:status' => array(
-          'drupalgap' => array(
-            'weight' => '26',
-            'visible' => FALSE,
-          ),
-          'default' => array(
-            'weight' => '26',
             'visible' => FALSE,
           ),
           'full' => array(
@@ -184,9 +170,23 @@ function property_strongarm() {
             'visible' => FALSE,
           ),
         ),
+        'product:status' => array(
+          'drupalgap' => array(
+            'weight' => '29',
+            'visible' => FALSE,
+          ),
+          'default' => array(
+            'weight' => '26',
+            'visible' => FALSE,
+          ),
+          'full' => array(
+            'weight' => '16',
+            'visible' => FALSE,
+          ),
+        ),
         'product:commerce_price' => array(
           'drupalgap' => array(
-            'weight' => '23',
+            'weight' => '26',
             'visible' => FALSE,
           ),
           'default' => array(
@@ -194,17 +194,17 @@ function property_strongarm() {
             'visible' => TRUE,
           ),
           'full' => array(
-            'weight' => '13',
+            'weight' => '15',
             'visible' => FALSE,
           ),
         ),
         'product:field_property' => array(
           'full' => array(
-            'weight' => '9',
+            'weight' => '11',
             'visible' => FALSE,
           ),
           'drupalgap' => array(
-            'weight' => '20',
+            'weight' => '21',
             'visible' => TRUE,
           ),
           'default' => array(

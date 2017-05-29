@@ -21,7 +21,7 @@ function property_field_group_info() {
   $field_group->parent_name = '';
   $field_group->data = array(
     'label' => 'Owner Info',
-    'weight' => '19',
+    'weight' => '20',
     'children' => array(),
     'format_type' => 'fieldset',
     'format_settings' => array(
@@ -103,7 +103,7 @@ function property_field_group_info() {
   $field_group->parent_name = '';
   $field_group->data = array(
     'label' => 'Property Info',
-    'weight' => '18',
+    'weight' => '19',
     'children' => array(),
     'format_type' => 'fieldset',
     'format_settings' => array(
