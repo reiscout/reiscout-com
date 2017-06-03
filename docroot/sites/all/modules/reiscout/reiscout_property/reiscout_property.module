@@ -291,7 +291,7 @@ function reiscout_property_entity_load($entities, $type) {
     foreach ($entities as $entity) {
       if ('property' == $entity->type) {
         $nw = entity_metadata_wrapper('node', $entity);
-        $entity->_address = $nw->field_address->locality->value(). ', ' . $nw->field_address->postal_code->value();
+        $entity->_address = $nw->field_address->locality->value() . ', ' . $nw->field_address->postal_code->value();
       }
     }
   }
