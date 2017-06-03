@@ -41,6 +41,13 @@ function reiscout_property_menu() {
 }
 
 /**
+ * Implements hook_form_FORM_ID_alter().
+ */
+function reiscout_property_form_views_exposed_form_alter(&$form, &$form_state, $form_id) {
+  $form['city']['#autocomplete_path'] = 'reiscout_property/address_locality';
+}
+
+/**
  * Implements hook_form_FORM_ID_alter
  */
 function reiscout_property_form_property_node_form_alter(&$form, &$form_state, $form_id) {
