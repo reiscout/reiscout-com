@@ -248,6 +248,56 @@ function reiscout_property_node_presave($node) {
 }
 
 /**
+ * Implements hook_field_extra_fields().
+ */
+function reiscout_property_field_extra_fields() {
+  $return = array();
+
+  $return['node']['property'] = array(
+    'display' => array(
+      'address' => array(
+        'label' => t('Public address'),
+        'description' => t('Address that is available to all the users.'),
+        'weight' => -1,
+      ),
+    ),
+  );
+
+  return $return;
+}
+
+/**
+ * Implements hook_node_view().
+ */
+function reiscout_property_node_view($node, $view_mode, $langcode) {
+  if ('full' == $view_mode && 'property' == $node->type) {
+    // If a user has not an access to view a full address of a property,
+    // show him a public address (a city and a ZIP code)
+    if (!$node->content['field_address']['#access']) {
+      $node->content['address'] = array(
+        '#prefix' => '<div class="field address"><div class="field-label">Address:</div>',
+        '#markup' => $node->_address,
+        '#suffix' => '</div>',
+      );
+    }
+  }
+}
+
+/**
+ * Implements hook_entity_load().
+ */
+function reiscout_property_entity_load($entities, $type) {
+  if ('node' == $type) {
+    foreach ($entities as $entity) {
+      if ('property' == $entity->type) {
+        $nw = entity_metadata_wrapper('node', $entity);
+        $entity->_address = $nw->field_address->locality->value(). ', ' . $nw->field_address->postal_code->value();
+      }
+    }
+  }
+}
+
+/**
  * Builds data that is needed for request to the Connect2Data API.
  */
 function _reiscout_property_build_property_criteria($nid) {
