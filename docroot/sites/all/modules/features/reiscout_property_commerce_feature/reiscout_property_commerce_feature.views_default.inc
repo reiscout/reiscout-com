@@ -68,6 +68,7 @@ function reiscout_property_commerce_feature_views_default_views() {
   $handler->display->display_options['fields']['field_image']['field'] = 'field_image';
   $handler->display->display_options['fields']['field_image']['relationship'] = 'field_address_access_product';
   $handler->display->display_options['fields']['field_image']['label'] = '';
+  $handler->display->display_options['fields']['field_image']['element_type'] = '0';
   $handler->display->display_options['fields']['field_image']['element_label_colon'] = FALSE;
   $handler->display->display_options['fields']['field_image']['click_sort_column'] = 'fid';
   $handler->display->display_options['fields']['field_image']['settings'] = array(
@@ -82,12 +83,16 @@ function reiscout_property_commerce_feature_views_default_views() {
   $handler->display->display_options['fields']['field_data_verified']['label'] = '';
   $handler->display->display_options['fields']['field_data_verified']['element_type'] = '0';
   $handler->display->display_options['fields']['field_data_verified']['element_label_colon'] = FALSE;
+  $handler->display->display_options['fields']['field_data_verified']['type'] = 'list_key';
   /* Field: Content: Address */
   $handler->display->display_options['fields']['field_address']['id'] = 'field_address';
   $handler->display->display_options['fields']['field_address']['table'] = 'field_data_field_address';
   $handler->display->display_options['fields']['field_address']['field'] = 'field_address';
   $handler->display->display_options['fields']['field_address']['relationship'] = 'field_address_access_product';
   $handler->display->display_options['fields']['field_address']['label'] = '';
+  $handler->display->display_options['fields']['field_address']['alter']['alter_text'] = TRUE;
+  $handler->display->display_options['fields']['field_address']['alter']['text'] = '[field_address-thoroughfare], [field_address-locality], [field_address-administrative_area] [field_address-postal_code]';
+  $handler->display->display_options['fields']['field_address']['element_type'] = '0';
   $handler->display->display_options['fields']['field_address']['element_label_colon'] = FALSE;
   $handler->display->display_options['fields']['field_address']['click_sort_column'] = 'country';
   $handler->display->display_options['fields']['field_address']['settings'] = array(
@@ -123,6 +128,40 @@ function reiscout_property_commerce_feature_views_default_views() {
   $handler->display->display_options['filters']['status']['field'] = 'status';
   $handler->display->display_options['filters']['status']['value'] = array(
     'completed' => 'completed',
+  );
+  /* Filter criterion: Content: Address - Locality (i.e. City) */
+  $handler->display->display_options['filters']['field_address_locality']['id'] = 'field_address_locality';
+  $handler->display->display_options['filters']['field_address_locality']['table'] = 'field_data_field_address';
+  $handler->display->display_options['filters']['field_address_locality']['field'] = 'field_address_locality';
+  $handler->display->display_options['filters']['field_address_locality']['relationship'] = 'field_address_access_product';
+  $handler->display->display_options['filters']['field_address_locality']['operator'] = 'starts';
+  $handler->display->display_options['filters']['field_address_locality']['exposed'] = TRUE;
+  $handler->display->display_options['filters']['field_address_locality']['expose']['operator_id'] = 'field_address_locality_op';
+  $handler->display->display_options['filters']['field_address_locality']['expose']['label'] = 'City';
+  $handler->display->display_options['filters']['field_address_locality']['expose']['operator'] = 'field_address_locality_op';
+  $handler->display->display_options['filters']['field_address_locality']['expose']['identifier'] = 'city';
+  $handler->display->display_options['filters']['field_address_locality']['expose']['remember_roles'] = array(
+    2 => '2',
+    1 => 0,
+    4 => 0,
+    3 => 0,
+  );
+  /* Filter criterion: Content: Address - Postal code */
+  $handler->display->display_options['filters']['field_address_postal_code']['id'] = 'field_address_postal_code';
+  $handler->display->display_options['filters']['field_address_postal_code']['table'] = 'field_data_field_address';
+  $handler->display->display_options['filters']['field_address_postal_code']['field'] = 'field_address_postal_code';
+  $handler->display->display_options['filters']['field_address_postal_code']['relationship'] = 'field_address_access_product';
+  $handler->display->display_options['filters']['field_address_postal_code']['operator'] = 'starts';
+  $handler->display->display_options['filters']['field_address_postal_code']['exposed'] = TRUE;
+  $handler->display->display_options['filters']['field_address_postal_code']['expose']['operator_id'] = 'field_address_postal_code_op';
+  $handler->display->display_options['filters']['field_address_postal_code']['expose']['label'] = 'ZIP Code';
+  $handler->display->display_options['filters']['field_address_postal_code']['expose']['operator'] = 'field_address_postal_code_op';
+  $handler->display->display_options['filters']['field_address_postal_code']['expose']['identifier'] = 'zip';
+  $handler->display->display_options['filters']['field_address_postal_code']['expose']['remember_roles'] = array(
+    2 => '2',
+    1 => 0,
+    4 => 0,
+    3 => 0,
   );
 
   /* Display: Page */
@@ -182,6 +221,8 @@ function reiscout_property_commerce_feature_views_default_views() {
   $handler->display->display_options['fields']['field_address']['field'] = 'field_address';
   $handler->display->display_options['fields']['field_address']['relationship'] = 'field_address_access_product';
   $handler->display->display_options['fields']['field_address']['label'] = 'address';
+  $handler->display->display_options['fields']['field_address']['alter']['alter_text'] = TRUE;
+  $handler->display->display_options['fields']['field_address']['alter']['text'] = '[field_address-thoroughfare], [field_address-locality], [field_address-administrative_area] [field_address-postal_code]';
   $handler->display->display_options['fields']['field_address']['element_label_colon'] = FALSE;
   $handler->display->display_options['fields']['field_address']['click_sort_column'] = 'country';
   $handler->display->display_options['fields']['field_address']['settings'] = array(
