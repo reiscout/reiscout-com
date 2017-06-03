@@ -21,6 +21,22 @@ function reiscout_property_menu() {
     'file' => 'reiscout_property.pages.inc',
   );
 
+  $items['reiscout_property/address_locality'] = array(
+    'title' => 'Autocomplete for cities that is used in address of properties',
+    'page callback' => 'reiscout_property_address_locality_autocomplete',
+    'access arguments' => array('access content'),
+    'file' => 'reiscout_property.pages.inc',
+    'type' => MENU_CALLBACK,
+  );
+
+  $items['reiscout_property/address_locality/drupalgap'] = array(
+    'title' => 'Autocomplete for cities that is used in address of properties',
+    'page callback' => 'reiscout_property_address_locality_autocomplete_drupalgap',
+    'access arguments' => array('access content'),
+    'file' => 'reiscout_property.pages.inc',
+    'type' => MENU_CALLBACK,
+  );
+
   return $items;
 }
 
