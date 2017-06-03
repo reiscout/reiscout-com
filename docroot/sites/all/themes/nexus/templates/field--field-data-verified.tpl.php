@@ -44,7 +44,7 @@
  * @ingroup themeable
  */
 ?>
-<?php if ($items): ?>
+<?php if ($items[0]['#markup']): ?>
 <div class="<?php print $classes ?>">
   <div class="data-verified">
     <i class="icon"></i><div class="text">Reiscout data</div>
