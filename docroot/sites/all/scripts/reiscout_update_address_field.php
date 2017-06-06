@@ -1,4 +1,3 @@
-<?php
 #!/usr/bin/env drush
 
 function reiscout_update_address_field() {
