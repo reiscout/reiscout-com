@@ -1,3 +1,4 @@
+<?php
 #!/usr/bin/env drush
 
 function reiscout_update_address_field() {
@@ -31,9 +32,11 @@ function reiscout_update_address_field() {
 
       if (200 == $response->code) {
         $data = json_decode($response->data);
-        if (!empty($data->results[0]->formatted_address)) {
+        if (!empty($data->results[0])) {
           $data = array(
             'formatted_address' => $data->results[0]->formatted_address,
+            'latitude' => $data->results[0]->geometry->location->lat,
+            'longitude' => $data->results[0]->geometry->location->lng,
           );
           $node->field_address[LANGUAGE_NONE][0]['data'] = serialize($data);
           node_save($node);
