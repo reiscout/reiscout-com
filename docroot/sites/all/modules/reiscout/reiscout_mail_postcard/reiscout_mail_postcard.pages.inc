@@ -210,15 +210,39 @@ function _reiscout_mail_postcard_send($property_nid, $template_nid) {
 }
 
 /**
+ * Builds content to use as the front of a postcard.
+ *
+ * Given a property node and a template node, builds
+ * content to use as the front of a postcard.
+ */
+function _reiscout_mail_postcard_build_front_content($property_nid, $template_nid) {
+  $tnw = entity_metadata_wrapper('node', $template_nid);
+  $content = $tnw->field_postcard_template_front->value()['safe_value'];
+
+  return _reiscout_mail_postcard_replace_tokens($content, $property_nid);
+}
+
+/**
+ * Builds content to use as the back of a postcard.
+ *
+ * Given a property node and a template node, builds
+ * content to use as the back of a postcard.
+ */
+function _reiscout_mail_postcard_build_back_content($property_nid, $template_nid) {
+  $tnw = entity_metadata_wrapper('node', $template_nid);
+  $content = $tnw->field_postcard_template_back->value()['safe_value'];
+
+  return _reiscout_mail_postcard_replace_tokens($content, $property_nid);
+}
+
+/**
  * Builds HTML content to use as the front of a postcard.
  *
  * Given a property node and a template node, builds HTML
  * content to use as the front of a postcard.
  */
 function _reiscout_mail_postcard_build_front_html($property_nid, $template_nid) {
-  $tnw = entity_metadata_wrapper('node', $template_nid);
-  $content = $tnw->field_postcard_template_front->value()['safe_value'];
-  $content = _reiscout_mail_postcard_replace_tokens($content, $property_nid);
+  $content = _reiscout_mail_postcard_build_front_content($property_nid, $template_nid);
 
   $template_file_path = drupal_get_path('module', 'reiscout_mail_postcard') . '/html/front.html';
   if (!$template_file_content = @file_get_contents($template_file_path)) {
@@ -236,9 +260,7 @@ function _reiscout_mail_postcard_build_front_html($property_nid, $template_nid) 
  * content to use as the back of a postcard.
  */
 function _reiscout_mail_postcard_build_back_html($property_nid, $template_nid) {
-  $tnw = entity_metadata_wrapper('node', $template_nid);
-  $content = $tnw->field_postcard_template_back->value()['safe_value'];
-  $content = _reiscout_mail_postcard_replace_tokens($content, $property_nid);
+  $content = _reiscout_mail_postcard_build_back_content($property_nid, $template_nid);
 
   $template_file_path = drupal_get_path('module', 'reiscout_mail_postcard') . '/html/back.html';
   if (!$template_file_content = @file_get_contents($template_file_path)) {
@@ -275,10 +297,9 @@ function _reiscout_mail_postcard_combine_template_option($template_node, $proper
   $option = array();
 
   $tnw = entity_metadata_wrapper('node', $template_node);
-  $front = $tnw->field_postcard_template_front->value()['safe_value'];
-  $back = $tnw->field_postcard_template_back->value()['safe_value'];
-  $front = _reiscout_mail_postcard_replace_tokens($front, $property_node);
-  $back = _reiscout_mail_postcard_replace_tokens($back, $property_node);
+
+  $front = _reiscout_mail_postcard_build_front_content($property_node->nid, $template_node->nid);
+  $back = _reiscout_mail_postcard_build_back_content($property_node->nid, $template_node->nid);
 
   if ('predefined' == $type) {
     $title_prefix = t('Predefined:');
