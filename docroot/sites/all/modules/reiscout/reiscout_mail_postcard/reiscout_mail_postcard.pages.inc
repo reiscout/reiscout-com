@@ -217,7 +217,13 @@ function _reiscout_mail_postcard_send($property_nid, $template_nid) {
  */
 function _reiscout_mail_postcard_build_front_content($property_nid, $template_nid) {
   $tnw = entity_metadata_wrapper('node', $template_nid);
-  $content = $tnw->field_postcard_template_front->value()['safe_value'];
+
+  if (_reiscout_property_is_owner_an_individual_by_nid($property_nid)) {
+    $content = $tnw->field_postcard_template_front->value()['safe_value'];
+  }
+  else {
+    $content = $tnw->field_postcard_template_front_co->value()['safe_value'];
+  }
 
   return _reiscout_mail_postcard_replace_tokens($content, $property_nid);
 }
@@ -363,7 +369,14 @@ function _reiscout_mail_postcard_combine_template_option($template_node, $proper
 function _reiscout_mail_postcard_replace_tokens($content, $property_nid) {
   if (FALSE !== strpos($content, '{{owner_name}}')) {
     $property_owner_address = _reiscout_property_get_owner_address_by_nid($property_nid);
-    $content = str_replace('{{owner_name}}', $property_owner_address->name_line->value(), $content);
+    if (_reiscout_property_is_owner_an_individual_by_nid($property_nid)) {
+      $names = explode(' ', $property_owner_address->name_line->value());
+      $property_owner_name = mb_convert_case($names[1], MB_CASE_TITLE, "UTF-8");
+    }
+    else {
+      $property_owner_name = $property_owner_address->name_line->value();
+    }
+    $content = str_replace('{{owner_name}}', $property_owner_name, $content);
   }
 
   if (FALSE !== strpos($content, '{{street_address}}')) {
