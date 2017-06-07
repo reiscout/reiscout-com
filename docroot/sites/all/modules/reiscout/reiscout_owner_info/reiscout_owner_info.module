@@ -97,7 +97,7 @@ function _reiscout_owner_info_is_user_can_buy($node) {
 function reiscout_owner_info_get_owner_callback($node) {
   // Make a request to the Connect2Data API to get full info about property
   if (!$info = _reiscout_property_get_c2d_report_by_nid($node->nid, 'owner_info')) {
-    drupal_set_message(t("An error occurred while requesting the information about property's owner.", 'error'));
+    drupal_set_message(t("An error occurred while requesting an information about the property's owner."), 'error');
     // Return to the previous page
     drupal_goto();
   }
