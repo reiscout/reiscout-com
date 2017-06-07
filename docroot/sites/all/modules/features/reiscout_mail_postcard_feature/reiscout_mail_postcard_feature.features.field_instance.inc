@@ -54,7 +54,7 @@ You can use these tokens: <em>{{owner_name}}</em> - full name of a property owne
         'rows' => 15,
       ),
       'type' => 'text_textarea',
-      'weight' => 2,
+      'weight' => 3,
     ),
   );
 
@@ -65,7 +65,7 @@ You can use these tokens: <em>{{owner_name}}</em> - full name of a property owne
     'default_value' => NULL,
     'deleted' => 0,
     'description' => 'The content to use as the front of your postcard.<br>
-You can use these tokens: <em>{{owner_name}}</em> - full name of a property owner, <em>{{street_address}}</em> - property street address, <em>{{city}}</em> - property city name, <em>{{my_phone}}</em> - your phone from your <a href="/user">user profile</a>.',
+You can use these tokens: <em>{{owner_name}}</em> - the first name of a property owner, <em>{{street_address}}</em> - property street address, <em>{{city}}</em> - property city name, <em>{{my_phone}}</em> - your phone from your <a href="/user">user profile</a>.',
     'display' => array(
       'default' => array(
         'label' => 'above',
@@ -89,7 +89,7 @@ You can use these tokens: <em>{{owner_name}}</em> - full name of a property owne
     ),
     'entity_type' => 'node',
     'field_name' => 'field_postcard_template_front',
-    'label' => 'Front',
+    'label' => 'Front (a property owner is an individual)',
     'required' => 1,
     'settings' => array(
       'text_processing' => 1,
@@ -103,6 +103,54 @@ You can use these tokens: <em>{{owner_name}}</em> - full name of a property owne
       ),
       'type' => 'text_textarea',
       'weight' => 1,
+    ),
+  );
+
+  // Exported field_instance:
+  // 'node-postcard_template-field_postcard_template_front_co'.
+  $field_instances['node-postcard_template-field_postcard_template_front_co'] = array(
+    'bundle' => 'postcard_template',
+    'default_value' => NULL,
+    'deleted' => 0,
+    'description' => 'The content to use as the front of your postcard.<br>
+You can use these tokens: <em>{{owner_name}}</em> - the name of a corporation, <em>{{street_address}}</em> - property street address, <em>{{city}}</em> - property city name, <em>{{my_phone}}</em> - your phone from your <a href="/user">user profile</a>.',
+    'display' => array(
+      'default' => array(
+        'label' => 'above',
+        'module' => 'text',
+        'settings' => array(),
+        'type' => 'text_default',
+        'weight' => 3,
+      ),
+      'drupalgap' => array(
+        'label' => 'above',
+        'settings' => array(),
+        'type' => 'hidden',
+        'weight' => 0,
+      ),
+      'teaser' => array(
+        'label' => 'above',
+        'settings' => array(),
+        'type' => 'hidden',
+        'weight' => 0,
+      ),
+    ),
+    'entity_type' => 'node',
+    'field_name' => 'field_postcard_template_front_co',
+    'label' => 'Front (a property owner is a corporation)',
+    'required' => 1,
+    'settings' => array(
+      'text_processing' => 1,
+      'user_register_form' => FALSE,
+    ),
+    'widget' => array(
+      'active' => 1,
+      'module' => 'text',
+      'settings' => array(
+        'rows' => 15,
+      ),
+      'type' => 'text_textarea',
+      'weight' => 2,
     ),
   );
 
@@ -152,20 +200,23 @@ You can use these tokens: <em>{{owner_name}}</em> - full name of a property owne
         'display_label' => 1,
       ),
       'type' => 'options_onoff',
-      'weight' => 3,
+      'weight' => 4,
     ),
   );
 
   // Translatables
   // Included for use with string extractors like potx.
   t('Back');
-  t('Front');
+  t('Front (a property owner is a corporation)');
+  t('Front (a property owner is an individual)');
   t('Global template');
   t('If checked, all the users will be able to use this template.');
   t('The content to use as the back of your postcard.<br>
 You can use these tokens: <em>{{owner_name}}</em> - full name of a property owner, <em>{{street_address}}</em> - property street address, <em>{{city}}</em> - property city name, <em>{{my_phone}}</em> - your phone from your <a href="/user">user profile</a>.');
   t('The content to use as the front of your postcard.<br>
-You can use these tokens: <em>{{owner_name}}</em> - full name of a property owner, <em>{{street_address}}</em> - property street address, <em>{{city}}</em> - property city name, <em>{{my_phone}}</em> - your phone from your <a href="/user">user profile</a>.');
+You can use these tokens: <em>{{owner_name}}</em> - the first name of a property owner, <em>{{street_address}}</em> - property street address, <em>{{city}}</em> - property city name, <em>{{my_phone}}</em> - your phone from your <a href="/user">user profile</a>.');
+  t('The content to use as the front of your postcard.<br>
+You can use these tokens: <em>{{owner_name}}</em> - the name of a corporation, <em>{{street_address}}</em> - property street address, <em>{{city}}</em> - property city name, <em>{{my_phone}}</em> - your phone from your <a href="/user">user profile</a>.');
 
   return $field_instances;
 }
