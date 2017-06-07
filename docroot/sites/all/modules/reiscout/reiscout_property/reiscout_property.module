@@ -4,6 +4,7 @@ class ReiscoutPropertyAddressIsNotSet extends Exception {}
 class ReiscoutPropertyOwnerAddressIsNotSet extends Exception {}
 class ReiscoutPropertyUserAddressIsNotSet extends Exception {}
 class ReiscoutPropertyUserPhoneNumberIsNotSet extends Exception {}
+class ReiscoutPropertyOwnerTypeIsUnknown extends Exception {}
 
 define('REISCOUT_PROPERTY_NODE_TITLE_TO_CHANGE', 'Property #');
 define('REISCOUT_PROPERTY_MESSAGE_TO_CHANGE', 'Property <em class="placeholder">Property #</em> has been created.');
@@ -452,4 +453,30 @@ function _reiscout_property_get_user_phone($uid = NULL) {
   }
 
   return $phone_number;
+}
+
+/**
+ * Checks if the property owner is an individual.
+ */
+function _reiscout_property_is_owner_an_individual_by_nid($nid) {
+  static $is_owner_an_individual;
+
+  if (isset($is_owner_an_individual[$nid])) {
+    return $is_owner_an_individual[$nid];
+  }
+
+  // Make a request to the Connect2Data API to get full info about a property
+  if (!$info = _reiscout_property_get_c2d_report_by_nid($nid, 'is_owner_individual')) {
+    $msg = t('An error occurred while requesting an information about the property owner: !nid.', array('!nid' => $nid));
+    throw new ReiscoutPropertyOwnerTypeIsUnknown($msg);
+  }
+
+  if ('Y' == $info->_PROPERTY_HISTORY->_TRANSACTION_HISTORY->attributes()->_CorporateBuyer->__toString()) {
+    $is_owner_an_individual[$nid] = FALSE;
+  }
+  else {
+    $is_owner_an_individual[$nid] = TRUE;
+  }
+
+  return $is_owner_an_individual[$nid];
 }
