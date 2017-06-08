@@ -180,8 +180,8 @@ function _reiscout_mail_postcard_access($node) {
  * Checks if a user may send a postcard to a property's owner.
  *
  * A user may send a postcard to a property's owner if:
- * - he is not the property's author AND
- * - he has bought the property's address AND
+ * - he is the property's author OR he purchased the property's address
+ *   AND
  * - 'Owner postal address' field has been filled out.
  */
 function _reiscout_mail_postcard_is_user_can_send($node) {
@@ -197,16 +197,21 @@ function _reiscout_mail_postcard_is_user_can_send($node) {
     return FALSE;
   }
 
-  // Check if user is not administrator
-  if (!in_array('administrator', $user->roles)) {
-    // Check if user have purchased access to node
-    $node_purchased = reiscout_property_commerce_is_node_purchased($node->nid,
-      REISCOUT_PROPERTY_COMMERCE_ADDRESS_ACCESS_PRODUCT_TYPE,
-      $user->uid);
-    // If user have not purchased access to node return FALSE.
-    if (!$node_purchased) {
-      return FALSE;
-    }
+  // Check if the user has an 'administrator' role
+  if (in_array('administrator', $user->roles)) {
+    return TRUE;
+  }
+
+  // Check if the user purchased the property's address
+  $is_user_purchased_node = reiscout_property_commerce_is_node_purchased(
+    $node->nid,
+    REISCOUT_PROPERTY_COMMERCE_ADDRESS_ACCESS_PRODUCT_TYPE,
+    $user->uid);
+
+  // If the user is not an author of the property node
+  // and if he did not purchase the property's address
+  if ($node->uid != $user->uid && !$is_user_purchased_node) {
+    return FALSE;
   }
 
   return TRUE;
