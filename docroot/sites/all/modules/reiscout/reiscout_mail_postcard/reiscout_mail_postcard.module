@@ -90,6 +90,12 @@ function reiscout_mail_postcard_node_view($node, $view_mode, $langcode) {
         '#markup' => l($sample_postcard_link_text, $sample_postcard_link_url, array('attributes' => array('target' => '_blank'))),
         '#suffix' => '</div>',
       );
+
+      $node->content['reiscout-mail-buttons']['points-info'] = array(
+        '#prefix' => '<div class="points-info">',
+        '#markup' => format_plural($points, 'You have 1 send mail point left', 'You have @count send mail points left'),
+        '#suffix' => '</div>',
+      );
     }
     // If not
     else {
