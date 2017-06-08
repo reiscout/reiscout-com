@@ -32,6 +32,25 @@ function reiscout_mail_postcard_menu() {
 }
 
 /**
+ * Implements hook_field_extra_fields().
+ */
+function reiscout_mail_postcard_field_extra_fields() {
+  $return = array();
+
+  $return['node']['property'] = array(
+    'display' => array(
+      'reiscout-mail-buttons' => array(
+        'label' => t('Reiscout mail buttons'),
+        'description' => t('Buttons related to sending of a postcard.'),
+        'weight' => -1,
+      ),
+    ),
+  );
+
+  return $return;
+}
+
+/**
  * Implements hook_node_view().
  */
 function reiscout_mail_postcard_node_view($node, $view_mode, $langcode) {
