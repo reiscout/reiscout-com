@@ -78,8 +78,16 @@ function reiscout_mail_postcard_node_view($node, $view_mode, $langcode) {
       $button_url = 'reiscout-mail-postcard/' . $node->nid . '/send';
       $link = l($button_text, url($button_url, array('query' => drupal_get_destination(), 'absolute' => TRUE), array('html' => TRUE)));
       $node->content['reiscout-mail-buttons']['send-postcard'] = array(
-        '#prefix' => '<div class="callback-link">',
+        '#prefix' => '<div class="button">',
         '#markup' => $link,
+        '#suffix' => '</div>',
+      );
+
+      $sample_postcard_link_text = t('Click here to view a sample postcard');
+      $sample_postcard_link_url = url(drupal_get_path('module', 'reiscout_mail_postcard') . '/pdf/sample_postcard.pdf');
+      $node->content['reiscout-mail-buttons']['sample-postcard-link'] = array(
+        '#prefix' => '<div class="sample-postcard-link">',
+        '#markup' => l($sample_postcard_link_text, $sample_postcard_link_url, array('attributes' => array('target' => '_blank'))),
         '#suffix' => '</div>',
       );
     }
@@ -89,7 +97,7 @@ function reiscout_mail_postcard_node_view($node, $view_mode, $langcode) {
       $rules_link_name = 'buy_sending_letter';
       if ($rendered_link = rules_link_render($rules_link_name, $node->nid, drupal_get_destination(), array())) {
         $node->content['reiscout-mail-buttons']['send-postcard'] = array(
-          '#prefix' => '<div class="callback-link">',
+          '#prefix' => '<div class="button">',
           '#markup' => drupal_render($rendered_link),
           '#suffix' => '</div>',
         );
