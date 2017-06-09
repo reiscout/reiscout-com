@@ -222,6 +222,12 @@ function property_strongarm() {
             'visible' => TRUE,
           ),
         ),
+        'reiscout-mail-buttons' => array(
+          'full' => array(
+            'weight' => '22',
+            'visible' => TRUE,
+          ),
+        ),
       ),
     ),
   );

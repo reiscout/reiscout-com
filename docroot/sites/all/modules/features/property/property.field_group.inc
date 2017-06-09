@@ -79,6 +79,7 @@ function property_field_group_info() {
     'children' => array(
       0 => 'field_owner_phone',
       1 => 'field_owner_postal_address',
+      2 => 'reiscout-mail-buttons',
     ),
     'format_type' => 'fieldset',
     'format_settings' => array(
