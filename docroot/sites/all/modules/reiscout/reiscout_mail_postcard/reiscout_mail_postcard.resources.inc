@@ -8,7 +8,7 @@ function _reiscout_mail_postcard_resource_get_available_actions($nid) {
 
   $actions = array(
     'send_postcard' => 0,
-    'btn_send_postcard_title' => '',
+    'mail_sending_points_info' => '',
     'buy_mail_sending_points' => 0,
   );
 
@@ -20,7 +20,9 @@ function _reiscout_mail_postcard_resource_get_available_actions($nid) {
     // If user has enough points
     if ($points > 0) {
       $actions['send_postcard'] = 1;
-      $actions['btn_send_postcard_title'] = t('Send a postcard to the property owner (!points points left)', array('!points' => $points));
+      $actions['mail_sending_points_info'] = format_plural($points,
+        'You have 1 send mail point left',
+        'You have @count send mail points left');
     }
     // If not
     else {
