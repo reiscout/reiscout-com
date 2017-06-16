@@ -145,7 +145,6 @@ function reiscout_property_commerce_fields_access_to_sell() {
     'field_address',
     'field_owner_postal_address',
     'field_owner_phone',
-    'field_year_built',
   );
 }
 
