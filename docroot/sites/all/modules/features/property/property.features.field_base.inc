@@ -177,6 +177,21 @@ function property_field_default_field_bases() {
     'type' => 'list_boolean',
   );
 
+  // Exported field_base: 'field_effective_year_built'.
+  $field_bases['field_effective_year_built'] = array(
+    'active' => 1,
+    'cardinality' => 1,
+    'deleted' => 0,
+    'entity_types' => array(),
+    'field_name' => 'field_effective_year_built',
+    'indexes' => array(),
+    'locked' => 0,
+    'module' => 'number',
+    'settings' => array(),
+    'translatable' => 0,
+    'type' => 'number_integer',
+  );
+
   // Exported field_base: 'field_ep_appraised'.
   $field_bases['field_ep_appraised'] = array(
     'active' => 1,

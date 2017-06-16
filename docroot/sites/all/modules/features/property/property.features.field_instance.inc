@@ -500,7 +500,7 @@ function property_field_default_field_instances() {
         'label' => 'above',
         'settings' => array(),
         'type' => 'hidden',
-        'weight' => 26,
+        'weight' => 27,
       ),
       'full' => array(
         'label' => 'above',
@@ -575,6 +575,70 @@ function property_field_default_field_instances() {
       ),
       'type' => 'options_onoff',
       'weight' => 12,
+    ),
+  );
+
+  // Exported field_instance: 'node-property-field_effective_year_built'.
+  $field_instances['node-property-field_effective_year_built'] = array(
+    'bundle' => 'property',
+    'default_value' => NULL,
+    'deleted' => 0,
+    'description' => 'The year that a building on the property was significantly improved or remodeled',
+    'display' => array(
+      'default' => array(
+        'label' => 'above',
+        'module' => 'number',
+        'settings' => array(
+          'decimal_separator' => '.',
+          'prefix_suffix' => TRUE,
+          'scale' => 0,
+          'thousand_separator' => '',
+        ),
+        'type' => 'number_integer',
+        'weight' => 26,
+      ),
+      'drupalgap' => array(
+        'label' => 'above',
+        'module' => 'number',
+        'settings' => array(
+          'decimal_separator' => '.',
+          'prefix_suffix' => TRUE,
+          'scale' => 0,
+          'thousand_separator' => '',
+        ),
+        'type' => 'number_integer',
+        'weight' => 22,
+      ),
+      'full' => array(
+        'label' => 'above',
+        'module' => 'number',
+        'settings' => array(
+          'decimal_separator' => '.',
+          'prefix_suffix' => TRUE,
+          'scale' => 0,
+          'thousand_separator' => '',
+        ),
+        'type' => 'number_integer',
+        'weight' => 18,
+      ),
+    ),
+    'entity_type' => 'node',
+    'field_name' => 'field_effective_year_built',
+    'label' => 'Effective Year Built',
+    'required' => 0,
+    'settings' => array(
+      'max' => '',
+      'min' => 1900,
+      'prefix' => '',
+      'suffix' => '',
+      'user_register_form' => FALSE,
+    ),
+    'widget' => array(
+      'active' => 0,
+      'module' => 'number',
+      'settings' => array(),
+      'type' => 'number',
+      'weight' => 25,
     ),
   );
 
@@ -730,7 +794,7 @@ function property_field_default_field_instances() {
         'label' => 'above',
         'settings' => array(),
         'type' => 'hidden',
-        'weight' => 28,
+        'weight' => 29,
       ),
       'full' => array(
         'label' => 'above',
@@ -927,7 +991,7 @@ function property_field_default_field_instances() {
         'label' => 'above',
         'settings' => array(),
         'type' => 'hidden',
-        'weight' => 27,
+        'weight' => 28,
       ),
       'full' => array(
         'label' => 'above',
@@ -1228,7 +1292,7 @@ function property_field_default_field_instances() {
         'label' => 'above',
         'settings' => array(),
         'type' => 'hidden',
-        'weight' => 25,
+        'weight' => 26,
       ),
       'full' => array(
         'label' => 'above',
@@ -1506,6 +1570,7 @@ function property_field_default_field_instances() {
   t('Bedrooms');
   t('Buy Address Access');
   t('Calculated Equity Percentage');
+  t('Effective Year Built');
   t('Enter property address. It will be visible only for users bought the access to this property.');
   t('Last Purchase');
   t('Last Purchase Price');
@@ -1522,6 +1587,7 @@ function property_field_default_field_instances() {
   t('Reiscout data');
   t('Repairs (estimated)');
   t('The year that a building on the property was originally constructed');
+  t('The year that a building on the property was significantly improved or remodeled');
   t('Turn on to make this lead available for all the other users.');
   t('Turn on to prevent user from editing the property data.');
   t('Under Contract');
