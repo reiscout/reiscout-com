@@ -154,7 +154,7 @@ function reiscout_property_commerce_get_property_address_price($node) {
     'field_size',
     'field_bedrooms',
     'field_bathrooms',
-    'field_lot_size',
+    'field_lot_area_acres',
     'field_last_purchase_price',
     'field_last_purchase_time',
     'field_assessed_value',
