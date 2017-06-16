@@ -21,7 +21,7 @@ function property_field_group_info() {
   $field_group->parent_name = '';
   $field_group->data = array(
     'label' => 'Owner Info',
-    'weight' => '24',
+    'weight' => '25',
     'children' => array(),
     'format_type' => 'fieldset',
     'format_settings' => array(
@@ -104,7 +104,7 @@ function property_field_group_info() {
   $field_group->parent_name = '';
   $field_group->data = array(
     'label' => 'Property Info',
-    'weight' => '23',
+    'weight' => '24',
     'children' => array(),
     'format_type' => 'fieldset',
     'format_settings' => array(
@@ -144,6 +144,7 @@ function property_field_group_info() {
       10 => 'field_under_contract',
       11 => 'field_year_built',
       12 => 'field_effective_year_built',
+      13 => 'field_lot_area_acres',
     ),
     'format_type' => 'fieldset',
     'format_settings' => array(
@@ -184,6 +185,7 @@ function property_field_group_info() {
       10 => 'field_under_contract',
       11 => 'field_year_built',
       12 => 'field_effective_year_built',
+      13 => 'field_lot_area_acres',
     ),
     'format_type' => 'fieldset',
     'format_settings' => array(

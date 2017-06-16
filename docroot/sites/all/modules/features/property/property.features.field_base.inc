@@ -346,19 +346,23 @@ function property_field_default_field_bases() {
     'type' => 'datetime',
   );
 
-  // Exported field_base: 'field_lot_size'.
-  $field_bases['field_lot_size'] = array(
+  // Exported field_base: 'field_lot_area_acres'.
+  $field_bases['field_lot_area_acres'] = array(
     'active' => 1,
     'cardinality' => 1,
     'deleted' => 0,
     'entity_types' => array(),
-    'field_name' => 'field_lot_size',
+    'field_name' => 'field_lot_area_acres',
     'indexes' => array(),
     'locked' => 0,
     'module' => 'number',
-    'settings' => array(),
+    'settings' => array(
+      'decimal_separator' => '.',
+      'precision' => 10,
+      'scale' => 2,
+    ),
     'translatable' => 0,
-    'type' => 'number_integer',
+    'type' => 'number_decimal',
   );
 
   // Exported field_base: 'field_mortgage_company'.

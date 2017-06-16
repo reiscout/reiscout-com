@@ -500,7 +500,7 @@ function property_field_default_field_instances() {
         'label' => 'above',
         'settings' => array(),
         'type' => 'hidden',
-        'weight' => 27,
+        'weight' => 28,
       ),
       'full' => array(
         'label' => 'above',
@@ -607,7 +607,7 @@ function property_field_default_field_instances() {
           'thousand_separator' => '',
         ),
         'type' => 'number_integer',
-        'weight' => 22,
+        'weight' => 23,
       ),
       'full' => array(
         'label' => 'above',
@@ -619,7 +619,7 @@ function property_field_default_field_instances() {
           'thousand_separator' => '',
         ),
         'type' => 'number_integer',
-        'weight' => 18,
+        'weight' => 19,
       ),
     ),
     'entity_type' => 'node',
@@ -638,7 +638,7 @@ function property_field_default_field_instances() {
       'module' => 'number',
       'settings' => array(),
       'type' => 'number',
-      'weight' => 25,
+      'weight' => 26,
     ),
   );
 
@@ -794,7 +794,7 @@ function property_field_default_field_instances() {
         'label' => 'above',
         'settings' => array(),
         'type' => 'hidden',
-        'weight' => 29,
+        'weight' => 30,
       ),
       'full' => array(
         'label' => 'above',
@@ -991,7 +991,7 @@ function property_field_default_field_instances() {
         'label' => 'above',
         'settings' => array(),
         'type' => 'hidden',
-        'weight' => 28,
+        'weight' => 29,
       ),
       'full' => array(
         'label' => 'above',
@@ -1036,12 +1036,12 @@ function property_field_default_field_instances() {
     ),
   );
 
-  // Exported field_instance: 'node-property-field_lot_size'.
-  $field_instances['node-property-field_lot_size'] = array(
+  // Exported field_instance: 'node-property-field_lot_area_acres'.
+  $field_instances['node-property-field_lot_area_acres'] = array(
     'bundle' => 'property',
     'default_value' => NULL,
     'deleted' => 0,
-    'description' => '',
+    'description' => 'Total land lot area in acres',
     'display' => array(
       'default' => array(
         'label' => 'above',
@@ -1049,11 +1049,11 @@ function property_field_default_field_instances() {
         'settings' => array(
           'decimal_separator' => '.',
           'prefix_suffix' => TRUE,
-          'scale' => 0,
+          'scale' => 2,
           'thousand_separator' => '',
         ),
-        'type' => 'number_integer',
-        'weight' => 9,
+        'type' => 'number_decimal',
+        'weight' => 27,
       ),
       'drupalgap' => array(
         'label' => 'above',
@@ -1061,11 +1061,11 @@ function property_field_default_field_instances() {
         'settings' => array(
           'decimal_separator' => '.',
           'prefix_suffix' => TRUE,
-          'scale' => 0,
+          'scale' => 2,
           'thousand_separator' => '',
         ),
-        'type' => 'number_integer',
-        'weight' => 14,
+        'type' => 'number_decimal',
+        'weight' => 21,
       ),
       'full' => array(
         'label' => 'above',
@@ -1073,22 +1073,22 @@ function property_field_default_field_instances() {
         'settings' => array(
           'decimal_separator' => '.',
           'prefix_suffix' => TRUE,
-          'scale' => 0,
+          'scale' => 2,
           'thousand_separator' => '',
         ),
-        'type' => 'number_integer',
-        'weight' => 9,
+        'type' => 'number_decimal',
+        'weight' => 17,
       ),
     ),
     'entity_type' => 'node',
-    'field_name' => 'field_lot_size',
-    'label' => 'Lot Size',
+    'field_name' => 'field_lot_area_acres',
+    'label' => 'Lot Area',
     'required' => 0,
     'settings' => array(
       'max' => '',
       'min' => '',
-      'prefix' => '.',
-      'suffix' => 'acre',
+      'prefix' => '',
+      'suffix' => 'ac',
       'user_register_form' => FALSE,
     ),
     'widget' => array(
@@ -1096,7 +1096,7 @@ function property_field_default_field_instances() {
       'module' => 'number',
       'settings' => array(),
       'type' => 'number',
-      'weight' => 16,
+      'weight' => 24,
     ),
   );
 
@@ -1292,7 +1292,7 @@ function property_field_default_field_instances() {
         'label' => 'above',
         'settings' => array(),
         'type' => 'hidden',
-        'weight' => 26,
+        'weight' => 27,
       ),
       'full' => array(
         'label' => 'above',
@@ -1525,7 +1525,7 @@ function property_field_default_field_instances() {
           'thousand_separator' => '',
         ),
         'type' => 'number_integer',
-        'weight' => 21,
+        'weight' => 22,
       ),
       'full' => array(
         'label' => 'above',
@@ -1537,7 +1537,7 @@ function property_field_default_field_instances() {
           'thousand_separator' => '',
         ),
         'type' => 'number_integer',
-        'weight' => 17,
+        'weight' => 18,
       ),
     ),
     'entity_type' => 'node',
@@ -1556,7 +1556,7 @@ function property_field_default_field_instances() {
       'module' => 'number',
       'settings' => array(),
       'type' => 'number',
-      'weight' => 24,
+      'weight' => 25,
     ),
   );
 
@@ -1575,7 +1575,7 @@ function property_field_default_field_instances() {
   t('Last Purchase');
   t('Last Purchase Price');
   t('Lock data');
-  t('Lot Size');
+  t('Lot Area');
   t('Mortgage company');
   t('Notes');
   t('Owner Address');
@@ -1588,6 +1588,7 @@ function property_field_default_field_instances() {
   t('Repairs (estimated)');
   t('The year that a building on the property was originally constructed');
   t('The year that a building on the property was significantly improved or remodeled');
+  t('Total land lot area in acres');
   t('Turn on to make this lead available for all the other users.');
   t('Turn on to prevent user from editing the property data.');
   t('Under Contract');
