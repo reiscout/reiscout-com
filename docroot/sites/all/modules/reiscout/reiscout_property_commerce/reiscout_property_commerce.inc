@@ -165,7 +165,7 @@ function reiscout_property_commerce_get_property_address_price($node) {
   );
 
   $served_types = array(
-    'datetime', 'number_integer', 'list_integer', 'text', 'text_with_summary'
+    'datetime', 'number_integer', 'number_decimal', 'list_integer', 'text', 'text_with_summary'
   );
 
   $filled_fields_count = 0;
