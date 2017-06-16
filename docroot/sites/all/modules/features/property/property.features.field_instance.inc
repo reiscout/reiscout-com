@@ -29,7 +29,7 @@ function property_field_default_field_instances() {
         'module' => 'text',
         'settings' => array(),
         'type' => 'text_default',
-        'weight' => 4,
+        'weight' => 6,
       ),
       'full' => array(
         'label' => 'hidden',
@@ -98,7 +98,7 @@ function property_field_default_field_instances() {
           'use_widget_handlers' => 1,
         ),
         'type' => 'addressfield_default',
-        'weight' => 3,
+        'weight' => 5,
       ),
       'full' => array(
         'label' => 'above',
@@ -185,7 +185,7 @@ function property_field_default_field_instances() {
           'show_single_product_attributes' => FALSE,
         ),
         'type' => 'commerce_cart_add_to_cart_form',
-        'weight' => 0,
+        'weight' => 2,
       ),
       'full' => array(
         'label' => 'hidden',
@@ -252,7 +252,7 @@ function property_field_default_field_instances() {
           'thousand_separator' => '',
         ),
         'type' => 'number_integer',
-        'weight' => 17,
+        'weight' => 19,
       ),
       'full' => array(
         'label' => 'above',
@@ -264,7 +264,7 @@ function property_field_default_field_instances() {
           'thousand_separator' => '',
         ),
         'type' => 'number_integer',
-        'weight' => 16,
+        'weight' => 15,
       ),
     ),
     'entity_type' => 'node',
@@ -283,7 +283,7 @@ function property_field_default_field_instances() {
       'module' => 'number',
       'settings' => array(),
       'type' => 'number',
-      'weight' => 23,
+      'weight' => 22,
     ),
   );
 
@@ -316,7 +316,7 @@ function property_field_default_field_instances() {
           'thousand_separator' => '',
         ),
         'type' => 'number_integer',
-        'weight' => 14,
+        'weight' => 16,
       ),
       'full' => array(
         'label' => 'above',
@@ -328,7 +328,7 @@ function property_field_default_field_instances() {
           'thousand_separator' => '',
         ),
         'type' => 'number_integer',
-        'weight' => 13,
+        'weight' => 12,
       ),
     ),
     'entity_type' => 'node',
@@ -347,7 +347,7 @@ function property_field_default_field_instances() {
       'module' => 'number',
       'settings' => array(),
       'type' => 'number',
-      'weight' => 20,
+      'weight' => 19,
     ),
   );
 
@@ -380,7 +380,7 @@ function property_field_default_field_instances() {
           'thousand_separator' => '',
         ),
         'type' => 'number_integer',
-        'weight' => 11,
+        'weight' => 13,
       ),
       'full' => array(
         'label' => 'above',
@@ -444,7 +444,7 @@ function property_field_default_field_instances() {
           'thousand_separator' => '',
         ),
         'type' => 'number_integer',
-        'weight' => 10,
+        'weight' => 12,
       ),
       'full' => array(
         'label' => 'above',
@@ -500,7 +500,7 @@ function property_field_default_field_instances() {
         'label' => 'above',
         'settings' => array(),
         'type' => 'hidden',
-        'weight' => 23,
+        'weight' => 26,
       ),
       'full' => array(
         'label' => 'above',
@@ -550,7 +550,7 @@ function property_field_default_field_instances() {
         'module' => 'list',
         'settings' => array(),
         'type' => 'list_key',
-        'weight' => 2,
+        'weight' => 4,
       ),
       'full' => array(
         'label' => 'hidden',
@@ -611,7 +611,7 @@ function property_field_default_field_instances() {
           'thousand_separator' => '',
         ),
         'type' => 'number_decimal',
-        'weight' => 5,
+        'weight' => 7,
       ),
       'full' => array(
         'label' => 'above',
@@ -675,7 +675,7 @@ function property_field_default_field_instances() {
           'thousand_separator' => '',
         ),
         'type' => 'number_decimal',
-        'weight' => 6,
+        'weight' => 8,
       ),
       'full' => array(
         'label' => 'above',
@@ -730,7 +730,7 @@ function property_field_default_field_instances() {
         'label' => 'above',
         'settings' => array(),
         'type' => 'hidden',
-        'weight' => 25,
+        'weight' => 28,
       ),
       'full' => array(
         'label' => 'above',
@@ -787,7 +787,7 @@ function property_field_default_field_instances() {
           'image_style' => 'medium',
         ),
         'type' => 'image',
-        'weight' => 1,
+        'weight' => 3,
       ),
       'full' => array(
         'label' => 'hidden',
@@ -868,7 +868,7 @@ function property_field_default_field_instances() {
           'thousand_separator' => '',
         ),
         'type' => 'number_integer',
-        'weight' => 13,
+        'weight' => 15,
       ),
       'full' => array(
         'label' => 'above',
@@ -880,7 +880,7 @@ function property_field_default_field_instances() {
           'thousand_separator' => '',
         ),
         'type' => 'number_integer',
-        'weight' => 11,
+        'weight' => 10,
       ),
     ),
     'entity_type' => 'node',
@@ -927,7 +927,7 @@ function property_field_default_field_instances() {
         'label' => 'above',
         'settings' => array(),
         'type' => 'hidden',
-        'weight' => 24,
+        'weight' => 27,
       ),
       'full' => array(
         'label' => 'above',
@@ -941,7 +941,7 @@ function property_field_default_field_instances() {
           'show_remaining_days' => FALSE,
         ),
         'type' => 'date_default',
-        'weight' => 12,
+        'weight' => 11,
       ),
     ),
     'entity_type' => 'node',
@@ -1001,7 +1001,7 @@ function property_field_default_field_instances() {
           'thousand_separator' => '',
         ),
         'type' => 'number_integer',
-        'weight' => 12,
+        'weight' => 14,
       ),
       'full' => array(
         'label' => 'above',
@@ -1013,7 +1013,7 @@ function property_field_default_field_instances() {
           'thousand_separator' => '',
         ),
         'type' => 'number_integer',
-        'weight' => 10,
+        'weight' => 9,
       ),
     ),
     'entity_type' => 'node',
@@ -1055,14 +1055,14 @@ function property_field_default_field_instances() {
         'module' => 'text',
         'settings' => array(),
         'type' => 'text_default',
-        'weight' => 15,
+        'weight' => 17,
       ),
       'full' => array(
         'label' => 'above',
         'module' => 'text',
         'settings' => array(),
         'type' => 'text_default',
-        'weight' => 14,
+        'weight' => 13,
       ),
     ),
     'entity_type' => 'node',
@@ -1080,7 +1080,7 @@ function property_field_default_field_instances() {
         'size' => 60,
       ),
       'type' => 'text_textfield',
-      'weight' => 21,
+      'weight' => 20,
     ),
   );
 
@@ -1103,7 +1103,7 @@ function property_field_default_field_instances() {
         'module' => 'text',
         'settings' => array(),
         'type' => 'text_default',
-        'weight' => 8,
+        'weight' => 10,
       ),
       'full' => array(
         'label' => 'above',
@@ -1161,7 +1161,7 @@ function property_field_default_field_instances() {
           'use_widget_handlers' => 1,
         ),
         'type' => 'addressfield_default',
-        'weight' => 7,
+        'weight' => 9,
       ),
       'full' => array(
         'label' => 'above',
@@ -1228,7 +1228,7 @@ function property_field_default_field_instances() {
         'label' => 'above',
         'settings' => array(),
         'type' => 'hidden',
-        'weight' => 22,
+        'weight' => 25,
       ),
       'full' => array(
         'label' => 'above',
@@ -1284,7 +1284,7 @@ function property_field_default_field_instances() {
           'thousand_separator' => '',
         ),
         'type' => 'number_integer',
-        'weight' => 16,
+        'weight' => 18,
       ),
       'full' => array(
         'label' => 'above',
@@ -1296,7 +1296,7 @@ function property_field_default_field_instances() {
           'thousand_separator' => '',
         ),
         'type' => 'number_integer',
-        'weight' => 15,
+        'weight' => 14,
       ),
     ),
     'entity_type' => 'node',
@@ -1315,7 +1315,7 @@ function property_field_default_field_instances() {
       'module' => 'number',
       'settings' => array(),
       'type' => 'number',
-      'weight' => 22,
+      'weight' => 21,
     ),
   );
 
@@ -1348,7 +1348,7 @@ function property_field_default_field_instances() {
           'thousand_separator' => '',
         ),
         'type' => 'number_integer',
-        'weight' => 9,
+        'weight' => 11,
       ),
       'full' => array(
         'label' => 'above',
@@ -1406,14 +1406,14 @@ function property_field_default_field_instances() {
         'module' => 'list',
         'settings' => array(),
         'type' => 'list_default',
-        'weight' => 18,
+        'weight' => 20,
       ),
       'full' => array(
         'label' => 'above',
         'module' => 'list',
         'settings' => array(),
         'type' => 'list_default',
-        'weight' => 17,
+        'weight' => 16,
       ),
     ),
     'entity_type' => 'node',
@@ -1428,6 +1428,70 @@ function property_field_default_field_instances() {
       'module' => 'options',
       'settings' => array(),
       'type' => 'options_select',
+      'weight' => 23,
+    ),
+  );
+
+  // Exported field_instance: 'node-property-field_year_built'.
+  $field_instances['node-property-field_year_built'] = array(
+    'bundle' => 'property',
+    'default_value' => NULL,
+    'deleted' => 0,
+    'description' => 'The year that a building on the property was originally constructed',
+    'display' => array(
+      'default' => array(
+        'label' => 'above',
+        'module' => 'number',
+        'settings' => array(
+          'decimal_separator' => '.',
+          'prefix_suffix' => TRUE,
+          'scale' => 0,
+          'thousand_separator' => '',
+        ),
+        'type' => 'number_integer',
+        'weight' => 25,
+      ),
+      'drupalgap' => array(
+        'label' => 'above',
+        'module' => 'number',
+        'settings' => array(
+          'decimal_separator' => '.',
+          'prefix_suffix' => TRUE,
+          'scale' => 0,
+          'thousand_separator' => '',
+        ),
+        'type' => 'number_integer',
+        'weight' => 21,
+      ),
+      'full' => array(
+        'label' => 'above',
+        'module' => 'number',
+        'settings' => array(
+          'decimal_separator' => '.',
+          'prefix_suffix' => TRUE,
+          'scale' => 0,
+          'thousand_separator' => '',
+        ),
+        'type' => 'number_integer',
+        'weight' => 17,
+      ),
+    ),
+    'entity_type' => 'node',
+    'field_name' => 'field_year_built',
+    'label' => 'Year Built',
+    'required' => 0,
+    'settings' => array(
+      'max' => '',
+      'min' => 1900,
+      'prefix' => '',
+      'suffix' => '',
+      'user_register_form' => FALSE,
+    ),
+    'widget' => array(
+      'active' => 0,
+      'module' => 'number',
+      'settings' => array(),
+      'type' => 'number',
       'weight' => 24,
     ),
   );
@@ -1457,10 +1521,12 @@ function property_field_default_field_instances() {
   t('Property Size');
   t('Reiscout data');
   t('Repairs (estimated)');
+  t('The year that a building on the property was originally constructed');
   t('Turn on to make this lead available for all the other users.');
   t('Turn on to prevent user from editing the property data.');
   t('Under Contract');
   t('Upload property photo. ');
+  t('Year Built');
   t('Your current location (determined automatically)');
 
   return $field_instances;
