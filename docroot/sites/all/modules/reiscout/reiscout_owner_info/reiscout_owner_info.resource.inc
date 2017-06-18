@@ -36,7 +36,7 @@ function _reiscout_owner_info_get_show_button_info($data = array()) {
     // If user has enough points
     if ($points > 0) {
       $info['viewGetOwnerInfo'] = 1;
-      $info['btnGetOwnerInfoTitle'] = t('Get Property Owner (!points points left)', array('!points' => $points));
+      $info['btnGetOwnerInfoTitle'] = t('Get Full Property Data (!points points left)', array('!points' => $points));
     }
     // If not
     else {
