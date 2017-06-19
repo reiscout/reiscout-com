@@ -8,6 +8,10 @@
  * 2. Make call to connect2data_api
  */
 
+// @todo: we used this module for pulling only information about a
+// property owner, but now we use it for pulling information about
+// all the Property node fields, so we should to refactor the module.
+
 // Define constants
 // ToDo: put term to feature useing uuid and replace id here to uuid.
 define('TERM_ID_POINTS_OWNER_INFO', 1);
