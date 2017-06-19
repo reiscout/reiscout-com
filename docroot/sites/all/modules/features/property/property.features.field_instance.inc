@@ -29,7 +29,7 @@ function property_field_default_field_instances() {
         'module' => 'text',
         'settings' => array(),
         'type' => 'text_default',
-        'weight' => 6,
+        'weight' => 4,
       ),
       'full' => array(
         'label' => 'hidden',
@@ -98,7 +98,7 @@ function property_field_default_field_instances() {
           'use_widget_handlers' => 1,
         ),
         'type' => 'addressfield_default',
-        'weight' => 5,
+        'weight' => 3,
       ),
       'full' => array(
         'label' => 'above',
@@ -185,7 +185,7 @@ function property_field_default_field_instances() {
           'show_single_product_attributes' => FALSE,
         ),
         'type' => 'commerce_cart_add_to_cart_form',
-        'weight' => 2,
+        'weight' => 0,
       ),
       'full' => array(
         'label' => 'hidden',
@@ -228,7 +228,7 @@ function property_field_default_field_instances() {
     'bundle' => 'property',
     'default_value' => NULL,
     'deleted' => 0,
-    'description' => '',
+    'description' => 'The estimate of a property’s value after all repairs and upgrades are completed',
     'display' => array(
       'default' => array(
         'label' => 'above',
@@ -252,7 +252,7 @@ function property_field_default_field_instances() {
           'thousand_separator' => '',
         ),
         'type' => 'number_integer',
-        'weight' => 19,
+        'weight' => 22,
       ),
       'full' => array(
         'label' => 'above',
@@ -264,7 +264,7 @@ function property_field_default_field_instances() {
           'thousand_separator' => '',
         ),
         'type' => 'number_integer',
-        'weight' => 15,
+        'weight' => 29,
       ),
     ),
     'entity_type' => 'node',
@@ -283,7 +283,7 @@ function property_field_default_field_instances() {
       'module' => 'number',
       'settings' => array(),
       'type' => 'number',
-      'weight' => 22,
+      'weight' => 25,
     ),
   );
 
@@ -292,7 +292,7 @@ function property_field_default_field_instances() {
     'bundle' => 'property',
     'default_value' => NULL,
     'deleted' => 0,
-    'description' => '',
+    'description' => 'Combined value of the assessed land and improvements of the subject property',
     'display' => array(
       'default' => array(
         'label' => 'above',
@@ -300,11 +300,11 @@ function property_field_default_field_instances() {
         'settings' => array(
           'decimal_separator' => '.',
           'prefix_suffix' => TRUE,
-          'scale' => 0,
+          'scale' => 2,
           'thousand_separator' => '',
         ),
-        'type' => 'number_integer',
-        'weight' => 12,
+        'type' => 'number_decimal',
+        'weight' => 28,
       ),
       'drupalgap' => array(
         'label' => 'above',
@@ -312,11 +312,11 @@ function property_field_default_field_instances() {
         'settings' => array(
           'decimal_separator' => '.',
           'prefix_suffix' => TRUE,
-          'scale' => 0,
+          'scale' => 2,
           'thousand_separator' => '',
         ),
-        'type' => 'number_integer',
-        'weight' => 16,
+        'type' => 'number_decimal',
+        'weight' => 5,
       ),
       'full' => array(
         'label' => 'above',
@@ -324,11 +324,11 @@ function property_field_default_field_instances() {
         'settings' => array(
           'decimal_separator' => '.',
           'prefix_suffix' => TRUE,
-          'scale' => 0,
+          'scale' => 2,
           'thousand_separator' => '',
         ),
-        'type' => 'number_integer',
-        'weight' => 12,
+        'type' => 'number_decimal',
+        'weight' => 13,
       ),
     ),
     'entity_type' => 'node',
@@ -347,16 +347,16 @@ function property_field_default_field_instances() {
       'module' => 'number',
       'settings' => array(),
       'type' => 'number',
-      'weight' => 19,
+      'weight' => 9,
     ),
   );
 
-  // Exported field_instance: 'node-property-field_bathrooms'.
-  $field_instances['node-property-field_bathrooms'] = array(
+  // Exported field_instance: 'node-property-field_bedrooms'.
+  $field_instances['node-property-field_bedrooms'] = array(
     'bundle' => 'property',
     'default_value' => NULL,
     'deleted' => 0,
-    'description' => '',
+    'description' => 'Total number of bedroom contained in the subject property',
     'display' => array(
       'default' => array(
         'label' => 'above',
@@ -368,7 +368,7 @@ function property_field_default_field_instances() {
           'thousand_separator' => '',
         ),
         'type' => 'number_integer',
-        'weight' => 8,
+        'weight' => 7,
       ),
       'drupalgap' => array(
         'label' => 'above',
@@ -392,71 +392,7 @@ function property_field_default_field_instances() {
           'thousand_separator' => '',
         ),
         'type' => 'number_integer',
-        'weight' => 8,
-      ),
-    ),
-    'entity_type' => 'node',
-    'field_name' => 'field_bathrooms',
-    'label' => 'Bathrooms',
-    'required' => 0,
-    'settings' => array(
-      'max' => '',
-      'min' => '',
-      'prefix' => '',
-      'suffix' => '',
-      'user_register_form' => FALSE,
-    ),
-    'widget' => array(
-      'active' => 0,
-      'module' => 'number',
-      'settings' => array(),
-      'type' => 'number',
-      'weight' => 15,
-    ),
-  );
-
-  // Exported field_instance: 'node-property-field_bedrooms'.
-  $field_instances['node-property-field_bedrooms'] = array(
-    'bundle' => 'property',
-    'default_value' => NULL,
-    'deleted' => 0,
-    'description' => '',
-    'display' => array(
-      'default' => array(
-        'label' => 'above',
-        'module' => 'number',
-        'settings' => array(
-          'decimal_separator' => '.',
-          'prefix_suffix' => TRUE,
-          'scale' => 0,
-          'thousand_separator' => '',
-        ),
-        'type' => 'number_integer',
-        'weight' => 7,
-      ),
-      'drupalgap' => array(
-        'label' => 'above',
-        'module' => 'number',
-        'settings' => array(
-          'decimal_separator' => '.',
-          'prefix_suffix' => TRUE,
-          'scale' => 0,
-          'thousand_separator' => '',
-        ),
-        'type' => 'number_integer',
-        'weight' => 12,
-      ),
-      'full' => array(
-        'label' => 'above',
-        'module' => 'number',
-        'settings' => array(
-          'decimal_separator' => '.',
-          'prefix_suffix' => TRUE,
-          'scale' => 0,
-          'thousand_separator' => '',
-        ),
-        'type' => 'number_integer',
-        'weight' => 7,
+        'weight' => 20,
       ),
     ),
     'entity_type' => 'node',
@@ -475,7 +411,7 @@ function property_field_default_field_instances() {
       'module' => 'number',
       'settings' => array(),
       'type' => 'number',
-      'weight' => 14,
+      'weight' => 16,
     ),
   );
 
@@ -500,7 +436,7 @@ function property_field_default_field_instances() {
         'label' => 'above',
         'settings' => array(),
         'type' => 'hidden',
-        'weight' => 28,
+        'weight' => 30,
       ),
       'full' => array(
         'label' => 'above',
@@ -550,7 +486,7 @@ function property_field_default_field_instances() {
         'module' => 'list',
         'settings' => array(),
         'type' => 'list_key',
-        'weight' => 4,
+        'weight' => 2,
       ),
       'full' => array(
         'label' => 'hidden',
@@ -607,7 +543,7 @@ function property_field_default_field_instances() {
           'thousand_separator' => '',
         ),
         'type' => 'number_integer',
-        'weight' => 23,
+        'weight' => 17,
       ),
       'full' => array(
         'label' => 'above',
@@ -619,7 +555,7 @@ function property_field_default_field_instances() {
           'thousand_separator' => '',
         ),
         'type' => 'number_integer',
-        'weight' => 19,
+        'weight' => 24,
       ),
     ),
     'entity_type' => 'node',
@@ -638,7 +574,7 @@ function property_field_default_field_instances() {
       'module' => 'number',
       'settings' => array(),
       'type' => 'number',
-      'weight' => 26,
+      'weight' => 20,
     ),
   );
 
@@ -675,7 +611,7 @@ function property_field_default_field_instances() {
           'thousand_separator' => '',
         ),
         'type' => 'number_decimal',
-        'weight' => 7,
+        'weight' => 6,
       ),
       'full' => array(
         'label' => 'above',
@@ -687,12 +623,12 @@ function property_field_default_field_instances() {
           'thousand_separator' => '',
         ),
         'type' => 'number_decimal',
-        'weight' => 7,
+        'weight' => 15,
       ),
     ),
     'entity_type' => 'node',
     'field_name' => 'field_ep_appraised',
-    'label' => 'Appraised Equity Percentage',
+    'label' => 'Equity Percentage Estimate (appraised)',
     'required' => 0,
     'settings' => array(
       'max' => '',
@@ -706,7 +642,7 @@ function property_field_default_field_instances() {
       'module' => 'number',
       'settings' => array(),
       'type' => 'number',
-      'weight' => 8,
+      'weight' => 11,
     ),
   );
 
@@ -739,7 +675,7 @@ function property_field_default_field_instances() {
           'thousand_separator' => '',
         ),
         'type' => 'number_decimal',
-        'weight' => 8,
+        'weight' => 7,
       ),
       'full' => array(
         'label' => 'above',
@@ -751,12 +687,12 @@ function property_field_default_field_instances() {
           'thousand_separator' => '',
         ),
         'type' => 'number_decimal',
-        'weight' => 6,
+        'weight' => 14,
       ),
     ),
     'entity_type' => 'node',
     'field_name' => 'field_ep_calculated',
-    'label' => 'Calculated Equity Percentage',
+    'label' => 'Equity Percentage Estimate',
     'required' => 0,
     'settings' => array(
       'max' => '',
@@ -770,7 +706,71 @@ function property_field_default_field_instances() {
       'module' => 'number',
       'settings' => array(),
       'type' => 'number',
-      'weight' => 7,
+      'weight' => 10,
+    ),
+  );
+
+  // Exported field_instance: 'node-property-field_full_baths'.
+  $field_instances['node-property-field_full_baths'] = array(
+    'bundle' => 'property',
+    'default_value' => NULL,
+    'deleted' => 0,
+    'description' => 'Total number of full baths on the property',
+    'display' => array(
+      'default' => array(
+        'label' => 'above',
+        'module' => 'number',
+        'settings' => array(
+          'decimal_separator' => '.',
+          'prefix_suffix' => TRUE,
+          'scale' => 0,
+          'thousand_separator' => '',
+        ),
+        'type' => 'number_integer',
+        'weight' => 32,
+      ),
+      'drupalgap' => array(
+        'label' => 'above',
+        'module' => 'number',
+        'settings' => array(
+          'decimal_separator' => '.',
+          'prefix_suffix' => TRUE,
+          'scale' => 0,
+          'thousand_separator' => '',
+        ),
+        'type' => 'number_integer',
+        'weight' => 14,
+      ),
+      'full' => array(
+        'label' => 'above',
+        'module' => 'number',
+        'settings' => array(
+          'decimal_separator' => '.',
+          'prefix_suffix' => TRUE,
+          'scale' => 0,
+          'thousand_separator' => '',
+        ),
+        'type' => 'number_integer',
+        'weight' => 21,
+      ),
+    ),
+    'entity_type' => 'node',
+    'field_name' => 'field_full_baths',
+    'label' => 'Full Baths',
+    'required' => 0,
+    'settings' => array(
+      'max' => '',
+      'min' => '',
+      'prefix' => '',
+      'suffix' => '',
+      'user_register_form' => FALSE,
+    ),
+    'widget' => array(
+      'active' => 0,
+      'module' => 'number',
+      'settings' => array(),
+      'type' => 'number',
+      'weight' => 17,
     ),
   );
 
@@ -794,7 +794,7 @@ function property_field_default_field_instances() {
         'label' => 'above',
         'settings' => array(),
         'type' => 'hidden',
-        'weight' => 30,
+        'weight' => 31,
       ),
       'full' => array(
         'label' => 'above',
@@ -827,6 +827,134 @@ function property_field_default_field_instances() {
     ),
   );
 
+  // Exported field_instance: 'node-property-field_gross_area'.
+  $field_instances['node-property-field_gross_area'] = array(
+    'bundle' => 'property',
+    'default_value' => NULL,
+    'deleted' => 0,
+    'description' => 'Total living area square footage including unfinished area',
+    'display' => array(
+      'default' => array(
+        'label' => 'above',
+        'module' => 'number',
+        'settings' => array(
+          'decimal_separator' => '.',
+          'prefix_suffix' => TRUE,
+          'scale' => 0,
+          'thousand_separator' => '',
+        ),
+        'type' => 'number_integer',
+        'weight' => 31,
+      ),
+      'drupalgap' => array(
+        'label' => 'above',
+        'module' => 'number',
+        'settings' => array(
+          'decimal_separator' => '.',
+          'prefix_suffix' => TRUE,
+          'scale' => 0,
+          'thousand_separator' => '',
+        ),
+        'type' => 'number_integer',
+        'weight' => 12,
+      ),
+      'full' => array(
+        'label' => 'above',
+        'module' => 'number',
+        'settings' => array(
+          'decimal_separator' => '.',
+          'prefix_suffix' => TRUE,
+          'scale' => 0,
+          'thousand_separator' => '',
+        ),
+        'type' => 'number_integer',
+        'weight' => 19,
+      ),
+    ),
+    'entity_type' => 'node',
+    'field_name' => 'field_gross_area',
+    'label' => 'Gross Area',
+    'required' => 0,
+    'settings' => array(
+      'max' => '',
+      'min' => '',
+      'prefix' => '',
+      'suffix' => 'sq ft',
+      'user_register_form' => FALSE,
+    ),
+    'widget' => array(
+      'active' => 0,
+      'module' => 'number',
+      'settings' => array(),
+      'type' => 'number',
+      'weight' => 15,
+    ),
+  );
+
+  // Exported field_instance: 'node-property-field_half_baths'.
+  $field_instances['node-property-field_half_baths'] = array(
+    'bundle' => 'property',
+    'default_value' => NULL,
+    'deleted' => 0,
+    'description' => 'Total number of half baths on the property',
+    'display' => array(
+      'default' => array(
+        'label' => 'above',
+        'module' => 'number',
+        'settings' => array(
+          'decimal_separator' => '.',
+          'prefix_suffix' => TRUE,
+          'scale' => 0,
+          'thousand_separator' => '',
+        ),
+        'type' => 'number_integer',
+        'weight' => 33,
+      ),
+      'drupalgap' => array(
+        'label' => 'above',
+        'module' => 'number',
+        'settings' => array(
+          'decimal_separator' => '.',
+          'prefix_suffix' => TRUE,
+          'scale' => 0,
+          'thousand_separator' => '',
+        ),
+        'type' => 'number_integer',
+        'weight' => 15,
+      ),
+      'full' => array(
+        'label' => 'above',
+        'module' => 'number',
+        'settings' => array(
+          'decimal_separator' => '.',
+          'prefix_suffix' => TRUE,
+          'scale' => 0,
+          'thousand_separator' => '',
+        ),
+        'type' => 'number_integer',
+        'weight' => 22,
+      ),
+    ),
+    'entity_type' => 'node',
+    'field_name' => 'field_half_baths',
+    'label' => 'Half Baths',
+    'required' => 0,
+    'settings' => array(
+      'max' => '',
+      'min' => '',
+      'prefix' => '',
+      'suffix' => '',
+      'user_register_form' => FALSE,
+    ),
+    'widget' => array(
+      'active' => 0,
+      'module' => 'number',
+      'settings' => array(),
+      'type' => 'number',
+      'weight' => 18,
+    ),
+  );
+
   // Exported field_instance: 'node-property-field_image'.
   $field_instances['node-property-field_image'] = array(
     'bundle' => 'property',
@@ -851,7 +979,7 @@ function property_field_default_field_instances() {
           'image_style' => 'medium',
         ),
         'type' => 'image',
-        'weight' => 3,
+        'weight' => 1,
       ),
       'full' => array(
         'label' => 'hidden',
@@ -903,75 +1031,11 @@ function property_field_default_field_instances() {
     ),
   );
 
-  // Exported field_instance: 'node-property-field_last_purchase_price'.
-  $field_instances['node-property-field_last_purchase_price'] = array(
-    'bundle' => 'property',
-    'default_value' => NULL,
-    'deleted' => 0,
-    'description' => '',
-    'display' => array(
-      'default' => array(
-        'label' => 'above',
-        'module' => 'number',
-        'settings' => array(
-          'decimal_separator' => '.',
-          'prefix_suffix' => TRUE,
-          'scale' => 0,
-          'thousand_separator' => '',
-        ),
-        'type' => 'number_integer',
-        'weight' => 10,
-      ),
-      'drupalgap' => array(
-        'label' => 'above',
-        'module' => 'number',
-        'settings' => array(
-          'decimal_separator' => '.',
-          'prefix_suffix' => TRUE,
-          'scale' => 0,
-          'thousand_separator' => '',
-        ),
-        'type' => 'number_integer',
-        'weight' => 15,
-      ),
-      'full' => array(
-        'label' => 'above',
-        'module' => 'number',
-        'settings' => array(
-          'decimal_separator' => '.',
-          'prefix_suffix' => TRUE,
-          'scale' => 0,
-          'thousand_separator' => '',
-        ),
-        'type' => 'number_integer',
-        'weight' => 10,
-      ),
-    ),
-    'entity_type' => 'node',
-    'field_name' => 'field_last_purchase_price',
-    'label' => 'Last Purchase Price',
-    'required' => 0,
-    'settings' => array(
-      'max' => '',
-      'min' => '',
-      'prefix' => '$',
-      'suffix' => 'k',
-      'user_register_form' => FALSE,
-    ),
-    'widget' => array(
-      'active' => 0,
-      'module' => 'number',
-      'settings' => array(),
-      'type' => 'number',
-      'weight' => 17,
-    ),
-  );
-
-  // Exported field_instance: 'node-property-field_last_purchase_time'.
-  $field_instances['node-property-field_last_purchase_time'] = array(
+  // Exported field_instance: 'node-property-field_last_sale_date'.
+  $field_instances['node-property-field_last_sale_date'] = array(
     'bundle' => 'property',
     'deleted' => 0,
-    'description' => '',
+    'description' => 'Date of most recent subject property sale',
     'display' => array(
       'default' => array(
         'label' => 'above',
@@ -985,13 +1049,21 @@ function property_field_default_field_instances() {
           'show_remaining_days' => FALSE,
         ),
         'type' => 'date_default',
-        'weight' => 11,
+        'weight' => 30,
       ),
       'drupalgap' => array(
         'label' => 'above',
-        'settings' => array(),
-        'type' => 'hidden',
-        'weight' => 29,
+        'module' => 'date',
+        'settings' => array(
+          'format_type' => 'long',
+          'fromto' => 'both',
+          'multiple_from' => '',
+          'multiple_number' => '',
+          'multiple_to' => '',
+          'show_remaining_days' => FALSE,
+        ),
+        'type' => 'date_default',
+        'weight' => 9,
       ),
       'full' => array(
         'label' => 'above',
@@ -1005,15 +1077,15 @@ function property_field_default_field_instances() {
           'show_remaining_days' => FALSE,
         ),
         'type' => 'date_default',
-        'weight' => 11,
+        'weight' => 17,
       ),
     ),
     'entity_type' => 'node',
-    'field_name' => 'field_last_purchase_time',
-    'label' => 'Last Purchase',
+    'field_name' => 'field_last_sale_date',
+    'label' => 'Last Sale Date',
     'required' => 0,
     'settings' => array(
-      'default_value' => 'now',
+      'default_value' => 'blank',
       'default_value2' => 'same',
       'default_value_code' => '',
       'default_value_code2' => '',
@@ -1027,12 +1099,76 @@ function property_field_default_field_instances() {
         'input_format' => 'm/d/Y - H:i:s',
         'input_format_custom' => '',
         'label_position' => 'above',
-        'no_fieldset' => 0,
+        'no_fieldset' => 1,
         'text_parts' => array(),
-        'year_range' => '-3:+3',
+        'year_range' => '1900:+0',
       ),
       'type' => 'date_popup',
-      'weight' => 18,
+      'weight' => 13,
+    ),
+  );
+
+  // Exported field_instance: 'node-property-field_last_sale_price'.
+  $field_instances['node-property-field_last_sale_price'] = array(
+    'bundle' => 'property',
+    'default_value' => NULL,
+    'deleted' => 0,
+    'description' => 'Price of the sale as depicted on the recorded sales transaction',
+    'display' => array(
+      'default' => array(
+        'label' => 'above',
+        'module' => 'number',
+        'settings' => array(
+          'decimal_separator' => '.',
+          'prefix_suffix' => TRUE,
+          'scale' => 2,
+          'thousand_separator' => '',
+        ),
+        'type' => 'number_decimal',
+        'weight' => 29,
+      ),
+      'drupalgap' => array(
+        'label' => 'above',
+        'module' => 'number',
+        'settings' => array(
+          'decimal_separator' => '.',
+          'prefix_suffix' => TRUE,
+          'scale' => 2,
+          'thousand_separator' => '',
+        ),
+        'type' => 'number_decimal',
+        'weight' => 8,
+      ),
+      'full' => array(
+        'label' => 'above',
+        'module' => 'number',
+        'settings' => array(
+          'decimal_separator' => '.',
+          'prefix_suffix' => TRUE,
+          'scale' => 2,
+          'thousand_separator' => '',
+        ),
+        'type' => 'number_decimal',
+        'weight' => 16,
+      ),
+    ),
+    'entity_type' => 'node',
+    'field_name' => 'field_last_sale_price',
+    'label' => 'Last Sale Price',
+    'required' => 0,
+    'settings' => array(
+      'max' => '',
+      'min' => '',
+      'prefix' => '$',
+      'suffix' => 'k',
+      'user_register_form' => FALSE,
+    ),
+    'widget' => array(
+      'active' => 0,
+      'module' => 'number',
+      'settings' => array(),
+      'type' => 'number',
+      'weight' => 12,
     ),
   );
 
@@ -1065,7 +1201,7 @@ function property_field_default_field_instances() {
           'thousand_separator' => '',
         ),
         'type' => 'number_decimal',
-        'weight' => 21,
+        'weight' => 18,
       ),
       'full' => array(
         'label' => 'above',
@@ -1077,7 +1213,7 @@ function property_field_default_field_instances() {
           'thousand_separator' => '',
         ),
         'type' => 'number_decimal',
-        'weight' => 17,
+        'weight' => 25,
       ),
     ),
     'entity_type' => 'node',
@@ -1096,7 +1232,7 @@ function property_field_default_field_instances() {
       'module' => 'number',
       'settings' => array(),
       'type' => 'number',
-      'weight' => 24,
+      'weight' => 21,
     ),
   );
 
@@ -1105,7 +1241,7 @@ function property_field_default_field_instances() {
     'bundle' => 'property',
     'default_value' => NULL,
     'deleted' => 0,
-    'description' => '',
+    'description' => 'The name of the lender who grants the first mortgage on a property',
     'display' => array(
       'default' => array(
         'label' => 'above',
@@ -1119,14 +1255,14 @@ function property_field_default_field_instances() {
         'module' => 'text',
         'settings' => array(),
         'type' => 'text_default',
-        'weight' => 17,
+        'weight' => 20,
       ),
       'full' => array(
         'label' => 'above',
         'module' => 'text',
         'settings' => array(),
         'type' => 'text_default',
-        'weight' => 13,
+        'weight' => 27,
       ),
     ),
     'entity_type' => 'node',
@@ -1144,7 +1280,7 @@ function property_field_default_field_instances() {
         'size' => 60,
       ),
       'type' => 'text_textfield',
-      'weight' => 20,
+      'weight' => 23,
     ),
   );
 
@@ -1167,7 +1303,7 @@ function property_field_default_field_instances() {
         'module' => 'text',
         'settings' => array(),
         'type' => 'text_default',
-        'weight' => 10,
+        'weight' => 11,
       ),
       'full' => array(
         'label' => 'above',
@@ -1225,7 +1361,7 @@ function property_field_default_field_instances() {
           'use_widget_handlers' => 1,
         ),
         'type' => 'addressfield_default',
-        'weight' => 9,
+        'weight' => 10,
       ),
       'full' => array(
         'label' => 'above',
@@ -1292,7 +1428,7 @@ function property_field_default_field_instances() {
         'label' => 'above',
         'settings' => array(),
         'type' => 'hidden',
-        'weight' => 27,
+        'weight' => 29,
       ),
       'full' => array(
         'label' => 'above',
@@ -1348,7 +1484,7 @@ function property_field_default_field_instances() {
           'thousand_separator' => '',
         ),
         'type' => 'number_integer',
-        'weight' => 18,
+        'weight' => 21,
       ),
       'full' => array(
         'label' => 'above',
@@ -1360,7 +1496,7 @@ function property_field_default_field_instances() {
           'thousand_separator' => '',
         ),
         'type' => 'number_integer',
-        'weight' => 14,
+        'weight' => 28,
       ),
     ),
     'entity_type' => 'node',
@@ -1379,71 +1515,7 @@ function property_field_default_field_instances() {
       'module' => 'number',
       'settings' => array(),
       'type' => 'number',
-      'weight' => 21,
-    ),
-  );
-
-  // Exported field_instance: 'node-property-field_size'.
-  $field_instances['node-property-field_size'] = array(
-    'bundle' => 'property',
-    'default_value' => NULL,
-    'deleted' => 0,
-    'description' => '',
-    'display' => array(
-      'default' => array(
-        'label' => 'above',
-        'module' => 'number',
-        'settings' => array(
-          'decimal_separator' => '.',
-          'prefix_suffix' => TRUE,
-          'scale' => 0,
-          'thousand_separator' => '',
-        ),
-        'type' => 'number_integer',
-        'weight' => 6,
-      ),
-      'drupalgap' => array(
-        'label' => 'above',
-        'module' => 'number',
-        'settings' => array(
-          'decimal_separator' => '.',
-          'prefix_suffix' => TRUE,
-          'scale' => 0,
-          'thousand_separator' => '',
-        ),
-        'type' => 'number_integer',
-        'weight' => 11,
-      ),
-      'full' => array(
-        'label' => 'above',
-        'module' => 'number',
-        'settings' => array(
-          'decimal_separator' => '.',
-          'prefix_suffix' => TRUE,
-          'scale' => 0,
-          'thousand_separator' => '',
-        ),
-        'type' => 'number_integer',
-        'weight' => 6,
-      ),
-    ),
-    'entity_type' => 'node',
-    'field_name' => 'field_size',
-    'label' => 'Property Size',
-    'required' => 0,
-    'settings' => array(
-      'max' => '',
-      'min' => '',
-      'prefix' => '',
-      'suffix' => 'sq ft',
-      'user_register_form' => FALSE,
-    ),
-    'widget' => array(
-      'active' => 0,
-      'module' => 'number',
-      'settings' => array(),
-      'type' => 'number',
-      'weight' => 13,
+      'weight' => 24,
     ),
   );
 
@@ -1456,7 +1528,7 @@ function property_field_default_field_instances() {
       ),
     ),
     'deleted' => 0,
-    'description' => '',
+    'description' => 'Turn on if you have already made a contract to buy with the property owner',
     'display' => array(
       'default' => array(
         'label' => 'above',
@@ -1470,14 +1542,14 @@ function property_field_default_field_instances() {
         'module' => 'list',
         'settings' => array(),
         'type' => 'list_default',
-        'weight' => 20,
+        'weight' => 23,
       ),
       'full' => array(
         'label' => 'above',
         'module' => 'list',
         'settings' => array(),
         'type' => 'list_default',
-        'weight' => 16,
+        'weight' => 30,
       ),
     ),
     'entity_type' => 'node',
@@ -1492,7 +1564,7 @@ function property_field_default_field_instances() {
       'module' => 'options',
       'settings' => array(),
       'type' => 'options_select',
-      'weight' => 23,
+      'weight' => 26,
     ),
   );
 
@@ -1525,7 +1597,7 @@ function property_field_default_field_instances() {
           'thousand_separator' => '',
         ),
         'type' => 'number_integer',
-        'weight' => 22,
+        'weight' => 16,
       ),
       'full' => array(
         'label' => 'above',
@@ -1537,7 +1609,7 @@ function property_field_default_field_instances() {
           'thousand_separator' => '',
         ),
         'type' => 'number_integer',
-        'weight' => 18,
+        'weight' => 23,
       ),
     ),
     'entity_type' => 'node',
@@ -1556,7 +1628,55 @@ function property_field_default_field_instances() {
       'module' => 'number',
       'settings' => array(),
       'type' => 'number',
-      'weight' => 25,
+      'weight' => 19,
+    ),
+  );
+
+  // Exported field_instance: 'node-property-field_zoning'.
+  $field_instances['node-property-field_zoning'] = array(
+    'bundle' => 'property',
+    'default_value' => NULL,
+    'deleted' => 0,
+    'description' => 'The zoning classification of the subject property',
+    'display' => array(
+      'default' => array(
+        'label' => 'above',
+        'module' => 'text',
+        'settings' => array(),
+        'type' => 'text_default',
+        'weight' => 34,
+      ),
+      'drupalgap' => array(
+        'label' => 'above',
+        'module' => 'text',
+        'settings' => array(),
+        'type' => 'text_default',
+        'weight' => 19,
+      ),
+      'full' => array(
+        'label' => 'above',
+        'module' => 'text',
+        'settings' => array(),
+        'type' => 'text_default',
+        'weight' => 26,
+      ),
+    ),
+    'entity_type' => 'node',
+    'field_name' => 'field_zoning',
+    'label' => 'Zoning',
+    'required' => 0,
+    'settings' => array(
+      'text_processing' => 0,
+      'user_register_form' => FALSE,
+    ),
+    'widget' => array(
+      'active' => 1,
+      'module' => 'text',
+      'settings' => array(
+        'size' => 60,
+      ),
+      'type' => 'text_textfield',
+      'weight' => 22,
     ),
   );
 
@@ -1564,16 +1684,20 @@ function property_field_default_field_instances() {
   // Included for use with string extractors like potx.
   t('ARV (estimated)');
   t('Address');
-  t('Appraised Equity Percentage');
   t('Assessed Value');
-  t('Bathrooms');
   t('Bedrooms');
   t('Buy Address Access');
-  t('Calculated Equity Percentage');
+  t('Combined value of the assessed land and improvements of the subject property');
+  t('Date of most recent subject property sale');
   t('Effective Year Built');
   t('Enter property address. It will be visible only for users bought the access to this property.');
-  t('Last Purchase');
-  t('Last Purchase Price');
+  t('Equity Percentage Estimate');
+  t('Equity Percentage Estimate (appraised)');
+  t('Full Baths');
+  t('Gross Area');
+  t('Half Baths');
+  t('Last Sale Date');
+  t('Last Sale Price');
   t('Lock data');
   t('Lot Area');
   t('Mortgage company');
@@ -1583,18 +1707,27 @@ function property_field_default_field_instances() {
   t('Photo');
   t('Place this lead on the marketplace');
   t('Position');
-  t('Property Size');
+  t('Price of the sale as depicted on the recorded sales transaction');
   t('Reiscout data');
   t('Repairs (estimated)');
+  t('The estimate of a property’s value after all repairs and upgrades are completed');
+  t('The name of the lender who grants the first mortgage on a property');
   t('The year that a building on the property was originally constructed');
   t('The year that a building on the property was significantly improved or remodeled');
+  t('The zoning classification of the subject property');
   t('Total land lot area in acres');
+  t('Total living area square footage including unfinished area');
+  t('Total number of bedroom contained in the subject property');
+  t('Total number of full baths on the property');
+  t('Total number of half baths on the property');
+  t('Turn on if you have already made a contract to buy with the property owner');
   t('Turn on to make this lead available for all the other users.');
   t('Turn on to prevent user from editing the property data.');
   t('Under Contract');
   t('Upload property photo. ');
   t('Year Built');
   t('Your current location (determined automatically)');
+  t('Zoning');
 
   return $field_instances;
 }

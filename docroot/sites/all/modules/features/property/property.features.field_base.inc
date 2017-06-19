@@ -92,24 +92,13 @@ function property_field_default_field_bases() {
     'indexes' => array(),
     'locked' => 0,
     'module' => 'number',
-    'settings' => array(),
+    'settings' => array(
+      'decimal_separator' => '.',
+      'precision' => 10,
+      'scale' => 2,
+    ),
     'translatable' => 0,
-    'type' => 'number_integer',
-  );
-
-  // Exported field_base: 'field_bathrooms'.
-  $field_bases['field_bathrooms'] = array(
-    'active' => 1,
-    'cardinality' => 1,
-    'deleted' => 0,
-    'entity_types' => array(),
-    'field_name' => 'field_bathrooms',
-    'indexes' => array(),
-    'locked' => 0,
-    'module' => 'number',
-    'settings' => array(),
-    'translatable' => 0,
-    'type' => 'number_integer',
+    'type' => 'number_decimal',
   );
 
   // Exported field_base: 'field_bedrooms'.
@@ -230,6 +219,21 @@ function property_field_default_field_bases() {
     'type' => 'number_decimal',
   );
 
+  // Exported field_base: 'field_full_baths'.
+  $field_bases['field_full_baths'] = array(
+    'active' => 1,
+    'cardinality' => 1,
+    'deleted' => 0,
+    'entity_types' => array(),
+    'field_name' => 'field_full_baths',
+    'indexes' => array(),
+    'locked' => 0,
+    'module' => 'number',
+    'settings' => array(),
+    'translatable' => 0,
+    'type' => 'number_integer',
+  );
+
   // Exported field_base: 'field_geo_position'.
   $field_bases['field_geo_position'] = array(
     'active' => 1,
@@ -280,6 +284,36 @@ function property_field_default_field_bases() {
     'type' => 'geofield',
   );
 
+  // Exported field_base: 'field_gross_area'.
+  $field_bases['field_gross_area'] = array(
+    'active' => 1,
+    'cardinality' => 1,
+    'deleted' => 0,
+    'entity_types' => array(),
+    'field_name' => 'field_gross_area',
+    'indexes' => array(),
+    'locked' => 0,
+    'module' => 'number',
+    'settings' => array(),
+    'translatable' => 0,
+    'type' => 'number_integer',
+  );
+
+  // Exported field_base: 'field_half_baths'.
+  $field_bases['field_half_baths'] = array(
+    'active' => 1,
+    'cardinality' => 1,
+    'deleted' => 0,
+    'entity_types' => array(),
+    'field_name' => 'field_half_baths',
+    'indexes' => array(),
+    'locked' => 0,
+    'module' => 'number',
+    'settings' => array(),
+    'translatable' => 0,
+    'type' => 'number_integer',
+  );
+
   // Exported field_base: 'field_image'.
   $field_bases['field_image'] = array(
     'active' => 1,
@@ -302,28 +336,13 @@ function property_field_default_field_bases() {
     'type' => 'image',
   );
 
-  // Exported field_base: 'field_last_purchase_price'.
-  $field_bases['field_last_purchase_price'] = array(
+  // Exported field_base: 'field_last_sale_date'.
+  $field_bases['field_last_sale_date'] = array(
     'active' => 1,
     'cardinality' => 1,
     'deleted' => 0,
     'entity_types' => array(),
-    'field_name' => 'field_last_purchase_price',
-    'indexes' => array(),
-    'locked' => 0,
-    'module' => 'number',
-    'settings' => array(),
-    'translatable' => 0,
-    'type' => 'number_integer',
-  );
-
-  // Exported field_base: 'field_last_purchase_time'.
-  $field_bases['field_last_purchase_time'] = array(
-    'active' => 1,
-    'cardinality' => 1,
-    'deleted' => 0,
-    'entity_types' => array(),
-    'field_name' => 'field_last_purchase_time',
+    'field_name' => 'field_last_sale_date',
     'indexes' => array(),
     'locked' => 0,
     'module' => 'date',
@@ -331,7 +350,7 @@ function property_field_default_field_bases() {
       'cache_count' => 4,
       'cache_enabled' => 0,
       'granularity' => array(
-        'day' => 0,
+        'day' => 'day',
         'hour' => 0,
         'minute' => 0,
         'month' => 'month',
@@ -344,6 +363,25 @@ function property_field_default_field_bases() {
     ),
     'translatable' => 0,
     'type' => 'datetime',
+  );
+
+  // Exported field_base: 'field_last_sale_price'.
+  $field_bases['field_last_sale_price'] = array(
+    'active' => 1,
+    'cardinality' => 1,
+    'deleted' => 0,
+    'entity_types' => array(),
+    'field_name' => 'field_last_sale_price',
+    'indexes' => array(),
+    'locked' => 0,
+    'module' => 'number',
+    'settings' => array(
+      'decimal_separator' => '.',
+      'precision' => 10,
+      'scale' => 2,
+    ),
+    'translatable' => 0,
+    'type' => 'number_decimal',
   );
 
   // Exported field_base: 'field_lot_area_acres'.
@@ -462,21 +500,6 @@ function property_field_default_field_bases() {
     'type' => 'number_integer',
   );
 
-  // Exported field_base: 'field_size'.
-  $field_bases['field_size'] = array(
-    'active' => 1,
-    'cardinality' => 1,
-    'deleted' => 0,
-    'entity_types' => array(),
-    'field_name' => 'field_size',
-    'indexes' => array(),
-    'locked' => 0,
-    'module' => 'number',
-    'settings' => array(),
-    'translatable' => 0,
-    'type' => 'number_integer',
-  );
-
   // Exported field_base: 'field_under_contract'.
   $field_bases['field_under_contract'] = array(
     'active' => 1,
@@ -515,6 +538,27 @@ function property_field_default_field_bases() {
     'settings' => array(),
     'translatable' => 0,
     'type' => 'number_integer',
+  );
+
+  // Exported field_base: 'field_zoning'.
+  $field_bases['field_zoning'] = array(
+    'active' => 1,
+    'cardinality' => 1,
+    'deleted' => 0,
+    'entity_types' => array(),
+    'field_name' => 'field_zoning',
+    'indexes' => array(
+      'format' => array(
+        0 => 'format',
+      ),
+    ),
+    'locked' => 0,
+    'module' => 'text',
+    'settings' => array(
+      'max_length' => 15,
+    ),
+    'translatable' => 0,
+    'type' => 'text',
   );
 
   return $field_bases;
