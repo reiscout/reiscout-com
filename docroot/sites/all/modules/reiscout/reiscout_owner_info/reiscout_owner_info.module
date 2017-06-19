@@ -106,7 +106,7 @@ function reiscout_owner_info_get_owner_callback($node) {
     drupal_goto();
   }
 
-  _reiscout_owner_info_save($node, $info);
+  _reiscout_property_update_fields($node, $info);
   _reiscout_owner_info_decrease_user_points();
 
   drupal_set_message('Property information has been received successfully.');
@@ -127,7 +127,7 @@ function reiscout_owner_info_get_owner_drupalgap_callback($nid) {
     return FALSE;
   }
 
-  _reiscout_owner_info_save($nid, $info);
+  _reiscout_property_update_fields($nid, $info);
   _reiscout_owner_info_decrease_user_points();
 
   return TRUE;
@@ -291,25 +291,6 @@ function _reiscout_owner_info_resource_access($op, $args = array()) {
   }
 
   return FALSE;
-}
-
-/**
- * Fills Owner's Address field with info we received from the Connect2Data API.
- */
-function _reiscout_owner_info_save($node, $info) {
-  $nw = entity_metadata_wrapper('node', $node);
-
-  $nw->field_owner_postal_address->country = 'US';
-  $nw->field_owner_postal_address->name_line = trim($info->PROPERTY_OWNER->attributes()->_OwnerName);
-  $nw->field_owner_postal_address->thoroughfare = trim($info->PROPERTY_OWNER->attributes()->_MailingAddress);
-  $nw->field_owner_postal_address->postal_code = trim($info->PROPERTY_OWNER->attributes()->_MailingPostalCode);
-
-  if (preg_match('!(.+?)\s+([A-Z]{2})$!', $info->PROPERTY_OWNER->attributes()->_MailingCityAndState, $matches)) {
-    $nw->field_owner_postal_address->locality = $matches[1];
-    $nw->field_owner_postal_address->administrative_area = $matches[2];
-  }
-
-  $nw->save();
 }
 
 /**

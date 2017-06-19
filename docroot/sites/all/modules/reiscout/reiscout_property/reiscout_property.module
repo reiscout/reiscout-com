@@ -327,6 +327,25 @@ function _reiscout_property_get_c2d_report_by_nid($nid, $request_reason) {
 }
 
 /**
+ * Updates Property node fields with info we received from the Connect2Data API.
+ */
+function _reiscout_property_update_fields($node, $info) {
+  $nw = entity_metadata_wrapper('node', $node);
+
+  $nw->field_owner_postal_address->country = 'US';
+  $nw->field_owner_postal_address->name_line = trim($info->PROPERTY_OWNER->attributes()->_OwnerName);
+  $nw->field_owner_postal_address->thoroughfare = trim($info->PROPERTY_OWNER->attributes()->_MailingAddress);
+  $nw->field_owner_postal_address->postal_code = trim($info->PROPERTY_OWNER->attributes()->_MailingPostalCode);
+
+  if (preg_match('!(.+?)\s+([A-Z]{2})$!', $info->PROPERTY_OWNER->attributes()->_MailingCityAndState, $matches)) {
+    $nw->field_owner_postal_address->locality = $matches[1];
+    $nw->field_owner_postal_address->administrative_area = $matches[2];
+  }
+
+  $nw->save();
+}
+
+/**
  * Checks if an address of a property has been filled out.
  */
 function _reiscout_property_is_address_filled_by_nid($nid) {
