@@ -151,7 +151,7 @@ function reiscout_property_commerce_get_property_address_price($node) {
   // Load fields from fieldgroup? see field_group_load_field_group()
   $fields_to_check = array(
     'body',
-    'field_size',
+    'field_gross_area',
     'field_bedrooms',
     'field_bathrooms',
     'field_lot_area_acres',
