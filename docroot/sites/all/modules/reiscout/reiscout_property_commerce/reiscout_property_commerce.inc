@@ -147,22 +147,24 @@ function reiscout_property_commerce_get_owner_info_price() {
  * Calculate and return property address price
  */
 function reiscout_property_commerce_get_property_address_price($node) {
-
   // Load fields from fieldgroup? see field_group_load_field_group()
   $fields_to_check = array(
     'body',
+    'field_assessed_value',
+    'field_last_sale_price',
+    'field_last_sale_date',
     'field_gross_area',
     'field_bedrooms',
     'field_full_baths',
     'field_half_baths',
+    'field_year_built',
+    'field_effective_year_built',
     'field_lot_area_acres',
-    'field_last_sale_price',
-    'field_last_sale_date',
-    'field_assessed_value',
+    'field_zoning',
     'field_mortgage_company',
     'field_repairs_price',
     'field_arv',
-    'field_under_contract'
+    'field_under_contract',
   );
 
   $served_types = array(
