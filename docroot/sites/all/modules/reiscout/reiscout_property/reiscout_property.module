@@ -302,19 +302,13 @@ function reiscout_property_entity_load($entities, $type) {
  * Builds data that is needed for request to the Connect2Data API.
  */
 function _reiscout_property_build_property_criteria($nid) {
-  $nw = entity_metadata_wrapper('node', $nid);
-
-  if (!$address = $nw->field_address->value()) {
-    $message = "The property's !nid address was not set.";
-    watchdog('reiscout_property', $message, array('!nid' => $nid), WATCHDOG_ERROR);
-    return FALSE;
-  }
+  $address = _reiscout_property_get_address_by_nid($nid);
 
   return array(
-    'street_address' => $address['thoroughfare'],
-    'city' => $address['locality'],
-    'state' => $address['administrative_area'],
-    'postal_code' => $address['postal_code'],
+    'street_address' => $address->thoroughfare->value(),
+    'city' => $address->locality->value(),
+    'state' => $address->administrative_area->value(),
+    'postal_code' => $address->postal_code->value(),
   );
 }
 
@@ -322,13 +316,14 @@ function _reiscout_property_build_property_criteria($nid) {
  * Makes a request to the Connect2Data API and returns full info about property.
  */
 function _reiscout_property_get_c2d_report_by_nid($nid, $request_reason) {
-  if ($property_criteria = _reiscout_property_build_property_criteria($nid)) {
-    if ($report = connect2data_api_get_detailed_subject_report($property_criteria, $request_reason)) {
-      return $report;
-    }
+  try {
+    $property_criteria = _reiscout_property_build_property_criteria($nid);
+    return connect2data_api_get_detailed_subject_report($property_criteria, $request_reason);
   }
-
-  return FALSE;
+  catch (Exception $e) {
+    watchdog_exception('reiscout_property', $e);
+    return FALSE;
+  }
 }
 
 /**
