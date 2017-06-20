@@ -442,3 +442,7 @@ body.page-onepage #main-menu a.active:active {
   margin: 0 0 0 2px;
   vertical-align: middle;
 }
+
+.node-type-property .field-name-body {
+  font-size: 13px;
+}
