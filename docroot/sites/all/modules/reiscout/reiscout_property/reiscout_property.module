@@ -332,17 +332,83 @@ function _reiscout_property_get_c2d_report_by_nid($nid, $request_reason) {
 function _reiscout_property_update_fields($node, $info) {
   $nw = entity_metadata_wrapper('node', $node);
 
-  $nw->field_owner_postal_address->country = 'US';
-  $nw->field_owner_postal_address->name_line = trim($info->PROPERTY_OWNER->attributes()->_OwnerName);
-  $nw->field_owner_postal_address->thoroughfare = trim($info->PROPERTY_OWNER->attributes()->_MailingAddress);
-  $nw->field_owner_postal_address->postal_code = trim($info->PROPERTY_OWNER->attributes()->_MailingPostalCode);
+  // 'Assessed Value' field
+  if ($assessed_value = $info->_PROPERTY_TAX->attributes()->_TotalAssessedValueAmount->__toString()) {
+    $nw->field_assessed_value = $assessed_value / 1000;
+  }
 
-  if (preg_match('!(.+?)\s+([A-Z]{2})$!', $info->PROPERTY_OWNER->attributes()->_MailingCityAndState, $matches)) {
+  // 'Last Sale Price' field
+  if ($last_sale_price = $info->_PROPERTY_HISTORY->_SALES_HISTORY->attributes()->_LastSalesPriceAmount->__toString()) {
+    $nw->field_last_sale_price = $last_sale_price / 1000;
+  }
+
+  // 'Last Sale Date' field
+  if ($last_sale_date = $info->_PROPERTY_HISTORY->_SALES_HISTORY->attributes()->_LastSalesDate->__toString()) {
+    $nw->field_last_sale_date = strtotime($last_sale_date);
+  }
+
+  // 'Owner Address' field
+  $nw->field_owner_postal_address->country = 'US';
+  $nw->field_owner_postal_address->name_line = $info->PROPERTY_OWNER->attributes()->_OwnerName->__toString();
+  $nw->field_owner_postal_address->thoroughfare = $info->PROPERTY_OWNER->attributes()->_MailingAddress->__toString();
+  $nw->field_owner_postal_address->postal_code = $info->PROPERTY_OWNER->attributes()->_MailingPostalCode->__toString();
+
+  if (preg_match('!(.+?)\s+([A-Z]{2})$!', $info->PROPERTY_OWNER->attributes()->_MailingCityAndState->__toString(), $matches)) {
     $nw->field_owner_postal_address->locality = $matches[1];
     $nw->field_owner_postal_address->administrative_area = $matches[2];
   }
 
+  // 'Gross Area' field
+  if ($gross_area = $info->_PROPERTY_CHARACTERISTICS->_IMPROVEMENTS->_ROOM_COUNT->attributes()->_GrossLivingAreaSquareFeetNumber->__toString()) {
+    $nw->field_gross_area = $gross_area;
+  }
+
+  // 'Bedrooms' field
+  if ($bedrooms = $info->_PROPERTY_CHARACTERISTICS->_IMPROVEMENTS->_ROOM_COUNT->attributes()->_TotalBedroomsCount->__toString()) {
+    $nw->field_bedrooms = $bedrooms;
+  }
+
+  // 'Full Baths' field
+  if ($full_baths = $info->_PROPERTY_CHARACTERISTICS->_IMPROVEMENTS->_ROOM_COUNT->attributes()->_TotalFullBathsCount->__toString()) {
+    $nw->field_full_baths = $full_baths;
+  }
+
+  // 'Half Baths' field
+  if ($half_baths = $info->_PROPERTY_CHARACTERISTICS->_IMPROVEMENTS->_ROOM_COUNT->attributes()->_TotalHalfBathsCount->__toString()) {
+    $nw->field_half_baths = $half_baths;
+  }
+
+  // 'Year Built' field
+  if ($year_built = $info->_PROPERTY_CHARACTERISTICS->_IMPROVEMENTS->_GENERAL_DESCRIPTION->attributes()->_YearBuiltDateIdentifier->__toString()) {
+    $nw->field_year_built = $year_built;
+  }
+
+  // 'Effective Year Built' field
+  if ($effective_year_built = $info->_PROPERTY_CHARACTERISTICS->_IMPROVEMENTS->_GENERAL_DESCRIPTION->attributes()->_EffectiveYearBuiltDateIdentifier->__toString()) {
+    $nw->field_effective_year_built = $effective_year_built;
+  }
+
+  // 'Lot Area' field
+  if ($lot_area_acres = $info->_PROPERTY_CHARACTERISTICS->_SITE->_DIMENSIONS->attributes()->_LotAreaAcresNumber->__toString()) {
+    $nw->field_lot_area_acres = $lot_area_acres;
+  }
+
+  // 'Mortgage Company' field
+  if ($mortgage_company = $info->_PROPERTY_HISTORY->_SALES_HISTORY->attributes()->_LenderName->__toString()) {
+    $nw->field_mortgage_company = $mortgage_company;
+  }
+
+  // 'Zoning' field
+  if ($zoning = $info->_PROPERTY_CHARACTERISTICS->_SITE->_ZONING->attributes()->_ClassificationIdentifier->__toString()) {
+    $nw->field_zoning = $zoning;
+  }
+
+  // Lock the Property node fields from editing
+  $nw->field_data_locked = TRUE;
   $nw->save();
+
+  // Calculate the 'Equity Percentage Estimate' field
+  reiscout_equity_percentage_recalculate_in_property_by_nid($nw->nid->value());
 }
 
 /**
