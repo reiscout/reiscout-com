@@ -432,7 +432,7 @@ function _reiscout_property_is_address_filled_by_nid($nid) {
  */
 function _reiscout_property_get_address_by_nid($nid) {
   if (!_reiscout_property_is_address_filled_by_nid($nid)) {
-    $msg = t("An address of a property is empty or incomplete.");
+    $msg = t('An address of a property !nid is empty or incomplete.', array('!nid' => $nid));
     throw new ReiscoutPropertyAddressIsNotSet($msg);
   }
 
@@ -463,7 +463,7 @@ function _reiscout_property_is_owner_address_filled_by_nid($nid) {
  */
 function _reiscout_property_get_owner_address_by_nid($nid) {
   if (!_reiscout_property_is_owner_address_filled_by_nid($nid)) {
-    $msg = t("An address of a property's owner is empty or incomplete.");
+    $msg = t('An address of a property !nid owner is empty or incomplete.', array('!nid' => $nid));
     throw new ReiscoutPropertyOwnerAddressIsNotSet($msg);
   }
 
@@ -506,7 +506,7 @@ function _reiscout_property_get_user_address($uid = NULL) {
   }
 
   if (!_reiscout_property_is_user_address_filled($uid)) {
-    $msg = t('User postal address is empty or incomplete.');
+    $msg = t('User !uid postal address is empty or incomplete.', array('!uid' => $uid));
     throw new ReiscoutPropertyUserAddressIsNotSet($msg);
   }
 
@@ -528,7 +528,7 @@ function _reiscout_property_get_user_phone($uid = NULL) {
   $uw = entity_metadata_wrapper('user', $uid);
 
   if (!$phone_number = $uw->field_user_phone_number->value()) {
-    $msg = t('User phone number is not set.');
+    $msg = t('User !uid phone number is not set.', array('!uid' => $uid));
     throw new ReiscoutPropertyUserPhoneNumberIsNotSet($msg);
   }
 
