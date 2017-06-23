@@ -516,57 +516,6 @@ function property_field_default_field_instances() {
     ),
   );
 
-  // Exported field_instance: 'node-property-field_data_verified'.
-  $field_instances['node-property-field_data_verified'] = array(
-    'bundle' => 'property',
-    'default_value' => array(
-      0 => array(
-        'value' => 0,
-      ),
-    ),
-    'deleted' => 0,
-    'description' => '',
-    'display' => array(
-      'default' => array(
-        'label' => 'above',
-        'module' => 'list',
-        'settings' => array(),
-        'type' => 'list_default',
-        'weight' => 24,
-      ),
-      'drupalgap' => array(
-        'label' => 'hidden',
-        'module' => 'list',
-        'settings' => array(),
-        'type' => 'list_key',
-        'weight' => 2,
-      ),
-      'full' => array(
-        'label' => 'hidden',
-        'module' => 'list',
-        'settings' => array(),
-        'type' => 'list_key',
-        'weight' => 2,
-      ),
-    ),
-    'entity_type' => 'node',
-    'field_name' => 'field_data_verified',
-    'label' => 'Reiscout data',
-    'required' => 0,
-    'settings' => array(
-      'user_register_form' => FALSE,
-    ),
-    'widget' => array(
-      'active' => 1,
-      'module' => 'options',
-      'settings' => array(
-        'display_label' => 1,
-      ),
-      'type' => 'options_onoff',
-      'weight' => 17,
-    ),
-  );
-
   // Exported field_instance: 'node-property-field_effective_year_built'.
   $field_instances['node-property-field_effective_year_built'] = array(
     'bundle' => 'property',
@@ -1762,7 +1711,6 @@ function property_field_default_field_instances() {
   t('Place this lead on the marketplace');
   t('Position');
   t('Price of the sale as depicted on the recorded sales transaction');
-  t('Reiscout data');
   t('Repairs (estimated)');
   t('The estimate of a property’s value after all repairs and upgrades are completed');
   t('The name of the lender who grants the first mortgage on a property');

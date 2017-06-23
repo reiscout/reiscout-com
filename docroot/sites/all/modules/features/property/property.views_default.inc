@@ -39,7 +39,7 @@ function property_views_default_views() {
   $handler->display->display_options['relationships']['uid']['id'] = 'uid';
   $handler->display->display_options['relationships']['uid']['table'] = 'node';
   $handler->display->display_options['relationships']['uid']['field'] = 'uid';
-  /* Field: Content: Image */
+  /* Field: Content: Photo */
   $handler->display->display_options['fields']['field_image']['id'] = 'field_image';
   $handler->display->display_options['fields']['field_image']['table'] = 'field_data_field_image';
   $handler->display->display_options['fields']['field_image']['field'] = 'field_image';
@@ -194,7 +194,7 @@ function property_views_default_views() {
   $handler->display->display_options['empty']['area_text_custom']['empty'] = TRUE;
   $handler->display->display_options['empty']['area_text_custom']['content'] = 'There are not any properties that meet your filter criteria.';
   $handler->display->display_options['defaults']['fields'] = FALSE;
-  /* Field: Content: Image */
+  /* Field: Content: Photo */
   $handler->display->display_options['fields']['field_image']['id'] = 'field_image';
   $handler->display->display_options['fields']['field_image']['table'] = 'field_data_field_image';
   $handler->display->display_options['fields']['field_image']['field'] = 'field_image';
@@ -210,14 +210,6 @@ function property_views_default_views() {
   $handler->display->display_options['fields']['field_image']['delta_limit'] = '1';
   $handler->display->display_options['fields']['field_image']['delta_offset'] = '0';
   $handler->display->display_options['fields']['field_image']['delta_first_last'] = TRUE;
-  /* Field: Content: Reiscout data */
-  $handler->display->display_options['fields']['field_data_verified']['id'] = 'field_data_verified';
-  $handler->display->display_options['fields']['field_data_verified']['table'] = 'field_data_field_data_verified';
-  $handler->display->display_options['fields']['field_data_verified']['field'] = 'field_data_verified';
-  $handler->display->display_options['fields']['field_data_verified']['label'] = '';
-  $handler->display->display_options['fields']['field_data_verified']['element_type'] = '0';
-  $handler->display->display_options['fields']['field_data_verified']['element_label_colon'] = FALSE;
-  $handler->display->display_options['fields']['field_data_verified']['type'] = 'list_key';
   /* Field: Content: Address - Locality (i.e. City) */
   $handler->display->display_options['fields']['field_address_locality']['id'] = 'field_address_locality';
   $handler->display->display_options['fields']['field_address_locality']['table'] = 'field_data_field_address';
@@ -344,7 +336,7 @@ function property_views_default_views() {
   $handler->display->display_options['defaults']['row_plugin'] = FALSE;
   $handler->display->display_options['defaults']['row_options'] = FALSE;
   $handler->display->display_options['defaults']['fields'] = FALSE;
-  /* Field: Content: Image */
+  /* Field: Content: Photo */
   $handler->display->display_options['fields']['field_image']['id'] = 'field_image';
   $handler->display->display_options['fields']['field_image']['table'] = 'field_data_field_image';
   $handler->display->display_options['fields']['field_image']['field'] = 'field_image';
@@ -363,13 +355,6 @@ function property_views_default_views() {
   $handler->display->display_options['fields']['nid']['table'] = 'node';
   $handler->display->display_options['fields']['nid']['field'] = 'nid';
   $handler->display->display_options['fields']['nid']['label'] = 'nid';
-  /* Field: Content: Reiscout data */
-  $handler->display->display_options['fields']['field_data_verified']['id'] = 'field_data_verified';
-  $handler->display->display_options['fields']['field_data_verified']['table'] = 'field_data_field_data_verified';
-  $handler->display->display_options['fields']['field_data_verified']['field'] = 'field_data_verified';
-  $handler->display->display_options['fields']['field_data_verified']['label'] = 'data_verified';
-  $handler->display->display_options['fields']['field_data_verified']['element_label_colon'] = FALSE;
-  $handler->display->display_options['fields']['field_data_verified']['type'] = 'list_key';
   /* Field: Content: Address - Locality (i.e. City) */
   $handler->display->display_options['fields']['field_address_locality']['id'] = 'field_address_locality';
   $handler->display->display_options['fields']['field_address_locality']['table'] = 'field_data_field_address';
@@ -469,7 +454,7 @@ function property_views_default_views() {
   $handler->display->display_options['defaults']['row_plugin'] = FALSE;
   $handler->display->display_options['defaults']['row_options'] = FALSE;
   $handler->display->display_options['defaults']['fields'] = FALSE;
-  /* Field: Content: Image */
+  /* Field: Content: Photo */
   $handler->display->display_options['fields']['field_image']['id'] = 'field_image';
   $handler->display->display_options['fields']['field_image']['table'] = 'field_data_field_image';
   $handler->display->display_options['fields']['field_image']['field'] = 'field_image';
@@ -503,13 +488,6 @@ function property_views_default_views() {
       'address' => 'address',
     ),
   );
-  /* Field: Content: Reiscout data */
-  $handler->display->display_options['fields']['field_data_verified']['id'] = 'field_data_verified';
-  $handler->display->display_options['fields']['field_data_verified']['table'] = 'field_data_field_data_verified';
-  $handler->display->display_options['fields']['field_data_verified']['field'] = 'field_data_verified';
-  $handler->display->display_options['fields']['field_data_verified']['label'] = 'data_verified';
-  $handler->display->display_options['fields']['field_data_verified']['element_label_colon'] = FALSE;
-  $handler->display->display_options['fields']['field_data_verified']['type'] = 'list_key';
   /* Field: Content: Data Quality Tags */
   $handler->display->display_options['fields']['field_data_quality_tags']['id'] = 'field_data_quality_tags';
   $handler->display->display_options['fields']['field_data_quality_tags']['table'] = 'field_data_field_data_quality_tags';
@@ -666,7 +644,7 @@ function property_views_default_views() {
   $handler->display->display_options['row_plugin'] = 'fields';
   $handler->display->display_options['defaults']['row_options'] = FALSE;
   $handler->display->display_options['defaults']['fields'] = FALSE;
-  /* Field: Content: Image */
+  /* Field: Content: Photo */
   $handler->display->display_options['fields']['field_image']['id'] = 'field_image';
   $handler->display->display_options['fields']['field_image']['table'] = 'field_data_field_image';
   $handler->display->display_options['fields']['field_image']['field'] = 'field_image';
@@ -682,14 +660,6 @@ function property_views_default_views() {
   $handler->display->display_options['fields']['field_image']['delta_limit'] = '1';
   $handler->display->display_options['fields']['field_image']['delta_offset'] = '0';
   $handler->display->display_options['fields']['field_image']['delta_first_last'] = TRUE;
-  /* Field: Content: Reiscout data */
-  $handler->display->display_options['fields']['field_data_verified']['id'] = 'field_data_verified';
-  $handler->display->display_options['fields']['field_data_verified']['table'] = 'field_data_field_data_verified';
-  $handler->display->display_options['fields']['field_data_verified']['field'] = 'field_data_verified';
-  $handler->display->display_options['fields']['field_data_verified']['label'] = '';
-  $handler->display->display_options['fields']['field_data_verified']['element_type'] = '0';
-  $handler->display->display_options['fields']['field_data_verified']['element_label_colon'] = FALSE;
-  $handler->display->display_options['fields']['field_data_verified']['type'] = 'list_key';
   /* Field: Content: Address */
   $handler->display->display_options['fields']['field_address']['id'] = 'field_address';
   $handler->display->display_options['fields']['field_address']['table'] = 'field_data_field_address';
