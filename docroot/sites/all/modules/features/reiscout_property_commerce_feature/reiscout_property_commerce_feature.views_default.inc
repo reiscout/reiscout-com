@@ -62,7 +62,7 @@ function reiscout_property_commerce_feature_views_default_views() {
   $handler->display->display_options['relationships']['field_address_access_product']['field'] = 'field_address_access_product';
   $handler->display->display_options['relationships']['field_address_access_product']['relationship'] = 'commerce_product_product_id';
   $handler->display->display_options['relationships']['field_address_access_product']['required'] = TRUE;
-  /* Field: Content: Image */
+  /* Field: Content: Photo */
   $handler->display->display_options['fields']['field_image']['id'] = 'field_image';
   $handler->display->display_options['fields']['field_image']['table'] = 'field_data_field_image';
   $handler->display->display_options['fields']['field_image']['field'] = 'field_image';
@@ -257,7 +257,7 @@ function reiscout_property_commerce_feature_views_default_views() {
     ),
   );
   $handler->display->display_options['defaults']['fields'] = FALSE;
-  /* Field: Content: Image */
+  /* Field: Content: Photo */
   $handler->display->display_options['fields']['field_image']['id'] = 'field_image';
   $handler->display->display_options['fields']['field_image']['table'] = 'field_data_field_image';
   $handler->display->display_options['fields']['field_image']['field'] = 'field_image';
@@ -270,15 +270,6 @@ function reiscout_property_commerce_feature_views_default_views() {
     'image_style' => 'property_listing',
     'image_link' => 'content',
   );
-  /* Field: Content: Reiscout data */
-  $handler->display->display_options['fields']['field_data_verified']['id'] = 'field_data_verified';
-  $handler->display->display_options['fields']['field_data_verified']['table'] = 'field_data_field_data_verified';
-  $handler->display->display_options['fields']['field_data_verified']['field'] = 'field_data_verified';
-  $handler->display->display_options['fields']['field_data_verified']['relationship'] = 'field_address_access_product';
-  $handler->display->display_options['fields']['field_data_verified']['label'] = '';
-  $handler->display->display_options['fields']['field_data_verified']['element_type'] = '0';
-  $handler->display->display_options['fields']['field_data_verified']['element_label_colon'] = FALSE;
-  $handler->display->display_options['fields']['field_data_verified']['type'] = 'list_key';
   /* Field: Content: Address */
   $handler->display->display_options['fields']['field_address']['id'] = 'field_address';
   $handler->display->display_options['fields']['field_address']['table'] = 'field_data_field_address';
@@ -408,7 +399,7 @@ function reiscout_property_commerce_feature_views_default_views() {
   $handler->display->display_options['defaults']['row_plugin'] = FALSE;
   $handler->display->display_options['defaults']['row_options'] = FALSE;
   $handler->display->display_options['defaults']['fields'] = FALSE;
-  /* Field: Content: Image */
+  /* Field: Content: Photo */
   $handler->display->display_options['fields']['field_image']['id'] = 'field_image';
   $handler->display->display_options['fields']['field_image']['table'] = 'field_data_field_image';
   $handler->display->display_options['fields']['field_image']['field'] = 'field_image';
@@ -444,14 +435,6 @@ function reiscout_property_commerce_feature_views_default_views() {
       'address' => 'address',
     ),
   );
-  /* Field: Content: Reiscout data */
-  $handler->display->display_options['fields']['field_data_verified']['id'] = 'field_data_verified';
-  $handler->display->display_options['fields']['field_data_verified']['table'] = 'field_data_field_data_verified';
-  $handler->display->display_options['fields']['field_data_verified']['field'] = 'field_data_verified';
-  $handler->display->display_options['fields']['field_data_verified']['relationship'] = 'field_address_access_product';
-  $handler->display->display_options['fields']['field_data_verified']['label'] = 'data_verified';
-  $handler->display->display_options['fields']['field_data_verified']['element_label_colon'] = FALSE;
-  $handler->display->display_options['fields']['field_data_verified']['type'] = 'list_key';
   /* Field: Content: Data Quality Tags */
   $handler->display->display_options['fields']['field_data_quality_tags']['id'] = 'field_data_quality_tags';
   $handler->display->display_options['fields']['field_data_quality_tags']['table'] = 'field_data_field_data_quality_tags';
