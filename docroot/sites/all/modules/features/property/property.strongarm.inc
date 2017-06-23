@@ -152,7 +152,7 @@ function property_strongarm() {
             'visible' => FALSE,
           ),
           'full' => array(
-            'weight' => '20',
+            'weight' => '19',
             'visible' => FALSE,
           ),
         ),
@@ -166,7 +166,7 @@ function property_strongarm() {
             'visible' => FALSE,
           ),
           'full' => array(
-            'weight' => '21',
+            'weight' => '20',
             'visible' => FALSE,
           ),
         ),
@@ -180,7 +180,7 @@ function property_strongarm() {
             'visible' => FALSE,
           ),
           'full' => array(
-            'weight' => '23',
+            'weight' => '22',
             'visible' => FALSE,
           ),
         ),
@@ -194,13 +194,13 @@ function property_strongarm() {
             'visible' => TRUE,
           ),
           'full' => array(
-            'weight' => '22',
+            'weight' => '21',
             'visible' => FALSE,
           ),
         ),
         'product:field_property' => array(
           'full' => array(
-            'weight' => '18',
+            'weight' => '17',
             'visible' => FALSE,
           ),
           'drupalgap' => array(
@@ -214,7 +214,7 @@ function property_strongarm() {
         ),
         'address' => array(
           'full' => array(
-            'weight' => '4',
+            'weight' => '5',
             'visible' => TRUE,
           ),
           'drupalgap' => array(
