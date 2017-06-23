@@ -193,7 +193,7 @@ function reiscout_property_node_grants($account, $op) {
 function reiscout_property_field_access($op, $field, $entity_type, $entity, $account) {
   if ('node' == $entity_type && !empty($entity->type) && 'property' == $entity->type) {
     if ('edit' == $op) {
-      if (in_array($field['field_name'], array('field_data_locked', 'field_data_verified', 'field_data_quality_tags'))) {
+      if (in_array($field['field_name'], array('field_data_locked', 'field_data_quality_tags'))) {
         $role_admin = user_role_load_by_name('administrator');
         if (!user_has_role($role_admin->rid, $account)) {
           return FALSE;
@@ -221,31 +221,6 @@ function reiscout_property_node_access($node, $op, $account) {
   }
 
   return NODE_ACCESS_IGNORE;
-}
-
-/**
- * Implements hook_node_presave().
- */
-function reiscout_property_node_presave($node) {
-  if ('property' != $node->type) {
-    return;
-  }
-
-  $is_data_verified = FALSE;
-
-  // Check if the author of a node has an 'administrator' role
-  $node_author = user_load($node->uid);
-  $role_admin = user_role_load_by_name('administrator');
-  if (user_has_role($role_admin->rid, $node_author)) {
-    $is_data_verified = TRUE;
-  }
-
-  // Check if the 'Locked data' field of a node is set to true
-  if (!empty($node->field_data_locked[LANGUAGE_NONE][0]['value'])) {
-    $is_data_verified = TRUE;
-  }
-
-  $node->field_data_verified[LANGUAGE_NONE][0]['value'] = (int) $is_data_verified;
 }
 
 /**
