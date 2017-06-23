@@ -380,6 +380,14 @@ function property_views_default_views() {
   $handler->display->display_options['fields']['field_address_postal_code']['table'] = 'field_data_field_address';
   $handler->display->display_options['fields']['field_address_postal_code']['field'] = 'field_address_postal_code';
   $handler->display->display_options['fields']['field_address_postal_code']['label'] = 'zip';
+  /* Field: Content: Data Quality Tags */
+  $handler->display->display_options['fields']['field_data_quality_tags']['id'] = 'field_data_quality_tags';
+  $handler->display->display_options['fields']['field_data_quality_tags']['table'] = 'field_data_field_data_quality_tags';
+  $handler->display->display_options['fields']['field_data_quality_tags']['field'] = 'field_data_quality_tags';
+  $handler->display->display_options['fields']['field_data_quality_tags']['label'] = 'data_quality_tags';
+  $handler->display->display_options['fields']['field_data_quality_tags']['type'] = 'taxonomy_term_reference_plain';
+  $handler->display->display_options['fields']['field_data_quality_tags']['delta_offset'] = '0';
+  $handler->display->display_options['fields']['field_data_quality_tags']['separator'] = ',';
   $handler->display->display_options['defaults']['filter_groups'] = FALSE;
   $handler->display->display_options['defaults']['filters'] = FALSE;
   /* Filter criterion: Content: Published */
@@ -502,6 +510,14 @@ function property_views_default_views() {
   $handler->display->display_options['fields']['field_data_verified']['label'] = 'data_verified';
   $handler->display->display_options['fields']['field_data_verified']['element_label_colon'] = FALSE;
   $handler->display->display_options['fields']['field_data_verified']['type'] = 'list_key';
+  /* Field: Content: Data Quality Tags */
+  $handler->display->display_options['fields']['field_data_quality_tags']['id'] = 'field_data_quality_tags';
+  $handler->display->display_options['fields']['field_data_quality_tags']['table'] = 'field_data_field_data_quality_tags';
+  $handler->display->display_options['fields']['field_data_quality_tags']['field'] = 'field_data_quality_tags';
+  $handler->display->display_options['fields']['field_data_quality_tags']['label'] = 'data_quality_tags';
+  $handler->display->display_options['fields']['field_data_quality_tags']['type'] = 'taxonomy_term_reference_plain';
+  $handler->display->display_options['fields']['field_data_quality_tags']['delta_offset'] = '0';
+  $handler->display->display_options['fields']['field_data_quality_tags']['separator'] = ',';
   $handler->display->display_options['defaults']['arguments'] = FALSE;
   /* Contextual filter: Content: Author uid */
   $handler->display->display_options['arguments']['uid']['id'] = 'uid';
