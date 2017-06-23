@@ -454,11 +454,11 @@ body.page-onepage #main-menu a.active:active {
   color: #FFF;
 }
 
-.owner-contacts {
+.owner-info {
   background: dodgerblue;
 }
 
-.fully-populated {
+.full-info {
   background: #294bff;
 }
 
@@ -466,12 +466,12 @@ body.page-onepage #main-menu a.active:active {
   background: green;
 }
 
-.owner-contacts .text:before {
+.owner-info .text:before {
   font-size: 14px;
   content: '⛀ ';
 }
 
-.fully-populated .text:before {
+.full-info .text:before {
   font-size: 14px;
   content: '⛁ ';
 }

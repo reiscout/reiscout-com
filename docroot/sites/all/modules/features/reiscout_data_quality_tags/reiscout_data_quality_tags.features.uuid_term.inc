@@ -11,20 +11,20 @@ function reiscout_data_quality_tags_uuid_features_default_terms() {
   $terms = array();
 
   $terms[] = array(
-    'name' => 'Owner contacts',
+    'name' => 'Owner info',
     'description' => '',
     'format' => 'plain_text',
     'weight' => 0,
-    'machine_name' => 'owner_contacts',
+    'machine_name' => 'owner_info',
     'uuid' => '3ce39630-afd5-4afb-a9df-e804cd9b6673',
     'vocabulary_machine_name' => 'data_quality_tags',
   );
   $terms[] = array(
-    'name' => 'Fully populated',
+    'name' => 'Full info',
     'description' => '',
     'format' => 'plain_text',
     'weight' => 1,
-    'machine_name' => 'fully_populated',
+    'machine_name' => 'full_info',
     'uuid' => '5bc252c6-d983-4035-8cbf-7389b958a769',
     'vocabulary_machine_name' => 'data_quality_tags',
   );
