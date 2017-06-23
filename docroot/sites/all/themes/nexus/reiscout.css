@@ -395,7 +395,9 @@ body.page-onepage #main-menu a.active:active {
 }
 
 .view-property-listing .view-content .data-verified,
-.view-reiscout-property-commerce-purchased-nodes .view-content .data-verified {
+.view-reiscout-property-commerce-purchased-nodes .view-content .data-verified,
+.view-property-listing .view-content .data-quality-tags,
+.view-reiscout-property-commerce-purchased-nodes .view-content .data-quality-tags {
   float: right;
 }
 
@@ -441,6 +443,42 @@ body.page-onepage #main-menu a.active:active {
   display: inline-block;
   margin: 0 0 0 2px;
   vertical-align: middle;
+}
+
+.data-quality-tag {
+  display: inline-block;
+  padding: 0 5px 2px 5px;
+  border-radius: 5px;
+  font-size: 13px;
+  font-weight: bold;
+  color: #FFF;
+}
+
+.owner-contacts {
+  background: dodgerblue;
+}
+
+.fully-populated {
+  background: #294bff;
+}
+
+.verified-data {
+  background: green;
+}
+
+.owner-contacts .text:before {
+  font-size: 14px;
+  content: '⛀ ';
+}
+
+.fully-populated .text:before {
+  font-size: 14px;
+  content: '⛁ ';
+}
+
+.verified-data .text:before {
+  font-size: 14px;
+  content: '✔ ';
 }
 
 .node-type-property .field-name-body {
