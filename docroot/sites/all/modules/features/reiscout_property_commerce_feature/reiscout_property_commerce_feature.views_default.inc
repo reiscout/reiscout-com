@@ -101,6 +101,22 @@ function reiscout_property_commerce_feature_views_default_views() {
       'address' => 'address',
     ),
   );
+  /* Field: Content: Data Quality Tags */
+  $handler->display->display_options['fields']['field_data_quality_tags']['id'] = 'field_data_quality_tags';
+  $handler->display->display_options['fields']['field_data_quality_tags']['table'] = 'field_data_field_data_quality_tags';
+  $handler->display->display_options['fields']['field_data_quality_tags']['field'] = 'field_data_quality_tags';
+  $handler->display->display_options['fields']['field_data_quality_tags']['relationship'] = 'field_address_access_product';
+  $handler->display->display_options['fields']['field_data_quality_tags']['label'] = '';
+  $handler->display->display_options['fields']['field_data_quality_tags']['element_type'] = '0';
+  $handler->display->display_options['fields']['field_data_quality_tags']['element_label_colon'] = FALSE;
+  $handler->display->display_options['fields']['field_data_quality_tags']['type'] = 'entityreference_entity_view';
+  $handler->display->display_options['fields']['field_data_quality_tags']['settings'] = array(
+    'view_mode' => 'default',
+    'links' => 1,
+    'use_content_language' => 1,
+  );
+  $handler->display->display_options['fields']['field_data_quality_tags']['delta_offset'] = '0';
+  $handler->display->display_options['fields']['field_data_quality_tags']['separator'] = '';
   /* Sort criterion: Commerce Order: Updated date */
   $handler->display->display_options['sorts']['changed']['id'] = 'changed';
   $handler->display->display_options['sorts']['changed']['table'] = 'commerce_order';
@@ -168,6 +184,7 @@ function reiscout_property_commerce_feature_views_default_views() {
   $handler = $view->new_display('page', 'Page', 'page');
   $handler->display->display_options['defaults']['query'] = FALSE;
   $handler->display->display_options['query']['type'] = 'views_query';
+  $handler->display->display_options['query']['options']['distinct'] = TRUE;
   $handler->display->display_options['defaults']['exposed_form'] = FALSE;
   $handler->display->display_options['exposed_form']['type'] = 'better_exposed_filters';
   $handler->display->display_options['exposed_form']['options']['reset_button'] = TRUE;
@@ -287,7 +304,6 @@ function reiscout_property_commerce_feature_views_default_views() {
   $handler->display->display_options['fields']['field_data_quality_tags']['label'] = '';
   $handler->display->display_options['fields']['field_data_quality_tags']['element_type'] = '0';
   $handler->display->display_options['fields']['field_data_quality_tags']['element_label_colon'] = FALSE;
-  $handler->display->display_options['fields']['field_data_quality_tags']['element_default_classes'] = FALSE;
   $handler->display->display_options['fields']['field_data_quality_tags']['type'] = 'entityreference_entity_view';
   $handler->display->display_options['fields']['field_data_quality_tags']['settings'] = array(
     'view_mode' => 'default',
