@@ -5,3 +5,64 @@
  */
 
 include_once 'reiscout_data_quality_tags.features.inc';
+
+/**
+ * Implements hook_node_presave().
+ */
+function reiscout_data_quality_tags_node_presave($node) {
+  if ('property' != $node->type) {
+    return;
+  }
+
+  $is_data_verified = FALSE;
+
+  // Check if the author of a node has an 'administrator' role
+  $node_author = user_load($node->uid);
+  $role_admin = user_role_load_by_name('administrator');
+  if (user_has_role($role_admin->rid, $node_author)) {
+    $is_data_verified = TRUE;
+  }
+
+  // Check if the 'Locked data' field of a node is set to true
+  if (!empty($node->field_data_locked[LANGUAGE_NONE][0]['value'])) {
+    $is_data_verified = TRUE;
+  }
+
+  $tag_verified_data = taxonomy_term_machine_name_load('verified_data', 'data_quality_tags');
+
+  if ($is_data_verified) {
+    // Add the 'Verified data' tag
+    _reiscout_data_quality_tags_add($node->field_data_quality_tags[LANGUAGE_NONE], $tag_verified_data->tid);
+  }
+  else {
+    // Remove the 'Verified data' tag
+    _reiscout_data_quality_tags_remove($node->field_data_quality_tags[LANGUAGE_NONE], $tag_verified_data->tid);
+  }
+}
+
+/**
+ * Adds a tag into an array of tags
+ */
+function _reiscout_data_quality_tags_add(&$field, $tid) {
+  $tag = array('tid' => $tid);
+  if (!in_array($tag, $field)) {
+    // Add a tag
+    $field[] = $tag;
+  }
+}
+
+/**
+ * Removes a tag from an array of tags
+ */
+function _reiscout_data_quality_tags_remove(&$field, $tid) {
+  $tag = array('tid' => $tid);
+  for ($i = 0, $len = count($field); $i < $len; ++$i) {
+    if ($tag == $field[$i]) {
+      // Remove a tag
+      unset($field[$i]);
+      // Reindex an array
+      $field = array_values($field);
+      break;
+    }
+  }
+}
