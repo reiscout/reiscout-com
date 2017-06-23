@@ -30,6 +30,11 @@
 <div class="address">
   <?php print $fields['field_address_locality']->content ?>, <?php print $fields['field_address_postal_code']->content ?>
 </div>
+<?php if ($fields['field_data_quality_tags']->content): ?>
+<div class="data-quality-tags">
+  <?php print $fields['field_data_quality_tags']->content ?>
+</div>
+<?php endif; ?>
 <?php if ($fields['field_data_verified']->content): ?>
 <div class="data-verified">
   <i class="icon"></i><div class="text">Reiscout data</div>
