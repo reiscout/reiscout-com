@@ -15,6 +15,7 @@ function reiscout_data_quality_tags_node_presave($node) {
   }
 
   $is_data_verified = FALSE;
+  $is_owner_address_filled = _reiscout_property_is_owner_address_filled_by_nid($node);
 
   // Check if the author of a node has an 'administrator' role
   $node_author = user_load($node->uid);
@@ -29,6 +30,7 @@ function reiscout_data_quality_tags_node_presave($node) {
   }
 
   $tag_verified_data = taxonomy_term_machine_name_load('verified_data', 'data_quality_tags');
+  $tag_owner_info = taxonomy_term_machine_name_load('owner_info', 'data_quality_tags');
 
   if ($is_data_verified) {
     // Add the 'Verified data' tag
@@ -37,6 +39,15 @@ function reiscout_data_quality_tags_node_presave($node) {
   else {
     // Remove the 'Verified data' tag
     _reiscout_data_quality_tags_remove($node->field_data_quality_tags[LANGUAGE_NONE], $tag_verified_data->tid);
+  }
+
+  if ($is_owner_address_filled) {
+    // Add the 'Owner info' tag
+    _reiscout_data_quality_tags_add($node->field_data_quality_tags[LANGUAGE_NONE], $tag_owner_info->tid);
+  }
+  else {
+    // Remove the 'Owner info' tag
+    _reiscout_data_quality_tags_remove($node->field_data_quality_tags[LANGUAGE_NONE], $tag_owner_info->tid);
   }
 }
 
