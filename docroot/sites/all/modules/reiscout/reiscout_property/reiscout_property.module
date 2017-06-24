@@ -378,6 +378,10 @@ function _reiscout_property_update_fields($node, $info) {
     $nw->field_zoning = $zoning;
   }
 
+  // Add the 'Full info' tag
+  $tag_full_info = taxonomy_term_machine_name_load('full_info', 'data_quality_tags');
+  _reiscout_data_quality_tags_add($node->field_data_quality_tags[LANGUAGE_NONE], $tag_full_info->tid);
+
   // Lock the Property node fields from editing
   $nw->field_data_locked = TRUE;
   $nw->save();
