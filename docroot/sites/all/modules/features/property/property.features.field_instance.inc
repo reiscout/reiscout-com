@@ -961,7 +961,7 @@ function property_field_default_field_instances() {
   $field_instances['node-property-field_image'] = array(
     'bundle' => 'property',
     'deleted' => 0,
-    'description' => 'Upload property photo. ',
+    'description' => 'Upload property photo.',
     'display' => array(
       'default' => array(
         'label' => 'above',
@@ -1009,12 +1009,12 @@ function property_field_default_field_instances() {
     'entity_type' => 'node',
     'field_name' => 'field_image',
     'label' => 'Photo',
-    'required' => 1,
+    'required' => 0,
     'settings' => array(
       'alt_field' => 0,
-      'default_image' => 0,
+      'default_image' => 357,
       'file_directory' => 'properties',
-      'file_extensions' => 'png gif jpg jpeg',
+      'file_extensions' => 'png jpg jpeg',
       'max_filesize' => '12 MB',
       'max_resolution' => '',
       'min_resolution' => '',
@@ -1726,7 +1726,7 @@ function property_field_default_field_instances() {
   t('Turn on to make this lead available for all the other users.');
   t('Turn on to prevent user from editing the property data.');
   t('Under Contract');
-  t('Upload property photo. ');
+  t('Upload property photo.');
   t('Year Built');
   t('Your current location (determined automatically)');
   t('Zoning');
