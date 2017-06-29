@@ -306,6 +306,7 @@ function _reiscout_mail_postcard_combine_template_option($template_node, $proper
 
   $front = _reiscout_mail_postcard_build_front_content($property_node->nid, $template_node->nid);
   $back = _reiscout_mail_postcard_build_back_content($property_node->nid, $template_node->nid);
+  $back = _reiscout_mail_postcard_add_address_block($back, $property_node->nid);
 
   if ('predefined' == $type) {
     $title_prefix = t('Predefined:');
@@ -361,6 +362,37 @@ function _reiscout_mail_postcard_combine_template_option($template_node, $proper
   );
 
   return drupal_render($option);
+}
+
+/**
+ * Adds an address block to content.
+ *
+ * Given a property node and content that will be used as the back
+ * of a postcard, builds an address block and adds it to the content.
+ */
+function _reiscout_mail_postcard_add_address_block($content, $property_nid) {
+  $property_owner_address = _reiscout_property_get_owner_address_by_nid($property_nid);
+  $user_address = _reiscout_property_get_user_address();
+
+  $address_block_content = array(
+    '#theme' => 'reiscout_mail_postcard_address_block',
+    '#to' => array(
+      'name'         => $property_owner_address->name_line->value(),
+      'thoroughfare' => $property_owner_address->thoroughfare->value(),
+      'city'         => $property_owner_address->locality->value(),
+      'state'        => $property_owner_address->administrative_area->value(),
+      'zip'          => $property_owner_address->postal_code->value(),
+    ),
+    '#from' => array(
+      'name'         => $user_address->name_line->value(),
+      'thoroughfare' => $user_address->thoroughfare->value(),
+      'city'         => $user_address->locality->value(),
+      'state'        => $user_address->administrative_area->value(),
+      'zip'          => $user_address->postal_code->value(),
+    ),
+  );
+
+  return $content . drupal_render($address_block_content);
 }
 
 /**

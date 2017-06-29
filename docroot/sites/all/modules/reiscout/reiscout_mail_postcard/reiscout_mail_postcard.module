@@ -189,6 +189,32 @@ function reiscout_mail_postcard_services_resources() {
 }
 
 /**
+ * Preprocess variables for address-block.tpl.php
+ *
+ * @see address-block.tpl.php
+ */
+function template_preprocess_reiscout_mail_postcard_address_block(&$variables) {
+  $variables['from']['name'] = strtoupper($variables['from']['name']);
+  $variables['from']['thoroughfare'] = strtoupper($variables['from']['thoroughfare']);
+  $variables['from']['city'] = strtoupper($variables['from']['city']);
+  $variables['from']['state'] = strtoupper($variables['from']['state']);
+  $variables['from']['zip'] = strtoupper($variables['from']['zip']);
+}
+
+/**
+ * Implements hook_theme().
+ */
+function reiscout_mail_postcard_theme($existing, $type, $theme, $path) {
+  return array(
+    'reiscout_mail_postcard_address_block' => array(
+      'variables' => array('to' => NULL, 'from' => NULL),
+      'path' => drupal_get_path('module', 'reiscout_mail_postcard'),
+      'template' => 'templates/address-block',
+    ),
+  );
+}
+
+/**
  * Determines whether the current user can send a postcard.
  */
 function _reiscout_mail_postcard_access($node) {
