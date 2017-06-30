@@ -236,13 +236,26 @@ body.page-onepage #main-menu a.active:active {
   padding-top: 2px;
 }
 
-.commerce-buttons>div {
+.commerce-buttons > div,
+.reiscout-mail-buttons .button {
   display: inline-block;
   margin: 1em 0;
   margin-right: 1em;
 }
 
-.commerce-buttons a {
+.reiscout-mail-buttons .sample-postcard-link {
+  margin-top: -0.8em;
+  font-size: 85%;
+  line-height: 16px;
+}
+
+.reiscout-mail-buttons .points-info {
+  font-size: 85%;
+  line-height: 16px;
+}
+
+.commerce-buttons a,
+.reiscout-mail-buttons .button a {
   /* IE10 */
   background-image: -ms-linear-gradient(top, #FFFFFF 0%, #E3E3E3 100%);
   /* Mozilla Firefox */
@@ -273,7 +286,8 @@ body.page-onepage #main-menu a.active:active {
   display: block;
 }
 
-.commerce-buttons a:hover {
+.commerce-buttons a:hover,
+.reiscout-mail-buttons .button a:hover {
   /* IE10 */
   background-image: -ms-linear-gradient(top, #DBDBDB 0%, #F2F2F2 100%);
   /* Mozilla Firefox */
@@ -368,4 +382,79 @@ body.page-onepage #main-menu a.active:active {
 
 .form-item-template-nid label .header {
   display: inline;
+}
+
+.view-property-listing .view-content,
+.view-reiscout-property-commerce-purchased-nodes .view-content {
+  max-width: 480px;
+}
+
+.view-property-listing .view-content .address,
+.view-reiscout-property-commerce-purchased-nodes .view-content .address {
+  float: left;
+}
+
+.view-property-listing .view-content .data-quality-tags,
+.view-reiscout-property-commerce-purchased-nodes .view-content .data-quality-tags {
+  float: right;
+}
+
+.view-property-listing .view-content .views-row::after,
+.view-reiscout-property-commerce-purchased-nodes .view-content .views-row::after {
+  content: "";
+  clear: both;
+  display: table;
+}
+
+.view-property-listing .views-row,
+.view-reiscout-property-commerce-purchased-nodes .views-row {
+  margin-bottom: 25px;
+}
+
+#edit-city.form-autocomplete {
+  width: 200px;
+}
+
+#edit-zip.form-text {
+  width: 80px;
+}
+
+.data-quality-tag {
+  display: inline-block;
+  padding: 0 5px 2px 5px;
+  border-radius: 5px;
+  font-size: 13px;
+  font-weight: bold;
+  color: #FFF;
+}
+
+.owner-info {
+  background: dodgerblue;
+}
+
+.full-info {
+  background: #294bff;
+}
+
+.verified-data {
+  background: green;
+}
+
+.owner-info .text:before {
+  font-size: 14px;
+  content: '⛀ ';
+}
+
+.full-info .text:before {
+  font-size: 14px;
+  content: '⛁ ';
+}
+
+.verified-data .text:before {
+  font-size: 14px;
+  content: '✔ ';
+}
+
+.node-type-property .field-name-body {
+  font-size: 13px;
 }

@@ -147,25 +147,28 @@ function reiscout_property_commerce_get_owner_info_price() {
  * Calculate and return property address price
  */
 function reiscout_property_commerce_get_property_address_price($node) {
-
   // Load fields from fieldgroup? see field_group_load_field_group()
   $fields_to_check = array(
     'body',
-    'field_size',
-    'field_bedrooms',
-    'field_bathrooms',
-    'field_lot_size',
-    'field_last_purchase_price',
-    'field_last_purchase_time',
     'field_assessed_value',
+    'field_last_sale_price',
+    'field_last_sale_date',
+    'field_gross_area',
+    'field_bedrooms',
+    'field_full_baths',
+    'field_half_baths',
+    'field_year_built',
+    'field_effective_year_built',
+    'field_lot_area_acres',
+    'field_zoning',
     'field_mortgage_company',
     'field_repairs_price',
     'field_arv',
-    'field_under_contract'
+    'field_under_contract',
   );
 
   $served_types = array(
-    'datetime', 'number_integer', 'list_integer', 'text', 'text_with_summary'
+    'datetime', 'number_integer', 'number_decimal', 'list_integer', 'text', 'text_with_summary'
   );
 
   $filled_fields_count = 0;
@@ -193,8 +196,8 @@ function reiscout_property_commerce_get_property_address_price($node) {
     }
   }
 
-  $bace_price_decimal = variable_get('reiscout_property_commerce_address_access_basic_price', 10);
-  $per_field_price_decimal = variable_get('reiscout_property_commerce_address_access_per_field_price', 0.1);
+  $bace_price_decimal = variable_get('reiscout_property_commerce_address_access_basic_price', 30);
+  $per_field_price_decimal = variable_get('reiscout_property_commerce_address_access_per_field_price', 0);
   $price = $bace_price_decimal + $per_field_price_decimal * $filled_fields_count;
   return array(
     'amount' => $price * 100,

@@ -1,0 +1,16 @@
+name = Reiscout Data Quality Tags
+description = Provides 'Data Quality Tags' taxonomy vocabulary that allows to classify properties by quality of its data
+core = 7.x
+package = Reiscout
+features[ctools][] = strongarm:strongarm:1
+features[features_api][] = api:2
+features[taxonomy][] = data_quality_tags
+features[uuid_term][] = 3ce39630-afd5-4afb-a9df-e804cd9b6673
+features[uuid_term][] = 5bc252c6-d983-4035-8cbf-7389b958a769
+features[uuid_term][] = c35e891f-2c63-4a35-adf8-47e2d972499f
+features_exclude[dependencies][ctools] = ctools
+features_exclude[dependencies][features] = features
+features_exclude[dependencies][strongarm] = strongarm
+features_exclude[dependencies][taxonomy] = taxonomy
+features_exclude[dependencies][uuid] = uuid
+features_exclude[dependencies][uuid_features] = uuid_features

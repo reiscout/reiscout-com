@@ -135,58 +135,58 @@ function property_strongarm() {
     'extra_fields' => array(
       'form' => array(
         'title' => array(
-          'weight' => '2',
+          'weight' => '1',
         ),
         'path' => array(
-          'weight' => '11',
+          'weight' => '18',
         ),
       ),
       'display' => array(
         'product:sku' => array(
           'drupalgap' => array(
-            'weight' => '24',
+            'weight' => '32',
             'visible' => FALSE,
           ),
           'default' => array(
-            'weight' => '27',
+            'weight' => '24',
             'visible' => FALSE,
           ),
           'full' => array(
-            'weight' => '11',
+            'weight' => '19',
             'visible' => FALSE,
           ),
         ),
         'product:title' => array(
           'drupalgap' => array(
-            'weight' => '25',
+            'weight' => '33',
             'visible' => FALSE,
           ),
           'default' => array(
-            'weight' => '28',
+            'weight' => '25',
             'visible' => FALSE,
           ),
           'full' => array(
-            'weight' => '12',
+            'weight' => '20',
             'visible' => FALSE,
           ),
         ),
         'product:status' => array(
           'drupalgap' => array(
-            'weight' => '26',
+            'weight' => '34',
             'visible' => FALSE,
           ),
           'default' => array(
-            'weight' => '29',
+            'weight' => '26',
             'visible' => FALSE,
           ),
           'full' => array(
-            'weight' => '14',
+            'weight' => '22',
             'visible' => FALSE,
           ),
         ),
         'product:commerce_price' => array(
           'drupalgap' => array(
-            'weight' => '23',
+            'weight' => '31',
             'visible' => FALSE,
           ),
           'default' => array(
@@ -194,22 +194,42 @@ function property_strongarm() {
             'visible' => TRUE,
           ),
           'full' => array(
-            'weight' => '13',
+            'weight' => '21',
             'visible' => FALSE,
           ),
         ),
         'product:field_property' => array(
           'full' => array(
-            'weight' => '9',
+            'weight' => '17',
             'visible' => FALSE,
           ),
           'drupalgap' => array(
-            'weight' => '20',
+            'weight' => '25',
             'visible' => TRUE,
           ),
           'default' => array(
-            'weight' => '23',
+            'weight' => '18',
             'visible' => TRUE,
+          ),
+        ),
+        'address' => array(
+          'full' => array(
+            'weight' => '5',
+            'visible' => TRUE,
+          ),
+          'drupalgap' => array(
+            'weight' => '27',
+            'visible' => FALSE,
+          ),
+        ),
+        'reiscout-mail-buttons' => array(
+          'full' => array(
+            'weight' => '22',
+            'visible' => TRUE,
+          ),
+          'drupalgap' => array(
+            'weight' => '26',
+            'visible' => FALSE,
           ),
         ),
       ),

@@ -8,6 +8,10 @@
  * 2. Make call to connect2data_api
  */
 
+// @todo: we used this module for pulling only information about a
+// property owner, but now we use it for pulling information about
+// all the Property node fields, so we should to refactor the module.
+
 // Define constants
 // ToDo: put term to feature useing uuid and replace id here to uuid.
 define('TERM_ID_POINTS_OWNER_INFO', 1);
@@ -97,15 +101,15 @@ function _reiscout_owner_info_is_user_can_buy($node) {
 function reiscout_owner_info_get_owner_callback($node) {
   // Make a request to the Connect2Data API to get full info about property
   if (!$info = _reiscout_property_get_c2d_report_by_nid($node->nid, 'owner_info')) {
-    drupal_set_message(t("An error occurred while requesting the information about property's owner.", 'error'));
+    drupal_set_message(t('An error occurred while getting a property information.'), 'error');
     // Return to the previous page
     drupal_goto();
   }
 
-  _reiscout_owner_info_save($node, $info);
+  _reiscout_property_update_fields($node, $info);
   _reiscout_owner_info_decrease_user_points();
 
-  drupal_set_message("Owner info received successfully.");
+  drupal_set_message('Property information has been received successfully.');
   // Return to previous page
   drupal_goto();
 }
@@ -118,12 +122,12 @@ function reiscout_owner_info_get_owner_callback($node) {
 function reiscout_owner_info_get_owner_drupalgap_callback($nid) {
   // Make a request to the Connect2Data API to get full info about property
   if (!$info = _reiscout_property_get_c2d_report_by_nid($nid, 'owner_info')) {
-    $message = 'An error occurred while requesting the information about owner of property !nid.';
+    $message = 'An error occurred while getting the property !nid information.';
     watchdog('reiscout_owner_info', $message, array('!nid' => $nid), WATCHDOG_ERROR);
     return FALSE;
   }
 
-  _reiscout_owner_info_save($nid, $info);
+  _reiscout_property_update_fields($nid, $info);
   _reiscout_owner_info_decrease_user_points();
 
   return TRUE;
@@ -172,7 +176,7 @@ function reiscout_owner_info_node_view($node, $view_mode, $langcode) {
     }
 
     $points = userpoints_get_current_points($user->uid, TERM_ID_POINTS_OWNER_INFO);
-    $button_name = 'Get Property Owner' . ' (' . $points . ' points left)';
+    $button_name = 'Get Full Property Data' . ' (' . $points . ' points left)';
     $callback_path = 'get_owner_info/' . $node->nid;
     $rules_buy_link = 'buy_owner_info';
 
@@ -287,25 +291,6 @@ function _reiscout_owner_info_resource_access($op, $args = array()) {
   }
 
   return FALSE;
-}
-
-/**
- * Fills Owner's Address field with info we received from the Connect2Data API.
- */
-function _reiscout_owner_info_save($node, $info) {
-  $nw = entity_metadata_wrapper('node', $node);
-
-  $nw->field_owner_postal_address->country = 'US';
-  $nw->field_owner_postal_address->name_line = trim($info->PROPERTY_OWNER->attributes()->_OwnerName);
-  $nw->field_owner_postal_address->thoroughfare = trim($info->PROPERTY_OWNER->attributes()->_MailingAddress);
-  $nw->field_owner_postal_address->postal_code = trim($info->PROPERTY_OWNER->attributes()->_MailingPostalCode);
-
-  if (preg_match('!(.+?)\s+([A-Z]{2})$!', $info->PROPERTY_OWNER->attributes()->_MailingCityAndState, $matches)) {
-    $nw->field_owner_postal_address->locality = $matches[1];
-    $nw->field_owner_postal_address->administrative_area = $matches[2];
-  }
-
-  $nw->save();
 }
 
 /**

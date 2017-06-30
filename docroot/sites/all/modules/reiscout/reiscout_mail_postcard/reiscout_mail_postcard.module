@@ -32,6 +32,25 @@ function reiscout_mail_postcard_menu() {
 }
 
 /**
+ * Implements hook_field_extra_fields().
+ */
+function reiscout_mail_postcard_field_extra_fields() {
+  $return = array();
+
+  $return['node']['property'] = array(
+    'display' => array(
+      'reiscout-mail-buttons' => array(
+        'label' => t('Reiscout mail buttons'),
+        'description' => t('Buttons related to sending of a postcard.'),
+        'weight' => -1,
+      ),
+    ),
+  );
+
+  return $return;
+}
+
+/**
  * Implements hook_node_view().
  */
 function reiscout_mail_postcard_node_view($node, $view_mode, $langcode) {
@@ -42,27 +61,39 @@ function reiscout_mail_postcard_node_view($node, $view_mode, $langcode) {
       return;
     }
 
-    // Prepare HTML-container for action buttons
-    if (!isset($node->content['commerce-buttons'])) {
-      $node->content['commerce-buttons'] = array(
-        '#type' => 'container',
-        '#attributes' => array(
-          'class' => array('commerce-buttons'),
-        ),
-        '#weight' => -1,
-      );
-    }
+    // Prepare an HTML-container for buttons
+    $node->content['reiscout-mail-buttons'] = array(
+      '#type' => 'container',
+      '#attributes' => array(
+        'class' => array('reiscout-mail-buttons'),
+      ),
+      '#weight' => -1,
+    );
 
     $points = userpoints_get_current_points($user->uid, REISCOUT_MAIL_POSTCARD_USERPOINTS_TID);
 
     // If user has enough points for current action
     if ($points > 0) {
-      $button_text = t('Send a postcard to the property owner (!points points left)', array('!points' => $points));
+      $button_text = t('Send a Postcard');
       $button_url = 'reiscout-mail-postcard/' . $node->nid . '/send';
       $link = l($button_text, url($button_url, array('query' => drupal_get_destination(), 'absolute' => TRUE), array('html' => TRUE)));
-      $node->content['commerce-buttons']['send-postcard'] = array(
-        '#prefix' => '<div class="callback-link">',
+      $node->content['reiscout-mail-buttons']['send-postcard'] = array(
+        '#prefix' => '<div class="button">',
         '#markup' => $link,
+        '#suffix' => '</div>',
+      );
+
+      $sample_postcard_link_text = t('Click here to view a sample postcard');
+      $sample_postcard_link_url = url(drupal_get_path('module', 'reiscout_mail_postcard') . '/pdf/sample_postcard.pdf');
+      $node->content['reiscout-mail-buttons']['sample-postcard-link'] = array(
+        '#prefix' => '<div class="sample-postcard-link">',
+        '#markup' => l($sample_postcard_link_text, $sample_postcard_link_url, array('attributes' => array('target' => '_blank'))),
+        '#suffix' => '</div>',
+      );
+
+      $node->content['reiscout-mail-buttons']['points-info'] = array(
+        '#prefix' => '<div class="points-info">',
+        '#markup' => format_plural($points, 'You have 1 send mail point left', 'You have @count send mail points left'),
         '#suffix' => '</div>',
       );
     }
@@ -71,8 +102,8 @@ function reiscout_mail_postcard_node_view($node, $view_mode, $langcode) {
       // Add link/button via Rules Link module to allow user to buy points as a commerce product
       $rules_link_name = 'buy_sending_letter';
       if ($rendered_link = rules_link_render($rules_link_name, $node->nid, drupal_get_destination(), array())) {
-        $node->content['commerce-buttons']['send-postcard'] = array(
-          '#prefix' => '<div class="callback-link">',
+        $node->content['reiscout-mail-buttons']['send-postcard'] = array(
+          '#prefix' => '<div class="button">',
           '#markup' => drupal_render($rendered_link),
           '#suffix' => '</div>',
         );
@@ -158,6 +189,32 @@ function reiscout_mail_postcard_services_resources() {
 }
 
 /**
+ * Preprocess variables for address-block.tpl.php
+ *
+ * @see address-block.tpl.php
+ */
+function template_preprocess_reiscout_mail_postcard_address_block(&$variables) {
+  $variables['from']['name'] = strtoupper($variables['from']['name']);
+  $variables['from']['thoroughfare'] = strtoupper($variables['from']['thoroughfare']);
+  $variables['from']['city'] = strtoupper($variables['from']['city']);
+  $variables['from']['state'] = strtoupper($variables['from']['state']);
+  $variables['from']['zip'] = strtoupper($variables['from']['zip']);
+}
+
+/**
+ * Implements hook_theme().
+ */
+function reiscout_mail_postcard_theme($existing, $type, $theme, $path) {
+  return array(
+    'reiscout_mail_postcard_address_block' => array(
+      'variables' => array('to' => NULL, 'from' => NULL),
+      'path' => drupal_get_path('module', 'reiscout_mail_postcard'),
+      'template' => 'templates/address-block',
+    ),
+  );
+}
+
+/**
  * Determines whether the current user can send a postcard.
  */
 function _reiscout_mail_postcard_access($node) {
@@ -180,8 +237,8 @@ function _reiscout_mail_postcard_access($node) {
  * Checks if a user may send a postcard to a property's owner.
  *
  * A user may send a postcard to a property's owner if:
- * - he is not the property's author AND
- * - he has bought the property's address AND
+ * - he is the property's author OR he purchased the property's address
+ *   AND
  * - 'Owner postal address' field has been filled out.
  */
 function _reiscout_mail_postcard_is_user_can_send($node) {
@@ -197,16 +254,21 @@ function _reiscout_mail_postcard_is_user_can_send($node) {
     return FALSE;
   }
 
-  // Check if user is not administrator
-  if (!in_array('administrator', $user->roles)) {
-    // Check if user have purchased access to node
-    $node_purchased = reiscout_property_commerce_is_node_purchased($node->nid,
-      REISCOUT_PROPERTY_COMMERCE_ADDRESS_ACCESS_PRODUCT_TYPE,
-      $user->uid);
-    // If user have not purchased access to node return FALSE.
-    if (!$node_purchased) {
-      return FALSE;
-    }
+  // Check if the user has an 'administrator' role
+  if (in_array('administrator', $user->roles)) {
+    return TRUE;
+  }
+
+  // Check if the user purchased the property's address
+  $is_user_purchased_node = reiscout_property_commerce_is_node_purchased(
+    $node->nid,
+    REISCOUT_PROPERTY_COMMERCE_ADDRESS_ACCESS_PRODUCT_TYPE,
+    $user->uid);
+
+  // If the user is not an author of the property node
+  // and if he did not purchase the property's address
+  if ($node->uid != $user->uid && !$is_user_purchased_node) {
+    return FALSE;
   }
 
   return TRUE;

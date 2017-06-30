@@ -4,6 +4,7 @@ class ReiscoutPropertyAddressIsNotSet extends Exception {}
 class ReiscoutPropertyOwnerAddressIsNotSet extends Exception {}
 class ReiscoutPropertyUserAddressIsNotSet extends Exception {}
 class ReiscoutPropertyUserPhoneNumberIsNotSet extends Exception {}
+class ReiscoutPropertyOwnerTypeIsUnknown extends Exception {}
 
 define('REISCOUT_PROPERTY_NODE_TITLE_TO_CHANGE', 'Property #');
 define('REISCOUT_PROPERTY_MESSAGE_TO_CHANGE', 'Property <em class="placeholder">Property #</em> has been created.');
@@ -21,7 +22,30 @@ function reiscout_property_menu() {
     'file' => 'reiscout_property.pages.inc',
   );
 
+  $items['reiscout_property/address_locality'] = array(
+    'title' => 'Autocomplete for cities that is used in address of properties',
+    'page callback' => 'reiscout_property_address_locality_autocomplete',
+    'access arguments' => array('access content'),
+    'file' => 'reiscout_property.pages.inc',
+    'type' => MENU_CALLBACK,
+  );
+
+  $items['reiscout_property/address_locality/drupalgap'] = array(
+    'title' => 'Autocomplete for cities that is used in address of properties',
+    'page callback' => 'reiscout_property_address_locality_autocomplete_drupalgap',
+    'access arguments' => array('access content'),
+    'file' => 'reiscout_property.pages.inc',
+    'type' => MENU_CALLBACK,
+  );
+
   return $items;
+}
+
+/**
+ * Implements hook_form_FORM_ID_alter().
+ */
+function reiscout_property_form_views_exposed_form_alter(&$form, &$form_state, $form_id) {
+  $form['city']['#autocomplete_path'] = 'reiscout_property/address_locality';
 }
 
 /**
@@ -101,22 +125,177 @@ function reiscout_property_node_update($node) {
 }
 
 /**
+ * Implements hook_node_access_records().
+ *
+ * We want to force these access rules:
+ * - a user, who is the author of the node, can view the node;
+ * - all the other users can view the node only if it is published and the
+ *   'Place this lead on the marketplace' field of the node is set to true.
+ */
+function reiscout_property_node_access_records($node) {
+  if ('property' == $node->type) {
+    $grants = array();
+
+    // We set GID to $node->uid here, because we want to grant an access for
+    // a user, who is the author of the node. But we do not want to grant an
+    // access for a super user here, because he already has an access.
+    if (1 != $node->uid) {
+      $grants[] = array(
+        'realm' => 'reiscout_property',
+        'gid' => $node->uid,
+        'grant_view' => 1,
+        'grant_update' => 0,
+        'grant_delete' => 0,
+        'priority' => 0,
+      );
+    }
+
+    // We set GID to 0 here for all the other users
+    $nw = entity_metadata_wrapper('node', $node);
+    if ($nw->status->value() && $nw->field_place_on_marketplace->value()) {
+      $grants[] = array(
+        'realm' => 'reiscout_property',
+        'gid' => 0,
+        'grant_view' => 1,
+        'grant_update' => 0,
+        'grant_delete' => 0,
+        'priority' => 0,
+      );
+    }
+
+    return $grants;
+  }
+}
+
+/**
+ * Implements hook_node_grants().
+ */
+function reiscout_property_node_grants($account, $op) {
+  $grants = array();
+
+  if ('view' == $op) {
+    // First, we want to check if a user has an access using GID 0
+    $grants['reiscout_property'][] = 0;
+
+    // Then, if a user is logged in, we want to check if he has an
+    // access as the author of the node, using his UID as a GID
+    if ($account->uid) {
+      $grants['reiscout_property'][] = $account->uid;
+    }
+  }
+
+  return $grants;
+}
+
+/**
+ * Implements hook_field_access().
+ */
+function reiscout_property_field_access($op, $field, $entity_type, $entity, $account) {
+  if ('node' == $entity_type && !empty($entity->type) && 'property' == $entity->type) {
+    if ('edit' == $op) {
+      if (in_array($field['field_name'], array('field_data_locked', 'field_data_quality_tags'))) {
+        $role_admin = user_role_load_by_name('administrator');
+        if (!user_has_role($role_admin->rid, $account)) {
+          return FALSE;
+        }
+      }
+    }
+  }
+}
+
+/**
+ * Implements hook_node_access().
+ */
+function reiscout_property_node_access($node, $op, $account) {
+  $type = is_string($node) ? $node : $node->type;
+
+  if ('property' == $type) {
+    if ('update' == $op) {
+      if (is_object($node)) {
+        $nw = entity_metadata_wrapper('node', $node);
+        if ($nw->field_data_locked->value()) {
+          return NODE_ACCESS_DENY;
+        }
+      }
+    }
+  }
+
+  return NODE_ACCESS_IGNORE;
+}
+
+/**
+ * Implements hook_field_extra_fields().
+ */
+function reiscout_property_field_extra_fields() {
+  $return = array();
+
+  $return['node']['property'] = array(
+    'display' => array(
+      'address' => array(
+        'label' => t('Public address'),
+        'description' => t('Address that is available to all the users.'),
+        'weight' => -1,
+      ),
+    ),
+  );
+
+  return $return;
+}
+
+/**
+ * Implements hook_node_view().
+ */
+function reiscout_property_node_view($node, $view_mode, $langcode) {
+  if ('full' == $view_mode && 'property' == $node->type) {
+    // If a user has not an access to view a full address of a property,
+    // show him a public address (a city and a ZIP code)
+    if (!$node->content['field_address']['#access']) {
+      $node->content['address'] = array(
+        '#prefix' => '<div class="field address"><div class="field-label">Address:</div>',
+        '#markup' => $node->_address,
+        '#suffix' => '</div>',
+      );
+    }
+  }
+}
+
+/**
+ * Implements hook_entity_load().
+ */
+function reiscout_property_entity_load($entities, $type) {
+  if ('node' == $type) {
+    foreach ($entities as $entity) {
+      if ('property' == $entity->type) {
+        $nw = entity_metadata_wrapper('node', $entity);
+        $entity->_address = $nw->field_address->locality->value() . ', ' . $nw->field_address->postal_code->value();
+        // If an image was not uploaded for the 'Photo' field of the Property
+        // node, we set a URL of the default image that will be used in the app.
+        // See reiscout_property_entity_post_render_field() function in
+        // reiscout_property.js module.
+        if (!$entity->field_image) {
+          $field_info_instance = field_info_instances('node', 'property');
+          if ($fid = $field_info_instance['field_image']['settings']['default_image']) {
+            if ($file = file_load($fid)) {
+              $entity->_default_field_image_uri = $file->uri;
+            };
+          }
+        }
+      }
+    }
+  }
+}
+
+/**
  * Builds data that is needed for request to the Connect2Data API.
  */
 function _reiscout_property_build_property_criteria($nid) {
-  $nw = entity_metadata_wrapper('node', $nid);
-
-  if (!$address = $nw->field_address->value()) {
-    $message = "The property's !nid address was not set.";
-    watchdog('reiscout_property', $message, array('!nid' => $nid), WATCHDOG_ERROR);
-    return FALSE;
-  }
+  $address = _reiscout_property_get_address_by_nid($nid);
 
   return array(
-    'street_address' => $address['thoroughfare'],
-    'city' => $address['locality'],
-    'state' => $address['administrative_area'],
-    'postal_code' => $address['postal_code'],
+    'street_address' => $address->thoroughfare->value(),
+    'city' => $address->locality->value(),
+    'state' => $address->administrative_area->value(),
+    'postal_code' => $address->postal_code->value(),
   );
 }
 
@@ -124,13 +303,102 @@ function _reiscout_property_build_property_criteria($nid) {
  * Makes a request to the Connect2Data API and returns full info about property.
  */
 function _reiscout_property_get_c2d_report_by_nid($nid, $request_reason) {
-  if ($property_criteria = _reiscout_property_build_property_criteria($nid)) {
-    if ($report = connect2data_api_get_detailed_subject_report($property_criteria, $request_reason)) {
-      return $report;
-    }
+  try {
+    $property_criteria = _reiscout_property_build_property_criteria($nid);
+    return connect2data_api_get_detailed_subject_report($property_criteria, $request_reason);
+  }
+  catch (Exception $e) {
+    watchdog_exception('reiscout_property', $e);
+    return FALSE;
+  }
+}
+
+/**
+ * Updates Property node fields with info we received from the Connect2Data API.
+ */
+function _reiscout_property_update_fields($node, $info) {
+  $nw = entity_metadata_wrapper('node', $node);
+
+  // 'Assessed Value' field
+  if ($assessed_value = $info->_PROPERTY_TAX->attributes()->_TotalAssessedValueAmount->__toString()) {
+    $nw->field_assessed_value = $assessed_value / 1000;
   }
 
-  return FALSE;
+  // 'Last Sale Price' field
+  if ($last_sale_price = $info->_PROPERTY_HISTORY->_SALES_HISTORY->attributes()->_LastSalesPriceAmount->__toString()) {
+    $nw->field_last_sale_price = $last_sale_price / 1000;
+  }
+
+  // 'Last Sale Date' field
+  if ($last_sale_date = $info->_PROPERTY_HISTORY->_SALES_HISTORY->attributes()->_LastSalesDate->__toString()) {
+    $nw->field_last_sale_date = strtotime($last_sale_date);
+  }
+
+  // 'Owner Address' field
+  $nw->field_owner_postal_address->country = 'US';
+  $nw->field_owner_postal_address->name_line = $info->PROPERTY_OWNER->attributes()->_OwnerName->__toString();
+  $nw->field_owner_postal_address->thoroughfare = $info->PROPERTY_OWNER->attributes()->_MailingAddress->__toString();
+  $nw->field_owner_postal_address->postal_code = $info->PROPERTY_OWNER->attributes()->_MailingPostalCode->__toString();
+
+  if (preg_match('!(.+?)\s+([A-Z]{2})$!', $info->PROPERTY_OWNER->attributes()->_MailingCityAndState->__toString(), $matches)) {
+    $nw->field_owner_postal_address->locality = $matches[1];
+    $nw->field_owner_postal_address->administrative_area = $matches[2];
+  }
+
+  // 'Gross Area' field
+  if ($gross_area = $info->_PROPERTY_CHARACTERISTICS->_IMPROVEMENTS->_ROOM_COUNT->attributes()->_GrossLivingAreaSquareFeetNumber->__toString()) {
+    $nw->field_gross_area = $gross_area;
+  }
+
+  // 'Bedrooms' field
+  if ($bedrooms = $info->_PROPERTY_CHARACTERISTICS->_IMPROVEMENTS->_ROOM_COUNT->attributes()->_TotalBedroomsCount->__toString()) {
+    $nw->field_bedrooms = $bedrooms;
+  }
+
+  // 'Full Baths' field
+  if ($full_baths = $info->_PROPERTY_CHARACTERISTICS->_IMPROVEMENTS->_ROOM_COUNT->attributes()->_TotalFullBathsCount->__toString()) {
+    $nw->field_full_baths = $full_baths;
+  }
+
+  // 'Half Baths' field
+  if ($half_baths = $info->_PROPERTY_CHARACTERISTICS->_IMPROVEMENTS->_ROOM_COUNT->attributes()->_TotalHalfBathsCount->__toString()) {
+    $nw->field_half_baths = $half_baths;
+  }
+
+  // 'Year Built' field
+  if ($year_built = $info->_PROPERTY_CHARACTERISTICS->_IMPROVEMENTS->_GENERAL_DESCRIPTION->attributes()->_YearBuiltDateIdentifier->__toString()) {
+    $nw->field_year_built = $year_built;
+  }
+
+  // 'Effective Year Built' field
+  if ($effective_year_built = $info->_PROPERTY_CHARACTERISTICS->_IMPROVEMENTS->_GENERAL_DESCRIPTION->attributes()->_EffectiveYearBuiltDateIdentifier->__toString()) {
+    $nw->field_effective_year_built = $effective_year_built;
+  }
+
+  // 'Lot Area' field
+  if ($lot_area_acres = $info->_PROPERTY_CHARACTERISTICS->_SITE->_DIMENSIONS->attributes()->_LotAreaAcresNumber->__toString()) {
+    $nw->field_lot_area_acres = $lot_area_acres;
+  }
+
+  // 'Mortgage Company' field
+  if ($mortgage_company = $info->_PROPERTY_HISTORY->_SALES_HISTORY->attributes()->_LenderName->__toString()) {
+    $nw->field_mortgage_company = $mortgage_company;
+  }
+
+  // 'Zoning' field
+  if ($zoning = $info->_PROPERTY_CHARACTERISTICS->_SITE->_ZONING->attributes()->_ClassificationIdentifier->__toString()) {
+    $nw->field_zoning = $zoning;
+  }
+
+  // Add the 'Full info' tag
+  _reiscout_data_quality_tags_add($nw->field_data_quality_tags, 'full_info');
+
+  // Lock the Property node fields from editing
+  $nw->field_data_locked = TRUE;
+  $nw->save();
+
+  // Calculate the 'Equity Percentage Estimate' field
+  reiscout_equity_percentage_recalculate_in_property_by_nid($nw->nid->value());
 }
 
 /**
@@ -154,7 +422,7 @@ function _reiscout_property_is_address_filled_by_nid($nid) {
  */
 function _reiscout_property_get_address_by_nid($nid) {
   if (!_reiscout_property_is_address_filled_by_nid($nid)) {
-    $msg = t("An address of a property is empty or incomplete.");
+    $msg = t('An address of a property !nid is empty or incomplete.', array('!nid' => $nid));
     throw new ReiscoutPropertyAddressIsNotSet($msg);
   }
 
@@ -185,7 +453,7 @@ function _reiscout_property_is_owner_address_filled_by_nid($nid) {
  */
 function _reiscout_property_get_owner_address_by_nid($nid) {
   if (!_reiscout_property_is_owner_address_filled_by_nid($nid)) {
-    $msg = t("An address of a property's owner is empty or incomplete.");
+    $msg = t('An address of a property !nid owner is empty or incomplete.', array('!nid' => $nid));
     throw new ReiscoutPropertyOwnerAddressIsNotSet($msg);
   }
 
@@ -228,7 +496,7 @@ function _reiscout_property_get_user_address($uid = NULL) {
   }
 
   if (!_reiscout_property_is_user_address_filled($uid)) {
-    $msg = t('User postal address is empty or incomplete.');
+    $msg = t('User !uid postal address is empty or incomplete.', array('!uid' => $uid));
     throw new ReiscoutPropertyUserAddressIsNotSet($msg);
   }
 
@@ -250,9 +518,35 @@ function _reiscout_property_get_user_phone($uid = NULL) {
   $uw = entity_metadata_wrapper('user', $uid);
 
   if (!$phone_number = $uw->field_user_phone_number->value()) {
-    $msg = t('User phone number is not set.');
+    $msg = t('User !uid phone number is not set.', array('!uid' => $uid));
     throw new ReiscoutPropertyUserPhoneNumberIsNotSet($msg);
   }
 
   return $phone_number;
+}
+
+/**
+ * Checks if the property owner is an individual.
+ */
+function _reiscout_property_is_owner_an_individual_by_nid($nid) {
+  static $is_owner_an_individual;
+
+  if (isset($is_owner_an_individual[$nid])) {
+    return $is_owner_an_individual[$nid];
+  }
+
+  // Make a request to the Connect2Data API to get full info about a property
+  if (!$info = _reiscout_property_get_c2d_report_by_nid($nid, 'is_owner_individual')) {
+    $msg = t('An error occurred while requesting an information about the property owner: !nid.', array('!nid' => $nid));
+    throw new ReiscoutPropertyOwnerTypeIsUnknown($msg);
+  }
+
+  if ('Y' == $info->_PROPERTY_HISTORY->_TRANSACTION_HISTORY->attributes()->_CorporateBuyer->__toString()) {
+    $is_owner_an_individual[$nid] = FALSE;
+  }
+  else {
+    $is_owner_an_individual[$nid] = TRUE;
+  }
+
+  return $is_owner_an_individual[$nid];
 }

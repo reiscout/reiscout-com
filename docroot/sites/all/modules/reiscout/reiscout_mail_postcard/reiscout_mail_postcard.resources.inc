@@ -8,7 +8,7 @@ function _reiscout_mail_postcard_resource_get_available_actions($nid) {
 
   $actions = array(
     'send_postcard' => 0,
-    'btn_send_postcard_title' => '',
+    'mail_sending_points_info' => '',
     'buy_mail_sending_points' => 0,
   );
 
@@ -20,7 +20,9 @@ function _reiscout_mail_postcard_resource_get_available_actions($nid) {
     // If user has enough points
     if ($points > 0) {
       $actions['send_postcard'] = 1;
-      $actions['btn_send_postcard_title'] = t('Send a postcard to the property owner (!points points left)', array('!points' => $points));
+      $actions['mail_sending_points_info'] = format_plural($points,
+        'You have 1 send mail point left',
+        'You have @count send mail points left');
     }
     // If not
     else {
@@ -57,7 +59,7 @@ function _reiscout_mail_postcard_resource_send($property_nid) {
       '%date' => $postcard['expected_delivery_date'],
       '!url_login' => url('/user', array('absolute' => TRUE)),
     );
-    $message = t('Your <a href="!url" target="_blank">postcard</a> will be sent via %carrier. Expected delivery date is %date. <br><a onclick="javascript:window.open(\'!url_login\', \'_blank\', \'location=yes\');">Log in to reiscout.com</a> with the same credentials and create your own template for a postcard.', $t_args);
+    $message = t('Your <a href="#" onclick="javascript:window.open(\'!url\', \'_system\');">postcard</a> will be sent via %carrier. Expected delivery date is %date. <br><a onclick="javascript:window.open(\'!url_login\', \'_system\');">Log in to reiscout.com</a> with the same credentials and create your own template for a postcard.', $t_args);
 
     $result['status'] = TRUE;
     $result['message'] = $message;

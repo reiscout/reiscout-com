@@ -62,12 +62,13 @@ function reiscout_property_commerce_feature_views_default_views() {
   $handler->display->display_options['relationships']['field_address_access_product']['field'] = 'field_address_access_product';
   $handler->display->display_options['relationships']['field_address_access_product']['relationship'] = 'commerce_product_product_id';
   $handler->display->display_options['relationships']['field_address_access_product']['required'] = TRUE;
-  /* Field: Content: Image */
+  /* Field: Content: Photo */
   $handler->display->display_options['fields']['field_image']['id'] = 'field_image';
   $handler->display->display_options['fields']['field_image']['table'] = 'field_data_field_image';
   $handler->display->display_options['fields']['field_image']['field'] = 'field_image';
   $handler->display->display_options['fields']['field_image']['relationship'] = 'field_address_access_product';
   $handler->display->display_options['fields']['field_image']['label'] = '';
+  $handler->display->display_options['fields']['field_image']['element_type'] = '0';
   $handler->display->display_options['fields']['field_image']['element_label_colon'] = FALSE;
   $handler->display->display_options['fields']['field_image']['click_sort_column'] = 'fid';
   $handler->display->display_options['fields']['field_image']['settings'] = array(
@@ -80,6 +81,9 @@ function reiscout_property_commerce_feature_views_default_views() {
   $handler->display->display_options['fields']['field_address']['field'] = 'field_address';
   $handler->display->display_options['fields']['field_address']['relationship'] = 'field_address_access_product';
   $handler->display->display_options['fields']['field_address']['label'] = '';
+  $handler->display->display_options['fields']['field_address']['alter']['alter_text'] = TRUE;
+  $handler->display->display_options['fields']['field_address']['alter']['text'] = '[field_address-thoroughfare], [field_address-locality], [field_address-administrative_area] [field_address-postal_code]';
+  $handler->display->display_options['fields']['field_address']['element_type'] = '0';
   $handler->display->display_options['fields']['field_address']['element_label_colon'] = FALSE;
   $handler->display->display_options['fields']['field_address']['click_sort_column'] = 'country';
   $handler->display->display_options['fields']['field_address']['settings'] = array(
@@ -88,6 +92,22 @@ function reiscout_property_commerce_feature_views_default_views() {
       'address' => 'address',
     ),
   );
+  /* Field: Content: Data Quality Tags */
+  $handler->display->display_options['fields']['field_data_quality_tags']['id'] = 'field_data_quality_tags';
+  $handler->display->display_options['fields']['field_data_quality_tags']['table'] = 'field_data_field_data_quality_tags';
+  $handler->display->display_options['fields']['field_data_quality_tags']['field'] = 'field_data_quality_tags';
+  $handler->display->display_options['fields']['field_data_quality_tags']['relationship'] = 'field_address_access_product';
+  $handler->display->display_options['fields']['field_data_quality_tags']['label'] = '';
+  $handler->display->display_options['fields']['field_data_quality_tags']['element_type'] = '0';
+  $handler->display->display_options['fields']['field_data_quality_tags']['element_label_colon'] = FALSE;
+  $handler->display->display_options['fields']['field_data_quality_tags']['type'] = 'entityreference_entity_view';
+  $handler->display->display_options['fields']['field_data_quality_tags']['settings'] = array(
+    'view_mode' => 'default',
+    'links' => 1,
+    'use_content_language' => 1,
+  );
+  $handler->display->display_options['fields']['field_data_quality_tags']['delta_offset'] = '0';
+  $handler->display->display_options['fields']['field_data_quality_tags']['separator'] = '';
   /* Sort criterion: Commerce Order: Updated date */
   $handler->display->display_options['sorts']['changed']['id'] = 'changed';
   $handler->display->display_options['sorts']['changed']['table'] = 'commerce_order';
@@ -116,11 +136,233 @@ function reiscout_property_commerce_feature_views_default_views() {
   $handler->display->display_options['filters']['status']['value'] = array(
     'completed' => 'completed',
   );
+  /* Filter criterion: Content: Address - Locality (i.e. City) */
+  $handler->display->display_options['filters']['field_address_locality']['id'] = 'field_address_locality';
+  $handler->display->display_options['filters']['field_address_locality']['table'] = 'field_data_field_address';
+  $handler->display->display_options['filters']['field_address_locality']['field'] = 'field_address_locality';
+  $handler->display->display_options['filters']['field_address_locality']['relationship'] = 'field_address_access_product';
+  $handler->display->display_options['filters']['field_address_locality']['operator'] = 'starts';
+  $handler->display->display_options['filters']['field_address_locality']['exposed'] = TRUE;
+  $handler->display->display_options['filters']['field_address_locality']['expose']['operator_id'] = 'field_address_locality_op';
+  $handler->display->display_options['filters']['field_address_locality']['expose']['label'] = 'City';
+  $handler->display->display_options['filters']['field_address_locality']['expose']['operator'] = 'field_address_locality_op';
+  $handler->display->display_options['filters']['field_address_locality']['expose']['identifier'] = 'city';
+  $handler->display->display_options['filters']['field_address_locality']['expose']['remember_roles'] = array(
+    2 => '2',
+    1 => 0,
+    4 => 0,
+    3 => 0,
+  );
+  /* Filter criterion: Content: Address - Postal code */
+  $handler->display->display_options['filters']['field_address_postal_code']['id'] = 'field_address_postal_code';
+  $handler->display->display_options['filters']['field_address_postal_code']['table'] = 'field_data_field_address';
+  $handler->display->display_options['filters']['field_address_postal_code']['field'] = 'field_address_postal_code';
+  $handler->display->display_options['filters']['field_address_postal_code']['relationship'] = 'field_address_access_product';
+  $handler->display->display_options['filters']['field_address_postal_code']['operator'] = 'starts';
+  $handler->display->display_options['filters']['field_address_postal_code']['exposed'] = TRUE;
+  $handler->display->display_options['filters']['field_address_postal_code']['expose']['operator_id'] = 'field_address_postal_code_op';
+  $handler->display->display_options['filters']['field_address_postal_code']['expose']['label'] = 'ZIP Code';
+  $handler->display->display_options['filters']['field_address_postal_code']['expose']['operator'] = 'field_address_postal_code_op';
+  $handler->display->display_options['filters']['field_address_postal_code']['expose']['identifier'] = 'zip';
+  $handler->display->display_options['filters']['field_address_postal_code']['expose']['remember_roles'] = array(
+    2 => '2',
+    1 => 0,
+    4 => 0,
+    3 => 0,
+  );
 
   /* Display: Page */
   $handler = $view->new_display('page', 'Page', 'page');
   $handler->display->display_options['defaults']['query'] = FALSE;
   $handler->display->display_options['query']['type'] = 'views_query';
+  $handler->display->display_options['query']['options']['distinct'] = TRUE;
+  $handler->display->display_options['defaults']['exposed_form'] = FALSE;
+  $handler->display->display_options['exposed_form']['type'] = 'better_exposed_filters';
+  $handler->display->display_options['exposed_form']['options']['reset_button'] = TRUE;
+  $handler->display->display_options['exposed_form']['options']['bef'] = array(
+    'general' => array(
+      'input_required' => 0,
+      'text_input_required' => array(
+        'text_input_required' => array(
+          'value' => 'Select any filter and click on Apply to see results',
+          'format' => 'blog_article',
+        ),
+      ),
+      'allow_secondary' => 0,
+      'secondary_label' => 'Advanced options',
+      'secondary_collapse_override' => '0',
+    ),
+    'field_address_locality' => array(
+      'bef_format' => 'default',
+      'more_options' => array(
+        'autosubmit' => 0,
+        'is_secondary' => 0,
+        'any_label' => '',
+        'bef_filter_description' => '',
+        'tokens' => array(
+          'available' => array(
+            0 => 'global_types',
+          ),
+        ),
+        'rewrite' => array(
+          'filter_rewrite_values' => '',
+        ),
+      ),
+    ),
+    'field_address_postal_code' => array(
+      'bef_format' => 'default',
+      'more_options' => array(
+        'autosubmit' => 0,
+        'is_secondary' => 0,
+        'any_label' => '',
+        'bef_filter_description' => '',
+        'tokens' => array(
+          'available' => array(
+            0 => 'global_types',
+          ),
+        ),
+        'rewrite' => array(
+          'filter_rewrite_values' => '',
+        ),
+      ),
+    ),
+    'field_data_quality_tags_tid' => array(
+      'bef_format' => 'bef',
+      'more_options' => array(
+        'bef_select_all_none' => 0,
+        'bef_collapsible' => 0,
+        'autosubmit' => 0,
+        'is_secondary' => 0,
+        'any_label' => '',
+        'bef_filter_description' => '',
+        'tokens' => array(
+          'available' => array(
+            0 => 'global_types',
+            1 => 'vocabulary',
+          ),
+        ),
+        'rewrite' => array(
+          'filter_rewrite_values' => '',
+        ),
+      ),
+    ),
+  );
+  $handler->display->display_options['defaults']['fields'] = FALSE;
+  /* Field: Content: Photo */
+  $handler->display->display_options['fields']['field_image']['id'] = 'field_image';
+  $handler->display->display_options['fields']['field_image']['table'] = 'field_data_field_image';
+  $handler->display->display_options['fields']['field_image']['field'] = 'field_image';
+  $handler->display->display_options['fields']['field_image']['relationship'] = 'field_address_access_product';
+  $handler->display->display_options['fields']['field_image']['label'] = '';
+  $handler->display->display_options['fields']['field_image']['element_type'] = '0';
+  $handler->display->display_options['fields']['field_image']['element_label_colon'] = FALSE;
+  $handler->display->display_options['fields']['field_image']['click_sort_column'] = 'fid';
+  $handler->display->display_options['fields']['field_image']['settings'] = array(
+    'image_style' => 'property_listing',
+    'image_link' => 'content',
+  );
+  /* Field: Content: Address */
+  $handler->display->display_options['fields']['field_address']['id'] = 'field_address';
+  $handler->display->display_options['fields']['field_address']['table'] = 'field_data_field_address';
+  $handler->display->display_options['fields']['field_address']['field'] = 'field_address';
+  $handler->display->display_options['fields']['field_address']['relationship'] = 'field_address_access_product';
+  $handler->display->display_options['fields']['field_address']['label'] = '';
+  $handler->display->display_options['fields']['field_address']['alter']['alter_text'] = TRUE;
+  $handler->display->display_options['fields']['field_address']['alter']['text'] = '[field_address-thoroughfare],<br> [field_address-locality], [field_address-administrative_area] [field_address-postal_code]';
+  $handler->display->display_options['fields']['field_address']['element_type'] = '0';
+  $handler->display->display_options['fields']['field_address']['element_label_colon'] = FALSE;
+  $handler->display->display_options['fields']['field_address']['click_sort_column'] = 'country';
+  $handler->display->display_options['fields']['field_address']['settings'] = array(
+    'use_widget_handlers' => 1,
+    'format_handlers' => array(
+      'address' => 'address',
+    ),
+  );
+  /* Field: Content: Data Quality Tags */
+  $handler->display->display_options['fields']['field_data_quality_tags']['id'] = 'field_data_quality_tags';
+  $handler->display->display_options['fields']['field_data_quality_tags']['table'] = 'field_data_field_data_quality_tags';
+  $handler->display->display_options['fields']['field_data_quality_tags']['field'] = 'field_data_quality_tags';
+  $handler->display->display_options['fields']['field_data_quality_tags']['relationship'] = 'field_address_access_product';
+  $handler->display->display_options['fields']['field_data_quality_tags']['label'] = '';
+  $handler->display->display_options['fields']['field_data_quality_tags']['element_type'] = '0';
+  $handler->display->display_options['fields']['field_data_quality_tags']['element_label_colon'] = FALSE;
+  $handler->display->display_options['fields']['field_data_quality_tags']['type'] = 'entityreference_entity_view';
+  $handler->display->display_options['fields']['field_data_quality_tags']['settings'] = array(
+    'view_mode' => 'default',
+    'links' => 1,
+    'use_content_language' => 1,
+  );
+  $handler->display->display_options['fields']['field_data_quality_tags']['delta_offset'] = '0';
+  $handler->display->display_options['fields']['field_data_quality_tags']['separator'] = '';
+  $handler->display->display_options['defaults']['filter_groups'] = FALSE;
+  $handler->display->display_options['defaults']['filters'] = FALSE;
+  /* Filter criterion: Commerce Order: Order type */
+  $handler->display->display_options['filters']['type']['id'] = 'type';
+  $handler->display->display_options['filters']['type']['table'] = 'commerce_order';
+  $handler->display->display_options['filters']['type']['field'] = 'type';
+  $handler->display->display_options['filters']['type']['value'] = array(
+    'commerce_order' => 'commerce_order',
+  );
+  /* Filter criterion: Commerce Order: Order status */
+  $handler->display->display_options['filters']['status']['id'] = 'status';
+  $handler->display->display_options['filters']['status']['table'] = 'commerce_order';
+  $handler->display->display_options['filters']['status']['field'] = 'status';
+  $handler->display->display_options['filters']['status']['value'] = array(
+    'completed' => 'completed',
+  );
+  /* Filter criterion: Content: Address - Locality (i.e. City) */
+  $handler->display->display_options['filters']['field_address_locality']['id'] = 'field_address_locality';
+  $handler->display->display_options['filters']['field_address_locality']['table'] = 'field_data_field_address';
+  $handler->display->display_options['filters']['field_address_locality']['field'] = 'field_address_locality';
+  $handler->display->display_options['filters']['field_address_locality']['relationship'] = 'field_address_access_product';
+  $handler->display->display_options['filters']['field_address_locality']['operator'] = 'starts';
+  $handler->display->display_options['filters']['field_address_locality']['exposed'] = TRUE;
+  $handler->display->display_options['filters']['field_address_locality']['expose']['operator_id'] = 'field_address_locality_op';
+  $handler->display->display_options['filters']['field_address_locality']['expose']['label'] = 'City';
+  $handler->display->display_options['filters']['field_address_locality']['expose']['operator'] = 'field_address_locality_op';
+  $handler->display->display_options['filters']['field_address_locality']['expose']['identifier'] = 'city';
+  $handler->display->display_options['filters']['field_address_locality']['expose']['remember_roles'] = array(
+    2 => '2',
+    1 => 0,
+    4 => 0,
+    3 => 0,
+  );
+  /* Filter criterion: Content: Address - Postal code */
+  $handler->display->display_options['filters']['field_address_postal_code']['id'] = 'field_address_postal_code';
+  $handler->display->display_options['filters']['field_address_postal_code']['table'] = 'field_data_field_address';
+  $handler->display->display_options['filters']['field_address_postal_code']['field'] = 'field_address_postal_code';
+  $handler->display->display_options['filters']['field_address_postal_code']['relationship'] = 'field_address_access_product';
+  $handler->display->display_options['filters']['field_address_postal_code']['operator'] = 'starts';
+  $handler->display->display_options['filters']['field_address_postal_code']['exposed'] = TRUE;
+  $handler->display->display_options['filters']['field_address_postal_code']['expose']['operator_id'] = 'field_address_postal_code_op';
+  $handler->display->display_options['filters']['field_address_postal_code']['expose']['label'] = 'ZIP Code';
+  $handler->display->display_options['filters']['field_address_postal_code']['expose']['operator'] = 'field_address_postal_code_op';
+  $handler->display->display_options['filters']['field_address_postal_code']['expose']['identifier'] = 'zip';
+  $handler->display->display_options['filters']['field_address_postal_code']['expose']['remember_roles'] = array(
+    2 => '2',
+    1 => 0,
+    4 => 0,
+    3 => 0,
+  );
+  /* Filter criterion: Content: Data Quality Tags (field_data_quality_tags) */
+  $handler->display->display_options['filters']['field_data_quality_tags_tid']['id'] = 'field_data_quality_tags_tid';
+  $handler->display->display_options['filters']['field_data_quality_tags_tid']['table'] = 'field_data_field_data_quality_tags';
+  $handler->display->display_options['filters']['field_data_quality_tags_tid']['field'] = 'field_data_quality_tags_tid';
+  $handler->display->display_options['filters']['field_data_quality_tags_tid']['relationship'] = 'field_address_access_product';
+  $handler->display->display_options['filters']['field_data_quality_tags_tid']['exposed'] = TRUE;
+  $handler->display->display_options['filters']['field_data_quality_tags_tid']['expose']['operator_id'] = 'field_data_quality_tags_tid_op';
+  $handler->display->display_options['filters']['field_data_quality_tags_tid']['expose']['label'] = 'Data Quality Tags';
+  $handler->display->display_options['filters']['field_data_quality_tags_tid']['expose']['operator'] = 'field_data_quality_tags_tid_op';
+  $handler->display->display_options['filters']['field_data_quality_tags_tid']['expose']['identifier'] = 'field_data_quality_tags_tid';
+  $handler->display->display_options['filters']['field_data_quality_tags_tid']['expose']['multiple'] = TRUE;
+  $handler->display->display_options['filters']['field_data_quality_tags_tid']['expose']['remember_roles'] = array(
+    2 => '2',
+    1 => 0,
+    4 => 0,
+    3 => 0,
+  );
+  $handler->display->display_options['filters']['field_data_quality_tags_tid']['type'] = 'select';
+  $handler->display->display_options['filters']['field_data_quality_tags_tid']['vocabulary'] = 'data_quality_tags';
   $handler->display->display_options['path'] = 'purchased-property-address';
   $handler->display->display_options['menu']['type'] = 'normal';
   $handler->display->display_options['menu']['title'] = 'Purchased Addresses';
@@ -148,7 +390,7 @@ function reiscout_property_commerce_feature_views_default_views() {
   $handler->display->display_options['defaults']['row_plugin'] = FALSE;
   $handler->display->display_options['defaults']['row_options'] = FALSE;
   $handler->display->display_options['defaults']['fields'] = FALSE;
-  /* Field: Content: Image */
+  /* Field: Content: Photo */
   $handler->display->display_options['fields']['field_image']['id'] = 'field_image';
   $handler->display->display_options['fields']['field_image']['table'] = 'field_data_field_image';
   $handler->display->display_options['fields']['field_image']['field'] = 'field_image';
@@ -174,6 +416,8 @@ function reiscout_property_commerce_feature_views_default_views() {
   $handler->display->display_options['fields']['field_address']['field'] = 'field_address';
   $handler->display->display_options['fields']['field_address']['relationship'] = 'field_address_access_product';
   $handler->display->display_options['fields']['field_address']['label'] = 'address';
+  $handler->display->display_options['fields']['field_address']['alter']['alter_text'] = TRUE;
+  $handler->display->display_options['fields']['field_address']['alter']['text'] = '[field_address-thoroughfare], [field_address-locality], [field_address-administrative_area] [field_address-postal_code]';
   $handler->display->display_options['fields']['field_address']['element_label_colon'] = FALSE;
   $handler->display->display_options['fields']['field_address']['click_sort_column'] = 'country';
   $handler->display->display_options['fields']['field_address']['settings'] = array(
@@ -182,6 +426,15 @@ function reiscout_property_commerce_feature_views_default_views() {
       'address' => 'address',
     ),
   );
+  /* Field: Content: Data Quality Tags */
+  $handler->display->display_options['fields']['field_data_quality_tags']['id'] = 'field_data_quality_tags';
+  $handler->display->display_options['fields']['field_data_quality_tags']['table'] = 'field_data_field_data_quality_tags';
+  $handler->display->display_options['fields']['field_data_quality_tags']['field'] = 'field_data_quality_tags';
+  $handler->display->display_options['fields']['field_data_quality_tags']['relationship'] = 'field_address_access_product';
+  $handler->display->display_options['fields']['field_data_quality_tags']['label'] = 'data_quality_tags';
+  $handler->display->display_options['fields']['field_data_quality_tags']['type'] = 'taxonomy_term_reference_plain';
+  $handler->display->display_options['fields']['field_data_quality_tags']['delta_offset'] = '0';
+  $handler->display->display_options['fields']['field_data_quality_tags']['separator'] = ',';
   $handler->display->display_options['path'] = 'drupalgap/views_datasource/purchased_address_list/%';
   $export['reiscout_property_commerce_purchased_nodes'] = $view;
 

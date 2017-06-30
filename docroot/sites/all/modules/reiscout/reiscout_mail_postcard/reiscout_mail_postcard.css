@@ -84,7 +84,7 @@
 .template .back #title,
 .template .back #subtitle,
 .template .back #text {
-    width: 200px;
+    width: 180px;
 }
 
 .template .back #title {
@@ -97,4 +97,39 @@
     margin: 10pt 0 15pt 0;
     text-align: center;
     font-weight: bold;
+}
+
+.template .back #ink-free {
+    position: absolute;
+    width: 3.5in;
+    height: 2.76in;
+    right: 0.1555in;
+    bottom: 0.9in;
+    background-color: white;
+}
+
+.template .back #ink-free #postage-indicia {
+    position: absolute;
+    right: 0.35in;
+    top: 0.25in;
+    padding: 15px 0 15px 0;
+    width: 80px;
+    text-align: center;
+    border: solid 1px #000;
+    font-family: "Liberation Sans Narrow";
+}
+
+.template .back #ink-free #user-address {
+    position: absolute;
+    left: 0.19in;
+    top: 0.34in;
+    font-size: 9px;
+}
+
+.template .back #ink-free #owner-address {
+    position: absolute;
+    left: 0.19in;
+    top: 1.3in;
+    font-size: 13px;
+    line-height: 18px;
 }
