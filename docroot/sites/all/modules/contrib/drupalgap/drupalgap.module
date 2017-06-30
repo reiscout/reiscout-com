@@ -109,6 +109,8 @@ function drupalgap_entity_info_alter(&$entity_info) {
 function drupalgap_services_request_postprocess_alter($controller, $args, &$result) {
   switch ($controller['callback']) {
     case '_system_resource_connect':
+      // If the caller wants to skip extras, let them.
+      if (isset($_GET['dgSkipExtras']) && $_GET['dgSkipExtras'])  { return; }
       // Grab the extras DG provides to system connect and append them to result.
       module_load_include('inc', 'drupalgap', 'drupalgap.resource');
       $extras = drupalgap_system_connect_extras(false);
