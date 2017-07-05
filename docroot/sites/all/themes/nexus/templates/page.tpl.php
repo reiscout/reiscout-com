@@ -234,7 +234,8 @@
     <div class="container">
       <div class="row">
         <div class="fcred col-sm-12">
-          <?php print t('Copyright'); ?> &copy; <?php echo date("Y"); ?>, <a href="<?php print $front_page; ?>"><?php print $site_name; ?></a>. <?php print t('Theme by'); ?>  <a href="http://www.devsaran.com" target="_blank">Devsaran</a>.
+          <?php print t('Copyright'); ?> &copy; <?php echo date("Y"); ?> Three Oaks Technology Group, LLC <a href="/terms-of-use">Terms of Use</a> | <a href="/privacy-policy">Privacy Policy</a>
+          <br/>404-977-8281
         </div>
       </div>
     </div>
