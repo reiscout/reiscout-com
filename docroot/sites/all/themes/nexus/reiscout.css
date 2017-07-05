@@ -458,3 +458,19 @@ body.page-onepage #main-menu a.active:active {
 .node-type-property .field-name-body {
   font-size: 13px;
 }
+
+footer#colophon .col-sm-12 {
+  text-align: center;
+}
+
+footer#colophon .col-sm-12 a {
+  text-decoration: underline;
+}
+
+footer#colophon .col-sm-12 a:hover {
+  text-decoration: none;
+}
+
+footer#colophon .col-sm-12 a:first-child{
+  margin-left: 5px;
+}
