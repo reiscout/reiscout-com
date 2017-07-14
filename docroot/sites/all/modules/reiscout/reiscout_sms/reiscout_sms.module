@@ -61,8 +61,7 @@ function reiscout_sms_form($form, &$form_state) {
  * Implements hook_form_validate().
  */
 function reiscout_sms_form_validate($form, &$form_state) {
-  if (strlen($form_state['values']['sms_phone']) != 12
-   || strpos($form_state['values']['sms_phone'], '+') === false) {
+  if (!preg_match('!^\+[0-9]{11}$!', $form_state['values']['sms_phone'])) {
     form_set_error('phone', t('Please use the following format for the phone number: +12223334444'));
   }
 }
