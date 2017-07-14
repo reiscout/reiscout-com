@@ -1,81 +1,9 @@
 <?php
 
 /**
- * Implements hook_block_info().
- */
-function reiscout_sms_block_info()
-{
-  $blocks['reiscout_sms'] = array(
-    'info' => t('Reiscout sms'),
-    'cache' => DRUPAL_CACHE_PER_ROLE,
-  );
-  return $blocks;
-}
-
-function reiscout_sms_form($form, &$form_state)
-{
-  $form['sms_phone'] = array(
-    '#type' => 'telfield',
-    '#size' => 60,
-    '#title' => t('Phone number'),
-    '#required' => TRUE,
-  );
-  $form['actions']['submit'] = array('#type' => 'submit', '#value' => t('Get Link'));
-
-  return $form;
-}
-
-/**
- * Implements hook_block_view().
- */
-function reiscout_sms_block_view($delta = '')
-{
-  $block = array();
-  switch ($delta) {
-    case 'reiscout_sms':
-      $block['content'] = drupal_get_form('reiscout_sms_form');
-    break;
-  }
-  return $block;
-}
-
-/**
- * Implements hook_form_validate().
- */
-function reiscout_sms_form_validate($form, &$form_state) {
-  if (
-    strlen($form_state['values']['sms_phone']) != 12 ||
-    strpos($form_state['values']['sms_phone'], '+') === false
-  )
-  {
-    form_set_error('phone', t('Please use format +12223334444'));
-  }
-}
-
-function reiscout_sms_form_submit($form, &$form_state)
-{
-  try {
-    $phone = $form_state['values']['sms_phone'];
-    $text = variable_get('reiscout_sms_text');
-    $res = twilio_send($phone, $text, '');
-    if (!$res) {
-      drupal_set_message('Something goes wrong', 'error');
-    } else {
-      drupal_set_message('Message has been sent on your number, it may take a few minutes until you receive it.', 'status');
-    }
-  } catch (Exception $e) {
-    drupal_set_message('Something goes wrong', 'error');
-    watchdog('reiscout sms error', $e->getMessage(), array(), WATCHDOG_ERROR);
-  }
-
-}
-
-/**
  * Implements hook_menu().
  */
-function reiscout_sms_menu()
-{
-  $items = array();
+function reiscout_sms_menu() {
   $items['admin/config/content/reiscout_sms'] = array(
     'title' => 'SMS text',
     'description' => 'SMS text to send',
@@ -84,11 +12,80 @@ function reiscout_sms_menu()
     'access arguments' => array('access administration pages'),
     'type' => MENU_NORMAL_ITEM,
   );
+
   return $items;
 }
 
-function reiscout_sms_admin_form($form, &$form_state)
-{
+/**
+ * Implements hook_block_info().
+ */
+function reiscout_sms_block_info() {
+  $blocks['reiscout_sms'] = array(
+    'info' => t('Reiscout sms'),
+    'cache' => DRUPAL_CACHE_PER_ROLE,
+  );
+
+  return $blocks;
+}
+
+/**
+ * Implements hook_block_view().
+ */
+function reiscout_sms_block_view($delta = '') {
+  $block = array();
+  switch ($delta) {
+    case 'reiscout_sms':
+      $block['content'] = drupal_get_form('reiscout_sms_form');
+      break;
+  }
+  return $block;
+}
+
+function reiscout_sms_form($form, &$form_state) {
+  $form['sms_phone'] = array(
+    '#type' => 'telfield',
+    '#size' => 60,
+    '#title' => t('Phone number'),
+    '#required' => TRUE,
+  );
+
+  $form['actions']['submit'] = array(
+    '#type' => 'submit',
+    '#value' => t('Get Link'),
+  );
+
+  return $form;
+}
+
+/**
+ * Implements hook_form_validate().
+ */
+function reiscout_sms_form_validate($form, &$form_state) {
+  if (strlen($form_state['values']['sms_phone']) != 12
+   || strpos($form_state['values']['sms_phone'], '+') === false) {
+    form_set_error('phone', t('Please use format +12223334444'));
+  }
+}
+
+function reiscout_sms_form_submit($form, &$form_state) {
+  try {
+    $phone = $form_state['values']['sms_phone'];
+    $text = variable_get('reiscout_sms_text');
+    $res = twilio_send($phone, $text, '');
+    if (!$res) {
+      drupal_set_message('Something goes wrong', 'error');
+    }
+    else {
+      drupal_set_message('Message has been sent on your number, it may take a few minutes until you receive it.', 'status');
+    }
+  }
+  catch (Exception $e) {
+    drupal_set_message('Something goes wrong', 'error');
+    watchdog('reiscout sms error', $e->getMessage(), array(), WATCHDOG_ERROR);
+  }
+}
+
+function reiscout_sms_admin_form($form, &$form_state) {
   $form['reiscout_sms_text'] = array(
     '#type' => 'textarea',
     '#title' => 'SMS text',
@@ -97,5 +94,6 @@ function reiscout_sms_admin_form($form, &$form_state)
     '#maxlength' => 128,
     '#required' => TRUE,
   );
+
   return system_settings_form($form);
 }

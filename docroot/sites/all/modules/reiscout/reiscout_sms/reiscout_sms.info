@@ -4,6 +4,5 @@ package = Reiscout
 core = 7.x
 dependencies[] = twilio
 dependencies[] = elements
-files[] = reiscout_sms.module
 
 configure = admin/config/content/reiscout_sms
