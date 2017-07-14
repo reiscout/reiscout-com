@@ -7,7 +7,6 @@ dependencies[] = better_exposed_filters
 dependencies[] = colorbox
 dependencies[] = commerce_cart
 dependencies[] = date
-dependencies[] = editableapi
 dependencies[] = entityreference
 dependencies[] = field_group
 dependencies[] = field_validation
