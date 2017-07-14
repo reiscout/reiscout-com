@@ -22,7 +22,7 @@ function reiscout_sms_menu() {
 function reiscout_sms_block_info() {
   $blocks['reiscout_sms'] = array(
     'info' => t('Reiscout sms'),
-    'cache' => DRUPAL_CACHE_PER_ROLE,
+    'cache' => DRUPAL_CACHE_GLOBAL,
   );
 
   return $blocks;
