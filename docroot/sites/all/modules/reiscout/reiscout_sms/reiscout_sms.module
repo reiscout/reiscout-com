@@ -63,7 +63,7 @@ function reiscout_sms_form($form, &$form_state) {
 function reiscout_sms_form_validate($form, &$form_state) {
   if (strlen($form_state['values']['sms_phone']) != 12
    || strpos($form_state['values']['sms_phone'], '+') === false) {
-    form_set_error('phone', t('Please use format +12223334444'));
+    form_set_error('phone', t('Please use the following format for the phone number: +12223334444'));
   }
 }
 
@@ -73,15 +73,18 @@ function reiscout_sms_form_submit($form, &$form_state) {
     $text = variable_get('reiscout_sms_text');
     $res = twilio_send($phone, $text, '');
     if (!$res) {
-      drupal_set_message('Something goes wrong', 'error');
+      $msg = t('Message cannot be sent to your number. Please, try again later or contact technical support for assistance!');
+      drupal_set_message($msg, 'error');
     }
     else {
-      drupal_set_message('Message has been sent on your number, it may take a few minutes until you receive it.', 'status');
+      $msg = t('Message has been sent to your number. It may take a few minutes until you receive it.');
+      drupal_set_message($msg);
     }
   }
   catch (Exception $e) {
-    drupal_set_message('Something goes wrong', 'error');
-    watchdog('reiscout sms error', $e->getMessage(), array(), WATCHDOG_ERROR);
+    $msg = t('Message cannot be sent to your number. Please, try again later or contact technical support for assistance!');
+    drupal_set_message($msg, 'error');
+    watchdog('reiscout_sms', $e->getMessage(), array(), WATCHDOG_ERROR);
   }
 }
 
