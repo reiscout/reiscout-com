@@ -66,6 +66,13 @@ function reiscout_mail_postcard_send_form($form, &$form_state, $node) {
     '#required' => TRUE,
   );
 
+  $form['use_call_center'] = array(
+    '#type' => 'checkbox',
+    '#title' => t('Use Reiscout Call Center ($50/mo)'),
+    '#description' => t('The phone number of our call center will be placed on your postcard as the contact number for incoming calls.<br/>You will receive a weekly report of each call, the results, and the contact information of the prospects that responded.<br/>Our agents utilize a custom script to be sure that each call provides you the information that will help you to make an investment decision.'),
+    '#disabled' => TRUE,
+  );
+
   $form['actions'] = array(
     '#type' => 'actions',
   );
