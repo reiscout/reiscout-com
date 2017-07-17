@@ -12,7 +12,7 @@ function reiscout_points_feature_commerce_product_default_types() {
     'points_owner' => array(
       'type' => 'points_owner',
       'name' => 'Points',
-      'description' => 'Commerce product to get payed points.',
+      'description' => 'Commerce product to get paid points.',
       'help' => '',
       'revision' => 0,
     ),
