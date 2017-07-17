@@ -101,7 +101,7 @@ function _reiscout_owner_info_is_user_can_buy($node) {
 function reiscout_owner_info_get_owner_callback($node) {
   // Make a request to the Connect2Data API to get full info about property
   if (!$info = _reiscout_property_get_c2d_report_by_nid($node->nid, 'owner_info')) {
-    drupal_set_message(t('An error occurred while getting a property information.'), 'error');
+    drupal_set_message(t('Property data cannot be updated. Please, try again later or contact technical support for assistance!'), 'error');
     // Return to the previous page
     drupal_goto();
   }
@@ -109,7 +109,7 @@ function reiscout_owner_info_get_owner_callback($node) {
   _reiscout_property_update_fields($node, $info);
   _reiscout_owner_info_decrease_user_points();
 
-  drupal_set_message('Property information has been received successfully.');
+  drupal_set_message('Property data have been updated.');
   // Return to previous page
   drupal_goto();
 }
