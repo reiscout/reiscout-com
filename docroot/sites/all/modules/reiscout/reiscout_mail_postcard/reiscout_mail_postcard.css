@@ -3,7 +3,8 @@
 }
 
 .template .front, .template .back {
-    display: inline-block;
+    float: left;
+    position: relative;
     border: 1px solid #ccc;
     border-radius: 5px;
     font: normal 11pt Helvetica, Arial, sans-serif;
@@ -14,7 +15,7 @@
 .template .front {
     width: 6in;
     height: 4.25in;
-    margin: 0 0 0;
+    margin: 0 5px 5px 0;
     padding: 25px;
 }
 
@@ -75,7 +76,6 @@
 }
 
 .template .back {
-    float: right;
     width: 6in;
     height: 4.25in;
     padding: 85px 0 0 25px;
@@ -102,9 +102,9 @@
 .template .back #ink-free {
     position: absolute;
     width: 3.5in;
-    height: 2.76in;
-    right: 0.1555in;
-    bottom: 0.9in;
+    height: 2.6in;
+    top: 1.65in;
+    left: 2.5in;
     background-color: white;
 }
 
@@ -132,4 +132,10 @@
     top: 1.3in;
     font-size: 13px;
     line-height: 18px;
+}
+
+.form-item-template-nid:after {
+    display: table;
+    content: '';
+    clear: both;
 }
