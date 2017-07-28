@@ -28,25 +28,11 @@ $from_address = $lob->addresses()->create(array(
 ));
 
 $postcard = $lob->postcards()->create(array(
-  'to'          => $to_address['id'],
-  'from'        => $from_address['id'],
-  'front'       => $file,
-  'message'     => 'Happy Birthday!',
-  'data[name]'  => 'Harry'
-));
-
-$postcard = $lob->postcards()->create(array(
-  'description' => 'Demo Postcard job',
-  'to'      => array(
-    'name'          => 'Harry Zhang',
-    'address_line1' => '123 Main Street',
-    'address_city'  => 'Mountain View',
-    'address_state' => 'CA',
-    'address_zip'   => '94041',
-  ),
-  'front'       => '<html style="padding: 1in; font-size: 50;">Front HTML for {{name}}</html>',
-  'back'        => '<html style="padding: 1in; font-size: 20;">Back HTML for {{name}}</html>',
-  'data[name]'  => 'Harry'
+  'to'                    => $to_address['id'],
+  'from'                  => $from_address['id'],
+  'front'                 => $file,
+  'message'               => 'Happy Birthday!',
+  'merge_variables[name]' => 'Harry'
 ));
 
 print_r($postcard);
