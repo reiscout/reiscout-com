@@ -417,7 +417,7 @@ function reiscout_property_commerce_form_commerce_cart_form_alter(&$form, &$form
     //  - he has not yet bought the property's address.
     if ($node->uid != $GLOBALS['user']->uid && !$is_user_bought_property_address) {
       $price = reiscout_property_commerce_get_property_address_price($node);
-      $form['submit']['#value'] = t('Buy Property Address for @price @cur',
+      $form['submit']['#value'] = t('Buy Property Lead for @price @cur',
         array(
           '@price' => commerce_currency_amount_to_decimal($price['amount'], $price['currency_code']),
           '@cur' => $price['currency_code'],
