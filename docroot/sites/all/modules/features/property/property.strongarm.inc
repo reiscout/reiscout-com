@@ -221,6 +221,10 @@ function property_strongarm() {
             'weight' => '27',
             'visible' => FALSE,
           ),
+          'default' => array(
+            'weight' => '-1',
+            'visible' => TRUE,
+          ),
         ),
         'reiscout-mail-buttons' => array(
           'full' => array(
@@ -230,6 +234,10 @@ function property_strongarm() {
           'drupalgap' => array(
             'weight' => '26',
             'visible' => FALSE,
+          ),
+          'default' => array(
+            'weight' => '-1',
+            'visible' => TRUE,
           ),
         ),
       ),
