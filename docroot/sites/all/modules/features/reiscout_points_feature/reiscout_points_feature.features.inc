@@ -36,7 +36,7 @@ function reiscout_points_feature_default_rules_link() {
   $items = array();
   $items['buy_owner_info'] = entity_import('rules_link', '{
     "settings" : {
-      "text" : "Buy Ability to Get Owner Info",
+      "text" : "Buy Property Data Points",
       "link_type" : "token",
       "bundles" : { "property" : "property" },
       "entity_link" : 0,
@@ -45,14 +45,14 @@ function reiscout_points_feature_default_rules_link() {
       "confirm_description" : ""
     },
     "name" : "buy_owner_info",
-    "label" : "Buy Ability to Get Owner Info",
+    "label" : "Buy Property Data Points",
     "path" : "buy_owner_info",
     "entity_type" : "node",
     "rdf_mapping" : []
   }');
   $items['buy_sending_letter'] = entity_import('rules_link', '{
     "settings" : {
-      "text" : "Buy Ability to Send Mail",
+      "text" : "Buy Mail Points",
       "link_type" : "token",
       "bundles" : { "property" : "property" },
       "entity_link" : 0,
@@ -61,7 +61,7 @@ function reiscout_points_feature_default_rules_link() {
       "confirm_description" : ""
     },
     "name" : "buy_sending_letter",
-    "label" : "Buy Ability to Send Mail",
+    "label" : "Buy Mail Points",
     "path" : "buy_sending_letter",
     "entity_type" : "node",
     "rdf_mapping" : []
