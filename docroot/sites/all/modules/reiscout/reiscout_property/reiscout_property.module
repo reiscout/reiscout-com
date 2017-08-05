@@ -550,3 +550,19 @@ function _reiscout_property_is_owner_an_individual_by_nid($nid) {
 
   return $is_owner_an_individual[$nid];
 }
+
+/**
+ * Returns amount of properties that were added by a user.
+ *
+ * Given a user ID, returns amount of properties
+ * that were added by the user.
+ */
+function _reiscout_property_get_added_amount_by_uid($uid) {
+  $query = new EntityFieldQuery;
+
+  $query->entityCondition('entity_type', 'node')
+    ->entityCondition('bundle', 'property')
+    ->propertyCondition('uid', $uid);
+
+  return (int) $query->count()->execute();
+}
