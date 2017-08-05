@@ -2,3 +2,7 @@ name = Reiscout Drupalgap
 description = Fixes some problems with drupalgap.
 package = Reiscout
 core = 7.x
+
+dependencies[] = reiscout_property
+dependencies[] = reiscout_owner_info
+dependencies[] = reiscout_mail_postcard
