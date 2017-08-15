@@ -1,0 +1,4 @@
+name = Reiscout Block Spam
+description = Allows to block spam emails.
+package = Reiscout
+core = 7.x

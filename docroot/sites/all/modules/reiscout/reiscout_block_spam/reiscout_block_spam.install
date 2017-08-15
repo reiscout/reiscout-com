@@ -1,0 +1,17 @@
+<?php
+
+/**
+ * @file
+ * Install, update and uninstall functions for the Reiscout Block Spam module.
+ */
+
+/**
+ * Implements hook_uninstall().
+ */
+function reiscout_block_spam_uninstall() {
+  variable_del('reiscout_block_spam_message_ids');
+  variable_del('reiscout_block_spam_cyrillic_symbols');
+  variable_del('reiscout_block_spam_stop_words');
+  variable_del('reiscout_block_spam_log_enabled');
+  variable_del('reiscout_block_spam_counter');
+}

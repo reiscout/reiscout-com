@@ -1,0 +1,91 @@
+<?php
+
+/**
+ * @file
+ * Allows to block spam emails.
+ */
+
+/**
+ * Implements hook_permission().
+ */
+function reiscout_block_spam_permission() {
+  return array(
+    'administer reiscout_block_spam' => array(
+      'title' => t('Administer Reiscout Block Spam'),
+    ),
+  );
+}
+
+/**
+ * Implements hook_menu().
+ */
+function reiscout_block_spam_menu() {
+  $items['admin/config/content/reiscout-block-spam'] = array(
+    'title' => 'Reiscout Block Spam',
+    'description' => 'Configure Reiscout Block Spam settings.',
+    'page callback' => 'drupal_get_form',
+    'page arguments' => array('reiscout_block_spam_admin_settings_form'),
+    'access arguments' => array('administer reiscout_block_spam'),
+    'file' => 'reiscout_block_spam.admin.inc',
+  );
+
+  return $items;
+}
+
+/**
+ * Implements hook_mail_alter().
+ */
+function reiscout_block_spam_mail_alter(&$message) {
+  // Do we need to process an email?
+  if (!$message_ids = trim(variable_get('reiscout_block_spam_message_ids', ''))) {
+    return;
+  }
+
+  $message_ids = explode(PHP_EOL, $message_ids);
+  if (!in_array($message['id'], $message_ids)) {
+    return;
+  }
+
+  // Do we need to block an email if it contains cyrillic symbols?
+  if (variable_get('reiscout_block_spam_cyrillic_symbols', FALSE)) {
+    if (preg_match('![а-яА-Я]{3,}!u', $message['params']['message'])) {
+      _reiscout_block_spam_log($message, t('Email contains cyrillic symbols'));
+      $message['send'] = FALSE;
+      return;
+    }
+  }
+
+  // Do we need to block an email if it contains any of the stop words?
+  if ($stop_words = trim(variable_get('reiscout_block_spam_stop_words', ''))) {
+    $stop_words = explode(PHP_EOL, $stop_words);
+    $stop_words = array_map('trim', $stop_words);
+
+    // Check if an email contains any of the stop words
+    for ($i = 0, $len = count($stop_words); $i < $len; ++$i) {
+      if (FALSE !== stripos($message['params']['message'], $stop_words[$i])) {
+        _reiscout_block_spam_log($message, t('Email contains a stop word: @word', array('@word' => $stop_words[$i])));
+        $message['send'] = FALSE;
+        return;
+      }
+    }
+  }
+}
+
+/**
+ * Logs a blocked email to the watchdog.
+ */
+function _reiscout_block_spam_log($message, $reason) {
+  if (!variable_get('reiscout_block_spam_log_enabled', FALSE)) {
+    return;
+  }
+
+  // Increase a counter to have a statistics of blocked emails
+  $reiscout_block_spam_counter = variable_get('reiscout_block_spam_counter', 0);
+  variable_set('reiscout_block_spam_counter', ++$reiscout_block_spam_counter);
+
+  $variables = array(
+    '%reason'  => $reason,
+    '!message' => '<pre>' . var_export($message, TRUE) . '</pre>',
+  );
+  watchdog('reiscout_block_spam', 'Email has been blocked. Reason: %reason. Message: !message', $variables, WATCHDOG_WARNING);
+}
