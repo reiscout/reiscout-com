@@ -196,7 +196,7 @@ function reiscout_property_commerce_get_property_address_price($node) {
     }
   }
 
-  $bace_price_decimal = variable_get('reiscout_property_commerce_address_access_basic_price', 30);
+  $bace_price_decimal = variable_get('reiscout_property_commerce_address_access_basic_price', 10);
   $per_field_price_decimal = variable_get('reiscout_property_commerce_address_access_per_field_price', 0);
   $price = $bace_price_decimal + $per_field_price_decimal * $filled_fields_count;
   return array(
