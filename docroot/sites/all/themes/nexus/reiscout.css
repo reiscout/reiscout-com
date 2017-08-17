@@ -474,3 +474,47 @@ footer#colophon .col-sm-12 a:hover {
 footer#colophon .col-sm-12 a:first-child{
   margin-left: 5px;
 }
+
+#block-our-prices .nav-tabs {
+  margin-left: 0;
+}
+
+#block-our-prices .price {
+  margin: 20px 0 10px 0;
+  text-align: center;
+  font-size: 37px;
+  font-weight: bold;
+}
+
+#block-our-prices .title {
+  margin: 0 0 5px 0;
+  text-align: center;
+  font-size: 16px;
+  font-weight: bold;
+}
+
+#block-our-prices .bordered-container {
+  padding: 30px 0 20px 0;
+  border: solid 1px #DDD;
+}
+
+#block-our-prices .options {
+  margin-left: 20%;
+  list-style: none;
+}
+
+#block-our-prices .options li:before {
+  padding-right: 5px;
+  content: "✓";
+  font-weight: bold;
+  color: green;
+}
+
+#block-our-prices .options li {
+  padding: 7px 0 7px 0;
+}
+
+#block-our-prices .video {
+  margin-top: 20px;
+  text-align: center;
+}
