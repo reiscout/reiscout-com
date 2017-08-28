@@ -1,0 +1,7 @@
+<?php
+/**
+ * @file
+ * Code for the Reiscout Video Tutorial feature.
+ */
+
+include_once 'reiscout_video_tutorial.features.inc';
