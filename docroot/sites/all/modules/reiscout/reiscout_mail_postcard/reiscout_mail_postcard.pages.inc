@@ -185,6 +185,10 @@ function _reiscout_mail_postcard_send($property_nid, $template_nid) {
   }
 
   $property_owner_address = _reiscout_property_get_owner_address_by_nid($property_nid);
+  $property_owner_name = $property_owner_address->name_line->value();
+  if (_reiscout_property_is_owner_an_individual_by_nid($property_nid)) {
+    $property_owner_name = _reiscout_mail_postcard_swap_recipient_first_and_last_names($property_owner_name);
+  }
   $user_address = _reiscout_property_get_user_address();
 
   $front = _reiscout_mail_postcard_build_front_html($property_nid, $template_nid);
@@ -192,7 +196,7 @@ function _reiscout_mail_postcard_send($property_nid, $template_nid) {
 
   $data = array(
     'to' => array(
-      'name'            => $property_owner_address->name_line->value(),
+      'name'            => $property_owner_name,
       'address_line1'   => $property_owner_address->thoroughfare->value(),
       'address_city'    => $property_owner_address->locality->value(),
       'address_state'   => $property_owner_address->administrative_area->value(),
@@ -379,12 +383,16 @@ function _reiscout_mail_postcard_combine_template_option($template_node, $proper
  */
 function _reiscout_mail_postcard_add_address_block($content, $property_nid) {
   $property_owner_address = _reiscout_property_get_owner_address_by_nid($property_nid);
+  $property_owner_name = $property_owner_address->name_line->value();
+  if (_reiscout_property_is_owner_an_individual_by_nid($property_nid)) {
+    $property_owner_name = _reiscout_mail_postcard_swap_recipient_first_and_last_names($property_owner_name);
+  }
   $user_address = _reiscout_property_get_user_address();
 
   $address_block_content = array(
     '#theme' => 'reiscout_mail_postcard_address_block',
     '#to' => array(
-      'name'         => $property_owner_address->name_line->value(),
+      'name'         => $property_owner_name,
       'thoroughfare' => $property_owner_address->thoroughfare->value(),
       'city'         => $property_owner_address->locality->value(),
       'state'        => $property_owner_address->administrative_area->value(),

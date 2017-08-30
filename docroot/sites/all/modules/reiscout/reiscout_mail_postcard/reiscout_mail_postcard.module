@@ -273,3 +273,27 @@ function _reiscout_mail_postcard_is_user_can_send($node) {
 
   return TRUE;
 }
+
+/**
+ * Swaps the first name and the last name in a full name string.
+ *
+ * Given a full name of a postcard's recipient,
+ * swaps the first name and the last name.
+ */
+function _reiscout_mail_postcard_swap_recipient_first_and_last_names($full_name) {
+  if (strpos($full_name, '/')) {
+    $names = explode('/', $full_name);
+    $names = array_map('trim', $names);
+    $names = array_map('_reiscout_mail_postcard_swap_recipient_first_and_last_names', $names);
+    $full_name = implode(' / ', $names);
+  }
+  elseif (strpos($full_name, ' ')) {
+    $names = explode(' ', $full_name);
+    $names = array_map('trim', $names);
+    $last_name = array_shift($names);
+    $names[] = $last_name;
+    $full_name = implode(' ', $names);
+  }
+
+  return $full_name;
+}
