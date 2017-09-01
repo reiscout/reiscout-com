@@ -1396,7 +1396,7 @@ function property_field_default_field_instances() {
     'bundle' => 'property',
     'default_value' => array(
       0 => array(
-        'value' => 1,
+        'value' => 0,
       ),
     ),
     'deleted' => 0,
