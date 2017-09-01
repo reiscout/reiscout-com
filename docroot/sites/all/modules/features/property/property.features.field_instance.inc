@@ -580,56 +580,6 @@ function property_field_default_field_instances() {
     ),
   );
 
-  // Exported field_instance: 'node-property-field_ep_appraised'.
-  $field_instances['node-property-field_ep_appraised'] = array(
-    'bundle' => 'property',
-    'default_value' => array(
-      0 => array(
-        'value' => 60,
-      ),
-    ),
-    'deleted' => 0,
-    'description' => '',
-    'display' => array(
-      'default' => array(
-        'label' => 'above',
-        'settings' => array(),
-        'type' => 'hidden',
-        'weight' => 21,
-      ),
-      'drupalgap' => array(
-        'label' => 'above',
-        'settings' => array(),
-        'type' => 'hidden',
-        'weight' => 7,
-      ),
-      'full' => array(
-        'label' => 'above',
-        'settings' => array(),
-        'type' => 'hidden',
-        'weight' => 9,
-      ),
-    ),
-    'entity_type' => 'node',
-    'field_name' => 'field_ep_appraised',
-    'label' => 'Equity Percentage Estimate (appraised)',
-    'required' => 0,
-    'settings' => array(
-      'max' => '',
-      'min' => '',
-      'prefix' => '',
-      'suffix' => '%',
-      'user_register_form' => FALSE,
-    ),
-    'widget' => array(
-      'active' => 0,
-      'module' => 'number',
-      'settings' => array(),
-      'type' => 'number',
-      'weight' => 9,
-    ),
-  );
-
   // Exported field_instance: 'node-property-field_ep_calculated'.
   $field_instances['node-property-field_ep_calculated'] = array(
     'bundle' => 'property',
@@ -1677,7 +1627,6 @@ function property_field_default_field_instances() {
   t('Effective Year Built');
   t('Enter property address. It will be visible only for users bought the access to this property.');
   t('Equity Percentage Estimate');
-  t('Equity Percentage Estimate (appraised)');
   t('Full Baths');
   t('Gross Area');
   t('Half Baths');
