@@ -5,8 +5,6 @@
  * Calculates an equity percentage for a property.
  */
 
-define('REISCOUT_EQUITY_PERCENTAGE_EP_APPRAISED_DEFAULT_VALUE', 60);
-
 /**
  * Implements hook_cron().
  */
@@ -30,10 +28,6 @@ function reiscout_equity_percentage_cron() {
  * Implements hook_cron_queue_info().
  */
 function reiscout_equity_percentage_cron_queue_info() {
-  $queues['reiscout_equity_percentage_set_default_appraised_value'] = array(
-    'worker callback' => 'reiscout_equity_percentage_set_default_appraised_value',
-  );
-
   $queues['reiscout_equity_percentage_recalculate'] = array(
     'worker callback' => 'reiscout_equity_percentage_recalculate',
   );
@@ -93,19 +87,9 @@ function reiscout_equity_percentage_field_access($op, $field, $entity_type, $ent
           return FALSE;
         }
       }
-
-      if ('field_ep_appraised' == $field['field_name']) {
-        $nw = entity_metadata_wrapper('node', $entity);
-        if ($nw->field_ep_calculated->value()) {
-          return FALSE;
-        }
-        else {
-          return TRUE;
-        }
-      }
     }
     else if ('edit' == $op) {
-      if ('field_ep_calculated' == $field['field_name'] || 'field_ep_appraised' == $field['field_name']) {
+      if ('field_ep_calculated' == $field['field_name']) {
         $role_admin = user_role_load_by_name('administrator');
         if (!user_has_role($role_admin->rid)) {
           return FALSE;
@@ -113,18 +97,6 @@ function reiscout_equity_percentage_field_access($op, $field, $entity_type, $ent
       }
     }
   }
-}
-
-/*
- * Callback for hook_cron_queue_info().
- *
- * Sets a default value for an 'Appraised Equity Percentage'
- * field in a given property.
- */
-function reiscout_equity_percentage_set_default_appraised_value($nid) {
-  $nw = entity_metadata_wrapper('node', $nid);
-  $nw->field_ep_appraised = REISCOUT_EQUITY_PERCENTAGE_EP_APPRAISED_DEFAULT_VALUE;
-  $nw->save();
 }
 
 /*
