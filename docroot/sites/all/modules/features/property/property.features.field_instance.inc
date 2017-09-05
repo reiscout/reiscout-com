@@ -1552,7 +1552,7 @@ function property_field_default_field_instances() {
     'required' => 0,
     'settings' => array(
       'max' => '',
-      'min' => 1900,
+      'min' => 1800,
       'prefix' => '',
       'suffix' => '',
       'user_register_form' => FALSE,
