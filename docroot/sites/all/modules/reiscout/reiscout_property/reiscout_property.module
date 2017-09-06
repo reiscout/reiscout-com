@@ -211,34 +211,60 @@ function reiscout_property_node_grants($account, $op) {
 function reiscout_property_field_access($op, $field, $entity_type, $entity, $account) {
   if ('node' == $entity_type && !empty($entity->type) && 'property' == $entity->type) {
     if ('edit' == $op) {
+      // A list of a node's fields that a user is allowed to edit
+      // after the node has been purchased
+      $fields_to_edit_node_was_purchased = array(
+        'field_image',
+        'body',
+        'field_owner_phone',
+        'field_repairs_price',
+        'field_arv',
+        'field_under_contract',
+      );
+
+      // A list of a node's fields that a user is allowed to edit
+      // after the node has been filled with data from CL
+      $fields_to_edit_node_was_pulled = array(
+        'field_image',
+        'body',
+        'field_place_on_marketplace',
+        'field_owner_phone',
+        'field_repairs_price',
+        'field_arv',
+        'field_under_contract',
+      );
+
+      $role_admin = user_role_load_by_name('administrator');
+
+      // It is only administrator who can edit the 'Lock data'
+      // and the 'Data Quality Tags' fields
       if (in_array($field['field_name'], array('field_data_locked', 'field_data_quality_tags'))) {
-        $role_admin = user_role_load_by_name('administrator');
         if (!user_has_role($role_admin->rid, $account)) {
           return FALSE;
         }
       }
-    }
-  }
-}
 
-/**
- * Implements hook_node_access().
- */
-function reiscout_property_node_access($node, $op, $account) {
-  $type = is_string($node) ? $node : $node->type;
+      // If a node is being edited
+      if (isset($entity->nid)) {
+        if (_reiscout_property_lead_has_been_purchased($entity->nid)) {
+          if (!in_array($field['field_name'], $fields_to_edit_node_was_purchased)) {
+            if (!user_has_role($role_admin->rid, $account)) {
+              return FALSE;
+            }
+          }
+        }
 
-  if ('property' == $type) {
-    if ('update' == $op) {
-      if (is_object($node)) {
-        $nw = entity_metadata_wrapper('node', $node);
+        $nw = entity_metadata_wrapper('node', $entity);
         if ($nw->field_data_locked->value()) {
-          return NODE_ACCESS_DENY;
+          if (!in_array($field['field_name'], $fields_to_edit_node_was_pulled)) {
+            if (!user_has_role($role_admin->rid, $account)) {
+              return FALSE;
+            }
+          }
         }
       }
     }
   }
-
-  return NODE_ACCESS_IGNORE;
 }
 
 /**
@@ -583,4 +609,14 @@ function _reiscout_property_get_added_amount_by_uid($uid) {
     ->propertyCondition('uid', $uid);
 
   return (int) $query->count()->execute();
+}
+
+/**
+ * Checks if a node's 'Address Access' product has been purchased.
+ *
+ * Checks if an 'Address Access' product that is linked to a node
+ * has been purchased.
+ */
+function _reiscout_property_lead_has_been_purchased($nid) {
+  return _reiscout_property_commerce_node_has_been_purchased($nid, REISCOUT_PROPERTY_COMMERCE_ADDRESS_ACCESS_PRODUCT_TYPE);
 }

@@ -4,3 +4,4 @@ package = Reiscout
 core = 7.x
 dependencies[] = connect2data_api
 dependencies[] = reiscout_equity_percentage
+dependencies[] = reiscout_property_commerce

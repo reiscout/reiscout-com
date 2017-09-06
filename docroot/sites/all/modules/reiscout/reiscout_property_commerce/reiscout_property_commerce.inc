@@ -252,3 +252,24 @@ function reiscout_property_commerce_disable($product) {
     throw new Exception($e->getMessage());
   }
 }
+
+/**
+ * Checks if a node's $product_type product has been purchased.
+ *
+ * Checks if a $product_type product that is linked to a node
+ * has been purchased.
+ */
+function _reiscout_property_commerce_node_has_been_purchased($nid, $product_type) {
+  $query = db_select('commerce_order', 'ord');
+  $query->join('commerce_line_item', 'li', 'ord.order_id = li.order_id');
+  $query->join('field_data_commerce_product', 'li_prod', 'li.line_item_id = li_prod.entity_id');
+  $query->join('commerce_product', 'prod', 'prod.product_id = li_prod.commerce_product_product_id');
+  $query->join('field_data_field_property', 'prop_ref', 'prop_ref.entity_id = prod.product_id');
+  $query
+    ->fields('prop_ref', array('field_property_target_id'))
+    ->condition('ord.status', 'completed')
+    ->condition('prod.type', $product_type)
+    ->condition('prop_ref.field_property_target_id', $nid);
+
+  return (bool) $query->execute()->rowCount();
+}
