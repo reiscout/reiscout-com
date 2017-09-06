@@ -37,23 +37,29 @@ function reiscout_address_rest_server_request_parsed_alter(&$data, $controller) 
  * to the last widget before send it for saving.
  */
 function _reiscout_address_prepare_addressfield_data_to_address_autocomplete_widget(&$data, $field_name) {
-  $field_name_class = str_replace('_', '-', $field_name);
+  // If a user has not access to the field in the mobile application,
+  // its value will not be set.
+  //
+  // See reiscout_property_form_alter() in app/modules/custom/reiscout_property/reiscout_property.js
+  if (isset($data[$field_name])) {
+    $field_name_class = str_replace('_', '-', $field_name);
 
-  $data[$field_name]['und'][0]['latitude'] = $data[$field_name_class . '-und-0-value-latitude'];
-  $data[$field_name]['und'][0]['longitude'] = $data[$field_name_class . '-und-0-value-longitude'];
-  $data[$field_name]['und'][0] = array(
-    $field_name => array(
-      'reveal' => 0,
-      'autocomplete' => $data[$field_name_class . '-und-0-value-autocomplete'],
-      'widget' => $data[$field_name]['und'][0],
-    ),
-  );
+    $data[$field_name]['und'][0]['latitude'] = $data[$field_name_class . '-und-0-value-latitude'];
+    $data[$field_name]['und'][0]['longitude'] = $data[$field_name_class . '-und-0-value-longitude'];
+    $data[$field_name]['und'][0] = array(
+      $field_name => array(
+        'reveal' => 0,
+        'autocomplete' => $data[$field_name_class . '-und-0-value-autocomplete'],
+        'widget' => $data[$field_name]['und'][0],
+      ),
+    );
 
-  // We don't need these auxiliary fields anymore.
-  unset($data[$field_name_class . '-und-0-value-autocomplete']);
-  unset($data[$field_name_class . '-autocomplete-markup']);
-  unset($data[$field_name_class . '-und-0-value-latitude']);
-  unset($data[$field_name_class . '-und-0-value-longitude']);
+    // We don't need these auxiliary fields anymore.
+    unset($data[$field_name_class . '-und-0-value-autocomplete']);
+    unset($data[$field_name_class . '-autocomplete-markup']);
+    unset($data[$field_name_class . '-und-0-value-latitude']);
+    unset($data[$field_name_class . '-und-0-value-longitude']);
+  }
 }
 
 /**
