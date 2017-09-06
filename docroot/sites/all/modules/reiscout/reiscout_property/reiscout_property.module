@@ -71,6 +71,12 @@ function reiscout_property_node_validate($node, $form, &$form_state) {
     return;
   }
 
+  // If a node is being deleted, we do not need
+  // to check its address for uniqueness.
+  if ('Delete' == $form_state['values']['op']) {
+    return;
+  }
+
   $nw = entity_metadata_wrapper('node', $node);
 
   if (!$nw->field_address->value()) {
