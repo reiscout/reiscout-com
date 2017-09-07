@@ -143,6 +143,15 @@ function reiscout_mail_postcard_form_user_profile_form_alter(&$form, &$form_stat
 }
 
 /**
+ * Implements hook_node_delete().
+ */
+function reiscout_mail_postcard_node_delete($node) {
+  db_delete('reiscout_mail_postcard_history')
+    ->condition('pnid', $node->nid)
+    ->execute();
+}
+
+/**
  * Implements hook_services_resources().
  */
 function reiscout_mail_postcard_services_resources() {
