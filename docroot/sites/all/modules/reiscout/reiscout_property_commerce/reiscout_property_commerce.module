@@ -183,14 +183,6 @@ function reiscout_property_commerce_field_access($op, $field, $entity_type, $ent
 }
 
 /**
- * Implements hook_form_alter().
- */
-function reiscout_property_commerce_form_property_node_form_alter(&$form, &$form_state, $form_id) {
-  // Hide product selection on property node edit page.
-  $form['field_product']['#access'] = FALSE;
-}
-
-/**
  * Implements hook_entity_load().
  */
 function reiscout_property_commerce_entity_load($entities, $type) {
