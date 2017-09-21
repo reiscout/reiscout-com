@@ -380,58 +380,6 @@ function reiscout_property_commerce_node_presave($node) {
 }
 
 /**
- * Implements hook_form_alter().
- * @todo: remove this function
- */
-function reiscout_property_commerce_form_alter(&$form, &$form_state, $form_id) {
-  if (substr_count($form_id, 'commerce_cart_add_to_cart_form_') == 1) {
-    reiscout_property_commerce_form_commerce_cart_form_alter($form, $form_state, $form_id);
-  }
-}
-
-/**
- * It is NOT a hook and called from reiscout_property_commerce_form_alter
- * @todo: remove this function
- */
-function reiscout_property_commerce_form_commerce_cart_form_alter(&$form, &$form_state, $form_id) {
-  // Check that product type is the one needed to be processed.
-  $product = commerce_product_load($form['product_id']['#value']);
-
-  if (REISCOUT_PROPERTY_COMMERCE_ADDRESS_ACCESS_PRODUCT_TYPE != $product->type) {
-    return;
-  }
-
-  // Disable access for anonymous and exit
-  if (user_is_anonymous()) {
-    $form['#access'] = FALSE;
-    return;
-  }
-
-  $node = node_load($form_state['context']['entity_id']);
-
-  $is_user_bought_property_address = reiscout_property_commerce_is_node_purchased($node->nid, REISCOUT_PROPERTY_COMMERCE_ADDRESS_ACCESS_PRODUCT_TYPE, $GLOBALS['user']->uid);
-
-  // Process Address Access product
-  if ($product->type == REISCOUT_PROPERTY_COMMERCE_ADDRESS_ACCESS_PRODUCT_TYPE) {
-    // A user may buy a property's address if:
-    //  - he is not the property's author
-    //    AND
-    //  - he has not yet bought the property's address.
-    if ($node->uid != $GLOBALS['user']->uid && !$is_user_bought_property_address) {
-      $price = reiscout_property_commerce_get_property_address_price($node);
-      $form['submit']['#value'] = t('Buy Property Lead for @price @cur',
-        array(
-          '@price' => commerce_currency_amount_to_decimal($price['amount'], $price['currency_code']),
-          '@cur' => $price['currency_code'],
-        )
-      );
-    } else {
-      $form['#access'] = FALSE;
-    }
-  }
-}
-
-/**
  * Get avaliable products for node
  */
 function reiscout_property_commerce_get_property_avaliable_products($node) {
