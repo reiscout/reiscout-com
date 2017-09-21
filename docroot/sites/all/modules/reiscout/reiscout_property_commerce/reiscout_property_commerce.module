@@ -411,6 +411,8 @@ function reiscout_property_commerce_get_property_avaliable_products($node) {
 
 /**
  * Implements hook_node_delete().
+ *
+ * @todo: delete 'Address Access' and 'Owner Info' products if they have not yet been purchased
  */
 function reiscout_property_commerce_node_delete($node) {
   if ($node->type == REISCOUT_PROPERTY_COMMERCE_NODE_TYPE) {
