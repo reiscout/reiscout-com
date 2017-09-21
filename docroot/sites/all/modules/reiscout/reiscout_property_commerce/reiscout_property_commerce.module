@@ -191,6 +191,7 @@ function reiscout_property_commerce_entity_load($entities, $type) {
     // in reiscout_property_commerce.js of the App module
     foreach ($entities as &$entity) {
       if ($entity->type === REISCOUT_PROPERTY_COMMERCE_NODE_TYPE) {
+        /* @todo: remove this block of code- */
         $avaliable_products = reiscout_property_commerce_get_property_avaliable_products($entity);
         $avaliable_product = array_pop($avaliable_products);
         if (!empty($avaliable_product)) {
@@ -204,18 +205,22 @@ function reiscout_property_commerce_entity_load($entities, $type) {
         $entity->_price_title = commerce_currency_amount_to_decimal($price['amount'], $price['currency_code'])
                               . ' '
                               . $price['currency_code'];
+        /* @todo: -remove this block of code */
 
+        // @todo: move this block of code to reiscout_drupalgap.module
         // Mobile application needs to know if user bought an 'Address Access' product.
         $entity->_user_bought_address_access_product = reiscout_property_commerce_is_node_purchased(
           $entity->nid,
           REISCOUT_PROPERTY_COMMERCE_ADDRESS_ACCESS_PRODUCT_TYPE
         );
 
+        /* @todo: remove this block of code- */
         // Mobile application needs to know if user bought an 'Owner Info' product.
         $entity->_user_bought_owner_info_product = reiscout_property_commerce_is_node_purchased(
           $entity->nid,
           REISCOUT_PROPERTY_COMMERCE_OWNER_INFO_PRODUCT_TYPE
         );
+        /* @todo: -remove this block of code */
       }
     }
 
@@ -244,6 +249,8 @@ function reiscout_property_commerce_entity_load($entities, $type) {
 
 /**
  * Implements hook_node_view_alter().
+ *
+ * @todo: replace this function with hook_node_view() and hook_field_extra_fields().
  */
 function reiscout_property_commerce_node_view_alter(&$build) {
   if (isset($build['#node']) && $build['#node']->type === REISCOUT_PROPERTY_COMMERCE_NODE_TYPE) {
@@ -322,6 +329,10 @@ function reiscout_property_commerce_node_view_alter(&$build) {
 
 /**
  * Implements hook_node_presave().
+ *
+ * @todo: we do not provide 'Owner Info' product anymore,
+ * so we should rework this function and remove the code
+ * that is not needed anymore.
  */
 function reiscout_property_commerce_node_presave($node) {
   // Assign products to property nodes on save.
@@ -370,6 +381,7 @@ function reiscout_property_commerce_node_presave($node) {
 
 /**
  * Implements hook_form_alter().
+ * @todo: remove this function
  */
 function reiscout_property_commerce_form_alter(&$form, &$form_state, $form_id) {
   if (substr_count($form_id, 'commerce_cart_add_to_cart_form_') == 1) {
@@ -379,6 +391,7 @@ function reiscout_property_commerce_form_alter(&$form, &$form_state, $form_id) {
 
 /**
  * It is NOT a hook and called from reiscout_property_commerce_form_alter
+ * @todo: remove this function
  */
 function reiscout_property_commerce_form_commerce_cart_form_alter(&$form, &$form_state, $form_id) {
   // Check that product type is the one needed to be processed.
