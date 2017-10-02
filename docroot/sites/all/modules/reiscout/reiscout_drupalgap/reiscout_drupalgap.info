@@ -3,6 +3,7 @@ description = Fixes some problems with drupalgap.
 package = Reiscout
 core = 7.x
 
-dependencies[] = reiscout_property
-dependencies[] = reiscout_owner_info
 dependencies[] = reiscout_mail_postcard
+dependencies[] = reiscout_property
+dependencies[] = reiscout_property_products
+dependencies[] = reiscout_points_user_balance

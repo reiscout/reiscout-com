@@ -111,41 +111,16 @@ function _reiscout_drupalgap_checkout_complete_access($data) {
 /**
  * Implements hook_services_account_object_alter().
  *
- * Adds follow information into a user object:
+ * Adds following information into a user object:
  * - amount of properties that were added by a user;
- * - amount of 'Property Data' points that the user has;
- * - amount of 'Mail' points that the user has.
+ * - a user's current balance in Reiscout points.
  *
- * This information is used by the app. See reiscout_tutorial.js module.
+ * This information is used by the app. See reiscout_points.js
+ * and reiscout_tutorial.js modules.
  */
-function reiscout_drupalgap_services_account_object_alter(&$user) {
+function reiscout_drupalgap_services_account_object_alter($user) {
   if ($user->uid) {
     $user->_amount_of_added_properties = _reiscout_property_get_added_amount_by_uid($user->uid);
-    $user->_amount_of_property_data_points = userpoints_get_current_points($user->uid, TERM_ID_POINTS_OWNER_INFO);
-    $user->_amount_of_mail_points = userpoints_get_current_points($user->uid, REISCOUT_MAIL_POSTCARD_USERPOINTS_TID);
-  }
-}
-
-/**
- * Alter results of the services call.
- *
- * Checks if there are the 'Property Data points' product or/and
- * the 'Mail points' product in an order. And if there are,
- * adds follow information into corresponding line item(s):
- * - amount of 'Property data' points, that the 'Property Data points'
- *   product provides;
- * - amount of 'Mail' points, that the 'Mail points' product provides.
- *
- * This information is used by the app. See reiscout_tutorial.js module,
- * reiscout_tutorial_services_postprocess().
- */
-function reiscout_drupalgap_services_request_postprocess_alter($controller, $args, &$order) {
-  if ('commerce_services_order_retrieve' == $controller['callback']) {
-    foreach ($order->commerce_line_items_entities as $line_item_id => &$line_item) {
-      if (in_array($line_item->commerce_product, array(596, 597))) {
-        $product = commerce_product_load($line_item->commerce_product);
-        $line_item->product_points_amount = (int) $product->field_points_amount[LANGUAGE_NONE][0]['value'];
-      }
-    }
+    $user->_points = reiscout_points_user_balance_get();
   }
 }
