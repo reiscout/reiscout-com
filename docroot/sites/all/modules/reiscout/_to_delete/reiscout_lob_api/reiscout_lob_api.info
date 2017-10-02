@@ -1,4 +1,0 @@
-name = Reiscout Lob API
-description = Send letters via Lob API
-package = Reiscout
-core = 7.x
