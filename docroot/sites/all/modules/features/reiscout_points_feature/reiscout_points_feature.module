@@ -1,7 +1,37 @@
 <?php
 /**
  * @file
- * Code for the Reiscout Points Feature feature.
+ * Code for the Reiscout Points feature.
  */
 
 include_once 'reiscout_points_feature.features.inc';
+
+/**
+ * Implements hook_commerce_checkout_complete().
+ */
+function reiscout_points_feature_commerce_checkout_complete($order) {
+  foreach ($order->commerce_line_items[LANGUAGE_NONE] as $line_item) {
+    $line_item = commerce_line_item_load($line_item['line_item_id']);
+    $product_id = $line_item->commerce_product[LANGUAGE_NONE][0]['product_id'];
+    $product = commerce_product_load($product_id);
+
+    // If there is a product of type 'Points' in the order,
+    // give a user corresponding amount of Reiscout points.
+    if ('points_owner' == $product->type) {
+      $amount = $product->field_points_amount[LANGUAGE_NONE][0]['value'] * (int) $line_item->quantity;
+      $reason = t("User has bought '!title' product", array('!title' => $product->title));
+      reiscout_points_user_balance_increase($order->uid, $amount, $reason);
+    }
+  }
+}
+
+/**
+ * Returns an ID of the 'Point' taxonomy term.
+ */
+function _reiscout_points_feature_get_tid() {
+  if (!$ids = entity_get_id_by_uuid('taxonomy_term', array('b4bd66ff-f570-46a8-9ed5-7dba32659dc2'))) {
+    throw new Exception(t("The 'Point' taxonomy term does not exist."));
+  }
+
+  return array_shift($ids);
+}
