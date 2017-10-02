@@ -1,0 +1,21 @@
+<?php
+
+/**
+ * @file
+ * Implements miscellaneous hooks.
+ */
+
+/**
+ * Implements hook_admin_menu_output_alter().
+ *
+ * Prevents 'User counts' block from displaying to a user
+ * which has not an administrator user role.
+ */
+function reiscout_misc_admin_menu_output_alter(&$content) {
+  if (isset($content['users'])) {
+    $role_admin = user_role_load_by_name('administrator');
+    if (!user_has_role($role_admin->rid)) {
+      unset($content['users']);
+    }
+  }
+}

@@ -1,0 +1,4 @@
+name = Reiscout Misc
+description = Implements miscellaneous hooks.
+package = Reiscout
+core = 7.x
