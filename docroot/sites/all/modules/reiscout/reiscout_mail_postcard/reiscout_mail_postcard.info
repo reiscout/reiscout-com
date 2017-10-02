@@ -4,10 +4,9 @@ package = Reiscout
 core = 7.x
 
 dependencies[] = clone
-dependencies[] = rules_link
-dependencies[] = userpoints
 dependencies[] = services
 
 dependencies[] = lob_api
+dependencies[] = reiscout_points
 dependencies[] = reiscout_property
 dependencies[] = reiscout_property_commerce

@@ -6,7 +6,7 @@
  */
 
 /**
- * Form builder; Pick up an HTML template for a postcard and send one.
+ * Form builder; Allows to pick up an HTML template for a postcard and send it.
  *
  * @see reiscout_mail_postcard_send_form_submit()
  */
@@ -73,15 +73,7 @@ function reiscout_mail_postcard_send_form($form, &$form_state, $node) {
     '#disabled' => TRUE,
   );
 
-  $form['actions'] = array(
-    '#type' => 'actions',
-  );
-  $form['actions']['submit'] = array(
-    '#type' => 'submit',
-    '#value' => t('Send a postcard')
-  );
-
-  return $form;
+  return reiscout_points_product_decorate_form($form, $form_state, 'send_postcard');
 }
 
 /**
@@ -103,7 +95,7 @@ function reiscout_mail_postcard_send_form_submit($form, &$form_state) {
   try {
     $postcard = _reiscout_mail_postcard_send($property_nid, $template_nid);
 
-    _reiscout_mail_postcard_decrease_user_points();
+    reiscout_points_product_charge('send_postcard');
     _reiscout_mail_postcard_log($property_nid, $template_nid, $postcard['id']);
 
     $t_args = array(
@@ -132,22 +124,6 @@ function reiscout_mail_postcard_send_form_submit($form, &$form_state) {
   }
 
   $form_state['redirect'] = 'node/' . $property_nid;
-}
-
-/**
- * Decreases the amount of user points.
- */
-function _reiscout_mail_postcard_decrease_user_points() {
-  global $user;
-
-  $params = array(
-    'uid' => $user->uid,
-    'points' => -1,
-    'tid' => REISCOUT_MAIL_POSTCARD_USERPOINTS_TID,
-    'operation' => '1 point has been used to send a postcard.',
-  );
-
-  userpoints_userpointsapi($params);
 }
 
 /**
