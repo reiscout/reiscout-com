@@ -1,0 +1,316 @@
+<?php
+
+/**
+ * @file
+ * Provides 'Property Lead' and 'Property Data' products.
+ */
+
+/**
+ * Implements hook_field_extra_fields().
+ */
+function reiscout_property_products_field_extra_fields() {
+  $return = array();
+
+  $return['node']['property'] = array(
+    'display' => array(
+      'reiscout-property-lead-form' => array(
+        'label' => t('Reiscout Product: Buy Property Lead'),
+        'description' => t('A form to buy a property lead.'),
+        'weight' => -1,
+      ),
+      'reiscout-property-data-form' => array(
+        'label' => t('Reiscout Product: Pull Property Data'),
+        'description' => t('A form to pull a property data.'),
+        'weight' => -1,
+      ),
+    ),
+  );
+
+  return $return;
+}
+
+/**
+ * Implements hook_reiscout_points_product_info().
+ */
+function reiscout_property_products_reiscout_points_product_info() {
+  return array(
+    'property_lead' => array(
+      'title' => t('Buy Property Lead'),
+      'description' => t("Gives a user an 'Address Access' and an 'Owner Info' products"),
+      'desc_callback' => '_reiscout_property_products_get_desc_for_property_lead_product',
+      'sell_callback' => '_reiscout_property_products_provide_property_lead_product',
+      'services_sell_callback' => '_reiscout_property_products_provide_property_lead_product_services',
+      'access_callback' => '_reiscout_property_products_user_can_buy_property_lead',
+      'params_callback' => '_reiscout_property_products_build_params_for_property_lead_product',
+    ),
+    'property_data' => array(
+      'title' => t('Pull Property Data'),
+      'description' => t("Fills property's fields with CoreLogic data"),
+      'desc_callback' => '_reiscout_property_products_get_desc_for_property_data_product',
+      'sell_callback' => '_reiscout_property_products_provide_property_data_product',
+      'services_sell_callback' => '_reiscout_property_products_provide_property_data_product_services',
+      'access_callback' => '_reiscout_property_products_user_can_pull_property_data',
+      'params_callback' => '_reiscout_property_products_build_params_for_property_data_product',
+    ),
+  );
+}
+
+/**
+ * Implements hook_node_view().
+ */
+function reiscout_property_products_node_view($node, $view_mode, $langcode) {
+  if ('property' != $node->type || 'full' != $view_mode) {
+    return;
+  }
+
+  if (_reiscout_property_products_user_can_buy_property_lead($node)) {
+    $params = _reiscout_property_products_build_params_for_property_lead_product($node);
+    $form = reiscout_points_product_get_buy_form('property_lead', $params);
+    $node->content['reiscout-property-lead-form'] = $form;
+  }
+
+  if (_reiscout_property_products_user_can_pull_property_data($node)) {
+    $params = _reiscout_property_products_build_params_for_property_data_product($node);
+    $form = reiscout_points_product_get_buy_form('property_data', $params);
+    $node->content['reiscout-property-data-form'] = $form;
+  }
+}
+
+/**
+ * Checks if the current user may buy a property lead.
+ *
+ * A user may buy a property lead if:
+ * - he is not the property's author
+ *   AND
+ * - he has not yet purchased the property's address.
+ */
+function _reiscout_property_products_user_can_buy_property_lead($node) {
+  global $user;
+
+  if (user_is_anonymous()) {
+    return FALSE;
+  }
+
+  // If the user is an author of the property node
+  if ($node->uid == $user->uid) {
+    return FALSE;
+  }
+
+  // Check if the user has already purchased the property's address
+  $user_has_purchased_node = reiscout_property_commerce_is_node_purchased(
+    $node->nid,
+    REISCOUT_PROPERTY_COMMERCE_ADDRESS_ACCESS_PRODUCT_TYPE,
+    $user->uid);
+
+  if ($user_has_purchased_node) {
+    return FALSE;
+  }
+
+  return TRUE;
+}
+
+/**
+ * Checks if the current user may pull a property data.
+ *
+ * A user may pull a property data if:
+ * - he is the property's author OR he has purchased the property's address
+ *   AND
+ * - the 'Full info' data quality tag is not attached to the property.
+ */
+function _reiscout_property_products_user_can_pull_property_data($node) {
+  global $user;
+
+  if (user_is_anonymous()) {
+    return FALSE;
+  }
+
+  // If the 'Full info' data quality tag is attached to a property
+  if (_reiscout_property_is_data_quality_tag_attached($node->nid, 'full_info')) {
+    return FALSE;
+  }
+
+  // If the user is not an author of the property node
+  if ($node->uid != $user->uid) {
+    // Check if the user has purchased the property's address
+    $user_has_purchased_node = reiscout_property_commerce_is_node_purchased(
+      $node->nid,
+      REISCOUT_PROPERTY_COMMERCE_ADDRESS_ACCESS_PRODUCT_TYPE,
+      $user->uid);
+
+    if (!$user_has_purchased_node) {
+      return FALSE;
+    }
+  }
+
+  return TRUE;
+}
+
+/**
+ * Provides a 'Property Lead' product to a user.
+ */
+function _reiscout_property_products_provide_property_lead_product($params) {
+  $nid = $params['nid'];
+
+  // 1. Provide an 'Address Access' product to a user
+  _reiscout_property_products_provide_address_access_product($nid);
+
+  // 2. Pull property data if the 'Full info' data quality tag
+  //    is not attached to a property
+  if (!_reiscout_property_is_data_quality_tag_attached($nid, 'full_info')) {
+    // Make a request to the Connect2Data API to get full info about a property
+    if ($info = _reiscout_property_get_c2d_report_by_nid($nid, 'property_data')) {
+      _reiscout_property_update_fields($nid, $info);
+    }
+  }
+
+  drupal_set_message(t('You have purchased the property lead!'));
+
+  return TRUE;
+}
+
+/**
+ * Provides a 'Property Lead' product to a user.
+ *
+ * This function is called via a Services resource.
+ */
+function _reiscout_property_products_provide_property_lead_product_services($params) {
+  $nid = $params['nid'];
+
+  // 1. Provide an 'Address Access' product to a user
+  _reiscout_property_products_provide_address_access_product($nid);
+
+  // 2. Pull property data if the 'Full info' data quality tag
+  //    is not attached to a property
+  if (!_reiscout_property_is_data_quality_tag_attached($nid, 'full_info')) {
+    // Make a request to the Connect2Data API to get full info about a property
+    if ($info = _reiscout_property_get_c2d_report_by_nid($nid, 'property_data')) {
+      _reiscout_property_update_fields($nid, $info);
+    }
+  }
+
+  return array(
+    'status' => TRUE,
+    'message' => t('You have purchased the property lead!'),
+  );
+}
+
+/**
+ * Provides a 'Pull Property Data' product (service) to a user.
+ */
+function _reiscout_property_products_provide_property_data_product($params) {
+  $nid = $params['nid'];
+
+  // Make a request to the Connect2Data API to get full info about a property
+  if (!$info = _reiscout_property_get_c2d_report_by_nid($nid, 'property_data')) {
+    drupal_set_message(t('Property data cannot be updated. Please, try again later or contact technical support for assistance!'), 'error');
+    return FALSE;
+  }
+
+  _reiscout_property_update_fields($nid, $info);
+  drupal_set_message(t('Property data have been updated.'));
+
+  return TRUE;
+}
+
+/**
+ * Provides a 'Pull Property Data' product (service) to a user.
+ *
+ * This function is called via a Services resource.
+ */
+function _reiscout_property_products_provide_property_data_product_services($params) {
+  $nid = $params['nid'];
+
+  // Make a request to the Connect2Data API to get full info about a property
+  if (!$info = _reiscout_property_get_c2d_report_by_nid($nid, 'property_data')) {
+    return array(
+      'status' => FALSE,
+      'message' => t('Property data cannot be updated. Please, try again later or contact technical support for assistance!'),
+    );
+  }
+
+  _reiscout_property_update_fields($nid, $info);
+
+  return array(
+    'status' => TRUE,
+    'message' => t('Property data have been updated.'),
+  );
+}
+
+/**
+ * Returns a description for a 'Property Lead' product.
+ *
+ * @todo: we can use a system_settings_form() to configure description.
+ */
+function _reiscout_property_products_get_desc_for_property_lead_product($type = 'standard', $place = 'site') {
+  if (!in_array($type, array('standard', 'condition'))
+   || !in_array($place, array('site', 'app'))) {
+    return '';
+  }
+
+  if ('standard' == $type) {
+    return t('You will get all the info about the property');
+  }
+  elseif ('condition' == $type) {
+    return t('To buy the property lead');
+  }
+}
+
+/**
+ * Returns a description for a 'Pull Property Data' product (service).
+ *
+ * @todo: we can use a system_settings_form() to configure description.
+ */
+function _reiscout_property_products_get_desc_for_property_data_product($type = 'standard', $place = 'site') {
+  if (!in_array($type, array('standard', 'condition'))
+   || !in_array($place, array('site', 'app'))) {
+    return '';
+  }
+
+  if ('standard' == $type) {
+    return t('You will get all the info about the property');
+  }
+  elseif ('condition' == $type) {
+    return t("To pull the property's data");
+  }
+}
+
+/**
+ * Builds an array of params for a 'Property Lead' product.
+ */
+function _reiscout_property_products_build_params_for_property_lead_product($node) {
+  return array(
+    'nid' => $node->nid,
+  );
+}
+
+/**
+ * Builds an array of params for a 'Pull Property Data' product (service).
+ */
+function _reiscout_property_products_build_params_for_property_data_product($node) {
+  return array(
+    'nid' => $node->nid,
+  );
+}
+
+/**
+ * Provides an 'Address Access' product to a user.
+ */
+function _reiscout_property_products_provide_address_access_product($nid) {
+  global $user;
+
+  $nw = entity_metadata_wrapper('node', $nid);
+  $product = $nw->field_address_access_product->value();
+
+  _reiscout_points_clear_cart();
+
+  // Create the new line item with a product
+  $line_item = commerce_product_line_item_new($product);
+
+  // Add the line item to the cart
+  $line_item = commerce_cart_product_add($user->uid, $line_item, FALSE);
+
+  // Complete the checkout process for the cart
+  $order = commerce_order_load($line_item->order_id);
+  $order = commerce_order_status_update($order, 'checkout_complete');
+  commerce_checkout_complete($order);
+}

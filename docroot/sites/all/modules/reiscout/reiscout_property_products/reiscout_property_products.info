@@ -1,0 +1,10 @@
+name = Reiscout Property Products
+description = Provides 'Property Lead' and 'Property Data' products.
+package = Reiscout
+core = 7.x
+
+dependencies[] = services
+
+dependencies[] = reiscout_points
+dependencies[] = reiscout_property
+dependencies[] = reiscout_property_commerce
