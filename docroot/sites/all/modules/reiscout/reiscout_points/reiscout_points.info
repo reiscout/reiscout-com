@@ -1,0 +1,7 @@
+name = Reiscout Points
+description = Provides Reiscout points system.
+package = Reiscout
+core = 7.x
+
+dependencies[] = reiscout_points_user_balance
+dependencies[] = reiscout_points_product

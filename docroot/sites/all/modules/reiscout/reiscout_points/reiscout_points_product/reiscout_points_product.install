@@ -1,0 +1,13 @@
+<?php
+
+/**
+ * @file
+ * Install, update and uninstall functions for Reiscout Points Product module.
+ */
+
+/**
+ * Implements hook_uninstall().
+ */
+function reiscout_points_product_uninstall() {
+  variable_del('reiscout_points_product_prices');
+}

@@ -1,0 +1,8 @@
+name = Reiscout Points User Balance
+description = Provides a user's balance in Reiscout points; it is a wrapper for the Userpoints module.
+package = Reiscout
+core = 7.x
+
+dependencies[] = admin_menu
+dependencies[] = reiscout_points_feature
+dependencies[] = userpoints

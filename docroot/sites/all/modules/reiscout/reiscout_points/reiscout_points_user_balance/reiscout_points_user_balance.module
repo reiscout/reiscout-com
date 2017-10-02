@@ -1,0 +1,156 @@
+<?php
+
+/**
+ * @file
+ * Provides a user's balance in Reiscout points.
+ */
+
+/**
+ * Implements hook_menu().
+ */
+function reiscout_points_user_balance_menu() {
+  $items['user/%/reiscout-points-balance'] = array(
+    'title' => 'Balance',
+    'description' => "User's current balance in Reiscout points.",
+    'page callback' => 'reiscout_points_user_balance_page',
+    'page arguments' => array(1),
+    'access callback' => 'reiscout_points_user_balance_page_access',
+    'access arguments' => array(1),
+    'file' => 'reiscout_points_user_balance.pages.inc',
+    'type' => MENU_LOCAL_TASK,
+    'weight' => 1,
+  );
+
+  return $items;
+}
+
+/**
+ * Checks if a user can access the 'Balance' page.
+ */
+function reiscout_points_user_balance_page_access($uid) {
+  global $user;
+
+  if (user_is_logged_in() && $user->uid == $uid) {
+    return TRUE;
+  }
+
+  return FALSE;
+}
+
+/**
+ * Given an ID of a user, returns his current balance.
+ */
+function reiscout_points_user_balance_get($uid = NULL) {
+  global $user;
+
+  if (!$uid) {
+    $uid = $user->uid;
+  }
+
+  $tid = _reiscout_points_feature_get_tid();
+  return userpoints_get_current_points($uid, $tid);
+}
+
+/**
+ * Given an ID of a user, increases his balance.
+ */
+function reiscout_points_user_balance_increase($uid, $amount, $reason) {
+  $params = array(
+    'uid' => $uid,
+    'points' => $amount,
+    'tid' => _reiscout_points_feature_get_tid(),
+    'operation' => $reason,
+  );
+
+  userpoints_userpointsapi($params);
+}
+
+/**
+ * Given an ID of a user, decreases his balance.
+ */
+function reiscout_points_user_balance_decrease($uid, $amount, $reason) {
+  $params = array(
+    'uid' => $uid,
+    'points' => -1 * $amount,
+    'tid' => _reiscout_points_feature_get_tid(),
+    'operation' => $reason,
+  );
+
+  userpoints_userpointsapi($params);
+}
+
+/**
+ * Implements hook_userpoints().
+ *
+ * Clears Administration menu's cache and displays a user a message
+ * to inform him that his Reiscout balance has been updated.
+ */
+function reiscout_points_user_balance_userpoints($op, $params) {
+  global $user;
+
+  if ('points after' == $op) {
+    if (_reiscout_points_feature_get_tid() == $params['tid']
+     && USERPOINTS_TXN_STATUS_APPROVED == $params['status']) {
+      admin_menu_flush_caches($params['uid']);
+
+      // If the transaction has been initiated by the current user
+      // and he is a site's user
+      if ($user->uid == $params['uid']
+        && !empty($_SESSION['reiscout_points']['site_user'])) {
+        $balance = reiscout_points_user_balance_get();
+        $t_arg = array(
+          '!amount' => $params['points'],
+          '!balance' => $balance,
+        );
+        $msg1 = format_plural(
+          $params['points'],
+          'You have bought 1 point',
+          'You have bought !amount points',
+          $t_arg
+        );
+        $msg2 = format_plural(
+          $balance,
+          'and now have 1 point',
+          'and now have !balance points',
+          $t_arg
+        );
+        drupal_set_message($msg1 . ' ' . $msg2);
+        unset($_SESSION['reiscout_points']['site_user']);
+      }
+    }
+  }
+}
+
+/**
+ * Implements hook_admin_menu_output_build().
+ *
+ * Adds into Administration menu's block
+ * information about a user's current balance.
+ */
+function reiscout_points_user_balance_admin_menu_output_build(&$content) {
+  global $user;
+
+  $balance = reiscout_points_user_balance_get();
+
+  $t_arg = array('!balance' => $balance);
+
+  $content['reiscout-points-user-balance'] = array(
+    '#theme' => 'admin_menu_links',
+    '#wrapper_attributes' => array(
+      'id' => 'admin-menu-reiscout-points-user-balance',
+    ),
+    '#weight' => 100,
+  );
+
+  $content['reiscout-points-user-balance']['info'] = array(
+    '#title' => format_plural($balance, 'You have 1 point', 'You have !balance points', $t_arg),
+    '#href' => 'user/' . $user->uid . '/reiscout-points-balance',
+    '#attributes' => array(
+      'class' => array(
+        'admin-menu-action',
+        'reiscout-points-user-balance',
+      )
+    ),
+    '#weight' => -99,
+  );
+}

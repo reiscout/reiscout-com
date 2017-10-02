@@ -1,0 +1,5 @@
+name = Reiscout Points Product
+description = Allows to sell Reiscout products for Reiscout points.
+package = Reiscout
+core = 7.x
+configure = admin/config/reiscout-points/products-prices

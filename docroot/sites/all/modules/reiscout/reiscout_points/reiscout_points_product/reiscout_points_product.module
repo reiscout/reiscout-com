@@ -1,0 +1,342 @@
+<?php
+
+/**
+ * @file
+ * Allows to sell Reiscout products for Reiscout points.
+ */
+
+/**
+ * Implements hook_permission().
+ */
+function reiscout_points_product_permission() {
+  return array(
+    'administer reiscout products prices' =>  array(
+      'title' => t('Configure prices of Reiscout products'),
+    ),
+  );
+}
+
+/**
+ * Implements hook_menu().
+ */
+function reiscout_points_product_menu() {
+  $items['admin/config/reiscout-points/products-prices'] = array(
+    'title' => 'Reiscout products prices',
+    'description' => 'Configure prices of Reiscout products.',
+    'page callback' => 'drupal_get_form',
+    'page arguments' => array('reiscout_points_product_prices_form'),
+    'access arguments' => array('administer reiscout products prices'),
+    'file' => 'reiscout_points_product.admin.inc',
+  );
+
+  return $items;
+}
+
+/**
+ * Returns a list of all the Reiscout products.
+ *
+ * Returns a list of all the registered Reiscout products
+ * that can be sold for Reiscout points.
+ */
+function reiscout_points_product_get_all() {
+  static $products;
+
+  if (!$products) {
+    $defaults = array(
+      'price_callback' => FALSE,
+    );
+
+    if ($products = module_invoke_all('reiscout_points_product_info')) {
+      foreach ($products as $product_id => $product) {
+        $products[$product_id] = $product + $defaults;
+      }
+    }
+  }
+
+  return $products;
+}
+
+/**
+ * Given an ID of a Reiscout product, returns its definition.
+ */
+function reiscout_points_product_get($product_id) {
+  $products = reiscout_points_product_get_all();
+
+  if (!isset($products[$product_id])) {
+    $t_arg = array('!product_id' => $product_id);
+    throw new Exception(t("The product with '!product_id' ID has not been registered.", $t_arg));
+  }
+
+  return $products[$product_id];
+}
+
+/**
+ * Given an ID of a Reiscout product, returns its price in Reiscout points.
+ */
+function reiscout_points_product_get_price($product_id, $params = NULL) {
+  $product = reiscout_points_product_get($product_id);
+
+  if ($product['price_callback']) {
+    return call_user_func($product['price_callback'], $params);
+  }
+
+  if ($prices = variable_get('reiscout_points_product_prices')) {
+    if (isset($prices[$product_id])) {
+      return $prices[$product_id];
+    }
+  }
+
+  return FALSE;
+}
+
+/**
+ * Form builder; A form to buy a Reiscout product.
+ *
+ * @see reiscout_points_product_buy_form_submit()
+ */
+function reiscout_points_product_buy_form($form, &$form_state, $product_id, $params = NULL) {
+  $form['reiscout_points_product_data'] = array(
+    '#tree' => TRUE,
+  );
+  $form['reiscout_points_product_data']['product_id'] = array(
+    '#type' => 'value',
+    '#value' => $product_id,
+  );
+  if ($params) {
+    $form['reiscout_points_product_data']['params'] = array(
+      '#type' => 'value',
+      '#value' => $params,
+    );
+  }
+
+  return reiscout_points_product_decorate_form($form, $form_state, $product_id, $params);
+}
+
+/**
+ * Form submission handler for reiscout_points_product_buy_form().
+ *
+ * @see reiscout_points_product_buy_form()
+ */
+function reiscout_points_product_buy_form_submit($form, &$form_state) {
+  $product_id = $form_state['values']['reiscout_points_product_data']['product_id'];
+
+  $params = NULL;
+  if (isset($form_state['values']['reiscout_points_product_data']['params'])) {
+    $params = $form_state['values']['reiscout_points_product_data']['params'];
+  }
+
+  $product = reiscout_points_product_get($product_id);
+
+  if (!isset($product['sell_callback'])) {
+    $t_arg = array('!product_id' => $product_id);
+    throw new Exception(t("A 'sell_callback' is not set for product with '!product_id' ID.", $t_arg));
+  }
+
+  if (call_user_func($product['sell_callback'], $params)) {
+    reiscout_points_product_charge($product_id, $params);
+  }
+}
+
+/**
+ * Returns a form to buy a Reiscout product.
+ */
+function reiscout_points_product_get_buy_form($product_id, $params = NULL) {
+  return drupal_get_form('reiscout_points_product_buy_form', $product_id, $params);
+}
+
+/**
+ * Decorates a buy product form.
+ *
+ * If a user has enough amount of points to buy a product, adds a submit button.
+ * Otherwise adds:
+ * - a disabled submit button;
+ * - a link to buy more points.
+ */
+function reiscout_points_product_decorate_form($form, $form_state, $product_id, $params = NULL) {
+  $balance = reiscout_points_user_balance_get();
+  $product = reiscout_points_product_get($product_id);
+  $price = reiscout_points_product_get_price($product_id, $params);
+
+  $form['actions'] = array(
+    '#type' => 'actions',
+  );
+
+  $t_arg = array(
+    '@title' => $product['title'],
+    '!price' => $price,
+  );
+
+  $form['actions']['submit'] = array(
+    '#type' => 'submit',
+    '#value' => format_plural($price, '@title for 1 point', '@title for !price points', $t_arg),
+  );
+
+  // If a user has enough amount of points to buy a product
+  if ($balance >= $price) {
+    if ($description = call_user_func($product['desc_callback'])) {
+      $form['actions']['description'] = array(
+        '#type' => 'item',
+        '#markup' => $description,
+      );
+    }
+  }
+  else {
+    // If a user has not enough amount of points to buy a product,
+    // but he has sent (he has submit) a form to buy a product.
+    // We display him a message about that.
+    if (!empty($form_state['input'])) {
+      $message = _reiscout_points_product_build_not_enough_points_message(
+        $price,
+        $balance,
+        call_user_func($product['desc_callback'], 'condition')
+      );
+      drupal_set_message($message, 'warning', FALSE);
+    }
+
+    $form['actions']['submit']['#disabled'] = TRUE;
+
+    $t_arg = array(
+      '!url' => url('reiscout-points/buy/' . ($price - $balance), array('query' => array('return_to' => $_GET['q']))),
+    );
+
+    $description = call_user_func($product['desc_callback'], 'condition');
+    $form['actions']['description'] = array(
+      '#type' => 'item',
+      '#markup' => $description . t(' you must <a href="!url">purchase more points</a>', $t_arg),
+    );
+  }
+
+  return $form;
+}
+
+/**
+ * Charge a user for a purchased product.
+ */
+function reiscout_points_product_charge($product_id, $params = NULL) {
+  global $user;
+
+  $product = reiscout_points_product_get($product_id);
+  $price = reiscout_points_product_get_price($product_id, $params);
+  $reason = t("User has bought '@title' product", array('@title' => $product['title']));
+  reiscout_points_user_balance_decrease($user->uid, $price, $reason);
+}
+
+/**
+ * Alter results of the services call.
+ *
+ * Attaches to a node information about Reiscout products that the
+ * current user can buy.
+ *
+ * This information is used by the app. See reiscout_points.js module,
+ * reiscout_points_entity_post_render_field().
+ *
+ * @todo: check if code of the function can be optimized.
+ */
+function reiscout_points_product_services_request_postprocess_alter($controller, $args, $node) {
+  if ('_node_resource_retrieve' == $controller['callback'] && 'property' == $node->type) {
+    $points_products = array();
+
+    $products = reiscout_points_product_get_all();
+    foreach ($products as $product_id => $product) {
+      if (isset($product['access_callback'])) {
+        // If a user has access to a product
+        if (call_user_func($product['access_callback'], $node)) {
+          $params = isset($product['params_callback']) ? call_user_func($product['params_callback'], $node) : NULL;
+          $price = reiscout_points_product_get_price($product_id, $params);
+          $balance = reiscout_points_user_balance_get();
+
+          $t_arg = array(
+            '@title' => $product['title'],
+            '!price' => $price,
+          );
+          $title = format_plural($price, '@title for 1 point', '@title for !price points', $t_arg);
+
+          // If a user has enough amount of points to buy a product
+          if ($balance >= $price) {
+            $description = call_user_func($product['desc_callback'], 'standard', 'app');
+          }
+          else {
+            $t_arg = array(
+              '!url' => 'reiscout-points/buy/' . ($price - $balance) . '?return_to=node/' . $node->nid,
+            );
+            $description = call_user_func($product['desc_callback'], 'condition', 'app');
+            $description .= t(' you must <a href="#" onclick="javascript:drupalgap_goto(\'!url\');" >purchase more points</a>', $t_arg);
+          }
+
+          $points_products[$product_id] = array(
+            'available' => $balance >= $price,
+            'title' => $title,
+            'desc' => $description,
+          );
+        }
+      }
+    }
+
+    if ($points_products) {
+      $node->_reiscout_points_products = $points_products;
+    }
+  }
+}
+
+/**
+ * Implements hook_services_resources().
+ */
+function reiscout_points_product_services_resources() {
+  return array(
+    'reiscout_points_product' => array(
+      'actions' => array(
+        'sell' => array(
+          'help' => t('Sells a Reiscout product'),
+          'file' => array('type' => 'inc', 'module' => 'reiscout_points_product', 'name' => 'reiscout_points_product.resources'),
+          'callback' => '_reiscout_points_product_resource_sell',
+          'args' => array(
+            array(
+              'name' => 'product_id',
+              'type' => 'int',
+              'source' => array('data' => 'product_id'),
+              'optional' => FALSE,
+              'description' => 'An ID of a Reiscout product',
+            ),
+            array(
+              'name' => 'params',
+              'type' => 'array',
+              'source' => array('data' => 'params'),
+              'optional' => FALSE,
+              'description' => 'An array of params for a Reiscout product',
+            ),
+          ),
+          'access callback' => '_reiscout_points_product_resource_access',
+          'access arguments' => array('sell'),
+          'access arguments append' => TRUE,
+        ),
+      ),
+    ),
+  );
+}
+
+/**
+ * Builds a message that a user has not enough amount of points to buy a product.
+ */
+function _reiscout_points_product_build_not_enough_points_message($price, $balance, $text) {
+  $t_arg = array(
+    '!price' => $price,
+    '!balance' => $balance,
+    '@text' => $text,
+  );
+
+  $msg1 = format_plural(
+    $price,
+    '@text you must have at least 1 point.',
+    '@text you must have at least !price points.',
+    $t_arg
+  );
+
+  $msg2 = format_plural(
+    $balance,
+    'You have only 1 point.',
+    'You have only !balance points.',
+    $t_arg
+  );
+
+  return $msg1 . ' ' . $msg2;
+}

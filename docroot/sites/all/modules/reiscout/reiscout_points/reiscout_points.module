@@ -1,0 +1,202 @@
+<?php
+
+/**
+ * @file
+ * Provides Reiscout points system.
+ */
+
+define('REISCOUT_POINTS_1_POINT_PRODUCT_SKU', '1_point');
+
+/**
+ * Implements hook_menu().
+ */
+function reiscout_points_menu() {
+  $items['admin/config/reiscout-points'] = array(
+    'title' => 'Reiscout points',
+    'description' => 'Reiscout points system settings.',
+    'position' => 'right',
+    'weight' => 0,
+    'page callback' => 'system_admin_menu_block_page',
+    'access arguments' => array('access administration pages'),
+    'file' => 'system.admin.inc',
+    'file path' => drupal_get_path('module', 'system'),
+  );
+
+  $items['reiscout-points/buy'] = array(
+    'title' => 'Buy a points package',
+    'description' => 'Allows a user to buy a Reiscout points package',
+    'page callback' => 'drupal_get_form',
+    'page arguments' => array('reiscout_points_buy_package_form'),
+    'access callback' => 'user_is_logged_in',
+    'file' => 'reiscout_points.pages.inc',
+    'type' => MENU_CALLBACK,
+  );
+
+  $items['reiscout-points/buy/%'] = array(
+    'title' => 'Buy Reiscout points',
+    'description' => 'Allows a user to buy Reiscout points',
+    'page callback' => 'reiscout_points_buy_page',
+    'page arguments' => array(2),
+    'access callback' => 'user_is_logged_in',
+    'file' => 'reiscout_points.pages.inc',
+    'type' => MENU_CALLBACK,
+  );
+
+  return $items;
+}
+
+/**
+ * Implements hook_drupal_goto_alter().
+ *
+ * On checkout completion redirects a user to a page
+ * he started the buying process from.
+ */
+function reiscout_points_drupal_goto_alter(&$path, &$options, &$http_response_code) {
+  // If Drupal Commerce wants to redirect a user from
+  // 'checkout/order_id/payment' path to
+  // 'checkout/order_id/complete' path,
+  // we redirect him to 'return_to' path instead.
+  if (preg_match_all('!checkout/(\d+)/payment!', current_path(), $matches)
+   && 'checkout/' . $matches[1][0] . '/complete' == $path
+   && !empty($_SESSION['reiscout_points']['return_to'])) {
+    $path = $_SESSION['reiscout_points']['return_to'];
+    unset($_SESSION['reiscout_points']['return_to']);
+  }
+}
+
+/**
+ * Alter results of the services call.
+ *
+ * If checkout has been completed successfully, checks if there is a
+ * product of type 'Points' in an order. And if there is, adds following
+ * information into result information:
+ * - a user's current balance in Reiscout points.
+ *
+ * This information is used by the app. See reiscout_points.js module,
+ * reiscout_points_services_postprocess().
+ */
+function reiscout_points_services_request_postprocess_alter($controller, $args, &$result) {
+  if ('_commerce_drupalgap_resource_checkout_complete' == $controller['callback']) {
+    // If checkout has been completed successfully
+    if ($result) {
+      // Check if there is a product of type 'Points' in the order
+      $order = commerce_order_load($args[0]['order_id']);
+      foreach ($order->commerce_line_items[LANGUAGE_NONE] as $line_item) {
+        $line_item = commerce_line_item_load($line_item['line_item_id']);
+        $product_id = $line_item->commerce_product[LANGUAGE_NONE][0]['product_id'];
+        $product = commerce_product_load($product_id);
+
+        // If there is, adds into result information
+        // information about a user's current balance in Reiscout points
+        if ('points_owner' == $product->type) {
+          $result = array(
+            'status' => TRUE,
+            'balance' => reiscout_points_user_balance_get(),
+          );
+          break;
+        }
+      }
+    }
+  }
+}
+
+/**
+ * Implements hook_services_resources().
+ */
+function reiscout_points_services_resources() {
+  return array(
+    'reiscout_points' => array(
+      'actions' => array(
+        'add_product_to_cart' => array(
+          'help' => t("Clears a user's cart and adds corresponding amount of Points product to the cart"),
+          'file' => array('type' => 'inc', 'module' => 'reiscout_points', 'name' => 'reiscout_points.resources'),
+          'callback' => '_reiscout_points_resource_add_product_to_cart',
+          'args' => array(
+            array(
+              'name' => 'product_id',
+              'type' => 'int',
+              'source' => array('data' => 'product_id'),
+              'optional' => TRUE,
+              'description' => 'An ID of a Points product',
+            ),
+            array(
+              'name' => 'amount',
+              'type' => 'int',
+              'source' => array('data' => 'amount'),
+              'optional' => TRUE,
+              'description' => 'An amount of a Points product that must be added to the cart',
+            ),
+          ),
+          'access callback' => '_reiscout_points_resource_access',
+          'access arguments' => array('add_product_to_cart'),
+          'access arguments append' => TRUE,
+        ),
+        'get_package_products_options' => array(
+          'help' => t('Returns an option list of available points package products'),
+          'file' => array('type' => 'inc', 'module' => 'reiscout_points', 'name' => 'reiscout_points.resources'),
+          'callback' => '_reiscout_points_resource_get_package_products_options',
+          'args' => array(),
+          'access callback' => '_reiscout_points_resource_access',
+          'access arguments' => array('get_package_products_options'),
+          'access arguments append' => TRUE,
+        ),
+      ),
+    ),
+  );
+}
+
+/**
+ * Returns IDs of all the available points package products.
+ */
+function _reiscout_points_get_package_products_ids() {
+  $query = new EntityFieldQuery;
+
+  $query->entityCondition('entity_type', 'commerce_product')
+    ->entityCondition('bundle', 'points_owner')
+    ->propertyCondition('status', 1)
+    ->fieldCondition('field_points_amount', 'value', 1, '!=');
+
+  if ($result = $query->execute()) {
+    return array_keys($result['commerce_product']);
+  }
+
+  return FALSE;
+}
+
+/**
+ * Combines an option list of available points package products.
+ */
+function _reiscout_points_combine_package_products_options() {
+  $options = array();
+
+  if ($products_ids = _reiscout_points_get_package_products_ids()) {
+    $products = commerce_product_load_multiple($products_ids);
+    foreach ($products as $product_id => $product) {
+      $product = entity_metadata_wrapper('commerce_product', $product);
+      $price = commerce_currency_amount_to_decimal(
+        $product->commerce_price->amount->value(),
+        $product->commerce_price->currency_code->value()
+      );
+      $points = $product->field_points_amount->value();
+      $t_arg = array(
+        '@title' => $product->title->value(),
+        '!price' => $price,
+        '!real_price' => $price / $points,
+      );
+      $options[$product_id] = t('@title for $!price <div>($!real_price per point)</div>', $t_arg);
+    }
+  }
+
+  return $options;
+}
+
+/**
+ * Clears a user's cart if it has been created.
+ */
+function _reiscout_points_clear_cart() {
+  global $user;
+
+  if ($order = commerce_cart_order_load($user->uid)) {
+    commerce_cart_order_empty($order);
+  }
+}
