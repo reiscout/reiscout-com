@@ -641,3 +641,17 @@ function _reiscout_property_get_added_amount_by_uid($uid) {
 function _reiscout_property_lead_has_been_purchased($nid) {
   return _reiscout_property_commerce_node_has_been_purchased($nid, REISCOUT_PROPERTY_COMMERCE_ADDRESS_ACCESS_PRODUCT_TYPE);
 }
+
+/**
+ * Checks if a $tag_name data quality tag is attached to a property.
+ */
+function _reiscout_property_is_data_quality_tag_attached($nid, $tag_name) {
+  $nw = entity_metadata_wrapper('node', $nid);
+
+  if (!$nw->field_data_quality_tags->value()) {
+    return FALSE;
+  }
+
+  $tag = taxonomy_term_machine_name_load($tag_name, 'data_quality_tags');
+  return in_array($tag, $nw->field_data_quality_tags->value());
+}
