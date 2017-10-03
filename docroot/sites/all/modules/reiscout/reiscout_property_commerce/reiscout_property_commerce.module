@@ -187,17 +187,6 @@ function reiscout_property_commerce_field_access($op, $field, $entity_type, $ent
  */
 function reiscout_property_commerce_entity_load($entities, $type) {
   if ($type === 'node' && !user_is_anonymous()) {
-    foreach ($entities as &$entity) {
-      if ($entity->type === REISCOUT_PROPERTY_COMMERCE_NODE_TYPE) {
-        // @todo: move this block of code to reiscout_drupalgap.module
-        // Mobile application needs to know if user bought an 'Address Access' product.
-        $entity->_user_bought_address_access_product = reiscout_property_commerce_is_node_purchased(
-          $entity->nid,
-          REISCOUT_PROPERTY_COMMERCE_ADDRESS_ACCESS_PRODUCT_TYPE
-        );
-      }
-    }
-
     // Add _purchased_counter
     $nids = [];
     foreach ($entities as $nid => $entity) {
@@ -368,5 +357,22 @@ function reiscout_property_commerce_node_delete($node) {
     if ($address_access_product) {
       reiscout_property_commerce_disable($address_access_product);
     }
+  }
+}
+
+/**
+ * Alter results of the services call.
+ *
+ * Attaches to a node a flag if a user has purchased a property's address.
+ *
+ * This information is used by the app. See reiscout_property_commerce.js module,
+ * _reiscout_property_commerce_user_purchased_address_access().
+ */
+function reiscout_property_commerce_services_request_postprocess_alter($controller, $args, $node) {
+  if ('_node_resource_retrieve' == $controller['callback'] && 'property' == $node->type) {
+    $node->_user_purchased_address_access_product = reiscout_property_commerce_is_node_purchased(
+      $node->nid,
+      REISCOUT_PROPERTY_COMMERCE_ADDRESS_ACCESS_PRODUCT_TYPE
+    );
   }
 }
