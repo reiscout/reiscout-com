@@ -49,6 +49,25 @@ function reiscout_property_commerce_menu () {
 }
 
 /**
+ * Implements hook_field_extra_fields().
+ */
+function reiscout_property_commerce_field_extra_fields() {
+  $return = array();
+
+  $return['node']['property'] = array(
+    'display' => array(
+      'reiscout-number-of-property-lead-sales' => array(
+        'label' => t('Number of property lead sales'),
+        'description' => t('How many times this lead has been purchased.'),
+        'weight' => -10,
+      ),
+    ),
+  );
+
+  return $return;
+}
+
+/**
  * Implements menu callback for ajax request to reiscout_property_commerce_login_modal_ajax_callback/%ctools_js/%node path..
  */
 function reiscout_property_commerce_login_modal_ajax_callback($js = NULL, $node) {
@@ -132,6 +151,20 @@ function reiscout_property_commerce_node_view($node, $view_mode, $langcode) {
       $message = t('<a href="!url_login">Log In</a> to be available to get current property address and owner info. <a href="!url_video">Watch our video about how it works</a>', $t_args);
       drupal_set_message($message);
     }
+
+    if ($number_of_sales = _reiscout_property_commerce_get_number_of_property_lead_sales($node->nid)) {
+      $text = format_plural(
+        $number_of_sales,
+        'This lead has been purchased 1 time',
+        'This lead has been purchased @count times'
+      );
+
+      $node->content['reiscout-number-of-property-lead-sales'] = array(
+        '#prefix' => '<div class="field reiscout-number-of-property-lead-sales">',
+        '#markup' => $text,
+        '#suffix' => '</div>',
+      );
+    }
   }
 }
 
@@ -183,36 +216,7 @@ function reiscout_property_commerce_field_access($op, $field, $entity_type, $ent
 }
 
 /**
- * Implements hook_entity_load().
- */
-function reiscout_property_commerce_entity_load($entities, $type) {
-  if ($type === 'node' && !user_is_anonymous()) {
-    // Add _purchased_counter
-    $nids = [];
-    foreach ($entities as $nid => $entity) {
-      if ($entity->type === REISCOUT_PROPERTY_COMMERCE_NODE_TYPE && !isset($entity->_purchased_counter)) {
-        $entity->_purchased_counter = 0;
-        $nids[] = $nid;
-      }
-    }
-    if ($nids) {
-      $counters = reiscout_property_commerce_get_purchased_counters($nids);
-      if ($counters) {
-        foreach ($counters as $counter) {
-          if (isset($entities[$counter->nid])) {
-            // @ToDo: rename _purchased_counter to _reiscout_property_commerce_purchased_counter
-            $entities[$counter->nid]->_purchased_counter = $counter->counter;
-          }
-        }
-      }
-    }
-  }
-}
-
-/**
  * Implements hook_node_view_alter().
- *
- * @todo: replace this function with hook_node_view() and hook_field_extra_fields().
  */
 function reiscout_property_commerce_node_view_alter(&$build) {
   if (isset($build['#node']) && $build['#node']->type === REISCOUT_PROPERTY_COMMERCE_NODE_TYPE) {
@@ -266,27 +270,8 @@ function reiscout_property_commerce_node_view_alter(&$build) {
           }
         }
       }
-
-      // Add to image field prefix message 'This lead has been purchased: X times'
-      if (isset($build['field_image']) && !user_is_anonymous()) {
-        if (!isset($build['field_image']['#suffix'])) {
-          $build['field_image']['#suffix'] = '';
-        }
-
-        if (isset($node->_purchased_counter)) {
-          $purchasedMessage = format_plural(
-            $node->_purchased_counter
-            , 'This lead has been purchased: 1 time'
-            , 'This lead has been purchased: @count times'
-          );
-          
-          $build['field_image']['#suffix'] = $purchasedMessage . $build['field_image']['#suffix'];
-        }
-      }
     } // ENDIF for view mode 'full'
-
   } // ENDIF to check for node type 'property'
-
 }
 
 /**
@@ -363,16 +348,23 @@ function reiscout_property_commerce_node_delete($node) {
 /**
  * Alter results of the services call.
  *
- * Attaches to a node a flag if a user has purchased a property's address.
+ * Attaches to a node the following information:
+ * - a flag if a user has purchased a property's address;
+ * - number of property lead sales.
  *
- * This information is used by the app. See reiscout_property_commerce.js module,
- * _reiscout_property_commerce_user_purchased_address_access().
+ * This information is used by the app.
  */
 function reiscout_property_commerce_services_request_postprocess_alter($controller, $args, $node) {
   if ('_node_resource_retrieve' == $controller['callback'] && 'property' == $node->type) {
+    // See reiscout_property_commerce.js module,
+    // _reiscout_property_commerce_user_purchased_address_access().
     $node->_user_purchased_address_access_product = reiscout_property_commerce_is_node_purchased(
       $node->nid,
       REISCOUT_PROPERTY_COMMERCE_ADDRESS_ACCESS_PRODUCT_TYPE
     );
+
+    // See reiscout_property_commerce.js module,
+    // _reiscout_property_commerce_address_access_purchased().
+    $node->_number_of_property_lead_sales = _reiscout_property_commerce_get_number_of_property_lead_sales($node->nid);
   }
 }

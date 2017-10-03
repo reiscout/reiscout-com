@@ -86,21 +86,6 @@ function reiscout_property_commerce_get_purchased_nodes($type) {
   return $query->execute()->fetchCol();
 }
 
-function reiscout_property_commerce_get_purchased_counters($nids) {
-  $query = db_select('field_data_field_property', 'fdfp');
-  $query->join('commerce_product', 'cp', 'cp.product_id = fdfp.entity_id');
-  $query->join('field_data_commerce_product', 'fdcp', 'fdcp.commerce_product_product_id = cp.product_id');
-  $query->join('commerce_line_item', 'cli', 'cli.line_item_id = fdcp.entity_id');
-  $query->join('commerce_order', 'co', 'co.order_id = cli.order_id');
-  $query->condition('fdfp.field_property_target_id', $nids, 'IN');
-  $query->condition('co.status', 'completed', '=');
-  $query->addField('fdfp', 'field_property_target_id', 'nid');
-  $query->addExpression('COUNT(DISTINCT co.order_id)', 'counter');
-  $query->groupBy('fdfp.field_property_target_id');
-
-  return $query->execute()->fetchAll();
-}
-
 function reiscout_property_commerce_is_node_purchased($nid, $product_type, $uid = '') {
   $purchased_nids = reiscout_property_commerce_get_purchased_nids($product_type, $uid);
   return in_array($nid, $purchased_nids);
@@ -272,4 +257,22 @@ function _reiscout_property_commerce_node_has_been_purchased($nid, $product_type
     ->condition('prop_ref.field_property_target_id', $nid);
 
   return (bool) $query->execute()->rowCount();
+}
+
+/**
+ * Returns a number of property lead sales.
+ */
+function _reiscout_property_commerce_get_number_of_property_lead_sales($nid) {
+  $query = db_select('commerce_order', 'ord');
+  $query->join('commerce_line_item', 'li', 'ord.order_id = li.order_id');
+  $query->join('field_data_commerce_product', 'li_prod', 'li.line_item_id = li_prod.entity_id');
+  $query->join('commerce_product', 'prod', 'prod.product_id = li_prod.commerce_product_product_id');
+  $query->join('field_data_field_property', 'prop_ref', 'prop_ref.entity_id = prod.product_id');
+  $query
+    ->fields('ord', array('order_id'))
+    ->condition('ord.status', 'completed')
+    ->condition('prod.type', REISCOUT_PROPERTY_COMMERCE_ADDRESS_ACCESS_PRODUCT_TYPE)
+    ->condition('prop_ref.field_property_target_id', $nid);
+
+  return $query->execute()->rowCount();
 }
