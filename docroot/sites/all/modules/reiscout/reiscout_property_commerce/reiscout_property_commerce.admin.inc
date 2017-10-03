@@ -1,14 +1,17 @@
 <?php
+
 /**
- * Created by PhpStorm.
- * User: md761
- * Date: 4/3/16
- * Time: 20:23
+ * @file
+ * Admin page callback file for the Reiscout Property Commerce module.
  */
 
+/**
+ * Form builder; Configure Reiscout Property Commerce settings.
+ *
+ * @see reiscout_property_commerce_settings_form_validate()
+ * @see reiscout_property_commerce_settings_form_submit()
+ */
 function reiscout_property_commerce_settings_form($form, &$form_state) {
-  $form = array();
-
   $form['help'] = array(
     '#markup' => t('Update the price for new created products below.'),
   );
@@ -31,15 +34,6 @@ function reiscout_property_commerce_settings_form($form, &$form_state) {
     '#required' => TRUE,
   );
 
-  $form['reiscout_property_commerce_owner_info_price'] = array(
-    '#type' => 'textfield',
-    '#title' => t('Owner Info product price'),
-    '#default_value' => variable_get('reiscout_property_commerce_owner_info_price', 10),
-    '#size' => 5,
-    '#maxlength' => 5,
-    '#required' => TRUE,
-  );
-
   $form['submit'] = array(
     '#type' => 'submit',
     '#value' => t('Save'),
@@ -48,11 +42,14 @@ function reiscout_property_commerce_settings_form($form, &$form_state) {
   return $form;
 }
 
+/**
+ * Form validation handler for reiscout_property_commerce_settings_form().
+ *
+ * @see reiscout_property_commerce_settings_form()
+ */
 function reiscout_property_commerce_settings_form_validate($form, &$form_state) {
-
   $check_to_be_numeric = array(
     'reiscout_property_commerce_address_access_basic_price',
-    'reiscout_property_commerce_owner_info_price',
     'reiscout_property_commerce_address_access_per_field_price',
   );
 
@@ -62,13 +59,16 @@ function reiscout_property_commerce_settings_form_validate($form, &$form_state) 
       form_set_error($name, 'field value should be numeric');
     }
   }
-
 }
 
+/**
+ * Form submission handler for reiscout_property_commerce_settings_form().
+ *
+ * @see reiscout_property_commerce_settings_form()
+ */
 function reiscout_property_commerce_settings_form_submit($form, &$form_state) {
   $to_save = array(
     'reiscout_property_commerce_address_access_basic_price',
-    'reiscout_property_commerce_owner_info_price',
     'reiscout_property_commerce_address_access_per_field_price',
   );
 

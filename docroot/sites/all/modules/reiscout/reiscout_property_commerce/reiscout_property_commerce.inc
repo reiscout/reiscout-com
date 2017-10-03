@@ -5,8 +5,10 @@
  *
  */
 
+/**
+ * Creates a Drupal Commerce product.
+ */
 function reiscout_property_commerce_create_product($type, $reference_node) {
-
   if (empty($reference_node->nid)) {
     throw new Exception('nid is required in passed node object');
   }
@@ -22,11 +24,6 @@ function reiscout_property_commerce_create_product($type, $reference_node) {
     $product->title = 'Address Access for '. $reference_node->title;
     $product->sku = 'address-access-for-property-node-'. $reference_node->nid;
     $product->commerce_price[LANGUAGE_NONE][0] = reiscout_property_commerce_get_property_address_price($reference_node);
-  }
-  if ($type == REISCOUT_PROPERTY_COMMERCE_OWNER_INFO_PRODUCT_TYPE) {
-    $product->title = 'Owner Info for '. $reference_node->title;
-    $product->sku = 'owner-info-for-property-node-'. $reference_node->nid;
-    $product->commerce_price[LANGUAGE_NONE][0] = reiscout_property_commerce_get_owner_info_price();
   }
 
   commerce_product_save($product);
@@ -96,7 +93,6 @@ function reiscout_property_commerce_get_referenced_product($nid, $product_type) 
 }
 
 function reiscout_property_commerce_load_product_by_property($product_type, $nid) {
-  //return;
   $query = new EntityFieldQuery();
 
   $query->entityCondition('entity_type', 'commerce_product')
@@ -113,19 +109,6 @@ function reiscout_property_commerce_load_product_by_property($product_type, $nid
   } else {
     return FALSE;
   }
-}
-
-/**
- * Return owner info product price
- */
-function reiscout_property_commerce_get_owner_info_price() {
-
-  $price_decimal = variable_get('reiscout_property_commerce_owner_info_price', 10);
-
-  return array(
-    'amount' => $price_decimal * 100,
-    'currency_code' => 'USD',
-  );
 }
 
 /**
@@ -205,9 +188,8 @@ function reiscout_property_commerce_update_price($node, $product) {
 
     if ($product->type == REISCOUT_PROPERTY_COMMERCE_ADDRESS_ACCESS_PRODUCT_TYPE) {
       $new_price = reiscout_property_commerce_get_property_address_price($pw->field_property->value());
-    } elseif ($product->type == REISCOUT_PROPERTY_COMMERCE_OWNER_INFO_PRODUCT_TYPE) {
-      $new_price = reiscout_property_commerce_get_owner_info_price();
-    } else {
+    }
+    else {
       throw new Exception('Product of passed type can\'t be processed');
     }
 

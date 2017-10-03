@@ -21,12 +21,11 @@
  */
 
 define('REISCOUT_PROPERTY_COMMERCE_ADDRESS_ACCESS_PRODUCT_TYPE', 'reiscout_property_address_access');
-define('REISCOUT_PROPERTY_COMMERCE_OWNER_INFO_PRODUCT_TYPE', 'reiscout_property_owner_info');
 define('REISCOUT_PROPERTY_COMMERCE_NODE_TYPE', 'property');
 
 require_once 'reiscout_property_commerce.inc';
 
-function reiscout_property_commerce_menu () {
+function reiscout_property_commerce_menu() {
   // Module settings.
   $items['admin/commerce/config/reiscout'] = array(
     'title' => 'Reiscout Commerce Settings',
@@ -71,7 +70,6 @@ function reiscout_property_commerce_field_extra_fields() {
  * Implements menu callback for ajax request to reiscout_property_commerce_login_modal_ajax_callback/%ctools_js/%node path..
  */
 function reiscout_property_commerce_login_modal_ajax_callback($js = NULL, $node) {
-
   // For anonymous show login modal.
   if (!user_is_anonymous()) {
     exit;
@@ -100,71 +98,71 @@ function reiscout_property_commerce_login_modal_ajax_callback($js = NULL, $node)
  * Do nothing for authorized.
  */
 function reiscout_property_commerce_node_view($node, $view_mode, $langcode) {
-  if ($view_mode == 'full' && $node->type == 'property') {
+  if ($view_mode != 'full' || $node->type != 'property') {
+    return;
+  }
 
-    if (user_is_anonymous()) {
+  if (user_is_anonymous()) {
+    // Include the CTools tools that we need.
+    ctools_include('ajax');
+    ctools_include('modal');
 
-      // Include the CTools tools that we need.
-      ctools_include('ajax');
-      ctools_include('modal');
+    // Add CTools' javascript to the page.
+    ctools_modal_add_js();
 
-      // Add CTools' javascript to the page.
-      ctools_modal_add_js();
-
-      $sample_style = array(
-        'ctools-sample-style' => array(
-          'modalSize' => array(
-            'type' => 'fixed',
-            'width' => 400,
-            'height' => 520,
-            'addWidth' => 20,
-            'addHeight' => 15,
-          ),
-          'modalOptions' => array(
-            'opacity' => .5,
-            'background-color' => '#000',
-          ),
-          'animation' => 'fadeIn',
-          'throbber' => theme('image', array('path' => ctools_image_path('ajax-loader.gif', 'ctools_ajax_sample'), 'alt' => t('Loading...'), 'title' => t('Loading'))),
+    $sample_style = array(
+      'ctools-sample-style' => array(
+        'modalSize' => array(
+          'type' => 'fixed',
+          'width' => 400,
+          'height' => 520,
+          'addWidth' => 20,
+          'addHeight' => 15,
         ),
-      );
-      drupal_add_js($sample_style, 'setting');
+        'modalOptions' => array(
+          'opacity' => .5,
+          'background-color' => '#000',
+        ),
+        'animation' => 'fadeIn',
+        'throbber' => theme('image', array('path' => ctools_image_path('ajax-loader.gif', 'ctools_ajax_sample'), 'alt' => t('Loading...'), 'title' => t('Loading'))),
+      ),
+    );
+    drupal_add_js($sample_style, 'setting');
 
-      $button = ctools_modal_text_button(
-        t('Get Property Address and Owner Info'),
-        "reiscout_property_commerce_login_modal_ajax_callback/nojs/".$node->nid,
-        t(''),
-        'ctools-modal-ctools-sample-style'
-      );
-      
-      $button = '<span id="login-modal-button">'.$button.'</span>';
+    $button = ctools_modal_text_button(
+      t('Get Property Address and Owner Info'),
+      "reiscout_property_commerce_login_modal_ajax_callback/nojs/".$node->nid,
+      t(''),
+      'ctools-modal-ctools-sample-style'
+    );
 
-      $node->content['login_modal_button'] = array(
-        '#markup' => $button,
-        '#weight' => -1,
-      );
+    $button = '<span id="login-modal-button">'.$button.'</span>';
 
-      $t_args = array(
-        '!url_login' => url('user/login', array('query' => array('destination' => 'node/' . $node->nid))),
-        '!url_video' => url('/', array('fragment' => 'how-it-works')),
-      );
-      $message = t('<a href="!url_login">Log In</a> to be available to get current property address and owner info. <a href="!url_video">Watch our video about how it works</a>', $t_args);
-      drupal_set_message($message);
-    }
+    $node->content['login_modal_button'] = array(
+      '#markup' => $button,
+      '#weight' => -1,
+    );
 
-    if ($number_of_sales = _reiscout_property_commerce_get_number_of_property_lead_sales($node->nid)) {
-      $text = format_plural(
-        $number_of_sales,
-        'This lead has been purchased 1 time',
-        'This lead has been purchased @count times'
-      );
+    $t_args = array(
+      '!url_login' => url('user/login', array('query' => array('destination' => 'node/' . $node->nid))),
+      '!url_video' => url('/', array('fragment' => 'how-it-works')),
+    );
+    $message = t('<a href="!url_login">Log In</a> to be available to get current property address and owner info. <a href="!url_video">Watch our video about how it works</a>', $t_args);
+    drupal_set_message($message);
+  }
 
-      $node->content['reiscout-number-of-property-lead-sales'] = array(
-        '#prefix' => '<div class="field reiscout-number-of-property-lead-sales">',
-        '#markup' => $text,
-        '#suffix' => '</div>',
-      );
-    }
+  if ($number_of_sales = _reiscout_property_commerce_get_number_of_property_lead_sales($node->nid)) {
+    $text = format_plural(
+      $number_of_sales,
+      'This lead has been purchased 1 time',
+      'This lead has been purchased @count times'
+    );
+
+    $node->content['reiscout-number-of-property-lead-sales'] = array(
+      '#prefix' => '<div class="field reiscout-number-of-property-lead-sales">',
+      '#markup' => $text,
+      '#suffix' => '</div>',
+    );
   }
 }
 
@@ -216,65 +214,6 @@ function reiscout_property_commerce_field_access($op, $field, $entity_type, $ent
 }
 
 /**
- * Implements hook_node_view_alter().
- */
-function reiscout_property_commerce_node_view_alter(&$build) {
-  if (isset($build['#node']) && $build['#node']->type === REISCOUT_PROPERTY_COMMERCE_NODE_TYPE) {
-    $node = $build['#node'];
-
-    // Do not disable commerce 'add to cart' buttons for a while.
-    $disable_commerce_add_to_cart_buttons = false;
-
-    if (isset($build['#view_mode']) && $build['#view_mode'] === 'full') {
-      // Disable commerce 'add to cart' buttons and replace them with 'we are not ready yet' subscribe form in popup.
-      if ($disable_commerce_add_to_cart_buttons) {
-        module_load_include('inc', 'popup', 'includes/popup.api');
-
-        $popupOptions = array(
-          'block' => true,
-          'module' => 'mailchimp_signup',
-          'delta' => 'we_arent_ready_yet',
-          'activate' => 'click',
-          'ajax' => true,
-          'close' => true,
-          'width' => 400,
-          'class' => 'we-arent-ready-yet-popup',
-        );
-
-        $fields = array(
-          'field_address_access_product' => array(
-            'title' => 'Buy Property Address for @price @cur',
-            'price callback' => 'reiscout_property_commerce_get_property_address_price',
-            'price callback args' => array($node),
-          ),
-          'field_owner_info_product' => array(
-            'title' => 'Buy Owner Info for @price @cur',
-            'price callback' => 'reiscout_property_commerce_get_owner_info_price',
-          )
-        );
-
-        foreach ($fields as $field => $options) {
-          if (isset($build[$field])) {
-            $price = call_user_func_array($options['price callback'], (isset($options['price callback args']) ? $options['price callback args'] : array()));
-            $build[$field] = array(
-              '#markup' => popup(array_merge($popupOptions, array(
-                'title' => t($options['title'], array(
-                  '@price' => commerce_currency_amount_to_decimal($price['amount'], $price['currency_code']),
-                  '@cur' => $price['currency_code'],
-                ))
-              ))),
-              '#prefix' => '<div>',
-              '#suffix' => '</div>',
-              '#weight' => $build[$field]['#weight'],
-            );
-          }
-        }
-      }
-    } // ENDIF for view mode 'full'
-  } // ENDIF to check for node type 'property'
-}
-
-/**
  * Implements hook_node_presave().
  *
  * @todo: we do not provide 'Owner Info' product anymore,
@@ -287,26 +226,6 @@ function reiscout_property_commerce_node_presave($node) {
     return;
   }
 
-  // Looking for existed product or create one and attach to node if it is not attached yet
-  if (empty($node->field_owner_info_product[LANGUAGE_NONE][0])) {
-    if (!empty($node->nid)) {
-      $owner_info_product = reiscout_property_commerce_load_product_by_property(REISCOUT_PROPERTY_COMMERCE_OWNER_INFO_PRODUCT_TYPE, $node->nid);
-    }
-
-    if (empty($owner_info_product)) {
-      $owner_info_product = reiscout_property_commerce_create_product(REISCOUT_PROPERTY_COMMERCE_OWNER_INFO_PRODUCT_TYPE, $node);
-    }
-
-    $node->field_owner_info_product[LANGUAGE_NONE][0]['product_id'] = $owner_info_product->product_id;
-  }
-  // Update price for existed attached product
-  $owner_info_product = (!isset($owner_info_product)) ? commerce_product_load($node->field_owner_info_product[LANGUAGE_NONE][0]['product_id'])
-    : $owner_info_product;
-
-  // Its call is cheap as $node already in cache and wouldnt be loaded again and if prices are the theme product would not be saved.
-  reiscout_property_commerce_update_price($node, $owner_info_product);
-
-  // The save as for above for address access product
   // Looking for existed product or create one and attach to node if it is not attached yet
   if (empty($node->field_address_access_product[LANGUAGE_NONE][0])) {
     if (!empty($node->nid)) {
@@ -329,15 +248,10 @@ function reiscout_property_commerce_node_presave($node) {
 /**
  * Implements hook_node_delete().
  *
- * @todo: delete 'Address Access' and 'Owner Info' products if they have not yet been purchased
+ * @todo: delete linked 'Address Access' product if it has not yet been purchased
  */
 function reiscout_property_commerce_node_delete($node) {
   if ($node->type == REISCOUT_PROPERTY_COMMERCE_NODE_TYPE) {
-    $owner_info_product = reiscout_property_commerce_load_product_by_property(REISCOUT_PROPERTY_COMMERCE_OWNER_INFO_PRODUCT_TYPE, $node->nid);
-    if ($owner_info_product) {
-      reiscout_property_commerce_disable($owner_info_product);
-    }
-
     $address_access_product = reiscout_property_commerce_load_product_by_property(REISCOUT_PROPERTY_COMMERCE_ADDRESS_ACCESS_PRODUCT_TYPE, $node->nid);
     if ($address_access_product) {
       reiscout_property_commerce_disable($address_access_product);
