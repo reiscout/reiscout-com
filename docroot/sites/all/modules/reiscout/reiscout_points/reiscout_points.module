@@ -154,7 +154,7 @@ function _reiscout_points_get_package_products_ids() {
   $query->entityCondition('entity_type', 'commerce_product')
     ->entityCondition('bundle', 'points_owner')
     ->propertyCondition('status', 1)
-    ->fieldCondition('field_points_amount', 'value', 1, '!=');
+    ->fieldCondition('field_points_amount', 'value', 1, '>');
 
   if ($result = $query->execute()) {
     return array_keys($result['commerce_product']);

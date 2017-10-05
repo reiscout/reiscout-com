@@ -9,9 +9,9 @@
  * Menu callback; Adds '1 point' product to a user's cart.
  */
 function reiscout_points_buy_page($amount) {
+  // If a provided amount is not a positive integer
   if (!is_numeric($amount) || $amount <= 0) {
-    $t_arg = array('@amount' => $amount);
-    throw new Exception(t("The amount of points must be a positive integer. Provided value is '@amount'", $t_arg));
+    $amount = 10;
   }
 
   if (!$product = commerce_product_load_by_sku(REISCOUT_POINTS_1_POINT_PRODUCT_SKU)) {

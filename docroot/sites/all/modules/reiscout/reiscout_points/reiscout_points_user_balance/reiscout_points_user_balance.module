@@ -131,7 +131,6 @@ function reiscout_points_user_balance_admin_menu_output_build(&$content) {
   global $user;
 
   $balance = reiscout_points_user_balance_get();
-
   $t_arg = array('!balance' => $balance);
 
   $content['reiscout-points-user-balance'] = array(
