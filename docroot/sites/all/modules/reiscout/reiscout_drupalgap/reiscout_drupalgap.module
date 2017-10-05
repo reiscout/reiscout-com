@@ -107,20 +107,3 @@ function _reiscout_drupalgap_checkout_complete_access($data) {
     return services_error(t('Access to this operation not granted'), 401);
   }
 }
-
-/**
- * Implements hook_services_account_object_alter().
- *
- * Adds following information into a user object:
- * - amount of properties that were added by a user;
- * - a user's current balance in Reiscout points.
- *
- * This information is used by the app. See reiscout_points.js
- * and reiscout_tutorial.js modules.
- */
-function reiscout_drupalgap_services_account_object_alter($user) {
-  if ($user->uid) {
-    $user->_amount_of_added_properties = _reiscout_property_get_added_amount_by_uid($user->uid);
-    $user->_points = reiscout_points_user_balance_get();
-  }
-}

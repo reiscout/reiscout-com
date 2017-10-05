@@ -154,3 +154,18 @@ function reiscout_points_user_balance_admin_menu_output_build(&$content) {
     '#weight' => -99,
   );
 }
+
+/**
+ * Implements hook_services_account_object_alter().
+ *
+ * Adds following information into a user object:
+ * - a user's current balance in Reiscout points.
+ *
+ * This information is used by the app. See reiscout_points.js
+ * and reiscout_tutorial.js modules.
+ */
+function reiscout_points_user_balance_services_account_object_alter($user) {
+  if ($user->uid) {
+    $user->_points = reiscout_points_user_balance_get();
+  }
+}

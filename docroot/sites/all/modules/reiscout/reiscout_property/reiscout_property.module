@@ -655,3 +655,17 @@ function _reiscout_property_is_data_quality_tag_attached($nid, $tag_name) {
   $tag = taxonomy_term_machine_name_load($tag_name, 'data_quality_tags');
   return in_array($tag, $nw->field_data_quality_tags->value());
 }
+
+/**
+ * Implements hook_services_account_object_alter().
+ *
+ * Adds following information into a user object:
+ * - amount of properties that were added by a user.
+ *
+ * This information is used by the app. See reiscout_tutorial.js module.
+ */
+function reiscout_property_services_account_object_alter($user) {
+  if ($user->uid) {
+    $user->_amount_of_added_properties = _reiscout_property_get_added_amount_by_uid($user->uid);
+  }
+}
