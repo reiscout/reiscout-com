@@ -152,7 +152,7 @@ function property_strongarm() {
             'visible' => FALSE,
           ),
           'full' => array(
-            'weight' => '19',
+            'weight' => '20',
             'visible' => FALSE,
           ),
         ),
@@ -166,7 +166,7 @@ function property_strongarm() {
             'visible' => FALSE,
           ),
           'full' => array(
-            'weight' => '20',
+            'weight' => '21',
             'visible' => FALSE,
           ),
         ),
@@ -180,7 +180,7 @@ function property_strongarm() {
             'visible' => FALSE,
           ),
           'full' => array(
-            'weight' => '22',
+            'weight' => '23',
             'visible' => FALSE,
           ),
         ),
@@ -194,13 +194,13 @@ function property_strongarm() {
             'visible' => TRUE,
           ),
           'full' => array(
-            'weight' => '21',
+            'weight' => '22',
             'visible' => FALSE,
           ),
         ),
         'product:field_property' => array(
           'full' => array(
-            'weight' => '17',
+            'weight' => '18',
             'visible' => FALSE,
           ),
           'drupalgap' => array(
@@ -214,7 +214,7 @@ function property_strongarm() {
         ),
         'address' => array(
           'full' => array(
-            'weight' => '5',
+            'weight' => '6',
             'visible' => TRUE,
           ),
           'drupalgap' => array(
@@ -236,6 +236,36 @@ function property_strongarm() {
             'visible' => FALSE,
           ),
           'default' => array(
+            'weight' => '-1',
+            'visible' => TRUE,
+          ),
+        ),
+        'reiscout-number-of-property-lead-sales' => array(
+          'full' => array(
+            'weight' => '3',
+            'visible' => TRUE,
+          ),
+          'drupalgap' => array(
+            'weight' => '-10',
+            'visible' => TRUE,
+          ),
+        ),
+        'reiscout-property-lead-form' => array(
+          'full' => array(
+            'weight' => '0',
+            'visible' => TRUE,
+          ),
+          'drupalgap' => array(
+            'weight' => '-1',
+            'visible' => TRUE,
+          ),
+        ),
+        'reiscout-property-data-form' => array(
+          'full' => array(
+            'weight' => '1',
+            'visible' => TRUE,
+          ),
+          'drupalgap' => array(
             'weight' => '-1',
             'visible' => TRUE,
           ),
