@@ -1,0 +1,15 @@
+<?php
+
+/**
+ * @file
+ * Implement install and update hooks.
+ */
+
+/**
+ * Implements hook_install().
+ *
+ * Bring in map functionality.
+ */
+function reiscout_deploy_install () {
+  module_enable(['reiscout_map_feature']);
+}

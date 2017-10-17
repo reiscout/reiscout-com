@@ -1,0 +1,4 @@
+name = Reiscout Deploy
+description = Implements update hooks for new features deployment.
+package = Reiscout
+core = 7.x
