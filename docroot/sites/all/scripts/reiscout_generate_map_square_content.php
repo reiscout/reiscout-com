@@ -56,12 +56,11 @@ END;
  * Recursively scan passed directory and return all found squares as a flat (not nested) array.
  * Result format:
  *   array(
- *     0 => array(
- *       'name' => 'N3996335E_9401244',
+ *     'N3996335E_9401244' => array(
  *       'gpx'  => 'file path',
  *       'kmz' => 'file path',
+ *        ...
  *       'png' => 'file path',
- *       'html' => 'file path'
  *     ),
  *     1 => ...
  *   )
@@ -74,19 +73,16 @@ function scan_dir_for_squares($path) {
 
   $result = array();
 
-  if ($directoryIterator->isSquareDir()) {
-    $result[] = array(
-      'name' => basename($directoryIterator->getPath()),
-      'gpx' => $directoryIterator->getFileByExt('gpx'),
-      'kmz' => $directoryIterator->getFileByExt('kmz'),
-      'png' => $directoryIterator->getFileByExt('png'),
-    );
-
+  $detect_files = array('png', 'gpx', 'kmz', 'kml');
+  foreach ($detect_files as $ext) {
+    if ($file = $directoryIterator->getFileByExt($ext)) {
+      $result[$file->getBasename('.'.$file->getExtension())][$ext] = $directoryIterator->getFileByExt($ext);
+    }
   }
 
   foreach($directoryIterator as $item) {
     if (!$item->isDot() && $item->isDir()) {
-      $result += scan_dir_for_squares($item->getRealPath());
+      $result = array_merge_recursive($result, scan_dir_for_squares($item->getRealPath()));
     }
 
   }
