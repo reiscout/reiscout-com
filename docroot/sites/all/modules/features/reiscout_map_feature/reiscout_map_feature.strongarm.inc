@@ -162,5 +162,12 @@ function reiscout_map_feature_strongarm() {
   $strongarm->value = 0;
   $export['node_submitted_map_square'] = $strongarm;
 
+  $strongarm = new stdClass();
+  $strongarm->disabled = FALSE; /* Edit this to true to make a default strongarm disabled initially */
+  $strongarm->api_version = 1;
+  $strongarm->name = 'pathauto_node_map_square_pattern';
+  $strongarm->value = 'map-square/[node:title]';
+  $export['pathauto_node_map_square_pattern'] = $strongarm;
+
   return $export;
 }

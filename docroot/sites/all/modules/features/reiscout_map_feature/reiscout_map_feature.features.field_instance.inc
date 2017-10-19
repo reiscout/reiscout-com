@@ -70,15 +70,7 @@ function reiscout_map_feature_field_default_field_instances() {
   // Exported field_instance: 'node-map_square-field_map_sq_center'.
   $field_instances['node-map_square-field_map_sq_center'] = array(
     'bundle' => 'map_square',
-    'default_value' => array(
-      0 => array(
-        'input_format' => 'lat/lon',
-        'geom' => array(
-          'lat' => 1,
-          'lon' => 1,
-        ),
-      ),
-    ),
+    'default_value' => NULL,
     'deleted' => 0,
     'description' => 'Square center position. As for now all the squares content what we have having the same scale that field should have a unique value.',
     'display' => array(
@@ -106,7 +98,7 @@ function reiscout_map_feature_field_default_field_instances() {
     'entity_type' => 'node',
     'field_name' => 'field_map_sq_center',
     'label' => 'Center Position',
-    'required' => 1,
+    'required' => 0,
     'settings' => array(
       'user_register_form' => FALSE,
     ),
@@ -211,12 +203,12 @@ function reiscout_map_feature_field_default_field_instances() {
     ),
     'entity_type' => 'node',
     'field_name' => 'field_map_sq_kmz',
-    'label' => 'KMZ',
+    'label' => 'KML/KMZ',
     'required' => 0,
     'settings' => array(
       'description_field' => 0,
       'file_directory' => 'map-square/kmz',
-      'file_extensions' => 'kmz',
+      'file_extensions' => 'kmz kml',
       'max_filesize' => '10mb',
       'user_register_form' => FALSE,
     ),
@@ -302,7 +294,7 @@ function reiscout_map_feature_field_default_field_instances() {
   t('Body');
   t('Center Position');
   t('GPX');
-  t('KMZ');
+  t('KML/KMZ');
   t('Preview');
   t('Preview square route as an image');
   t('Square center position. As for now all the squares content what we have having the same scale that field should have a unique value.');

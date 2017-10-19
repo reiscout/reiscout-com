@@ -38,4 +38,5 @@ features[variable][] = menu_parent_map_square
 features[variable][] = node_options_map_square
 features[variable][] = node_preview_map_square
 features[variable][] = node_submitted_map_square
+features[variable][] = pathauto_node_map_square_pattern
 project path = sites/all/modules/features
