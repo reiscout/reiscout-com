@@ -71,7 +71,7 @@ function reiscout_maps_demo_feature_field_default_field_instances() {
     'bundle' => 'demo_map',
     'default_value' => NULL,
     'deleted' => 0,
-    'description' => '',
+    'description' => 'E.g., <em>Los Angeles, CA, United States</em>',
     'display' => array(
       'default' => array(
         'label' => 'hidden',
@@ -141,6 +141,7 @@ function reiscout_maps_demo_feature_field_default_field_instances() {
 
   // Translatables
   // Included for use with string extractors like potx.
+  t('E.g., <em>Los Angeles, CA, United States</em>');
   t('Image');
   t('Location');
 
