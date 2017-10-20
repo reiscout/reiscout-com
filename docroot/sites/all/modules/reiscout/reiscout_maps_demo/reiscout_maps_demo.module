@@ -1,0 +1,71 @@
+<?php
+
+/**
+ * @file
+ * Allows a user to choose a city and see a demo map for the city.
+ */
+
+/**
+ * Implements hook_menu().
+ */
+function reiscout_maps_demo_menu() {
+  $items['reiscout-maps-demo'] = array(
+    'title' => 'Maps',
+    'page callback' => 'reiscout_maps_demo_page',
+    'access arguments' => array('access content'),
+  );
+
+  return $items;
+}
+
+/**
+ * Page callback.
+ */
+function reiscout_maps_demo_page() {
+  $content['html'] = array(
+    '#markup' => 'test',
+  );
+
+  return $content;
+}
+
+/**
+ * Implements hook_node_validate().
+ */
+function reiscout_maps_demo_node_validate($node, $form, &$form_state) {
+  if ('demo_map' != $node->type) {
+    return;
+  }
+
+  // If a node is being deleted, we do not need
+  // to check its address for uniqueness.
+  if ('Delete' == $form_state['values']['op']) {
+    return;
+  }
+
+  $nw = entity_metadata_wrapper('node', $node);
+
+  if (!$nw->field_demo_map_location->value()) {
+    return;
+  }
+
+  // Check if a demo map for the same city has already been created
+  $query = new EntityFieldQuery;
+  $query->entityCondition('entity_type', 'node')
+    ->entityCondition('bundle', 'demo_map')
+    ->fieldCondition('field_demo_map_location', 'administrative_area', $nw->field_demo_map_location->administrative_area->value())
+    ->fieldCondition('field_demo_map_location', 'locality', $nw->field_demo_map_location->locality->value());
+
+  // We do not want to compare a node with itself
+  if ($node->nid) {
+    $query->propertyCondition('nid', $node->nid, '!=');
+  }
+
+  if ($result = $query->execute()) {
+    $nodes = array_keys($result['node']);
+    $nid = array_shift($nodes);
+    $t_args = array('!node_url' => url('/node/' . $nid));
+    $msg = t('A <a href="!node_url">demo map for the same city</a> has already been created.', $t_args);
+    form_set_error('field_demo_map_location', $msg);
+  }
+}

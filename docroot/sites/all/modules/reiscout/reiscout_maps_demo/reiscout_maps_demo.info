@@ -1,0 +1,4 @@
+name = Reiscout Maps Demo
+description = Allows a user to choose a city and see a demo map for the city.
+package = Reiscout
+core = 7.x
