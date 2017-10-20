@@ -11,7 +11,8 @@
 function reiscout_maps_demo_menu() {
   $items['reiscout-maps-demo'] = array(
     'title' => 'Maps',
-    'page callback' => 'reiscout_maps_demo_page',
+    'page callback' => 'drupal_get_form',
+    'page arguments' => array('reiscout_maps_demo_form'),
     'access arguments' => array('access content'),
   );
 
@@ -19,14 +20,75 @@ function reiscout_maps_demo_menu() {
 }
 
 /**
- * Page callback.
+ * Form builder; Allows a user to choose a state and a city.
+ *
+ * @see reiscout_maps_demo_form_submit()
  */
-function reiscout_maps_demo_page() {
-  $content['html'] = array(
-    '#markup' => 'test',
+function reiscout_maps_demo_form($form, &$form_state) {
+  $states_options = array('' => '-Select a state-');
+  $states_options += _reiscout_maps_demo_combine_states_options();
+
+  $cities_options = array('' => '-Select a city-');
+  // This part of code will be called via AJAX request
+  if (isset($form_state['values']['state'])) {
+    $state = $form_state['values']['state'];
+    $cities_options += _reiscout_maps_demo_combine_cities_options_by_state($state);
+  }
+
+  $form['header'] = array(
+    '#markup' => t('<h3 style="margin-bottom: 7px;">Select a location</h3>'),
   );
 
-  return $content;
+  $form['state'] = array(
+    '#type' => 'select',
+    '#title' => t('State:'),
+    '#options' => $states_options,
+    '#default_value' => -1,
+    '#required' => true,
+    '#ajax' => array(
+      'callback' => '_reiscout_maps_demo_form_ajax_callback',
+      'wrapper' => 'city_wrapper',
+    ),
+  );
+
+  $form['city'] = array(
+    '#type' => 'select',
+    '#title' => t('City:'),
+    '#options' => $cities_options,
+    '#default_value' => -1,
+    '#prefix' => '<div id="city_wrapper">',
+    '#suffix' => '</div>',
+    '#required' => true,
+  );
+
+  $form['actions'] = array(
+    '#type' => 'actions',
+  );
+
+  $form['actions']['submit'] = array(
+    '#type' => 'submit',
+    '#value' => t('Show map'),
+  );
+
+  return $form;
+}
+
+/**
+ * Form submission handler for reiscout_maps_demo_form().
+ *
+ * @see reiscout_maps_demo_form()
+ */
+function reiscout_maps_demo_form_submit($form, &$form_state) {
+  $state = $form_state['values']['state'];
+  $city = $form_state['values']['city'];
+
+  if (!$nid = _reiscout_maps_demo_get_nid_by_location($state, $city)) {
+    drupal_set_message(t('There is no a demo map for selected location!'), 'warning');
+    drupal_goto('reiscout-maps-demo');
+  }
+  else {
+    drupal_goto('node/' . $nid);
+  }
 }
 
 /**
@@ -68,4 +130,85 @@ function reiscout_maps_demo_node_validate($node, $form, &$form_state) {
     $msg = t('A <a href="!node_url">demo map for the same city</a> has already been created.', $t_args);
     form_set_error('field_demo_map_location', $msg);
   }
+}
+
+/**
+ * Combines an option list of states.
+ */
+function _reiscout_maps_demo_combine_states_options() {
+  $options = array();
+
+  $states = db_select('field_data_field_demo_map_location', 'f')
+    ->fields('f', array('field_demo_map_location_administrative_area'))
+    ->distinct()
+    ->execute()
+    ->fetchCol();
+
+  if (!$states) {
+    return $options;
+  }
+
+  sort($states);
+
+  foreach ($states as $state) {
+    $options[$state] = $state;
+  }
+
+  return $options;
+}
+
+/**
+ * Combines an option list of cities.
+ */
+function _reiscout_maps_demo_combine_cities_options_by_state($state) {
+  $options = array();
+
+  $cities = db_select('field_data_field_demo_map_location', 'f')
+    ->fields('f', array('field_demo_map_location_locality'))
+    ->condition('field_demo_map_location_administrative_area', $state)
+    ->distinct()
+    ->execute()
+    ->fetchCol();
+
+  if (!$cities) {
+    return $options;
+  }
+
+  sort($cities);
+
+  foreach ($cities as $city) {
+    $options[$city] = $city;
+  }
+
+  return $options;
+}
+
+/**
+ * Given a state and a city, returns corresponding node's NID.
+ */
+function _reiscout_maps_demo_get_nid_by_location($state, $city) {
+  $query = db_select('node', 'n');
+  $query->leftJoin('field_data_field_demo_map_location', 'f', 'n.nid = f.entity_id');
+  $query
+    ->fields('n', array('nid'))
+    ->condition('n.type', 'demo_map')
+    ->condition('n.status', NODE_PUBLISHED)
+    ->condition('field_demo_map_location_administrative_area', $state)
+    ->condition('field_demo_map_location_locality', $city);
+
+  return $query->execute()->fetchField();
+}
+
+/**
+ * Page callback.
+ */
+function _reiscout_maps_demo_form_ajax_callback($form, &$form_state) {
+  $commands = array();
+
+  $commands[] = ajax_command_insert(NULL, drupal_render($form['city']));
+
+  return array(
+    '#type' => 'ajax',
+    '#commands' => $commands,
+  );
 }
