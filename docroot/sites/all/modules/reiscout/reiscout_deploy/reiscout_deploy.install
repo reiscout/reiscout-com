@@ -11,5 +11,5 @@
  * Bring in map functionality.
  */
 function reiscout_deploy_install () {
-  module_enable(['reiscout_map_feature']);
+  module_enable(['reiscout_map_feature' , 'reiscout_map_atlanta_content_feature']);
 }
