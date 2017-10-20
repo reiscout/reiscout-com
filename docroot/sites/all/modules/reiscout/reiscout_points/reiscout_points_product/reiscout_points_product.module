@@ -340,3 +340,17 @@ function _reiscout_points_product_build_not_enough_points_message($price, $balan
 
   return $msg1 . ' ' . $msg2;
 }
+
+/**
+ * Create a commerce order with complete status, line item and payment transaction.
+ */
+function reiscout_points_product_sell_commerce_product($sku, $user) {
+
+}
+
+/**
+ * Check is user purchased given product.
+ */
+function reiscout_points_product_is_purchased($sku, $user) {
+
+}

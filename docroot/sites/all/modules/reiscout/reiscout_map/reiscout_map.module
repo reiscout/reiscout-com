@@ -1,0 +1,109 @@
+<?php
+
+/**
+ * @file
+ * Implements map squared data selling for points.
+ *
+ * ToDo:
+ * check commerce_userpoints code
+ * product type for individual square
+ * product type for all Atlanta squares
+ * implement helper class methods
+ * implement api funcs to create and order and check for existed orders
+ * rework reiscout_points_product to make it working with commerce
+ * provide transaction type to keep track points transactions
+ * rework helper class as CTools plugin
+ */
+
+/**
+ * List of fields to sell access to
+ *
+ * @todo: handle that list via admin settings form
+ */
+function reiscout_property_commerce_fields_access_to_sell() {
+  return array(
+    'field_address',
+    'field_owner_postal_address',
+    'field_owner_phone',
+  );
+}
+
+/**
+ * Implements hook_field_access.
+ */
+function reiscout_property_commerce_field_access($op, $field, $entity_type, $entity, $account) {
+  // Access control for property info fields (address and etc) in property node.
+  if ($op == 'view' && $entity_type == 'node' && !empty($entity->type) && $entity->type == REISCOUT_PROPERTY_COMMERCE_NODE_TYPE
+    &&  in_array($field['field_name'], reiscout_property_commerce_fields_access_to_sell() ) ) {
+
+    // Show property info fields only for
+    // - admin role
+    // - property owner
+    // - user who purchased the address
+
+    // User is an administrator
+    $role_admin = user_role_load_by_name('administrator');
+    if (user_has_role($role_admin->rid, $account)) {
+      return TRUE;
+    }
+
+    // User is a property's author
+    if ($entity->uid == $account->uid) {
+      return TRUE;
+    }
+
+    // User has bought a property's address
+    if (reiscout_property_commerce_is_node_purchased($entity->nid, REISCOUT_PROPERTY_COMMERCE_ADDRESS_ACCESS_PRODUCT_TYPE, $account->uid)) {
+      return TRUE;
+    }
+
+    // Deny access otherwise
+    return FALSE;
+  }
+}
+
+/**
+ * Implements hook_node_presave().
+ *
+ * @todo: we do not provide 'Owner Info' product anymore,
+ * so we should rework this function and remove the code
+ * that is not needed anymore.
+ */
+function reiscout_property_commerce_node_presave($node) {
+  // Assign products to property nodes on save.
+  if (!($node->type == REISCOUT_PROPERTY_COMMERCE_NODE_TYPE) || $node->is_new) {
+    return;
+  }
+
+  // Looking for existed product or create one and attach to node if it is not attached yet
+  if (empty($node->field_address_access_product[LANGUAGE_NONE][0])) {
+    if (!empty($node->nid)) {
+      $address_access_product = reiscout_property_commerce_load_product_by_property(REISCOUT_PROPERTY_COMMERCE_ADDRESS_ACCESS_PRODUCT_TYPE, $node->nid);
+    }
+
+    if (empty($address_access_product)) {
+      $address_access_product = reiscout_property_commerce_create_product(REISCOUT_PROPERTY_COMMERCE_ADDRESS_ACCESS_PRODUCT_TYPE, $node);
+    }
+    $node->field_address_access_product[LANGUAGE_NONE][0]['product_id'] = $address_access_product->product_id;
+  }
+  // Update price for existed attached product
+  $address_access_product = (!isset($address_access_product)) ? commerce_product_load($node->field_address_access_product[LANGUAGE_NONE][0]['product_id'])
+    : $address_access_product;
+
+  // Its call is cheap as $node already in cache and wouldnt be loaded again and if prices are the theme product would not be saved.
+  reiscout_property_commerce_update_price($node, $address_access_product);
+}
+
+/**
+ * Implements hook_node_delete().
+ *
+ * @todo: delete linked 'Address Access' product if it has not yet been purchased
+ */
+function reiscout_property_commerce_node_delete($node) {
+  if ($node->type == REISCOUT_PROPERTY_COMMERCE_NODE_TYPE) {
+    $address_access_product = reiscout_property_commerce_load_product_by_property(REISCOUT_PROPERTY_COMMERCE_ADDRESS_ACCESS_PRODUCT_TYPE, $node->nid);
+    if ($address_access_product) {
+      reiscout_property_commerce_disable($address_access_product);
+    }
+  }
+}
