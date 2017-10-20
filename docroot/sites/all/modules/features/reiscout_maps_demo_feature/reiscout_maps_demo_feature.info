@@ -1,7 +1,7 @@
 name = Reiscout Maps Demo
 description = Provides 'Demo map' content type
 core = 7.x
-package = Features
+package = Reiscout
 dependencies[] = addressfield
 dependencies[] = addressfield_autocomplete
 dependencies[] = ctools
