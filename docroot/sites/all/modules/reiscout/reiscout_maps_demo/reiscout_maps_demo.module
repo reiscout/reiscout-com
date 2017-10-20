@@ -82,7 +82,11 @@ function reiscout_maps_demo_form_submit($form, &$form_state) {
   $state = $form_state['values']['state'];
   $city = $form_state['values']['city'];
 
-  if (!$nid = _reiscout_maps_demo_get_nid_by_location($state, $city)) {
+  // We want to show a user a real map for Atlanta, GA
+  if ('GA' == $state && 'Atlanta' == $city) {
+    drupal_goto('map/atlanta');
+  }
+  elseif (!$nid = _reiscout_maps_demo_get_nid_by_location($state, $city)) {
     drupal_set_message(t('There is no a demo map for selected location!'), 'warning');
     drupal_goto('reiscout-maps-demo');
   }
@@ -144,8 +148,9 @@ function _reiscout_maps_demo_combine_states_options() {
     ->execute()
     ->fetchCol();
 
-  if (!$states) {
-    return $options;
+  // We want to show a user a real map for Atlanta, GA
+  if (!$states || !in_array('GA', $states)) {
+    $states[] = 'GA';
   }
 
   sort($states);
@@ -170,8 +175,16 @@ function _reiscout_maps_demo_combine_cities_options_by_state($state) {
     ->execute()
     ->fetchCol();
 
-  if (!$cities) {
-    return $options;
+  // We want to show a user a real map for Atlanta, GA
+  if ('GA' == $state) {
+    if (!$cities || !in_array('Atlanta', $cities)) {
+      $cities[] = 'Atlanta';
+    }
+  }
+  else {
+    if (!$cities) {
+      return $options;
+    }
   }
 
   sort($cities);
