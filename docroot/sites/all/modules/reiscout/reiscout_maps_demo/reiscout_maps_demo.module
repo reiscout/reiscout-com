@@ -9,7 +9,7 @@
  * Implements hook_menu().
  */
 function reiscout_maps_demo_menu() {
-  $items['reiscout-maps-demo'] = array(
+  $items['reiscout-maps'] = array(
     'title' => 'Maps',
     'page callback' => 'drupal_get_form',
     'page arguments' => array('reiscout_maps_demo_form'),
