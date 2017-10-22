@@ -137,6 +137,18 @@ function reiscout_maps_demo_node_validate($node, $form, &$form_state) {
 }
 
 /**
+ * Implements hook_node_view_alter().
+ */
+function reiscout_maps_demo_node_view_alter(&$build) {
+  if ('demo_map' != $build['#node']->type || 'full' != $build['#view_mode']) {
+    return;
+  }
+
+  $build['field_demo_map_image']['#prefix'] = '<a href="/join-mailing-list">';
+  $build['field_demo_map_image']['#suffix'] = '</a>';
+}
+
+/**
  * Combines an option list of states.
  */
 function _reiscout_maps_demo_combine_states_options() {
