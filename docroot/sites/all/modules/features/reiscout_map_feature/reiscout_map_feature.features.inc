@@ -5,6 +5,22 @@
  */
 
 /**
+ * Implements hook_commerce_product_default_types().
+ */
+function reiscout_map_feature_commerce_product_default_types() {
+  $items = array(
+    'individual_map_square' => array(
+      'type' => 'individual_map_square',
+      'name' => 'Individual Square',
+      'description' => 'Buying this product user get and access to route data files attached Individual map square node.',
+      'help' => 'This product created automatically a one per square node. ',
+      'revision' => 0,
+    ),
+  );
+  return $items;
+}
+
+/**
  * Implements hook_ctools_plugin_api().
  */
 function reiscout_map_feature_ctools_plugin_api($module = NULL, $api = NULL) {
