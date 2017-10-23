@@ -9,6 +9,13 @@
  */
 function reiscout_map_feature_commerce_product_default_types() {
   $items = array(
+    'city_map_square' => array(
+      'type' => 'city_map_square',
+      'name' => 'City Square',
+      'description' => 'Buying this product user get an access to route data files attached for all map square nodes belongs to the city.',
+      'help' => '',
+      'revision' => 1,
+    ),
     'individual_map_square' => array(
       'type' => 'individual_map_square',
       'name' => 'Individual Square',
