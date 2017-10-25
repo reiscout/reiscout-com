@@ -14,8 +14,7 @@
  *
  * Probably it is better to implement it as a CTools plugin but let it be just a simple class for now.
  *
- * ToDo: split this to interface, parent class and this class.
- * Make a user code to implement of successor
+ * ToDo: remove it.
  */
 class SellNodeFieldsAccessHelper {
 

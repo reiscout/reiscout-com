@@ -6,20 +6,18 @@
  *
  * ToDo:
  * check commerce_userpoints code
- * product type for individual square
- * product type for all Atlanta squares
- * implement helper class methods
- * implement api funcs to create and order and check for existed orders
  * rework reiscout_points_product to make it working with commerce
  * provide transaction type to keep track points transactions
  * rework helper class as CTools plugin
  */
 
 /* ToDo: could we use autoload instead ? */
-include_once 'SellFieldsAccessHelper.php';
+include_once 'SellMapSquareHelper.php';
 
 /**
  * Implements hook_reiscout_points_product_info().
+ *
+ * Declare a commerce product as a reiscout_points_product.
  */
 function reiscout_property_products_reiscout_points_product_info() {
   return array(
@@ -32,39 +30,19 @@ function reiscout_property_products_reiscout_points_product_info() {
 }
 
 /**
- * List of fields to sell access to.
- */
-function reiscout_map_square_fields_access_to_sell() {
-  return array(
-    'field_map_sq_kmz',
-    'field_map_sq_gpx',
-  );
-}
-
-function reiscout_map_get_sell_square_fields_access_helper() {
-  $helper = new SellNodeFieldsAccessHelper(
-    'map_square',
-    reiscout_map_square_fields_access_to_sell(),
-    'individual_map_square'
-  );
-  return $helper;
-}
-
-/**
  * Implements hook_field_access.
  */
 function reiscout_map_field_access($op, $field, $entity_type, $entity, $account) {
-  $helper = reiscout_map_get_sell_square_fields_access_helper();
+  $helper = new SellMapSquareHelper();
   return $helper->hook_field_access($op, $field, $entity_type, $entity, $account);
 }
 
 /**
  * Implements hook_node_insert().
- *
  */
 function reiscout_map_node_insert($node) {
-  $helper = reiscout_map_get_sell_square_fields_access_helper();
-  $helper->attach_product($node);
+  $helper = new SellMapSquareHelper();
+  $helper->on_create($node);
 }
 
 /**
@@ -73,6 +51,6 @@ function reiscout_map_node_insert($node) {
  * @todo: delete linked 'Address Access' product if it has not yet been purchased
  */
 function reiscout_map_node_delete($node) {
-  $helper = reiscout_map_get_sell_square_fields_access_helper();
-  $helper->hook_node_delete($node);
+  $helper = new SellMapSquareHelper();
+  $helper->on_delete($node);
 }
