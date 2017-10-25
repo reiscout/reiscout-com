@@ -6,6 +6,13 @@
  * Drupal manner.
  */
 
+
+/* Create a commerce order with complete status, line item and payment transaction. */
+reiscout_points_product_sell_commerce_product($sku, $user);
+
+/* Check is user purchased given product. */
+reiscout_points_product_is_purchased($sku, $user);
+
 /**
  * Defines reiscout points products ().
  *

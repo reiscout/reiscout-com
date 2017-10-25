@@ -344,13 +344,40 @@ function _reiscout_points_product_build_not_enough_points_message($price, $balan
 /**
  * Create a commerce order with complete status, line item and payment transaction.
  */
-function reiscout_points_product_sell_commerce_product($sku, $user) {
+function reiscout_points_product_sell_commerce_product($sku, $account) {
+  // Empty cart
+  if ($order = commerce_cart_order_load($account->uid)) {
+    commerce_cart_order_empty($order);
+  }
 
+  $product = commerce_product_load_by_sku($sku);
+
+  // Create the new line item with a product
+  $line_item = commerce_product_line_item_new($product);
+
+  // Add the line item to the cart
+  $line_item = commerce_cart_product_add($account->uid, $line_item, FALSE);
+
+  // Complete the checkout process for the cart
+  $order = commerce_order_load($line_item->order_id);
+  $order = commerce_order_status_update($order, 'checkout_complete');
+  commerce_checkout_complete($order);
 }
 
 /**
- * Check is user purchased given product.
+ * Check is user purchased a given product.
  */
-function reiscout_points_product_is_purchased($sku, $user) {
+function reiscout_points_product_is_purchased($sku, $account) {
+  $query = db_select('commerce_order', 'ord');
+  $query->join('commerce_line_item', 'li', 'ord.order_id = li.order_id');
+  $query->join('field_data_commerce_product', 'li_prod', 'li.line_item_id = li_prod.entity_id');
+  $query->join('commerce_product', 'prod', 'prod.product_id = li_prod.commerce_product_product_id');
+  $query->join('field_data_field_property', 'prop_ref', 'prop_ref.entity_id = prod.product_id');
+  $query
+    ->fields('ord', array('order_id'))
+    ->condition('ord.uid', $account->uid)
+    ->condition('ord.status', 'completed')
+    ->condition('prod.sku', $sku);
 
+  return (bool) $query->execute()->rowCount();
 }
