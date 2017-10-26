@@ -1,5 +1,7 @@
 <?php
 
+include_once 'SellEntityProductHelperInterface.php';
+
 /**
  * Created by PhpStorm.
  * User: vlad
@@ -14,8 +16,6 @@ abstract class SellEntityProductHelper implements SellEntityProductHelperInterfa
 
   protected $entity_bundle;
 
-  //protected $entity;
-
   protected $entity_ref_field_name = NULL;
 
   protected $product_ref_field_name = NULL;
@@ -28,8 +28,20 @@ abstract class SellEntityProductHelper implements SellEntityProductHelperInterfa
     // Check is required member is here.
   }
 
+  public function get_product_type() {
+    return $this->product_type;
+  }
+
+  public function get_entity_type() {
+    return $this->entity_type;
+  }
+
+  public function get_entity_bundle() {
+    return $this->entity_bundle;
+  }
+
   public function on_entity_create($entity) {
-    create_product($entity);
+    $this->create_product($entity);
   }
 
   public function on_entity_update($entity) {
@@ -37,7 +49,7 @@ abstract class SellEntityProductHelper implements SellEntityProductHelperInterfa
   }
 
   public function on_entity_delete($entity) {
-    $product = $this->get_product_by_entity();
+    $product = $this->get_product_by_entity($entity);
     if ($product) {
       $this->disable_product($product);
     }
@@ -49,12 +61,13 @@ abstract class SellEntityProductHelper implements SellEntityProductHelperInterfa
     $efq->entityCondition('entity_type', 'commerce_product')
       ->entityCondition('bundle', $this->product_type)
       ->propertyCondition('status', TRUE)
-      ->fieldCondition($this->node_ref_field_name, 'target_id', $wrapper->getIdentifier());
+      ->fieldCondition($this->entity_ref_field_name, 'target_id', $wrapper->getIdentifier());
 
     $result = $efq->execute();
     if (isset($result['commerce_product'])) {
       $product_id = key($result['commerce_product']);
-      return entity_load('commerce_product', $product_id);
+      $product = commerce_product_load($product_id);
+      return $product;
     }
 
     return FALSE;
@@ -107,11 +120,12 @@ abstract class SellEntityProductHelper implements SellEntityProductHelperInterfa
 
   protected function create_product($entity) {
 
-    $entity_wrapper = entity_metadata_wrapper($this->entity_type, $entity);
-
-    if (empty($this->node_ref_field_name)) {
-      throw new Exception('node_ref_field_name should not be empty');
+    if (empty($this->entity_ref_field_name)) {
+      throw new Exception('entity_ref_field_name should not be empty');
     }
+
+
+    $entity_wrapper = entity_metadata_wrapper($this->entity_type, $entity);
 
     $product_type = $this->product_type;
 
@@ -123,7 +137,7 @@ abstract class SellEntityProductHelper implements SellEntityProductHelperInterfa
     );
 
     $product->title = $this->product_type . ' for '. $entity_wrapper->label();
-    $product->sku =  $this->product_type . '-for-property-node-'. $entity_wrapper->getIdentifier();
+    $product->sku =  $this->product_type . '-for-'. $this->get_entity_type() .'-'.$this->get_entity_bundle().'-'. $entity_wrapper->getIdentifier();
 
     commerce_product_save($product);
 

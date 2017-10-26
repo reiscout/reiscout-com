@@ -19,7 +19,7 @@ include_once 'SellMapSquareHelper.php';
  *
  * Declare a commerce product as a reiscout_points_product.
  */
-function reiscout_property_products_reiscout_points_product_info() {
+function reiscout_map_reiscout_points_product_info() {
   return array(
     'individual_map_square' => array(
       'commerce_product_type' => 'individual_map_square',
@@ -42,7 +42,7 @@ function reiscout_map_field_access($op, $field, $entity_type, $entity, $account)
  */
 function reiscout_map_node_insert($node) {
   $helper = new SellMapSquareHelper();
-  $helper->on_create($node);
+  $helper->on_entity_create($node);
 }
 
 /**
@@ -52,5 +52,17 @@ function reiscout_map_node_insert($node) {
  */
 function reiscout_map_node_delete($node) {
   $helper = new SellMapSquareHelper();
-  $helper->on_delete($node);
+  $helper->on_entity_delete($node);
+}
+
+/**
+ * Implements hook_node_view().
+ */
+function reiscout_map_node_view($node, $view_mode, $langcode) {
+  $helper = new SellMapSquareHelper();
+  if ($helper->get_entity_bundle() == $node->type && 'full' == $view_mode) {
+    $form = $helper->get_product_form($node);
+    $product_type = $helper->get_product_type();
+    $node->content["reiscout-map-product-$product_type-form"] = $form;
+  }
 }

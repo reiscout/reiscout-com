@@ -7,13 +7,13 @@ include_once drupal_get_path('module', 'reiscout_points_product') . '/SellEntity
 
 class SellMapSquareHelper extends SellEntityProductHelper implements SellEntityProductHelperInterface {
 
-  private $product_type = 'individual_map_square';
+  protected $product_type = 'individual_map_square';
 
-  private $entity_type = 'node';
+  protected $entity_type = 'node';
 
-  private $entity_bundle = 'map_square';
+  protected $entity_bundle = 'map_square';
 
-  private $entity_ref_field_name = 'field_map_square_ref';
+  protected $entity_ref_field_name = 'field_map_square_ref';
 
   public function __construct() {
     parent::__construct();
@@ -55,7 +55,7 @@ class SellMapSquareHelper extends SellEntityProductHelper implements SellEntityP
 
   public function hook_field_access($op, $field, $entity_type, $entity, $account) {
     // Access control for property info fields (address and etc) in property node.
-    if ($op == 'view' && $entity_type == $this->entity_tyoe && !empty($entity->type) && $entity->type == $this->entity_bundle
+    if ($op == 'view' && $entity_type == $this->entity_type && !empty($entity->type) && $entity->type == $this->entity_bundle
       &&  in_array($field['field_name'], $this->fields_access_to_sell()) ) {
 
       return $this->user_has_access($entity, $account);
