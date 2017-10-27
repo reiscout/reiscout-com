@@ -5,7 +5,11 @@
 /**
  * @file
  * Implements map squares operations.
+ *
+ * To run it just `./reiscout_generate_map_square_content.php`
+ *
  * @see print_description();
+ *
  */
 
 namespace reiscout_generate_map_square_content;
