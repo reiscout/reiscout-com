@@ -130,7 +130,7 @@ function reiscout_map_node_view($node, $view_mode, $langcode) {
   }
 
   // Atlanta map node.
-  if ($node->uuid == '630d2a9f-4a34-4c46-8159-1da9d6c7198d' || $node->uuid == '0067f367-a84c-4116-ab58-32b2cd131e2e') {
+  if ($node->uuid == '630d2a9f-4a34-4c46-8159-1da9d6c7198d') {
     if (!$sellAtlantaHelper->is_purchased()) {
       $form = $sellAtlantaHelper->get_product_form($node);
       $product_type = $sellAtlantaHelper->get_product_type();
