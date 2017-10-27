@@ -5,10 +5,11 @@
  * Implements map squared data selling for points.
  *
  * ToDo:
- * check commerce_userpoints code
- * rework reiscout_points_product to make it working with commerce
- * provide transaction type to keep track points transactions
- * rework helper class as CTools plugin
+ * add a hook to control file access by url
+ * add namespaces and autoload
+ * add tests
+ * fix issue with image opening by its uri
+ * add a product to get whole Atlanta.
  */
 
 /* ToDo: could we use autoload instead ? */
@@ -93,4 +94,23 @@ function reiscout_map_node_view($node, $view_mode, $langcode) {
     }
 
   }
+}
+
+/**
+ * Implement hook_file_download
+ */
+function reiscout_map_file_download($uri) {
+
+  // ToDo: implement it.
+
+  $access = true;
+  //$access = false;
+  if ($access) {
+    $files = file_load_multiple(array(), array('uri' => $uri));
+    $file = current($files);
+    $headers = file_get_content_headers($file);
+    return $headers;
+  }
+
+  return FALSE;
 }
