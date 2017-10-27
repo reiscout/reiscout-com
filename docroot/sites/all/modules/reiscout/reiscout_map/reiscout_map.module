@@ -25,8 +25,33 @@ function reiscout_map_reiscout_points_product_info() {
       'commerce_product_type' => 'individual_map_square',
       'title' => t('Buy this map square'),
       'description' => t("Gives a user an access to map square route files"),
+      'desc_callback' => '_reiscout_map_get_desc_for_individual_map_square_product',
+      'sell_callback' => '_reiscout_map_sell_individual_map_square_product',
     ),
   );
+}
+
+/**
+ * Returns a description for a 'Property Lead' product.
+ *
+ * @todo: we can use a system_settings_form() to configure description.
+ */
+function _reiscout_map_get_desc_for_individual_map_square_product($params) {
+  if (isset($params['type']) && $params['type'] == 'condition') {
+    return t('To buy a route for this map square ');
+  }
+
+  return '';
+}
+
+/**
+ * Implements a sell callback for individual_map_square points product.
+ *
+ * Only thing we need to do on selling it is create a commerce order that would be done by default.
+ * As the callback is required and must return TRUE on success inmplement it empty.
+ */
+function _reiscout_map_sell_individual_map_square_product ($params) {
+  return TRUE;
 }
 
 /**
@@ -61,8 +86,11 @@ function reiscout_map_node_delete($node) {
 function reiscout_map_node_view($node, $view_mode, $langcode) {
   $helper = new SellMapSquareHelper();
   if ($helper->get_entity_bundle() == $node->type && 'full' == $view_mode) {
-    $form = $helper->get_product_form($node);
-    $product_type = $helper->get_product_type();
-    $node->content["reiscout-map-product-$product_type-form"] = $form;
+    if (!$helper->is_entity_purchased($node)) {
+      $form = $helper->get_product_form($node);
+      $product_type = $helper->get_product_type();
+      $node->content["reiscout-map-product-$product_type-form"] = $form;
+    }
+
   }
 }

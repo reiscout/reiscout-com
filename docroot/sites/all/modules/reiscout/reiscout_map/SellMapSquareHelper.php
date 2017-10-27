@@ -44,8 +44,7 @@ class SellMapSquareHelper extends SellEntityProductHelper implements SellEntityP
     }
 
     // User has bought a product.
-    $product = $this->get_product_by_entity($entity);
-    if (reiscout_points_product_is_purchased($product->sku, $account)) {
+    if ($this->is_entity_purchased($entity)) {
       return TRUE;
     }
 
