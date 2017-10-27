@@ -241,7 +241,11 @@ function _reiscout_property_products_provide_property_data_product_services($par
  *
  * @todo: we can use a system_settings_form() to configure description.
  */
-function _reiscout_property_products_get_desc_for_property_lead_product($type = 'standard', $place = 'site') {
+function _reiscout_property_products_get_desc_for_property_lead_product($params = array()) {
+
+  $type = ($params['type']) ? $params['type'] : 'standard';
+  $place = ($params['place']) ? $params['place'] : 'site';
+
   if (!in_array($type, array('standard', 'condition'))
    || !in_array($place, array('site', 'app'))) {
     return '';
@@ -260,7 +264,11 @@ function _reiscout_property_products_get_desc_for_property_lead_product($type = 
  *
  * @todo: we can use a system_settings_form() to configure description.
  */
-function _reiscout_property_products_get_desc_for_property_data_product($type = 'standard', $place = 'site') {
+function _reiscout_property_products_get_desc_for_property_data_product($params = array()) {
+
+  $type = ($params['type']) ? $params['type'] : 'standard';
+  $place = ($params['place']) ? $params['place'] : 'site';
+
   if (!in_array($type, array('standard', 'condition'))
    || !in_array($place, array('site', 'app'))) {
     return '';
