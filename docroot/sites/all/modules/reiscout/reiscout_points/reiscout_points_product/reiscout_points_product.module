@@ -33,6 +33,24 @@ function reiscout_points_product_menu() {
 }
 
 /**
+ * Implements hook_commerce_currency_info().
+ */
+function reiscout_points_product_commerce_currency_info() {
+
+  $currencies['PTS'] = array(
+    'code' => 'PTS',
+    'symbol' => 'Pts',
+    'name' => 'Points',
+    'rounding_step' => '1',
+    // Userpoints currently does not support decimals.
+    'decimals' => 0,
+    'conversion_rate' => 0.01,
+  );
+
+  return $currencies;
+}
+
+/**
  * Returns a list of all the Reiscout products.
  *
  * Returns a list of all the registered Reiscout products
@@ -152,20 +170,34 @@ function reiscout_points_product_buy_form_submit($form, &$form_state) {
     throw new Exception(t("A 'sell_callback' is not set for product with '!product_id' ID.", $t_arg));
   }
 
-  $sell_callback_success = call_user_func($product['sell_callback'], $params);
-  if ($sell_callback_success) {
-    if (isset($form_state['values']['reiscout_points_product_data']['params']['commerce_product'])) {
-      $commerce_product = $form_state['values']['reiscout_points_product_data']['params']['commerce_product'];
-      $commerce_order_created = reiscout_points_product_sell_commerce_product($commerce_product->sku);
-      if ($commerce_order_created) {
+  // Use a transaction to ensure that no broken order is created!
+  $transaction = db_transaction();
+  try {
+    $sell_callback_success = call_user_func($product['sell_callback'], $params);
+    if ($sell_callback_success) {
+      if (isset($form_state['values']['reiscout_points_product_data']['params']['commerce_product'])) {
+        $commerce_product = $form_state['values']['reiscout_points_product_data']['params']['commerce_product'];
+        $commerce_order_created = reiscout_points_product_sell_commerce_product($commerce_product->sku);
+        if ($commerce_order_created) {
+          reiscout_points_product_charge($product_id, $params);
+          return;
+        }
+      } else {
         reiscout_points_product_charge($product_id, $params);
         return;
       }
-    } else {
-      reiscout_points_product_charge($product_id, $params);
-      return;
     }
+  } catch (Exception $e) {
+    // Something went wrong so let's roll back the transaction:
+    $transaction->rollback();
+    // Add some information to the exception for easier debugging in an outer try / catch!
+    $e->user_id = $GLOBALS['user']->uid;
+    $e->product_sku = $commerce_product;
+    $e->points_product_id = $product_id;
+    throw $e;
   }
+
+
 
 }
 
@@ -404,6 +436,9 @@ function reiscout_points_product_sell_commerce_product($sku, $account = NULL) {
   }
 
   $product = commerce_product_load_by_sku($sku);
+  if (empty($product)) {
+    throw new Exception('Commerce Product not found by SKU');
+  }
 
   // Create the new line item with a product
   $line_item = commerce_product_line_item_new($product);

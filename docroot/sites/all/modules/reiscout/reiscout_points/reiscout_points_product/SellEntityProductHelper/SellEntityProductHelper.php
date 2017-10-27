@@ -3,10 +3,7 @@
 include_once 'SellEntityProductHelperInterface.php';
 
 /**
- * Created by PhpStorm.
- * User: vlad
- * Date: 25.10.17
- * Time: 13:29
+ * @class SellEntityProductHelper.
  */
 abstract class SellEntityProductHelper implements SellEntityProductHelperInterface {
 
@@ -101,7 +98,7 @@ abstract class SellEntityProductHelper implements SellEntityProductHelperInterfa
 
   public function get_product_form($entity) {
     $product = $this->get_product_by_entity($entity);
-    $form = reiscout_points_product_get_buy_form($product->sku);
+    $form = reiscout_points_product_get_buy_form_by_sku($product->sku);
     return $form;
   }
 
@@ -116,6 +113,7 @@ abstract class SellEntityProductHelper implements SellEntityProductHelperInterfa
     if (reiscout_points_product_is_purchased($product->sku, $account)) {
       return TRUE;
     }
+    return FALSE;
   }
 
   protected function create_product($entity) {
@@ -131,10 +129,23 @@ abstract class SellEntityProductHelper implements SellEntityProductHelperInterfa
 
     $product = commerce_product_new($product_type);
     $product->{$this->entity_ref_field_name}[LANGUAGE_NONE][0]['target_id'] = $entity_wrapper->getIdentifier();
-    $product->commerce_price[LANGUAGE_NONE][0] = array(
-      'amount' => 0,
-      'currency_code' => 'USD',
-    );
+
+    $points_product = reiscout_points_product_get($product_type);
+    if ($points_product) {
+      $price = reiscout_points_product_get_price($points_product['id']);
+      if ($price === FALSE) {
+        throw new Exception('Price for ' . $product_type . 'points product type is not set.');
+      }
+      $product->commerce_price[LANGUAGE_NONE][0] = array(
+        'amount' => $price,
+        'currency_code' => 'PTS',
+      );
+    } else {
+      $product->commerce_price[LANGUAGE_NONE][0] = array(
+        'amount' => 0,
+        'currency_code' => 'USD',
+      );
+    }
 
     $product->title = $this->product_type . ' for '. $entity_wrapper->label();
     $product->sku =  $this->product_type . '-for-'. $this->get_entity_type() .'-'.$this->get_entity_bundle().'-'. $entity_wrapper->getIdentifier();
