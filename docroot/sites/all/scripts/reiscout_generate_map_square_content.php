@@ -15,6 +15,7 @@
 namespace reiscout_generate_map_square_content;
 
 use DirectoryIterator;
+use EntityFieldQuery;
 
 /**
  * @class MapSquareDirectoryIterator
@@ -57,15 +58,22 @@ class MapSquareDirectoryIterator extends DirectoryIterator {
 
 }
 
-
-main();
-
+try {
+  main();
+} catch (\Exception $e) {
+  drush_print($e->getMessage());
+}
 
 /**
  * Handle script execution.
  */
 function main() {
   $show_help = TRUE;
+
+  if ($path = drush_get_option('show-help')) {
+    print_description();
+    return;
+  }
 
   if ($path = drush_get_option('scan-dir')) {
     $show_help = FALSE;
@@ -74,6 +82,7 @@ function main() {
       drush_print('Directory does not exists.');
     }
     $squares = scan_dir_for_squares($path);
+    drush_print('Found ' . count($squares) . ' squares');
 
     if ($echo_squares = drush_get_option('out-squares')) {
       drush_print('Scan results:');
@@ -115,6 +124,7 @@ function main() {
 function print_description() {
   $help_text = <<<END
   With that script you can:
+  * show help message instead any actions --show-help
   * scan any folder for squares using  --scan-dir=<dir>
   * output found squares  --out-squares
   * create nodes for found squares  --create-nodes
@@ -257,7 +267,7 @@ function create_node($square) {
  * @return boolean
  */
 function square_node_exists($square) {
-  $q = new \EntityFieldQuery();
+  $q = new EntityFieldQuery();
   $q->entityCondition('entity_type', 'node');
   $q->entityCondition('bundle', 'map_square');
   $q->propertyCondition('title', $square['name']);
@@ -273,7 +283,7 @@ function square_node_exists($square) {
  * Useful for testing to drop all nodes just after import.
  */
 function drop_square_nodes() {
-  $q = new \EntityFieldQuery();
+  $q = new EntityFieldQuery();
   $q->entityCondition('entity_type', 'node');
   $q->entityCondition('bundle', 'map_square');
   $r = $q->execute();
