@@ -180,59 +180,6 @@ function reiscout_map_feature_field_default_field_instances() {
   );
 
   // Exported field_instance:
-  // 'commerce_product-city_map_square-field_points_price'.
-  $field_instances['commerce_product-city_map_square-field_points_price'] = array(
-    'bundle' => 'city_map_square',
-    'default_value' => NULL,
-    'deleted' => 0,
-    'description' => 'Price for this product in points.',
-    'display' => array(
-      'default' => array(
-        'label' => 'above',
-        'module' => 'number',
-        'settings' => array(
-          'decimal_separator' => '.',
-          'prefix_suffix' => TRUE,
-          'scale' => 0,
-          'thousand_separator' => '',
-        ),
-        'type' => 'number_integer',
-        'weight' => 1,
-      ),
-      'line_item' => array(
-        'label' => 'above',
-        'settings' => array(),
-        'type' => 'hidden',
-        'weight' => 0,
-      ),
-      'node_teaser' => array(
-        'label' => 'above',
-        'settings' => array(),
-        'type' => 'hidden',
-        'weight' => 0,
-      ),
-    ),
-    'entity_type' => 'commerce_product',
-    'field_name' => 'field_points_price',
-    'label' => 'Points Price',
-    'required' => 0,
-    'settings' => array(
-      'max' => '',
-      'min' => '',
-      'prefix' => '',
-      'suffix' => '',
-      'user_register_form' => FALSE,
-    ),
-    'widget' => array(
-      'active' => 0,
-      'module' => 'number',
-      'settings' => array(),
-      'type' => 'number',
-      'weight' => 37,
-    ),
-  );
-
-  // Exported field_instance:
   // 'commerce_product-individual_map_square-commerce_price'.
   $field_instances['commerce_product-individual_map_square-commerce_price'] = array(
     'bundle' => 'individual_map_square',
@@ -483,7 +430,7 @@ function reiscout_map_feature_field_default_field_instances() {
         'module' => 'text',
         'settings' => array(),
         'type' => 'text_default',
-        'weight' => 0,
+        'weight' => 3,
       ),
       'teaser' => array(
         'label' => 'hidden',
@@ -535,11 +482,8 @@ function reiscout_map_feature_field_default_field_instances() {
       ),
       'full' => array(
         'label' => 'above',
-        'module' => 'geofield',
-        'settings' => array(
-          'data' => 'full',
-        ),
-        'type' => 'geofield_wkt',
+        'settings' => array(),
+        'type' => 'hidden',
         'weight' => 4,
       ),
     ),
@@ -585,7 +529,7 @@ function reiscout_map_feature_field_default_field_instances() {
         'module' => 'file',
         'settings' => array(),
         'type' => 'file_default',
-        'weight' => 3,
+        'weight' => 2,
       ),
       'teaser' => array(
         'label' => 'above',
@@ -640,7 +584,7 @@ function reiscout_map_feature_field_default_field_instances() {
         'module' => 'file',
         'settings' => array(),
         'type' => 'file_default',
-        'weight' => 2,
+        'weight' => 1,
       ),
       'teaser' => array(
         'label' => 'above',
@@ -694,14 +638,14 @@ function reiscout_map_feature_field_default_field_instances() {
         'weight' => 0,
       ),
       'full' => array(
-        'label' => 'above',
+        'label' => 'hidden',
         'module' => 'image',
         'settings' => array(
-          'image_link' => '',
-          'image_style' => '',
+          'image_link' => 'file',
+          'image_style' => 'medium',
         ),
         'type' => 'image',
-        'weight' => 1,
+        'weight' => 0,
       ),
       'teaser' => array(
         'label' => 'above',
@@ -745,11 +689,9 @@ function reiscout_map_feature_field_default_field_instances() {
   t('KML/KMZ');
   t('Map Square ');
   t('Map square node to sell.');
-  t('Points Price');
   t('Preview');
   t('Preview square route as an image');
   t('Price');
-  t('Price for this product in points.');
   t('Square center position. As for now all the squares content what we have having the same scale that field should have a unique value.');
   t('Square route in GPX format.');
   t('Square route in KMZ format.');
