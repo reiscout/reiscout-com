@@ -49,6 +49,7 @@ function reiscout_points_product_get_all() {
     if ($products = module_invoke_all('reiscout_points_product_info')) {
       foreach ($products as $product_id => $product) {
         $products[$product_id] = $product + $defaults;
+        $products[$product_id]['id'] = $product_id;
       }
     }
   }
@@ -64,10 +65,29 @@ function reiscout_points_product_get($product_id) {
 
   if (!isset($products[$product_id])) {
     $t_arg = array('!product_id' => $product_id);
-    throw new Exception(t("The product with '!product_id' ID has not been registered.", $t_arg));
+    throw new Exception(t("The points product with '!product_id' ID has not been registered.", $t_arg));
   }
 
   return $products[$product_id];
+}
+
+/**
+ * Given an SKU of a commerce product, returns a Reiscout product definition.
+ */
+function reiscout_points_product_get_by_sku($sku) {
+  $commerce_product = commerce_product_load_by_sku($sku);
+  if (!$commerce_product) {
+    throw new Exception('Product by given SKU not found.');
+  }
+
+  $points_products = reiscout_points_product_get_all();
+
+  if (!isset($points_products[$commerce_product->type])) {
+    $t_arg = array('!product_id' => $commerce_product->type);
+    throw new Exception(t("The points product with '!product_id' ID has not been registered.", $t_arg));
+  }
+
+  return $points_products[$commerce_product->type];
 }
 
 /**
@@ -132,9 +152,21 @@ function reiscout_points_product_buy_form_submit($form, &$form_state) {
     throw new Exception(t("A 'sell_callback' is not set for product with '!product_id' ID.", $t_arg));
   }
 
-  if (call_user_func($product['sell_callback'], $params)) {
-    reiscout_points_product_charge($product_id, $params);
+  $sell_callback_success = call_user_func($product['sell_callback'], $params);
+  if ($sell_callback_success) {
+    if (isset($form_state['values']['reiscout_points_product_data']['params']['commerce_product'])) {
+      $commerce_product = $form_state['values']['reiscout_points_product_data']['params']['commerce_product'];
+      $commerce_order_created = reiscout_points_product_sell_commerce_product($commerce_product->sku);
+      if ($commerce_order_created) {
+        reiscout_points_product_charge($product_id, $params);
+        return;
+      }
+    } else {
+      reiscout_points_product_charge($product_id, $params);
+      return;
+    }
   }
+
 }
 
 /**
@@ -142,6 +174,19 @@ function reiscout_points_product_buy_form_submit($form, &$form_state) {
  */
 function reiscout_points_product_get_buy_form($product_id, $params = NULL) {
   return drupal_get_form('reiscout_points_product_buy_form', $product_id, $params);
+}
+
+/**
+ * Returns a form to buy a Reiscout product by SKU.
+ */
+function reiscout_points_product_get_buy_form_by_sku($sku, $params = NULL) {
+  $commerce_product = commerce_product_load_by_sku($sku);
+  $points_product = reiscout_points_product_get_by_sku($sku);
+  //if ($params) {
+    $params['commerce_product'] = $commerce_product;
+  //}
+
+  return drupal_get_form('reiscout_points_product_buy_form', $points_product['id'], $params);
 }
 
 /**
@@ -173,7 +218,7 @@ function reiscout_points_product_decorate_form($form, $form_state, $product_id, 
 
   // If a user has enough amount of points to buy a product
   if ($balance >= $price) {
-    if ($description = call_user_func($product['desc_callback'])) {
+    if ($description = call_user_func($product['desc_callback'], $params)) {
       $form['actions']['description'] = array(
         '#type' => 'item',
         '#markup' => $description,
@@ -185,10 +230,12 @@ function reiscout_points_product_decorate_form($form, $form_state, $product_id, 
     // but he has sent (he has submit) a form to buy a product.
     // We display him a message about that.
     if (!empty($form_state['input'])) {
+      $desc_callback_args = $params;
+      $desc_callback_args['type'] = 'condition';
       $message = _reiscout_points_product_build_not_enough_points_message(
         $price,
         $balance,
-        call_user_func($product['desc_callback'], 'condition')
+        call_user_func($product['desc_callback'], $desc_callback_args)
       );
       drupal_set_message($message, 'warning', FALSE);
     }
@@ -199,7 +246,9 @@ function reiscout_points_product_decorate_form($form, $form_state, $product_id, 
       '!url' => url('reiscout-points/buy/' . ($price - $balance), array('query' => array('return_to' => $_GET['q']))),
     );
 
-    $description = call_user_func($product['desc_callback'], 'condition');
+    $desc_callback_args = $params;
+    $desc_callback_args['type'] = 'condition';
+    $description = call_user_func($product['desc_callback'], $desc_callback_args);
     $form['actions']['description'] = array(
       '#type' => 'item',
       '#markup' => $description . t(' you must <a href="!url">purchase more points</a>', $t_arg),
@@ -344,7 +393,11 @@ function _reiscout_points_product_build_not_enough_points_message($price, $balan
 /**
  * Create a commerce order with complete status, line item and payment transaction.
  */
-function reiscout_points_product_sell_commerce_product($sku, $account) {
+function reiscout_points_product_sell_commerce_product($sku, $account = NULL) {
+  if (!isset($account)) {
+    $account = $GLOBALS['user'];
+  }
+
   // Empty cart
   if ($order = commerce_cart_order_load($account->uid)) {
     commerce_cart_order_empty($order);
@@ -362,6 +415,8 @@ function reiscout_points_product_sell_commerce_product($sku, $account) {
   $order = commerce_order_load($line_item->order_id);
   $order = commerce_order_status_update($order, 'checkout_complete');
   commerce_checkout_complete($order);
+
+  return TRUE;
 }
 
 /**
@@ -372,7 +427,6 @@ function reiscout_points_product_is_purchased($sku, $account) {
   $query->join('commerce_line_item', 'li', 'ord.order_id = li.order_id');
   $query->join('field_data_commerce_product', 'li_prod', 'li.line_item_id = li_prod.entity_id');
   $query->join('commerce_product', 'prod', 'prod.product_id = li_prod.commerce_product_product_id');
-  $query->join('field_data_field_property', 'prop_ref', 'prop_ref.entity_id = prod.product_id');
   $query
     ->fields('ord', array('order_id'))
     ->condition('ord.uid', $account->uid)
