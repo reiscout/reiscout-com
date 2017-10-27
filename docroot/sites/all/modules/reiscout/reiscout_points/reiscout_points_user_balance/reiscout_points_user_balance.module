@@ -68,12 +68,17 @@ function reiscout_points_user_balance_increase($uid, $amount, $reason) {
 /**
  * Given an ID of a user, decreases his balance.
  */
-function reiscout_points_user_balance_decrease($uid, $amount, $reason) {
+function reiscout_points_user_balance_decrease($uid, $amount, $short_desc, $long_desc = '') {
+  if (strlen($short_desc) > 48) {
+    $long_desc = $short_desc . ': ' . $long_desc;
+    $short_desc = substr($short_desc, 0, 48);
+  }
   $params = array(
     'uid' => $uid,
     'points' => -1 * $amount,
     'tid' => _reiscout_points_feature_get_tid(),
-    'operation' => $reason,
+    'operation' => $short_desc,
+    'description' => $long_desc,
   );
 
   userpoints_userpointsapi($params);

@@ -298,8 +298,10 @@ function reiscout_points_product_charge($product_id, $params = NULL) {
 
   $product = reiscout_points_product_get($product_id);
   $price = reiscout_points_product_get_price($product_id, $params);
-  $reason = t("User has bought '@title' product", array('@title' => $product['title']));
-  reiscout_points_user_balance_decrease($user->uid, $price, $reason);
+  $short_desc = t("User has bought a '@id' product", array('@id' => $product_id));
+  $long_desc = t("User has bought '@title' product", array('@title' => $product['title']));
+
+  reiscout_points_user_balance_decrease($user->uid, $price, $short_desc, $long_desc);
 }
 
 /**

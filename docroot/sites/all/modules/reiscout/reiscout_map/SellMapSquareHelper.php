@@ -4,6 +4,7 @@ include_once drupal_get_path('module', 'reiscout_points_product') . '/SellEntity
 
 include_once drupal_get_path('module', 'reiscout_points_product') . '/SellEntityProductHelper/SellEntityProductHelperInterface.php';
 
+include_once 'SellAtlantaMapSquaresHelper.php';
 
 class SellMapSquareHelper extends SellEntityProductHelper implements SellEntityProductHelperInterface {
 
@@ -48,7 +49,14 @@ class SellMapSquareHelper extends SellEntityProductHelper implements SellEntityP
       return TRUE;
     }
 
-    // Deny access otherwise
+    /* ToDo: check for specific city product related to the current city square */
+    /* For now all the squares are for Atlanta so thats fine. */
+    $atlanta_product_helper = new SellAtlantaMapSquaresHelper();
+    if ($atlanta_product_helper->is_purchased()) {
+      return TRUE;
+    }
+
+    // Deny access otherwise.
     return FALSE;
   }
 
