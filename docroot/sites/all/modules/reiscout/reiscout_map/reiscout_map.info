@@ -1,0 +1,4 @@
+name = Reiscout Map
+description = Implements map squared data selling.
+package = Reiscout Map
+core = 7.x

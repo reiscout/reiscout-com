@@ -1,0 +1,7 @@
+<?php
+/**
+ * @file
+ * Code for the Reiscout Map Atlanta Content Feature feature.
+ */
+
+include_once 'reiscout_map_atlanta_content_feature.features.inc';
