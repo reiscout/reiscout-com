@@ -1,5 +1,8 @@
 <?php
 
+/**
+ * @class SellAtlantaMapSquaresHelper.
+ */
 class SellAtlantaMapSquaresHelper {
 
   const PRODUCT_TYPE = 'city_map_square';

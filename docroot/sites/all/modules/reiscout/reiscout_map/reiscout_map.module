@@ -6,15 +6,9 @@
  *
  * ToDo:
  * add a hook to control file access by url
- * add namespaces and autoload
  * add tests
  * fix issue with image opening by its uri
- * add a product to get whole Atlanta.
- * fix content feature deployment
  */
-
-/* ToDo: could we use autoload instead ? */
-include_once 'SellMapSquareHelper.php';
 
 /**
  * Implements hook_reiscout_points_product_info().

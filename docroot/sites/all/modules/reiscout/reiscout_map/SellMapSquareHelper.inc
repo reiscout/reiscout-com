@@ -1,11 +1,8 @@
 <?php
 
-include_once drupal_get_path('module', 'reiscout_points_product') . '/SellEntityProductHelper/SellEntityProductHelper.php';
-
-include_once drupal_get_path('module', 'reiscout_points_product') . '/SellEntityProductHelper/SellEntityProductHelperInterface.php';
-
-include_once 'SellAtlantaMapSquaresHelper.php';
-
+/**
+ * @class SellMapSquareHelper.
+ */
 class SellMapSquareHelper extends SellEntityProductHelper implements SellEntityProductHelperInterface {
 
   protected $product_type = 'individual_map_square';

@@ -1,10 +1,7 @@
 <?php
 
 /**
- * Created by PhpStorm.
- * User: vlad
- * Date: 25.10.17
- * Time: 13:29
+ * @interface SellEntityProductHelperInterface.
  */
 interface SellEntityProductHelperInterface {
 

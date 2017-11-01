@@ -3,3 +3,6 @@ description = Allows to sell Reiscout products for Reiscout points.
 package = Reiscout
 core = 7.x
 configure = admin/config/reiscout-points/products-prices
+
+files[]=SellEntityProductHelper/SellEntityProductHelperInterface.inc
+files[]=SellEntityProductHelper/SellEntityProductHelper.inc
