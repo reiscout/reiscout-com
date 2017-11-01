@@ -2,27 +2,65 @@
 
 /**
  * @interface SellEntityProductHelperInterface.
+ *
+ * Class implementing entity to product relationships and helper methods must implement this interface.
  */
 interface SellEntityProductHelperInterface {
 
-  public function get_product_type();
+  /**
+   * Return commerce product type name.
+   */
+  public function getProductType();
 
-  public function get_entity_type();
+  /**
+   * Return entity type name that has attached commerce product.
+   */
+  public function getEntityType();
 
-  public function get_entity_bundle();
+  /**
+   * Return bundle name of entity type returned by getProductType() that has attached commerce product.
+   */
+  public function getEntityBundle();
 
-  public function on_entity_create($entity);
+  /**
+   * Perform all actions on entity creation.
+   *
+   * Like creating and attaching the product.
+   */
+  public function onEntityCreate($entity);
 
-  public function on_entity_update($entity);
+  /**
+   * Perform all actions on entity update.
+   *
+   * Like updating the product.
+   */
+  public function onEntityUpdate($entity);
 
-  public function on_entity_delete($entiry);
+  /**
+   * Perform all actions on entity delete.
+   *
+   * Like deleting or disabling the product.
+   */
+  public function onEntityDelete($entiry);
 
-  public function get_product_by_entity($entity);
+  /**
+   * Return commerce product attached to passed entity.
+   */
+  public function getProductByEntity($entity);
 
-  public function get_entity_by_product($product);
+  /**
+   * Return entity attached to passed commerce product.
+   */
+  public function getEntityByProduct($product);
 
-  public function get_product_form($entity);
+  /**
+   * Return form to purchase an entity.
+   */
+  public function getProductForm($entity);
 
-  public function is_entity_purchased($entity);
+  /**
+   * Check is entity purchased.
+   */
+  public function isEntityPurchased($entity);
 
 }

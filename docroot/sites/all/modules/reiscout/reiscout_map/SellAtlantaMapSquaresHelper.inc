@@ -9,6 +9,9 @@ class SellAtlantaMapSquaresHelper {
 
   const SKU = 'all-atlanta-map-squares';
 
+  /**
+   * Constructor
+   */
   public function __construct() {
     $product = commerce_product_load_by_sku(self::SKU);
     if (empty($product)) {
@@ -16,15 +19,24 @@ class SellAtlantaMapSquaresHelper {
     }
   }
 
-  public function get_product_type() {
+  /**
+   * Return commerce product type name.
+   */
+  public function getProductType() {
     return self::PRODUCT_TYPE;
   }
 
-  public function get_product_sku() {
+  /**
+   * Return product SKU.
+   */
+  public function getProductSKU() {
     return self::SKU;
   }
 
-  public function is_purchased($account = NULL) {
+  /**
+   * Check is product purchased.
+   */
+  public function isPurchased($account = NULL) {
     if (!isset($account)) {
       $account = $GLOBALS['user'];
     }
@@ -35,7 +47,10 @@ class SellAtlantaMapSquaresHelper {
     return FALSE;
   }
 
-  public function get_product_form () {
+  /**
+   * Return form to purchase a product.
+   */
+  public function getProductForm() {
     $form = reiscout_points_product_get_buy_form_by_sku(self::SKU);
     return $form;
   }

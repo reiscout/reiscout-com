@@ -2,61 +2,90 @@
 
 /**
  * @class SellEntityProductHelper.
+ *
+ * Default implementation of methods for SellEntityProductHelperInterface and some other methods.
+ *
+ * ToDo: turn member variables to static.
+ *
  */
 abstract class SellEntityProductHelper implements SellEntityProductHelperInterface {
 
-  protected $product_type;
+  protected $productType;
 
-  protected $entity_type;
+  protected $entityType;
 
-  protected $entity_bundle;
+  protected $entityBundle;
 
-  protected $entity_ref_field_name = NULL;
+  protected $entityRefFieldName = NULL;
 
-  protected $product_ref_field_name = NULL;
+  protected $productRefFieldName = NULL;
 
+  /**
+   * Class constructor.
+   *
+   * Check for requirements.
+   */
   public function __construct() {
-    if (!isset($this->entity_ref_field_name) && !isset($this->product_ref_field_name)) {
-      throw new Exception('Either $entity_ref_field_name or $product_ref_field_name member variable should not be empty.');
+    if (!isset($this->entityRefFieldName) && !isset($this->productRefFieldName)) {
+      throw new Exception('Either $entityRefFieldName or $productRefFieldName member variable should not be empty.');
     }
-
-    // Check is required member is here.
   }
 
-  public function get_product_type() {
-    return $this->product_type;
+  /**
+   * @inheritdoc
+   */
+  public function getProductType() {
+    return $this->productType;
   }
 
-  public function get_entity_type() {
-    return $this->entity_type;
+  /**
+   * @inheritdoc
+   */
+  public function getEntityType() {
+    return $this->entityType;
   }
 
-  public function get_entity_bundle() {
-    return $this->entity_bundle;
+  /**
+   * @inheritdoc
+   */
+  public function getEntityBundle() {
+    return $this->entityBundle;
   }
 
-  public function on_entity_create($entity) {
-    $this->create_product($entity);
+  /**
+   * @inheritdoc
+   */
+  public function onEntityCreate($entity) {
+    $this->createProduct($entity);
   }
 
-  public function on_entity_update($entity) {
+  /**
+   * @inheritdoc
+   */
+  public function onEntityUpdate($entity) {
     /* Do nothing on update */
   }
 
-  public function on_entity_delete($entity) {
+  /**
+   * @inheritdoc
+   */
+  public function onEntityDelete($entity) {
     $product = $this->get_product_by_entity($entity);
     if ($product) {
-      $this->disable_product($product);
+      $this->disableProduct($product);
     }
   }
 
-  public function get_product_by_entity($entity) {
-    $wrapper = entity_metadata_wrapper($this->entity_type, $entity);
+  /**
+   * @inheritdoc
+   */
+  public function getProductByEntity($entity) {
+    $wrapper = entity_metadata_wrapper($this->entityType, $entity);
     $efq = new EntityFieldQuery();
     $efq->entityCondition('entity_type', 'commerce_product')
-      ->entityCondition('bundle', $this->product_type)
+      ->entityCondition('bundle', $this->productType)
       ->propertyCondition('status', TRUE)
-      ->fieldCondition($this->entity_ref_field_name, 'target_id', $wrapper->getIdentifier());
+      ->fieldCondition($this->entityRefFieldName, 'target_id', $wrapper->getIdentifier());
 
     $result = $efq->execute();
     if (isset($result['commerce_product'])) {
@@ -68,45 +97,54 @@ abstract class SellEntityProductHelper implements SellEntityProductHelperInterfa
     return FALSE;
   }
 
-  public function get_entity_by_product($product) {
+  /**
+   * @inheritdoc
+   */
+  public function getEntityByProduct($product) {
     $wrapper = entity_metadata_wrapper('commerce_product', $product);
 
-    if (!empty($this->entity_ref_field_name)) {
-      $entity = $wrapper->{$this->entity_ref_field_name}->get();
+    if (!empty($this->entityRefFieldName)) {
+      $entity = $wrapper->{$this->entityRefFieldName}->get();
       if ($entity) {
         return $entity;
       }
     }
 
-    if (!empty($this->product_ref_field_name)) {
+    if (!empty($this->productRefFieldName)) {
       $efq = new EntityFieldQuery();
-      $efq->entityCondition('entity_type', $this->entity_type);
-      if ($this->entity_bundle) {
-        $efq->entityCondition('bundle', $this->entity_bundle);
+      $efq->entityCondition('entity_type', $this->entityType);
+      if ($this->entityBundle) {
+        $efq->entityCondition('bundle', $this->entityBundle);
       }
-      $efq->fieldCondition($this->product_ref_field_name, 'target_id', $wrapper->getIdentifier());
+      $efq->fieldCondition($this->productRefFieldName, 'target_id', $wrapper->getIdentifier());
 
       $result = $efq->execute();
-      if (isset($result[$this->entity_type])) {
-        $entity_id = key($result[$this->entity_type]);
-        return entity_load($this->entity_type, $entity_id);
+      if (isset($result[$this->entityType])) {
+        $entity_id = key($result[$this->entityType]);
+        return entity_load($this->entityType, $entity_id);
       }
     }
   }
 
-  public function get_product_form($entity) {
-    $product = $this->get_product_by_entity($entity);
+  /**
+   * @inheritdoc
+   */
+  public function getProductForm($entity) {
+    $product = $this->getProductByEntity($entity);
     $form = reiscout_points_product_get_buy_form_by_sku($product->sku);
     return $form;
   }
 
-  public function is_entity_purchased($entity, $account = NULL) {
+  /**
+   * @inheritdoc
+   */
+  public function isEntityPurchased($entity, $account = NULL) {
     if (!isset($account)) {
       $account = $GLOBALS['user'];
     }
 
-    // User has bought a product
-    $product = $this->get_product_by_entity($entity);
+    // User has bought a product.
+    $product = $this->getProductByEntity($entity);
 
     if (reiscout_points_product_is_purchased($product->sku, $account)) {
       return TRUE;
@@ -114,19 +152,21 @@ abstract class SellEntityProductHelper implements SellEntityProductHelperInterfa
     return FALSE;
   }
 
-  protected function create_product($entity) {
+  /**
+   *
+   */
+  protected function createProduct($entity) {
 
-    if (empty($this->entity_ref_field_name)) {
+    if (empty($this->entityRefFieldName)) {
       throw new Exception('entity_ref_field_name should not be empty');
     }
 
+    $entity_wrapper = entity_metadata_wrapper($this->entityType, $entity);
 
-    $entity_wrapper = entity_metadata_wrapper($this->entity_type, $entity);
-
-    $product_type = $this->product_type;
+    $product_type = $this->productType;
 
     $product = commerce_product_new($product_type);
-    $product->{$this->entity_ref_field_name}[LANGUAGE_NONE][0]['target_id'] = $entity_wrapper->getIdentifier();
+    $product->{$this->entityRefFieldName}[LANGUAGE_NONE][0]['target_id'] = $entity_wrapper->getIdentifier();
 
     $points_product = reiscout_points_product_get($product_type);
     if ($points_product) {
@@ -138,28 +178,34 @@ abstract class SellEntityProductHelper implements SellEntityProductHelperInterfa
         'amount' => $price,
         'currency_code' => 'PTS',
       );
-    } else {
+    }
+    else {
       $product->commerce_price[LANGUAGE_NONE][0] = array(
         'amount' => 0,
         'currency_code' => 'USD',
       );
     }
 
-    $product->title = $this->product_type . ' for '. $entity_wrapper->label();
-    $product->sku =  $this->product_type . '-for-'. $this->get_entity_type() .'-'.$this->get_entity_bundle().'-'. $entity_wrapper->getIdentifier();
+    $product->title = $this->productType . ' for ' . $entity_wrapper->label();
+    $product->sku = $this->productType . '-for-' . $this->getEntityType() . '-' . $this->getEntityBundle() . '-' . $entity_wrapper->getIdentifier();
 
     commerce_product_save($product);
 
     return $product;
   }
 
-  protected function disable_product($product) {
+  /**
+   *
+   */
+  protected function disableProduct($product) {
     try {
       $pw = entity_metadata_wrapper('commerce_product', $product);
       $pw->status->set(0);
       $pw->save();
-    } catch (Exception $e) {
+    }
+    catch (Exception $e) {
       throw new Exception($e->getMessage());
     }
   }
+
 }

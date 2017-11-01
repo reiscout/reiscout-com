@@ -7,7 +7,7 @@
  * ToDo:
  * add a hook to control file access by url
  * add tests
- * fix issue with image opening by its uri
+ * fix issue with image opening by its uri.
  */
 
 /**
@@ -22,16 +22,16 @@ function reiscout_map_reiscout_points_product_info() {
 
   $products = array();
 
-  $products[$square_product_helper->get_product_type()] = array(
-    'commerce_product_type' => $square_product_helper->get_product_type(),
+  $products[$square_product_helper->getProductType()] = array(
+    'commerce_product_type' => $square_product_helper->getProductType(),
     'title' => t('Buy this map square'),
     'description' => t("Gives a user an access to map square route files"),
     'desc_callback' => '_reiscout_map_get_desc_for_individual_map_square_product',
     'sell_callback' => '_reiscout_map_sell_individual_map_square_product',
   );
 
-  $products[$atlanta_product_helper->get_product_type()] = array(
-    'commerce_product_type' => $atlanta_product_helper->get_product_type(),
+  $products[$atlanta_product_helper->getProductType()] = array(
+    'commerce_product_type' => $atlanta_product_helper->getProductType(),
     'title' => t('Buy all the map squares for Atlanta'),
     'description' => t("Gives a user an access to all route files for Atlanta"),
     'desc_callback' => '_reiscout_map_get_desc_for_atlanta_map_square_product',
@@ -69,7 +69,7 @@ function _reiscout_map_get_desc_for_atlanta_map_square_product($params) {
  * Only thing we need to do on selling it is create a commerce order that would be done by default.
  * As the callback is required and must return TRUE on success inmplement it empty.
  */
-function _reiscout_map_sell_individual_map_square_product ($params) {
+function _reiscout_map_sell_individual_map_square_product($params) {
   return TRUE;
 }
 
@@ -79,7 +79,7 @@ function _reiscout_map_sell_individual_map_square_product ($params) {
  * Only thing we need to do on selling it is create a commerce order that would be done by default.
  * As the callback is required and must return TRUE on success inmplement it empty.
  */
-function _reiscout_map_sell_atlanta_map_square_product ($params) {
+function _reiscout_map_sell_atlanta_map_square_product($params) {
   return TRUE;
 }
 
@@ -88,7 +88,7 @@ function _reiscout_map_sell_atlanta_map_square_product ($params) {
  */
 function reiscout_map_field_access($op, $field, $entity_type, $entity, $account) {
   $helper = new SellMapSquareHelper();
-  return $helper->hook_field_access($op, $field, $entity_type, $entity, $account);
+  return $helper->hookFieldAccess($op, $field, $entity_type, $entity, $account);
 }
 
 /**
@@ -96,7 +96,7 @@ function reiscout_map_field_access($op, $field, $entity_type, $entity, $account)
  */
 function reiscout_map_node_insert($node) {
   $helper = new SellMapSquareHelper();
-  $helper->on_entity_create($node);
+  $helper->onEntityCreate($node);
 }
 
 /**
@@ -106,7 +106,7 @@ function reiscout_map_node_insert($node) {
  */
 function reiscout_map_node_delete($node) {
   $helper = new SellMapSquareHelper();
-  $helper->on_entity_delete($node);
+  $helper->onEntityDelete($node);
 }
 
 /**
@@ -115,33 +115,33 @@ function reiscout_map_node_delete($node) {
 function reiscout_map_node_view($node, $view_mode, $langcode) {
   $sellMapSquareHelper = new SellMapSquareHelper();
   $sellAtlantaHelper = new SellAtlantaMapSquaresHelper();
-  if ($sellMapSquareHelper->get_entity_bundle() == $node->type && 'full' == $view_mode) {
-    if (!$sellMapSquareHelper->is_entity_purchased($node) && !$sellAtlantaHelper->is_purchased()) {
-      $form = $sellMapSquareHelper->get_product_form($node);
-      $product_type = $sellMapSquareHelper->get_product_type();
+  if ($sellMapSquareHelper->getEntityBundle() == $node->type && 'full' == $view_mode) {
+    if (!$sellMapSquareHelper->isEntityPurchased($node) && !$sellAtlantaHelper->isPurchased()) {
+      $form = $sellMapSquareHelper->getProductForm($node);
+      $product_type = $sellMapSquareHelper->getProductType();
       $node->content["reiscout-map-product-$product_type-form"] = $form;
     }
   }
 
   // Atlanta map node.
   if ($node->uuid == '630d2a9f-4a34-4c46-8159-1da9d6c7198d') {
-    if (!$sellAtlantaHelper->is_purchased()) {
-      $form = $sellAtlantaHelper->get_product_form($node);
-      $product_type = $sellAtlantaHelper->get_product_type();
+    if (!$sellAtlantaHelper->isPurchased()) {
+      $form = $sellAtlantaHelper->getProductForm($node);
+      $product_type = $sellAtlantaHelper->getProductType();
       $node->content["reiscout-map-product-$product_type-form"] = $form;
     }
   }
 }
 
 /**
- * Implement hook_file_download
+ * Implement hook_file_download.
  */
 function reiscout_map_file_download($uri) {
 
   // ToDo: implement it.
 
-  $access = true;
-  //$access = false;
+  $access = TRUE;
+  // $access = false;.
   if ($access) {
     $files = file_load_multiple(array(), array('uri' => $uri));
     $file = current($files);
