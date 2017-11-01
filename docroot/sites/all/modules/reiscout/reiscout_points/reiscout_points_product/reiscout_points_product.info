@@ -6,3 +6,4 @@ configure = admin/config/reiscout-points/products-prices
 
 files[]=SellEntityProductHelper/SellEntityProductHelperInterface.inc
 files[]=SellEntityProductHelper/SellEntityProductHelper.inc
+files[]=SellEntityProductHelper/DemoProductHelperInterface.inc

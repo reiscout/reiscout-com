@@ -130,6 +130,16 @@ function reiscout_map_node_view($node, $view_mode, $langcode) {
       $product_type = $sellAtlantaHelper->getProductType();
       $node->content["reiscout-map-product-$product_type-form"] = $form;
     }
+
+    $demo_links = $sellMapSquareHelper->getDemoSquaresLinks();
+    if ($demo_links) {
+      $node->content['reiscout-map-demo-products'] = array(
+        '#type' => 'fieldset',
+        '#title' => 'Demo Map Squares'
+      );
+      $node->content['reiscout-map-demo-products']['links'] = $demo_links;
+    }
+
   }
 }
 

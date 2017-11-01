@@ -3,7 +3,8 @@
 /**
  * @class SellMapSquareHelper.
  */
-class SellMapSquareHelper extends SellEntityProductHelper implements SellEntityProductHelperInterface {
+class SellMapSquareHelper extends SellEntityProductHelper
+  implements SellEntityProductHelperInterface, DemoProductHelperInterface {
 
   protected $productType = 'individual_map_square';
 
@@ -18,6 +19,21 @@ class SellMapSquareHelper extends SellEntityProductHelper implements SellEntityP
    */
   public function __construct() {
     parent::__construct();
+  }
+
+  /**
+   * @inheritdoc
+   */
+  public function getDemoEntitiesUUID() {
+    $uuids = array();
+
+    // A square on prod for Atlanta, the one on the 'A' of 'Atlanta' caption.
+    $uuids[] = 'd0856f1a-09e2-420a-ac04-9dfb4b3fb366';
+
+    // Test square, need to be removed.
+    $uuids[] = '1392f87e-1dcb-493b-ae75-bf212fec21f6';
+
+    return $uuids;
   }
 
   /**
@@ -77,6 +93,33 @@ class SellMapSquareHelper extends SellEntityProductHelper implements SellEntityP
       return $this->userHasAccess($entity, $account);
     }
 
+  }
+
+  /**
+   * Return a render array of links to demo squares.
+   *
+   * @return array
+   *   Render array
+   */
+  public function getDemoSquaresLinks() {
+    $demo_squares = entity_uuid_load($this->getEntityType(), $this->getDemoEntitiesUUID());
+
+    $links = array();
+    foreach ($demo_squares as $square) {
+      try {
+        /* @var EntityDrupalWrapper $wrapper  */
+        $wrapper = entity_metadata_wrapper($this->getEntityType(), $square);
+        $links[] = array(
+          '#type' => 'link',
+          '#title' => $wrapper->label(),
+          '#href' => $wrapper->url->value(),
+        );
+      } catch (Exception $e) {
+        watchdog_exception(__CLASS__, $e, 'Error on demo map squares operation.');
+      }
+    }
+
+    return $links;
   }
 
 }

@@ -143,6 +143,12 @@ abstract class SellEntityProductHelper implements SellEntityProductHelperInterfa
       $account = $GLOBALS['user'];
     }
 
+    if ($this instanceof DemoProductHelperInterface) {
+      if ($this->isDemoEntity($entity)) {
+        return TRUE;
+      }
+    }
+
     // User has bought a product.
     $product = $this->getProductByEntity($entity);
 
@@ -206,6 +212,21 @@ abstract class SellEntityProductHelper implements SellEntityProductHelperInterfa
     catch (Exception $e) {
       throw new Exception($e->getMessage());
     }
+  }
+
+  /**
+   * Default implementation for DemoProductHelperInterface::isDemoEntity
+   */
+  public function isDemoEntity($entity) {
+    if (!($this instanceof DemoProductHelperInterface)) {
+      throw new Exception('Object must implement DemoProductHelperInterface');
+    }
+
+    if (in_array($entity->uuid, $this->getDemoEntitiesUUID())) {
+      return TRUE;
+    }
+    return FALSE;
+
   }
 
 }
