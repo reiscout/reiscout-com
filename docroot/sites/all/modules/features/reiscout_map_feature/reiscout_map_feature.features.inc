@@ -12,14 +12,14 @@ function reiscout_map_feature_commerce_product_default_types() {
     'city_map_square' => array(
       'type' => 'city_map_square',
       'name' => 'City Square',
-      'description' => 'Buying this product user get an access to route data files attached for all map square nodes belongs to the city.',
+      'description' => 'Provides access to all the city\'s map routes.',
       'help' => '',
       'revision' => 1,
     ),
     'individual_map_square' => array(
       'type' => 'individual_map_square',
       'name' => 'Individual Square',
-      'description' => 'Buying this product user get and access to route data files attached Individual map square node.',
+      'description' => 'Provides access to the corresponding map route.',
       'help' => 'This product created automatically a one per square node. ',
       'revision' => 0,
     ),
