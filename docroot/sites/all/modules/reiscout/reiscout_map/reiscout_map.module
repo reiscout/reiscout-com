@@ -137,7 +137,13 @@ function reiscout_map_node_view($node, $view_mode, $langcode) {
         '#type' => 'fieldset',
         '#title' => 'Demo Map Squares'
       );
-      $node->content['reiscout-map-demo-products']['links'] = $demo_links;
+      foreach ($demo_links as $link) {
+        $items[] = l($link['#title'], $link['#href']);
+      }
+      $node->content['reiscout-map-demo-products']['links'] = array(
+        '#theme' => 'item_list',
+        '#items' => $items,
+      );
     }
 
   }
