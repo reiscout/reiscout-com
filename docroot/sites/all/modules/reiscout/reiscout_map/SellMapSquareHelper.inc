@@ -30,8 +30,11 @@ class SellMapSquareHelper extends SellEntityProductHelper
     // A square on prod for Atlanta, the one on the 'A' of 'Atlanta' caption.
     $uuids[] = 'd0856f1a-09e2-420a-ac04-9dfb4b3fb366';
 
-    // Test square, need to be removed.
-    $uuids[] = '1392f87e-1dcb-493b-ae75-bf212fec21f6';
+    // Test squares on north, east, west, south
+    $uuids[] = '65279ff1-eea5-4980-a2de-b6c8fd96185e';
+    $uuids[] = 'adefcdc9-eb7e-4552-8458-2a8505082f75';
+    $uuids[] = '80aeca37-b271-4bd9-b270-6a3fdcbc3337';
+    $uuids[] = 'e68c796e-4110-4cc9-8da9-7eec91a40cb1';
 
     return $uuids;
   }
