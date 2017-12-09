@@ -1,0 +1,5 @@
+name = Onboard Property API
+description = Provides a wrapper for the Onboard Property API.
+configure = admin/config/onboard/property-api
+core = 7.x
+files[] = onboard_property_api.class.inc

@@ -1,0 +1,113 @@
+<?php
+
+/**
+ * @file
+ * Install, update and uninstall functions for Onboard Property API module.
+ */
+
+/**
+ * Implements hook_schema().
+ */
+function onboard_property_api_schema() {
+  $schema['onboard_property_api_data'] = array(
+    'description' => 'Stores property data that were got via API requests.',
+    'fields' => array(
+      'address1' => array(
+        'type' => 'varchar',
+        'length' => 50,
+        'not null' => TRUE,
+        'description' => 'Value of the address1 filter that was used in a request.',
+      ),
+      'address2' => array(
+        'type' => 'varchar',
+        'length' => 50,
+        'not null' => TRUE,
+        'description' => 'Value of the address2 filter that was used in the request.',
+      ),
+      'data' => array(
+        'type' => 'text',
+        'size' => 'medium',
+        'not null' => TRUE,
+        'description' => 'Property data that were got from the request.',
+      ),
+      'created' => array(
+        'type' => 'int',
+        'unsigned' => TRUE,
+        'not null' => TRUE,
+        'description' => 'Timestamp for when a record was saved.',
+      ),
+    ),
+    'indexes' => array(
+      'created' => array('created'),
+    ),
+    'unique keys' => array(
+      'address' => array('address1', 'address2'),
+    ),
+  );
+
+  $schema['onboard_property_api_requests_history'] = array(
+    'description' => 'Stores history of requests that were made to the Onboard Property API.',
+    'fields' => array(
+      'hid' => array(
+        'type' => 'serial',
+        'unsigned' => TRUE,
+        'not null' => TRUE,
+        'description' => 'The primary identifier for a record.',
+      ),
+      'filters' => array(
+        'type' => 'varchar',
+        'length' => 255,
+        'not null' => TRUE,
+        'description' => 'Filters that were used in this request.',
+      ),
+      'reason' => array(
+        'type' => 'varchar',
+        'length' => 20,
+        'not null' => TRUE,
+        'description' => 'The reason of this request.',
+      ),
+      'response_source' => array(
+        'type' => 'int',
+        'size' => 'tiny',
+        'unsigned' => TRUE,
+        'not null' => TRUE,
+        'description' => 'Whether a response for this request was taken from cache: 0 = yes, 1 = no.',
+      ),
+      'uid' => array(
+        'type' => 'int',
+        'unsigned' => TRUE,
+        'not null' => TRUE,
+        'description' => 'The {users}.uid that made this request.',
+      ),
+      'timestamp' => array(
+        'type' => 'int',
+        'unsigned' => TRUE,
+        'not null' => TRUE,
+        'description' => 'Timestamp for when a request was made.',
+      ),
+    ),
+    'primary key' => array('hid'),
+    'indexes' => array(
+      'reason' => array('reason'),
+      'response_source' => array('response_source'),
+      'uid' => array('uid'),
+      'timestamp' => array('timestamp'),
+    ),
+    'foreign keys' => array(
+      'requester' => array(
+        'table' => 'users',
+        'columns' => array('uid' => 'uid'),
+      ),
+    ),
+  );
+
+  return $schema;
+}
+
+/**
+ * Implements hook_uninstall().
+ */
+function onboard_property_api_uninstall() {
+  variable_del('onboard_property_api_key');
+  variable_del('onboard_property_api_cache_lifetime');
+}

@@ -1,0 +1,77 @@
+<?php
+
+/**
+ * @file
+ * Provides a wrapper for the Onboard Property API.
+ */
+
+define('ONBOARD_PROPERTY_API_CACHE_LIFETIME', 180);
+
+/**
+ * Implements hook_permission().
+ */
+function onboard_property_api_permission() {
+  return array(
+    'administer onboard property api' => array(
+      'title' => t('Administer Onboard Property API'),
+    ),
+  );
+}
+
+/**
+ * Implements hook_menu().
+ */
+function onboard_property_api_menu() {
+  $items['admin/config/onboard'] = array(
+    'title' => 'Onboard API',
+    'position' => 'right',
+    'weight' => 0,
+    'page callback' => 'system_admin_menu_block_page',
+    'access arguments' => array('access administration pages'),
+    'file' => 'system.admin.inc',
+    'file path' => drupal_get_path('module', 'system'),
+  );
+
+  $items['admin/config/onboard/property-api'] = array(
+    'title' => 'Onboard Property API',
+    'description' => 'Configure Onboard Property API settings.',
+    'page callback' => 'drupal_get_form',
+    'page arguments' => array('onboard_property_api_admin_settings_form'),
+    'access arguments' => array('administer onboard property api'),
+    'file' => 'onboard_property_api.admin.inc',
+  );
+
+  $items['admin/config/onboard/property-api-requests-history'] = array(
+    'title' => 'History of requests',
+    'description' => 'Displays history of requests that were made to the Onboard Property API.',
+    'page callback' => 'onboard_property_api_requests_history_page',
+    'access arguments' => array('administer onboard property api'),
+    'file' => 'onboard_property_api.admin.inc',
+  );
+
+  return $items;
+}
+
+/**
+ * Returns property data using the Onboard Property API.
+ *
+ * Makes a request to the Onboard Property API and returns property data.
+ */
+function onboard_property_api_get_data($address1, $address2, $request_reason) {
+  try {
+    $api = new OnboardPropertyApi();
+    return $api->getData($address1, $address2, $request_reason);
+  }
+  catch (OnboardPropertyApiBadRequestException $e) {
+    watchdog('onboard_property_api', $e->getMessage());
+    return FALSE;
+  }
+  catch (OnboardPropertyApiJsonInvalidException $e) {
+    watchdog('onboard_property_api', $e->getMessage());
+    return FALSE;
+  }
+  catch (OnboardPropertyApiException $e) {
+    watchdog_exception('onboard_property_api', $e);
+    return FALSE;
+  }
+}
