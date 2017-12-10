@@ -21,7 +21,7 @@ function property_field_group_info() {
   $field_group->parent_name = '';
   $field_group->data = array(
     'label' => 'Last Market Sale Information',
-    'weight' => '10',
+    'weight' => '11',
     'children' => array(
       0 => 'field_mortgage_company',
       1 => 'field_last_sale_price',
@@ -80,7 +80,7 @@ function property_field_group_info() {
   $field_group->parent_name = '';
   $field_group->data = array(
     'label' => 'Other Information',
-    'weight' => '14',
+    'weight' => '15',
     'children' => array(
       0 => 'field_repairs_price',
       1 => 'field_arv',
@@ -139,7 +139,7 @@ function property_field_group_info() {
   $field_group->parent_name = '';
   $field_group->data = array(
     'label' => 'Owner Information',
-    'weight' => '11',
+    'weight' => '12',
     'children' => array(
       0 => 'field_owner_phone',
       1 => 'field_owner_postal_address',
@@ -255,7 +255,7 @@ function property_field_group_info() {
   $field_group->parent_name = '';
   $field_group->data = array(
     'label' => 'Property Characteristics',
-    'weight' => '12',
+    'weight' => '13',
     'children' => array(
       0 => 'field_bedrooms',
       1 => 'field_year_built',
@@ -409,7 +409,7 @@ function property_field_group_info() {
   $field_group->parent_name = '';
   $field_group->data = array(
     'label' => 'Site Information',
-    'weight' => '13',
+    'weight' => '14',
     'children' => array(
       0 => 'field_lot_area_acres',
       1 => 'field_zoning',
