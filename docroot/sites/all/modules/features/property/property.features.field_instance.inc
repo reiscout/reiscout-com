@@ -1007,7 +1007,7 @@ function property_field_default_field_instances() {
   $field_instances['node-property-field_last_sale_date'] = array(
     'bundle' => 'property',
     'deleted' => 0,
-    'description' => 'Date of most recent subject property sale',
+    'description' => 'The date the sale records was recorded with the local authority',
     'display' => array(
       'default' => array(
         'label' => 'above',
@@ -1085,7 +1085,7 @@ function property_field_default_field_instances() {
     'bundle' => 'property',
     'default_value' => NULL,
     'deleted' => 0,
-    'description' => 'Price of the sale as depicted on the recorded sales transaction',
+    'description' => 'The recorded amount of the sale transaction',
     'display' => array(
       'default' => array(
         'label' => 'above',
@@ -1714,7 +1714,6 @@ function property_field_default_field_instances() {
   t('Buy Address Access');
   t('Combined value of the assessed land and improvements of the subject property');
   t('Data Quality Tags');
-  t('Date of most recent subject property sale');
   t('Effective Year Built');
   t('Enter property address. It will be visible only for users bought the access to this property.');
   t('Equity Percentage Estimate');
@@ -1733,12 +1732,13 @@ function property_field_default_field_instances() {
   t('Photo');
   t('Place this lead on the marketplace');
   t('Position');
-  t('Price of the sale as depicted on the recorded sales transaction');
   t('Repairs (estimated)');
   t('The appraised total value from the local taxing authority');
+  t('The date the sale records was recorded with the local authority');
   t('The estimate of a property’s value after all repairs and upgrades are completed');
   t('The estimated total market value from the local taxing authority');
   t('The name of the lender who grants the first mortgage on a property');
+  t('The recorded amount of the sale transaction');
   t('The year that a building on the property was originally constructed');
   t('The year that a building on the property was significantly improved or remodeled');
   t('The zoning classification of the subject property');
