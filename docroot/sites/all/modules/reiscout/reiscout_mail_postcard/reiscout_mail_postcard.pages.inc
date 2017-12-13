@@ -161,10 +161,7 @@ function _reiscout_mail_postcard_send($property_nid, $template_nid) {
   }
 
   $property_owner_address = _reiscout_property_get_owner_address_by_nid($property_nid);
-  $property_owner_name = $property_owner_address->name_line->value();
-  if (_reiscout_property_is_owner_an_individual_by_nid($property_nid)) {
-    $property_owner_name = _reiscout_mail_postcard_swap_recipient_first_and_last_names($property_owner_name);
-  }
+  $property_owner_name = _reiscout_property_get_owner_name_by_nid($property_nid);;
   $user_address = _reiscout_property_get_user_address();
 
   $front = _reiscout_mail_postcard_build_front_html($property_nid, $template_nid);
@@ -359,10 +356,7 @@ function _reiscout_mail_postcard_combine_template_option($template_node, $proper
  */
 function _reiscout_mail_postcard_add_address_block($content, $property_nid) {
   $property_owner_address = _reiscout_property_get_owner_address_by_nid($property_nid);
-  $property_owner_name = $property_owner_address->name_line->value();
-  if (_reiscout_property_is_owner_an_individual_by_nid($property_nid)) {
-    $property_owner_name = _reiscout_mail_postcard_swap_recipient_first_and_last_names($property_owner_name);
-  }
+  $property_owner_name = _reiscout_property_get_owner_name_by_nid($property_nid);
   $user_address = _reiscout_property_get_user_address();
 
   $address_block_content = array(
@@ -392,12 +386,11 @@ function _reiscout_mail_postcard_add_address_block($content, $property_nid) {
 function _reiscout_mail_postcard_replace_tokens($content, $property_nid) {
   if (FALSE !== strpos($content, '{{owner_name}}')) {
     $property_owner_address = _reiscout_property_get_owner_address_by_nid($property_nid);
-    if (_reiscout_property_is_owner_an_individual_by_nid($property_nid)) {
-      $names = explode(' ', $property_owner_address->name_line->value());
-      $property_owner_name = mb_convert_case($names[1], MB_CASE_TITLE, "UTF-8");
+    if ($property_owner_address->first_name->value()) {
+      $property_owner_name = mb_convert_case($property_owner_address->first_name->value(), MB_CASE_TITLE, "UTF-8");
     }
     else {
-      $property_owner_name = $property_owner_address->name_line->value();
+      $property_owner_name = $property_owner_address->organisation_name->value();
     }
     $content = str_replace('{{owner_name}}', $property_owner_name, $content);
   }

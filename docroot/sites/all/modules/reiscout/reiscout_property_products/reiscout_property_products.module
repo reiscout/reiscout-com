@@ -157,10 +157,8 @@ function _reiscout_property_products_provide_property_lead_product($params) {
   // 2. Pull property data if the 'Full info' data quality tag
   //    is not attached to a property
   if (!_reiscout_property_is_data_quality_tag_attached($nid, 'full_info')) {
-    // Make a request to the Connect2Data API to get full info about a property
-    if ($info = _reiscout_property_get_c2d_report_by_nid($nid, 'property_data')) {
-      _reiscout_property_update_fields($nid, $info);
-    }
+    // Fill property's fields with data from Onboard Property API
+    reiscout_property_fill_with_onboard_property_data_by_nid($nid, 'property_data');
   }
 
   drupal_set_message(t('You have purchased the property lead!'));
@@ -182,10 +180,8 @@ function _reiscout_property_products_provide_property_lead_product_services($par
   // 2. Pull property data if the 'Full info' data quality tag
   //    is not attached to a property
   if (!_reiscout_property_is_data_quality_tag_attached($nid, 'full_info')) {
-    // Make a request to the Connect2Data API to get full info about a property
-    if ($info = _reiscout_property_get_c2d_report_by_nid($nid, 'property_data')) {
-      _reiscout_property_update_fields($nid, $info);
-    }
+    // Fill property's fields with data from Onboard Property API
+    reiscout_property_fill_with_onboard_property_data_by_nid($nid, 'property_data');
   }
 
   return array(
@@ -200,16 +196,15 @@ function _reiscout_property_products_provide_property_lead_product_services($par
 function _reiscout_property_products_provide_property_data_product($params) {
   $nid = $params['nid'];
 
-  // Make a request to the Connect2Data API to get full info about a property
-  if (!$info = _reiscout_property_get_c2d_report_by_nid($nid, 'property_data')) {
+  // Fill property's fields with data from Onboard Property API
+  if (reiscout_property_fill_with_onboard_property_data_by_nid($nid, 'property_data')) {
+    drupal_set_message(t('Property data have been updated.'));
+    return TRUE;
+  }
+  else {
     drupal_set_message(t('Property data cannot be updated. Please, try again later or contact technical support for assistance!'), 'error');
     return FALSE;
   }
-
-  _reiscout_property_update_fields($nid, $info);
-  drupal_set_message(t('Property data have been updated.'));
-
-  return TRUE;
 }
 
 /**
@@ -220,20 +215,19 @@ function _reiscout_property_products_provide_property_data_product($params) {
 function _reiscout_property_products_provide_property_data_product_services($params) {
   $nid = $params['nid'];
 
-  // Make a request to the Connect2Data API to get full info about a property
-  if (!$info = _reiscout_property_get_c2d_report_by_nid($nid, 'property_data')) {
+  // Fill property's fields with data from Onboard Property API
+  if (reiscout_property_fill_with_onboard_property_data_by_nid($nid, 'property_data')) {
+    return array(
+      'status' => TRUE,
+      'message' => t('Property data have been updated.'),
+    );
+  }
+  else {
     return array(
       'status' => FALSE,
       'message' => t('Property data cannot be updated. Please, try again later or contact technical support for assistance!'),
     );
   }
-
-  _reiscout_property_update_fields($nid, $info);
-
-  return array(
-    'status' => TRUE,
-    'message' => t('Property data have been updated.'),
-  );
 }
 
 /**

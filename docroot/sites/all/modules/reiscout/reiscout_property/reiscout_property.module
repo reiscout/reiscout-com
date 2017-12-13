@@ -4,7 +4,6 @@ class ReiscoutPropertyAddressIsNotSet extends Exception {}
 class ReiscoutPropertyOwnerAddressIsNotSet extends Exception {}
 class ReiscoutPropertyUserAddressIsNotSet extends Exception {}
 class ReiscoutPropertyUserPhoneNumberIsNotSet extends Exception {}
-class ReiscoutPropertyOwnerTypeIsUnknown extends Exception {}
 
 define('REISCOUT_PROPERTY_NODE_TITLE_TO_CHANGE', 'Property #');
 define('REISCOUT_PROPERTY_MESSAGE_TO_CHANGE', 'Property <em class="placeholder">Property #</em> has been created.');
@@ -379,6 +378,127 @@ function _reiscout_property_get_c2d_report_by_nid($nid, $request_reason) {
 }
 
 /**
+ * Fills property's fields with data from Onboard Property API.
+ *
+ * Makes a request to the Onboard Property API for property data
+ * and fills property's fields with the data.
+ */
+function reiscout_property_fill_with_onboard_property_data_by_nid($nid, $request_reason) {
+  try {
+    $address = _reiscout_property_get_address_by_nid($nid);
+    $address1 = $address->thoroughfare->value();
+    $address2 = $address->locality->value() . ', ' . $address->administrative_area->value() . ' ' . $address->postal_code->value();
+    if ($data = onboard_property_api_get_data($address1, $address2, $request_reason)) {
+      _reiscout_property_fill_with_onboard_property_data($nid, $data);
+      return TRUE;
+    }
+    else {
+      return FALSE;
+    }
+  }
+  catch (Exception $e) {
+    watchdog_exception('reiscout_property', $e);
+    return FALSE;
+  }
+}
+
+/**
+ * Fills property's fields with data from Onboard Property API.
+ */
+function _reiscout_property_fill_with_onboard_property_data($nid, $data) {
+  $nw = entity_metadata_wrapper('node', $nid);
+
+  if ($data->assessment->appraised->apprttlvalue) {
+    $nw->field_appraised_value = $data->assessment->appraised->apprttlvalue / 1000;
+  }
+
+  if ($data->assessment->market->mktttlvalue) {
+    $nw->field_market_value = $data->assessment->market->mktttlvalue / 1000;
+  }
+
+  if ($data->sale->amount->saleamt) {
+    $nw->field_last_sale_price = $data->sale->amount->saleamt / 1000;
+  }
+
+  if ($data->sale->amount->salerecdate) {
+    $nw->field_last_sale_date = strtotime($data->sale->amount->salerecdate);
+  }
+
+  if (isset($data->mortgage->lender->lastname)) {
+    $nw->field_mortgage_company = $data->mortgage->lender->lastname;
+  }
+
+  // If an owner is a corporation or business
+  if (isset($data->owner->corporateindicator)) {
+    $nw->field_owner_postal_address->organisation_name = $data->owner->owner1->firstnameandmi;
+  }
+  else {
+    $nw->field_owner_postal_address->first_name = $data->owner->owner1->firstnameandmi;
+    $nw->field_owner_postal_address->last_name = $data->owner->owner1->lastname;
+  }
+
+  $nw->field_owner_postal_address->country = 'US';
+
+  // If an owner mailing address and the property address are not equal
+  if (isset($data->owner->mailingaddressoneline)) {
+    if (preg_match('!(.+), (.+?) ([A-Z]{2}) (\d{5})!', $data->owner->mailingaddressoneline, $matches)) {
+      $nw->field_owner_postal_address->thoroughfare = $matches[1];
+      $nw->field_owner_postal_address->locality = $matches[2];
+      $nw->field_owner_postal_address->administrative_area = $matches[3];
+      $nw->field_owner_postal_address->postal_code = $matches[4];
+    }
+  }
+  else {
+    $nw->field_owner_postal_address->thoroughfare = $data->address->line1;
+    $nw->field_owner_postal_address->locality = $data->address->locality;
+    $nw->field_owner_postal_address->administrative_area = $data->address->countrySubd;
+    $nw->field_owner_postal_address->postal_code = $data->address->postal1;
+  }
+
+  if ($data->building->size->bldgsize) {
+    $nw->field_gross_area = $data->building->size->bldgsize;
+  }
+
+  if ($data->building->rooms->beds) {
+    $nw->field_bedrooms = $data->building->rooms->beds;
+  }
+
+  if ($data->building->rooms->bathsfull) {
+    $nw->field_full_baths = $data->building->rooms->bathsfull;
+  }
+
+  if ($data->building->rooms->bathshalf) {
+    $nw->field_half_baths = $data->building->rooms->bathshalf;
+  }
+
+  if ($data->summary->yearbuilt) {
+    $nw->field_year_built = $data->summary->yearbuilt;
+  }
+
+  if ($data->building->summary->yearbuilteffective) {
+    $nw->field_effective_year_built = $data->building->summary->yearbuilteffective;
+  }
+
+  if ($data->lot->lotsize1) {
+    $nw->field_lot_area_acres = $data->lot->lotsize1;
+  }
+
+  if ($data->area->countyuse1) {
+    $nw->field_zoning = $data->area->countyuse1;
+  }
+
+  // Add the 'Full info' tag
+  _reiscout_data_quality_tags_add($nw->field_data_quality_tags, 'full_info');
+
+  // Lock the Property node fields from editing
+  $nw->field_data_locked = TRUE;
+  $nw->save();
+
+  // Calculate the 'Equity Percentage Estimate' field
+  reiscout_equity_percentage_recalculate_in_property_by_nid($nw->nid->value());
+}
+
+/**
  * Updates Property node fields with info we received from the Connect2Data API.
  */
 function _reiscout_property_update_fields($node, $info) {
@@ -506,7 +626,11 @@ function _reiscout_property_is_owner_address_filled_by_nid($nid) {
     return FALSE;
   }
 
-  return $nw->field_owner_postal_address->name_line->value()
+  $is_name_filled = ($nw->field_owner_postal_address->first_name->value()
+    && $nw->field_owner_postal_address->last_name->value())
+    || $nw->field_owner_postal_address->organisation_name->value();
+
+  return $is_name_filled
     && $nw->field_owner_postal_address->thoroughfare->value()
     && $nw->field_owner_postal_address->locality->value()
     && $nw->field_owner_postal_address->administrative_area->value()
@@ -525,6 +649,29 @@ function _reiscout_property_get_owner_address_by_nid($nid) {
   $nw = entity_metadata_wrapper('node', $nid);
 
   return $nw->field_owner_postal_address;
+}
+
+/**
+ * Returns the name of a property's owner.
+ */
+function _reiscout_property_get_owner_name_by_nid($nid) {
+  if (!_reiscout_property_is_owner_address_filled_by_nid($nid)) {
+    $msg = t('An address of a property !nid owner is empty or incomplete.', array('!nid' => $nid));
+    throw new ReiscoutPropertyOwnerAddressIsNotSet($msg);
+  }
+
+  $nw = entity_metadata_wrapper('node', $nid);
+
+  if ($nw->field_owner_postal_address->organisation_name->value()) {
+    $owner_name = $nw->field_owner_postal_address->organisation_name->value();
+  }
+  else {
+    $owner_name = $nw->field_owner_postal_address->first_name->value()
+                . ' '
+                . $nw->field_owner_postal_address->last_name->value();
+  }
+
+  return $owner_name;
 }
 
 /**
@@ -600,17 +747,12 @@ function _reiscout_property_is_owner_an_individual_by_nid($nid) {
     return $is_owner_an_individual[$nid];
   }
 
-  // Make a request to the Connect2Data API to get full info about a property
-  if (!$info = _reiscout_property_get_c2d_report_by_nid($nid, 'is_owner_individual')) {
-    $msg = t('An error occurred while requesting an information about the property owner: !nid.', array('!nid' => $nid));
-    throw new ReiscoutPropertyOwnerTypeIsUnknown($msg);
-  }
-
-  if ('Y' == $info->_PROPERTY_HISTORY->_TRANSACTION_HISTORY->attributes()->_CorporateBuyer->__toString()) {
-    $is_owner_an_individual[$nid] = FALSE;
+  $property_owner_address = _reiscout_property_get_owner_address_by_nid($nid);
+  if ($property_owner_address->first_name->value()) {
+    $is_owner_an_individual[$nid] = TRUE;
   }
   else {
-    $is_owner_an_individual[$nid] = TRUE;
+    $is_owner_an_individual[$nid] = FALSE;
   }
 
   return $is_owner_an_individual[$nid];
