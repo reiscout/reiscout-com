@@ -433,6 +433,7 @@ function _reiscout_property_fill_with_onboard_property_data($nid, $data) {
     $nw->field_owner_postal_address->organisation_name = $data->owner->owner1->firstnameandmi;
   }
   else {
+    $nw->field_owner_postal_address->name_line = NULL;
     $nw->field_owner_postal_address->first_name = $data->owner->owner1->firstnameandmi;
     $nw->field_owner_postal_address->last_name = $data->owner->owner1->lastname;
   }
