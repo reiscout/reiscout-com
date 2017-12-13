@@ -123,6 +123,7 @@ function reiscout_equity_percentage_recalculate($nid) {
  * in a given property.
  */
 function reiscout_equity_percentage_recalculate_in_property_by_nid($nid) {
+return false;
   $node = node_load($nid);
 
   // Make a request to the Connect2Data API to get full info about property
