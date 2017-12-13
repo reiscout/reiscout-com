@@ -70,7 +70,7 @@ abstract class SellEntityProductHelper implements SellEntityProductHelperInterfa
    * @inheritdoc
    */
   public function onEntityDelete($entity) {
-    $product = $this->get_product_by_entity($entity);
+    $product = $this->getProductByEntity($entity);
     if ($product) {
       $this->disableProduct($product);
     }
