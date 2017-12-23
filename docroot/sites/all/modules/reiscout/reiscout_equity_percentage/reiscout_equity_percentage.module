@@ -6,36 +6,6 @@
  */
 
 /**
- * Implements hook_cron().
- */
-function reiscout_equity_percentage_cron() {
-  $queue = DrupalQueue::get('reiscout_equity_percentage_recalculate');
-
-  // The queue is not empty, so a recalculation process has been already running
-  if ($queue->numberOfItems()) {
-    return;
-  }
-
-  if (_reiscout_equity_percentage_values_must_be_recalculated()
-    && $nids = reiscout_property_commerce_get_purchased_nodes(REISCOUT_PROPERTY_COMMERCE_ADDRESS_ACCESS_PRODUCT_TYPE)) {
-    foreach ($nids as $nid) {
-      $queue->createItem($nid);
-    }
-  }
-}
-
-/**
- * Implements hook_cron_queue_info().
- */
-function reiscout_equity_percentage_cron_queue_info() {
-  $queues['reiscout_equity_percentage_recalculate'] = array(
-    'worker callback' => 'reiscout_equity_percentage_recalculate',
-  );
-
-  return $queues;
-}
-
-/**
  * Implements hook_menu().
  */
 function reiscout_equity_percentage_menu() {
@@ -49,27 +19,6 @@ function reiscout_equity_percentage_menu() {
   );
 
   return $items;
-}
-
-/**
- * Implements hook_commerce_checkout_complete().
- */
-function reiscout_equity_percentage_commerce_checkout_complete($order) {
-  foreach ($order->commerce_line_items[LANGUAGE_NONE] as $line_item) {
-    $line_item = commerce_line_item_load($line_item['line_item_id']);
-    $product_id = $line_item->commerce_product[LANGUAGE_NONE][0]['product_id'];
-    $product = commerce_product_load($product_id);
-
-    // If there is an 'Address Access' product in the order,
-    // we get a nid of related Property node.
-    if (REISCOUT_PROPERTY_COMMERCE_ADDRESS_ACCESS_PRODUCT_TYPE == $product->type) {
-      $nid = $product->field_property[LANGUAGE_NONE][0]['target_id'];
-      $nw = entity_metadata_wrapper('node', $nid);
-      if (!$nw->field_ep_calculated->value()) {
-        reiscout_equity_percentage_recalculate_in_property_by_nid($nid);
-      }
-    }
-  }
 }
 
 /**
@@ -97,23 +46,6 @@ function reiscout_equity_percentage_field_access($op, $field, $entity_type, $ent
       }
     }
   }
-}
-
-/*
- * Callback for hook_cron_queue_info().
- *
- * Recalculates and updates a 'Calculated Equity Percentage'
- * field in a given property.
- */
-function reiscout_equity_percentage_recalculate($nid) {
-  $queue = DrupalQueue::get('reiscout_equity_percentage_recalculate');
-
-  // If it is the last item in the queue
-  if (1 == $queue->numberOfItems()) {
-    variable_set('reiscout_equity_percentage_last_calculated', time());
-  }
-
-  reiscout_equity_percentage_recalculate_in_property_by_nid($nid);
 }
 
 /**
@@ -296,24 +228,4 @@ function _reiscout_equity_percentage_calculate_monthly_payment($amount, $term, $
   $n = $term * 12;
 
   return $monthly_rate * $amount / (1 - pow(1 + $monthly_rate, -$n));
-}
-
-/**
- * Checks if it is time to recalculate equity percentage values.
- */
-function _reiscout_equity_percentage_values_must_be_recalculated() {
-  // Equity percentage values have not yet been calculated
-  if (!$last_calculated = variable_get('reiscout_equity_percentage_last_calculated')) {
-    return TRUE;
-  }
-
-  // The timestamp of the first day of the current month
-  $ts_first_day_of_current_month = strtotime('first day of current month 00:00:00');
-
-  // Equity percentage values should be recalculated once a month
-  if ($last_calculated < $ts_first_day_of_current_month) {
-    return TRUE;
-  }
-
-  return FALSE;
 }
