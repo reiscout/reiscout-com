@@ -123,7 +123,6 @@ function reiscout_equity_percentage_recalculate($nid) {
  * in a given property.
  */
 function reiscout_equity_percentage_recalculate_in_property_by_nid($nid) {
-return false;
   $node = node_load($nid);
 
   // Make a request to the Connect2Data API to get full info about property
@@ -209,6 +208,34 @@ return false;
     $message = 'An equity percentage was calculated for property !nid: !ep.';
     watchdog('reiscout_equity_percentage', $message, array('!nid' => $nid, '!ep' => $ep), WATCHDOG_INFO);
   }
+}
+
+/**
+ * Calculates and returns an equity percentage estimate.
+ *
+ * Given the following data:
+ * - $property_value;
+ * - $mortgage_date;
+ * - $mortgage_amount;
+ * - $mortgage_term
+ *
+ * checks if the data are valid, and if yes calculates
+ * and returns an equity percentage estimate.
+ */
+function reiscout_equity_percentage_calculate($property_value, $mortgage_date, $mortgage_amount, $mortgage_term) {
+  if (!$property_value || !is_numeric($property_value)
+   || !$mortgage_date || !strtotime($mortgage_date)
+   || !$mortgage_amount || !is_numeric($mortgage_amount)
+   || !$mortgage_term || !is_numeric($mortgage_term)) {
+    return FALSE;
+  }
+
+  // Annual fixed interest rate for this mortgage
+  if (!$mortgage_rate = mortgage_rate_get($mortgage_term, $mortgage_date)) {
+    return FALSE;
+  }
+
+  return _reiscout_equity_percentage_calculate($mortgage_date, $property_value, $mortgage_amount, $mortgage_term, $mortgage_rate);
 }
 
 /**
