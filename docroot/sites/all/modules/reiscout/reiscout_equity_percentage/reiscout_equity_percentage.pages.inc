@@ -6,10 +6,10 @@
  */
 
 /**
- * Page callback: Displays a list of uncalculated purchased properties.
+ * Page callback: Displays a list of purchased properties with uncalculated EPE.
  *
  * Displays a list of properties whose 'Address Access' product was purchased,
- * but whose 'Calculated Equity Percentage' field was not yet calculated.
+ * but 'Calculated Equity Percentage' field is not filled.
  */
 function reiscout_equity_percentage_report_page() {
   $content = array();
@@ -34,10 +34,10 @@ function reiscout_equity_percentage_report_page() {
 }
 
 /**
- * Returns a list of uncalculated purchased properties.
+ * Returns a list of purchased properties with uncalculated EPE.
  *
  * Returns nodes whose 'Address Access' product was purchased,
- * but whose 'Calculated Equity Percentage' field was not yet calculated.
+ * but 'Calculated Equity Percentage' field is not filled.
  */
 function _reiscout_equity_percentage_get_uncalculated_nodes() {
   if (!$purchased_nodes_nids = reiscout_property_commerce_get_purchased_nodes(REISCOUT_PROPERTY_COMMERCE_ADDRESS_ACCESS_PRODUCT_TYPE)) {

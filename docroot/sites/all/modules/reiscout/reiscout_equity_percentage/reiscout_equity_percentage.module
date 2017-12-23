@@ -10,8 +10,8 @@
  */
 function reiscout_equity_percentage_menu() {
   $items['admin/reports/reiscout_equity_percentage'] = array(
-    'title' => 'Uncalculated purchased properties',
-    'description' => "Shows a list of properties whose 'Address Access' product was purchased, but whose 'Calculated Equity Percentage' field was not yet calculated.",
+    'title' => 'Purchased properties with uncalculated EPE',
+    'description' => "Displays a list of properties whose 'Address Access' product was purchased, but 'Calculated Equity Percentage' field is not filled.",
     'page callback' => 'drupal_get_form',
     'page arguments' => array('reiscout_equity_percentage_report_page'),
     'access arguments' => array('access site reports'),
