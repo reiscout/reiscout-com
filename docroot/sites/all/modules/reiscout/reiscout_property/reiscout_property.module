@@ -488,15 +488,23 @@ function _reiscout_property_fill_with_onboard_property_data($nid, $data) {
     $nw->field_zoning = $data->area->countyuse1;
   }
 
+  // Calculate an equity percentage estimate
+  $property_value = $data->assessment->appraised->apprttlvalue ? $data->assessment->appraised->apprttlvalue : $data->assessment->market->mktttlvalue;
+  $mortgage_date = $data->mortgage->date ? $data->mortgage->date : $data->sale->amount->salerecdate;
+  if ($epe = reiscout_equity_percentage_calculate($property_value, $mortgage_date, $data->mortgage->amount, $data->mortgage->term)) {
+    $nw->field_ep_calculated = $epe;
+  }
+  else {
+    $message = 'EPE cannot be calculated for the property !nid.';
+    watchdog('reiscout_property', $message, array('!nid' => $nid), WATCHDOG_ERROR);
+  }
+
   // Add the 'Full info' tag
   _reiscout_data_quality_tags_add($nw->field_data_quality_tags, 'full_info');
 
   // Lock the Property node fields from editing
   $nw->field_data_locked = TRUE;
   $nw->save();
-
-  // Calculate the 'Equity Percentage Estimate' field
-  reiscout_equity_percentage_recalculate_in_property_by_nid($nw->nid->value());
 }
 
 /**
