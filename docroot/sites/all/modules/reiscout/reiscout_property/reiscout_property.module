@@ -12,15 +12,6 @@ define('REISCOUT_PROPERTY_MESSAGE_TO_CHANGE', 'Property <em class="placeholder">
  * Implements hook_menu().
  */
 function reiscout_property_menu() {
-  $items['reiscout_property_get_c2d_report/%'] = array(
-    'title' => 'Connect2Data Report',
-    'description' => 'Returns a Connect2Data info for a property.',
-    'page callback' => 'reiscout_property_get_c2d_report_page',
-    'page arguments' => array(1),
-    'access arguments' => array('make request to connect2data_api'),
-    'file' => 'reiscout_property.pages.inc',
-  );
-
   $items['reiscout_property/address_locality'] = array(
     'title' => 'Autocomplete for cities that is used in address of properties',
     'page callback' => 'reiscout_property_address_locality_autocomplete',
