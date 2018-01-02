@@ -571,3 +571,7 @@ footer#colophon .col-sm-12 a:first-child{
 .reiscout-number-of-property-lead-sales {
   margin-bottom: 3px;
 }
+
+#mailchimp-signup-subscribe-page-join-our-mailing-list-page-form label {
+  width: 100px;
+}
