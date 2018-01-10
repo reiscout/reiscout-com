@@ -200,7 +200,21 @@ function reiscout_property_node_grants($account, $op) {
  */
 function reiscout_property_field_access($op, $field, $entity_type, $entity, $account) {
   if ('node' == $entity_type && !empty($entity->type) && 'property' == $entity->type) {
-    if ('edit' == $op) {
+    if ('view' == $op) {
+      if ('field_market_value' == $field['field_name']) {
+        $nw = entity_metadata_wrapper('node', $entity);
+        if ($nw->field_appraised_value->value()) {
+          return FALSE;
+        }
+      }
+      else if ('field_assessed_value' == $field['field_name']) {
+        $nw = entity_metadata_wrapper('node', $entity);
+        if ($nw->field_appraised_value->value() || $nw->field_market_value->value()) {
+          return FALSE;
+        }
+      }
+    }
+    else if ('edit' == $op) {
       // A list of a node's fields that a user is allowed to edit
       // after the node has been purchased
       $fields_to_edit_node_was_purchased = array(
