@@ -144,7 +144,7 @@ function property_strongarm() {
       'display' => array(
         'product:sku' => array(
           'drupalgap' => array(
-            'weight' => '32',
+            'weight' => '35',
             'visible' => FALSE,
           ),
           'default' => array(
@@ -152,31 +152,17 @@ function property_strongarm() {
             'visible' => FALSE,
           ),
           'full' => array(
-            'weight' => '20',
+            'weight' => '22',
             'visible' => FALSE,
           ),
         ),
         'product:title' => array(
           'drupalgap' => array(
-            'weight' => '33',
+            'weight' => '36',
             'visible' => FALSE,
           ),
           'default' => array(
             'weight' => '25',
-            'visible' => FALSE,
-          ),
-          'full' => array(
-            'weight' => '21',
-            'visible' => FALSE,
-          ),
-        ),
-        'product:status' => array(
-          'drupalgap' => array(
-            'weight' => '34',
-            'visible' => FALSE,
-          ),
-          'default' => array(
-            'weight' => '26',
             'visible' => FALSE,
           ),
           'full' => array(
@@ -184,9 +170,23 @@ function property_strongarm() {
             'visible' => FALSE,
           ),
         ),
+        'product:status' => array(
+          'drupalgap' => array(
+            'weight' => '37',
+            'visible' => FALSE,
+          ),
+          'default' => array(
+            'weight' => '26',
+            'visible' => FALSE,
+          ),
+          'full' => array(
+            'weight' => '25',
+            'visible' => FALSE,
+          ),
+        ),
         'product:commerce_price' => array(
           'drupalgap' => array(
-            'weight' => '31',
+            'weight' => '34',
             'visible' => FALSE,
           ),
           'default' => array(
@@ -194,17 +194,17 @@ function property_strongarm() {
             'visible' => TRUE,
           ),
           'full' => array(
-            'weight' => '22',
+            'weight' => '24',
             'visible' => FALSE,
           ),
         ),
         'product:field_property' => array(
           'full' => array(
-            'weight' => '18',
+            'weight' => '20',
             'visible' => FALSE,
           ),
           'drupalgap' => array(
-            'weight' => '25',
+            'weight' => '27',
             'visible' => TRUE,
           ),
           'default' => array(
@@ -218,7 +218,7 @@ function property_strongarm() {
             'visible' => TRUE,
           ),
           'drupalgap' => array(
-            'weight' => '27',
+            'weight' => '30',
             'visible' => FALSE,
           ),
           'default' => array(
@@ -232,7 +232,7 @@ function property_strongarm() {
             'visible' => TRUE,
           ),
           'drupalgap' => array(
-            'weight' => '26',
+            'weight' => '29',
             'visible' => FALSE,
           ),
           'default' => array(
@@ -246,7 +246,7 @@ function property_strongarm() {
             'visible' => TRUE,
           ),
           'drupalgap' => array(
-            'weight' => '-10',
+            'weight' => '0',
             'visible' => TRUE,
           ),
         ),
@@ -256,7 +256,7 @@ function property_strongarm() {
             'visible' => TRUE,
           ),
           'drupalgap' => array(
-            'weight' => '-1',
+            'weight' => '2',
             'visible' => TRUE,
           ),
         ),
@@ -266,7 +266,7 @@ function property_strongarm() {
             'visible' => TRUE,
           ),
           'drupalgap' => array(
-            'weight' => '-1',
+            'weight' => '1',
             'visible' => TRUE,
           ),
         ),
