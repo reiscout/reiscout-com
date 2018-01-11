@@ -1,18 +1,22 @@
 #!/usr/bin/env drush
 
+/**
+ * Updates 'Address' field to make it
+ * work via Address Autocomplete widget.
+ */
 function reiscout_update_address_field() {
-  $query = new EntityFieldQuery();
-  $query->entityCondition('entity_type', 'node')
-    ->entityCondition('bundle', 'property');
-  $result = $query->execute();
-
-  if (!isset($result['node'])) {
-    return;
+  $nids = db_query("SELECT nid
+                    FROM {node} n
+                    LEFT JOIN {field_data_field_address} fa
+                    ON n.nid = fa.entity_id
+                    WHERE type = 'property' AND field_address_data = ''
+                    LIMIT 0, 70")->fetchCol();
+  if (!$nids) {
+    exit;
   }
 
   $transaction = db_transaction();
 
-  $nids = array_keys($result['node']);
   foreach ($nids as $nid) {
     $node = node_load($nid);
 
