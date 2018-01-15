@@ -55,6 +55,23 @@ function reiscout_block_spam_mail_alter(&$message) {
     }
   }
 
+  // Do we need to block an email if it contains more than 5 external links?
+  if (variable_get('reiscout_block_spam_external_links', FALSE)) {
+    if (preg_match_all('!(http[s]?://.+?\..+)!', $message['params']['message'], $matches)) {
+      for ($i = 0, $len = sizeof($matches[1]); $i < $len; ++$i) {
+        if (strpos($matches[1][$i], 'reiscout.com')) {
+          unset($matches[1][$i]);
+        }
+      }
+
+      if (5 < count($matches[1])) {
+        _reiscout_block_spam_log($message, t('Email contains more than 5 external links'));
+        $message['send'] = FALSE;
+        return;
+      }
+    }
+  }
+
   // Do we need to block an email if it contains any of the stop words?
   if ($stop_words = trim(variable_get('reiscout_block_spam_stop_words', ''))) {
     $stop_words = explode(PHP_EOL, $stop_words);

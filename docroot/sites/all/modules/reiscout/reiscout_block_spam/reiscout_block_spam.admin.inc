@@ -24,6 +24,12 @@ function reiscout_block_spam_admin_settings_form() {
     '#default_value' => variable_get('reiscout_block_spam_cyrillic_symbols', FALSE),
   );
 
+  $form['reiscout_block_spam_external_links'] = array(
+    '#type' => 'checkbox',
+    '#title' => t('Block an email if it contains more than 5 external links'),
+    '#default_value' => variable_get('reiscout_block_spam_external_links', FALSE),
+  );
+
   $form['reiscout_block_spam_stop_words'] = array(
     '#type' => 'textarea',
     '#title' => t('Block an email if it contains any of these words'),
