@@ -10,11 +10,32 @@ define('REISCOUT_MAIL_POSTCARD_EXCEPTION_INVALID_TEMPLATE_NODE', 1);
 define('REISCOUT_MAIL_POSTCARD_EXCEPTION_TEMPLATE_FRONT_FILE_IS_NOT_READABLE', 2);
 define('REISCOUT_MAIL_POSTCARD_EXCEPTION_TEMPLATE_BACK_FILE_IS_NOT_READABLE', 3);
 define('REISCOUT_MAIL_POSTCARD_EXCEPTION_TEMPLATES_NOT_AVAILABLE', 4);
+define('REISCOUT_MAIL_POSTCARD_SEND_LIMIT_PERIOD', 14);
+
+/**
+ * Implements hook_permission().
+ */
+function reiscout_mail_postcard_permission() {
+  return array(
+    'administer reiscout mail postcard' => array(
+      'title' => t('Administer Reiscout Mail Postcard'),
+    ),
+  );
+}
 
 /**
  * Implements hook_menu().
  */
 function reiscout_mail_postcard_menu() {
+  $items['admin/config/services/reiscout-mail-postcard'] = array(
+    'title' => 'Reiscout Mail Postcard',
+    'description' => 'Configure Reiscout Mail Postcard settings.',
+    'page callback' => 'drupal_get_form',
+    'page arguments' => array('reiscout_mail_postcard_admin_settings_form'),
+    'access arguments' => array('administer reiscout mail postcard'),
+    'file' => 'reiscout_mail_postcard.admin.inc',
+  );
+
   $items['reiscout-mail-postcard/%node/send'] = array(
     'title' => 'Pick up a template',
     'description' => 'Allows to pick up a template for a postcard.',
@@ -245,6 +266,29 @@ function _reiscout_mail_postcard_is_user_can_send($node) {
 }
 
 /**
+ * Checks if the current user has already sent a postcard to an owner.
+ *
+ * Given a property's NID, checks if the current user has already sent
+ * a postcard to the property's owner withing the defined send limit period.
+ *
+ * We want to allow a user to send a postcard to the same property's owner
+ * only once per defined send limit period of time.
+ */
+function _reiscout_mail_postcard_is_user_already_sent_within_limit_period($property_nid) {
+  global $user;
+
+  $limit_period = variable_get('reiscout_mail_postcard_send_limit_period', REISCOUT_MAIL_POSTCARD_SEND_LIMIT_PERIOD);
+
+  $query = db_select('reiscout_mail_postcard_history', 'h')
+    ->fields('h', array('pnid'))
+    ->condition('uid', $user->uid)
+    ->condition('pnid', $property_nid)
+    ->condition('timestamp', time() - $limit_period * 24 * 60 * 60, '>');
+
+  return (bool) $query->execute()->rowCount();
+}
+
+/**
  * Swaps the first name and the last name in a full name string.
  *
  * Given a full name of a postcard's recipient,
@@ -285,6 +329,15 @@ function _reiscout_mail_postcard_provide_send_postcard_product_services($params)
     module_load_include('inc', 'reiscout_mail_postcard', 'reiscout_mail_postcard.pages');
 
     $property_nid = $params['nid'];
+
+    if (_reiscout_mail_postcard_is_user_already_sent_within_limit_period($property_nid)) {
+      $t_args = array(
+        '!period' => variable_get('reiscout_mail_postcard_send_limit_period', REISCOUT_MAIL_POSTCARD_SEND_LIMIT_PERIOD),
+      );
+      $result['message'] = t("You may send a postcard to the same property's owner only once per !period days!", $t_args);
+      return $result;
+    }
+
     $template_nid = _reiscout_mail_postcard_get_template_nid_by_uid($user->uid);
     $postcard = _reiscout_mail_postcard_send($property_nid, $template_nid);
     _reiscout_mail_postcard_log($property_nid, $template_nid, $postcard['id']);

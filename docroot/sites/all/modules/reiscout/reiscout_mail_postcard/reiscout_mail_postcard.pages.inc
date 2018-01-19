@@ -87,6 +87,16 @@ function reiscout_mail_postcard_send_form_submit($form, &$form_state) {
   $property_nid = intval($form_state['values']['property_nid']);
   $template_nid = intval($form_state['values']['template_nid']);
 
+  if (_reiscout_mail_postcard_is_user_already_sent_within_limit_period($property_nid)) {
+    $t_args = array(
+      '!period' => variable_get('reiscout_mail_postcard_send_limit_period', REISCOUT_MAIL_POSTCARD_SEND_LIMIT_PERIOD),
+    );
+    $message = t("You may send a postcard to the same property's owner only once per !period days!", $t_args);
+    drupal_set_message($message, 'warning');
+    $form_state['redirect'] = 'node/' . $property_nid;
+    return;
+  }
+
   // Save selected template nid as default for the current user
   $uw = entity_metadata_wrapper('user', $user);
   $uw->field_default_template_nid = $template_nid;
