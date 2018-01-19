@@ -325,11 +325,7 @@ function _reiscout_mail_postcard_provide_send_postcard_product_services($params)
  *
  * @todo: we can use a system_settings_form() to configure description.
  */
-function _reiscout_mail_postcard_get_desc_for_send_postcard_product($params = array()) {
-
-  $type = ($params['type']) ? $params['type'] : 'standard';
-  $place = ($params['place']) ? $params['place'] : 'site';
-
+function _reiscout_mail_postcard_get_desc_for_send_postcard_product($type, $place) {
   if (!in_array($type, array('standard', 'condition'))
    || !in_array($place, array('site', 'app'))) {
     return '';

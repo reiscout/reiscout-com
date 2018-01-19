@@ -250,7 +250,7 @@ function reiscout_points_product_decorate_form($form, $form_state, $product_id, 
 
   // If a user has enough amount of points to buy a product
   if ($balance >= $price) {
-    if ($description = call_user_func($product['desc_callback'], $params)) {
+    if ($description = call_user_func($product['desc_callback'], 'standard', 'site')) {
       $form['actions']['description'] = array(
         '#type' => 'item',
         '#markup' => $description,
@@ -262,12 +262,10 @@ function reiscout_points_product_decorate_form($form, $form_state, $product_id, 
     // but he has sent (he has submit) a form to buy a product.
     // We display him a message about that.
     if (!empty($form_state['input'])) {
-      $desc_callback_args = $params;
-      $desc_callback_args['type'] = 'condition';
       $message = _reiscout_points_product_build_not_enough_points_message(
         $price,
         $balance,
-        call_user_func($product['desc_callback'], $desc_callback_args)
+        call_user_func($product['desc_callback'], 'condition', 'site')
       );
       drupal_set_message($message, 'warning', FALSE);
     }
@@ -278,9 +276,7 @@ function reiscout_points_product_decorate_form($form, $form_state, $product_id, 
       '!url' => url('reiscout-points/buy/' . ($price - $balance), array('query' => array('return_to' => $_GET['q']))),
     );
 
-    $desc_callback_args = $params;
-    $desc_callback_args['type'] = 'condition';
-    $description = call_user_func($product['desc_callback'], $desc_callback_args);
+    $description = call_user_func($product['desc_callback'], 'condition', 'site');
     $form['actions']['description'] = array(
       '#type' => 'item',
       '#markup' => $description . t(' you must <a href="!url">purchase more points</a>', $t_arg),
@@ -417,7 +413,7 @@ function _reiscout_points_product_build_not_enough_points_message($price, $balan
   $msg2 = format_plural(
     $balance,
     'You have only 1 point.',
-    'You have only !balance points.',
+    $balance ? 'You have only !balance points.' : 'You have no points.',
     $t_arg
   );
 

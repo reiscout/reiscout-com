@@ -44,23 +44,35 @@ function reiscout_map_reiscout_points_product_info() {
 /**
  * Returns a description for a 'Individual Map Square' product form.
  */
-function _reiscout_map_get_desc_for_individual_map_square_product($params) {
-  if (isset($params['type']) && $params['type'] == 'condition') {
-    return t('To buy a route for this map square ');
+function _reiscout_map_get_desc_for_individual_map_square_product($type, $place) {
+  if (!in_array($type, array('standard', 'condition'))
+   || !in_array($place, array('site', 'app'))) {
+    return '';
   }
 
-  return '';
+  if ('standard' == $type) {
+    return '';
+  }
+  elseif ('condition' == $type) {
+    return t('To buy a route for this map square');
+  }
 }
 
 /**
- * Returns a description for a 'Atlanta Map Square' product form.
+ * Returns a description for 'Atlanta Map Square' product form.
  */
-function _reiscout_map_get_desc_for_atlanta_map_square_product($params) {
-  if (isset($params['type']) && $params['type'] == 'condition') {
-    return t('To buy this product ');
+function _reiscout_map_get_desc_for_atlanta_map_square_product($type, $place) {
+  if (!in_array($type, array('standard', 'condition'))
+   || !in_array($place, array('site', 'app'))) {
+    return '';
   }
 
-  return 'Buying this product you will get instant access for all routes for Atlanta';
+  if ('standard' == $type) {
+    return t('You will get instant access for all the routes for Atlanta');
+  }
+  elseif ('condition' == $type) {
+    return t('To buy this product');
+  }
 }
 
 /**

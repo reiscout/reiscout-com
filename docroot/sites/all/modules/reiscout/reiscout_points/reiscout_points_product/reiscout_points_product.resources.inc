@@ -21,7 +21,7 @@ function _reiscout_points_product_resource_sell($product_id, $params) {
     $result['message'] = _reiscout_points_product_build_not_enough_points_message(
       $price,
       $balance,
-      call_user_func($product['desc_callback'], 'condition')
+      strip_tags(call_user_func($product['desc_callback'], 'condition', 'app'))
     );
   }
   else {
