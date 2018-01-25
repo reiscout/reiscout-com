@@ -22,16 +22,17 @@
 .template .front #top {
     font-size: 14.5pt;
     font-weight: bold;
+    line-height: 23px;
 }
 
 .template .front #middle {
-    margin: 10pt 0 15pt 0;
+    margin: 10pt 0 11pt 0;
     text-align: center;
     font-weight: bold;
 }
 
 .template .front #middle .title {
-    margin-bottom: 8pt;
+    margin-bottom: 6pt;
     font-size: 18pt;
     font-style: italic;
     text-decoration: underline;
@@ -70,9 +71,16 @@
 }
 
 .template .front #phone {
-    font-size: 20pt;
+    font-size: 19pt;
     font-weight: bold;
     text-align: center;
+}
+
+.template .front #url {
+    font-size: 15pt;
+    font-weight: bold;
+    text-align: center;
+    color: #2E74B5;
 }
 
 .template .back {
