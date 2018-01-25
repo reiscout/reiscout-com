@@ -36,6 +36,7 @@ features[variable][] = menu_parent_postcard_template
 features[variable][] = node_options_postcard_template
 features[variable][] = node_preview_postcard_template
 features[variable][] = node_submitted_postcard_template
+features[variable][] = pathauto_node_postcard_template_pattern
 features_exclude[dependencies][ctools] = ctools
 features_exclude[dependencies][options] = options
 features_exclude[variable][diff_enable_revisions_page_node_postcard_template] = diff_enable_revisions_page_node_postcard_template
