@@ -412,7 +412,7 @@ function _reiscout_mail_postcard_provide_send_postcard_product_services($params)
 
     $template_nid = _reiscout_mail_postcard_get_template_nid_by_uid($user->uid);
     $postcard = _reiscout_mail_postcard_send($property_nid, $template_nid);
-    _reiscout_mail_postcard_log($property_nid, $template_nid, $postcard['id']);
+    _reiscout_mail_postcard_log($property_nid, $template_nid, $postcard['id'], $postcard['expected_delivery_date']);
 
     $t_args = array(
       '!url' => $postcard['url'],

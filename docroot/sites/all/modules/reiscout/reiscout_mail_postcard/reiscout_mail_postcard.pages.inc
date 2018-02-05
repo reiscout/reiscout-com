@@ -106,7 +106,7 @@ function reiscout_mail_postcard_send_form_submit($form, &$form_state) {
     $postcard = _reiscout_mail_postcard_send($property_nid, $template_nid);
 
     reiscout_points_product_charge('send_postcard');
-    _reiscout_mail_postcard_log($property_nid, $template_nid, $postcard['id']);
+    _reiscout_mail_postcard_log($property_nid, $template_nid, $postcard['id'], $postcard['expected_delivery_date']);
 
     $t_args = array(
       '!url' => $postcard['url'],
@@ -215,7 +215,7 @@ function _reiscout_mail_postcard_get_sent_history($header, $nid, $uid = NULL) {
 /**
  * Saves information to DB about postcard sending.
  */
-function _reiscout_mail_postcard_log($property_nid, $template_nid, $lob_api_postcard_id) {
+function _reiscout_mail_postcard_log($property_nid, $template_nid, $lob_api_postcard_id, $expected_delivery_date) {
   global $user;
 
   $record = new stdClass();
@@ -223,6 +223,7 @@ function _reiscout_mail_postcard_log($property_nid, $template_nid, $lob_api_post
   $record->pnid = $property_nid;
   $record->tnid = $template_nid;
   $record->lob_api_postcard_id = $lob_api_postcard_id;
+  $record->expected_delivery_date = strtotime($expected_delivery_date);
   $record->timestamp = time();
 
   drupal_write_record('reiscout_mail_postcard_history', $record);
