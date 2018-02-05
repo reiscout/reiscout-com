@@ -20,6 +20,9 @@ function reiscout_mail_postcard_permission() {
     'administer reiscout mail postcard' => array(
       'title' => t('Administer Reiscout Mail Postcard'),
     ),
+    'view all users postcards sent history' => array(
+      'title' => t("View all users' postcards sent history"),
+    ),
   );
 }
 
@@ -47,6 +50,16 @@ function reiscout_mail_postcard_menu() {
     'file' => 'reiscout_mail_postcard.pages.inc',
   );
 
+  $items['node/%node/postcards-sent-history'] = array(
+    'title' => 'Postcards Sent History',
+    'page callback' => 'reiscout_mail_postcard_sent_history_page',
+    'page arguments' => array(1),
+    'access callback' => '_reiscout_mail_postcard_is_user_can_see_sent_history',
+    'access arguments' => array(1),
+    'type' => MENU_LOCAL_TASK,
+    'file' => 'reiscout_mail_postcard.pages.inc',
+  );
+
   return $items;
 }
 
@@ -67,6 +80,15 @@ function reiscout_mail_postcard_field_extra_fields() {
   );
 
   return $return;
+}
+
+/**
+ * Implements hook_admin_paths().
+ */
+function reiscout_mail_postcard_admin_paths() {
+  return array(
+    'node/*/postcards-sent-history*' => TRUE,
+  );
 }
 
 /**
@@ -263,6 +285,56 @@ function _reiscout_mail_postcard_is_user_can_send($node) {
   }
 
   return TRUE;
+}
+
+/**
+ * Checks if the current user may see postcards sent history.
+ *
+ * The user may see postcards sent history if:
+ * - (he is the property's author OR he has purchased the property's lead
+ *   AND
+ * - he sent at least one postcard to the property's owner)
+ *   OR
+ * - (he has 'view all users postcards sent history' permission
+ *   AND
+ * - at least one postcard was sent to the property's owner)
+ */
+function _reiscout_mail_postcard_is_user_can_see_sent_history($node) {
+  global $user;
+
+  if (user_access('view all users postcards sent history')) {
+    if (_reiscout_mail_postcard_get_sent_cnt($node->nid)) {
+      return TRUE;
+    }
+  }
+
+  // Flag if the user has purchased the property's address
+  $user_has_purchased_lead = reiscout_property_commerce_is_node_purchased($node->nid,
+    REISCOUT_PROPERTY_COMMERCE_ADDRESS_ACCESS_PRODUCT_TYPE,
+    $user->uid);
+
+  if ($node->uid == $user->uid || $user_has_purchased_lead) {
+    if (_reiscout_mail_postcard_get_sent_cnt($node->nid, $user->uid)) {
+      return TRUE;
+    }
+  }
+
+  return FALSE;
+}
+
+/**
+ * Given Property nid, returns number of postcards sent to the property's owner.
+ */
+function _reiscout_mail_postcard_get_sent_cnt($nid, $uid = NULL) {
+  $query = db_select('reiscout_mail_postcard_history', 'h')
+    ->fields('h')
+    ->condition('pnid', $nid);
+
+  if ($uid) {
+    $query->condition('uid', $uid);
+  }
+
+  return $query->execute()->rowCount();
 }
 
 /**

@@ -137,6 +137,82 @@ function reiscout_mail_postcard_send_form_submit($form, &$form_state) {
 }
 
 /**
+ * Page callback: displays postcards sent history.
+ *
+ * Displays postcards sent history for the current Property node.
+ */
+function reiscout_mail_postcard_sent_history_page($node) {
+  global $user;
+
+  $content = array();
+
+  $header = array(
+    array('data' => t('Username'), 'field' => 'uid'),
+    array('data' => t('Created'), 'field' => 'timestamp', 'sort' => 'desc'),
+    t('Expected Delivery Date'),
+    t('Current Status'),
+    t('Current Location'),
+  );
+
+  $rows = array();
+
+  if (user_access('view all users postcards sent history')) {
+    $records = _reiscout_mail_postcard_get_sent_history($header, $node->nid);
+  }
+  else {
+    $records = _reiscout_mail_postcard_get_sent_history($header, $node->nid, $user->uid);
+  }
+
+  if ($records) {
+    foreach ($records as $record) {
+      $rows[] = array(
+        l($record->name, 'user/' . $record->uid),
+        format_date($record->timestamp) . ' (' . format_interval(time() - $record->timestamp) . ' ago)',
+        format_date($record->expected_delivery_date),
+        '',
+        '',
+      );
+    }
+  }
+
+  $content['table'] = array(
+    '#theme' => 'table',
+    '#header' => $header,
+    '#rows' => $rows,
+    '#empty' => t('There is no history to display.'),
+  );
+
+  $content['pager'] = array(
+    '#theme' => 'pager',
+  );
+
+  return $content;
+}
+
+/**
+ * Given Property nid, returns corresponding postcards sent history.
+ */
+function _reiscout_mail_postcard_get_sent_history($header, $nid, $uid = NULL) {
+  $query = db_select('reiscout_mail_postcard_history', 'h')
+    ->extend('PagerDefault')
+    ->extend('TableSort');
+  $query
+    ->leftJoin('users', 'u', 'h.uid = u.uid');
+  $query
+    ->fields('h', array('lob_api_postcard_id', 'expected_delivery_date', 'timestamp'))
+    ->fields('u', array('uid', 'name'))
+    ->condition('pnid', $nid)
+    ->orderByHeader($header)
+    ->limit(20);
+
+  if ($uid) {
+    $query->condition('u.uid', $uid);
+  }
+
+  return $query->execute()->fetchAll();
+}
+
+/**
  * Saves information to DB about postcard sending.
  */
 function _reiscout_mail_postcard_log($property_nid, $template_nid, $lob_api_postcard_id) {
