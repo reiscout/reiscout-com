@@ -10,7 +10,7 @@
  */
 function reiscout_mail_postcard_schema() {
   $schema['reiscout_mail_postcard_history'] = array(
-    'description' => "Stores information about sending a postcard to a property's owner.",
+    'description' => "Stores information about postcards sent to properties' owners.",
     'fields' => array(
       'hid' => array(
         'description' => 'The primary identifier for a record.',
@@ -40,6 +40,12 @@ function reiscout_mail_postcard_schema() {
         'description' => 'The unique postcard ID that was returned by the Lob API.',
         'type' => 'char',
         'length' => 50,
+        'not null' => TRUE,
+      ),
+      'expected_delivery_date' => array(
+        'description' => 'Timestamp for an expected delivery date.',
+        'type' => 'int',
+        'unsigned' => TRUE,
         'not null' => TRUE,
       ),
       'timestamp' => array(
