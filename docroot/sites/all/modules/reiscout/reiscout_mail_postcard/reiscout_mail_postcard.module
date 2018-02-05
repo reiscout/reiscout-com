@@ -179,52 +179,6 @@ function reiscout_mail_postcard_node_delete($node) {
 }
 
 /**
- * Implements hook_services_resources().
- */
-function reiscout_mail_postcard_services_resources() {
-  return array(
-    'reiscout_mail_postcard' => array(
-      'actions' => array(
-        'get_available_actions' => array(
-          'help' => t('Returns the list of available actions'),
-          'file' => array('type' => 'inc', 'module' => 'reiscout_mail_postcard', 'name' => 'reiscout_mail_postcard.resources'),
-          'callback' => '_reiscout_mail_postcard_resource_get_available_actions',
-          'args' => array(
-            array(
-              'name' => 'nid',
-              'type' => 'int',
-              'source' => array('data' => 'nid'),
-              'optional' => FALSE,
-              'description' => 'The nid of the property node',
-            ),
-          ),
-          'access callback' => '_reiscout_mail_postcard_resource_access',
-          'access arguments' => array('get_available_actions'),
-          'access arguments append' => TRUE,
-        ),
-        'send' => array(
-          'help' => t('Sends a postcard to an owner of a property'),
-          'file' => array('type' => 'inc', 'module' => 'reiscout_mail_postcard', 'name' => 'reiscout_mail_postcard.resources'),
-          'callback' => '_reiscout_mail_postcard_resource_send',
-          'args' => array(
-            array(
-              'name' => 'nid',
-              'type' => 'int',
-              'source' => array('data' => 'nid'),
-              'optional' => FALSE,
-              'description' => 'The nid of the property node',
-            ),
-          ),
-          'access callback' => '_reiscout_mail_postcard_resource_access',
-          'access arguments' => array('send'),
-          'access arguments append' => TRUE,
-        ),
-      ),
-    ),
-  );
-}
-
-/**
  * Implements hook_theme().
  */
 function reiscout_mail_postcard_theme($existing, $type, $theme, $path) {
