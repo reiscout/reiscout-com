@@ -3,6 +3,8 @@ description = Allows to send a postcard to an owner of a property.
 package = Reiscout
 core = 7.x
 
+files[] = classes/events.inc
+
 dependencies[] = clone
 dependencies[] = services
 
