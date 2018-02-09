@@ -164,13 +164,14 @@ function reiscout_mail_postcard_sent_history_page($node) {
   }
 
   if ($records) {
+    $events = new Events();
     foreach ($records as $record) {
       $rows[] = array(
         l($record->name, 'user/' . $record->uid),
         format_date($record->timestamp) . ' (' . format_interval(time() - $record->timestamp) . ' ago)',
-        format_date($record->expected_delivery_date),
-        '',
-        '',
+        date('D, m/d/Y', $record->expected_delivery_date),
+        array('data' => $events->getNameByType($record->type), 'title' => $events->getDescByType($record->type)),
+        $record->location,
       );
     }
   }
@@ -191,25 +192,40 @@ function reiscout_mail_postcard_sent_history_page($node) {
 
 /**
  * Given Property nid, returns corresponding postcards sent history.
+ *
+ * Returns a list of postcards sent history records with info about
+ * the most recent tracking event for each of these postcards.
  */
 function _reiscout_mail_postcard_get_sent_history($header, $nid, $uid = NULL) {
-  $query = db_select('reiscout_mail_postcard_history', 'h')
-    ->extend('PagerDefault')
-    ->extend('TableSort');
-  $query
-    ->leftJoin('users', 'u', 'h.uid = u.uid');
-  $query
-    ->fields('h', array('lob_api_postcard_id', 'expected_delivery_date', 'timestamp'))
-    ->fields('u', array('uid', 'name'))
-    ->condition('pnid', $nid)
-    ->orderByHeader($header)
-    ->limit(20);
+  $order = tablesort_get_order($header);
+  $sort = tablesort_get_sort($header);
+  $per_page = 20;
 
+  $query = 'SELECT u.uid, u.name, h.expected_delivery_date, h.timestamp, e.type, e.location, e.time
+            FROM {reiscout_mail_postcard_history} h
+            LEFT JOIN {users} u ON h.uid = u.uid
+            LEFT JOIN {reiscout_mail_postcard_tracking_events} e ON e.pid = h.lob_api_postcard_id
+            WHERE pnid = :pnid' . ($uid ? ' AND u.uid = :uid ' : '') . '
+            AND (e.eid IN (
+              SELECT e1.eid
+              FROM {reiscout_mail_postcard_tracking_events} e1
+              WHERE e1.time = (
+                SELECT MAX(time)
+                FROM {reiscout_mail_postcard_tracking_events} e2
+                WHERE e2.pid = e1.pid
+              )
+            )
+            OR e.eid IS NULL)
+            ORDER BY ' . $order['sql'] . ' ' . $sort;
+
+  $args = array(':pnid' => $nid);
   if ($uid) {
-    $query->condition('u.uid', $uid);
+    $args[':uid'] = $uid;
   }
 
-  return $query->execute()->fetchAll();
+  pager_default_initialize(db_query($query, $args)->rowCount(), $per_page);
+
+  return db_query_range($query, pager_find_page() * $per_page, $per_page, $args)->fetchAll();
 }
 
 /**
