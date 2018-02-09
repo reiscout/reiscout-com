@@ -79,5 +79,53 @@ function reiscout_mail_postcard_schema() {
     ),
   );
 
+  $schema['reiscout_mail_postcard_tracking_events'] = array(
+    'description' => 'Stores information about tracking events for postcards.',
+    'fields' => array(
+      'eid' => array(
+        'description' => 'The unique ID of an event.',
+        'type' => 'varchar',
+        'length' => 30,
+        'not null' => TRUE,
+      ),
+      'pid' => array(
+        'description' => 'The ID of a postcard an event associated with.',
+        'type' => 'varchar',
+        'length' => 30,
+        'not null' => TRUE,
+      ),
+      'type' => array(
+        'description' => 'The type of an event.',
+        'type' => 'int',
+        'size' => 'tiny',
+        'unsigned' => TRUE,
+        'not null' => TRUE,
+      ),
+      'location' => array(
+        'description' => 'The zip code in which an event occurred.',
+        'type' => 'char',
+        'length' => 5,
+        'not null' => TRUE,
+      ),
+      'time' => array(
+        'description' => 'A timestamp of the date USPS registered an event.',
+        'type' => 'int',
+        'unsigned' => TRUE,
+        'not null' => TRUE,
+      ),
+    ),
+    'primary key' => array('eid'),
+    'indexes' => array(
+      'postcard_id' => array('pid'),
+      'type' => array('type'),
+    ),
+    'foreign keys' => array(
+      'postcard_id' => array(
+        'table' => 'reiscout_mail_postcard_history',
+        'columns' => array('pid' => 'lob_api_postcard_id'),
+      ),
+    ),
+  );
+
   return $schema;
 }
