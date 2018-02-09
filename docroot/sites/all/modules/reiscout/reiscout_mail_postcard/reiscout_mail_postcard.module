@@ -60,6 +60,15 @@ function reiscout_mail_postcard_menu() {
     'file' => 'reiscout_mail_postcard.pages.inc',
   );
 
+  $items['reiscout-mail-postcard/wh'] = array(
+    'title' => 'Lob Webhook',
+    'description' => 'Webhook to get notifications from Lob on tracking events for postcards.',
+    'page callback' => 'reiscout_mail_postcard_wh_page',
+    'access callback' => TRUE,
+    'type' => MENU_CALLBACK,
+    'file' => 'reiscout_mail_postcard.pages.inc',
+  );
+
   return $items;
 }
 

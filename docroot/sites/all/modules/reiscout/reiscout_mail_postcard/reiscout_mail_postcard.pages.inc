@@ -191,6 +191,31 @@ function reiscout_mail_postcard_sent_history_page($node) {
 }
 
 /**
+ * Page callback: webhook for Lob API.
+ *
+ * Processes notifications from Lob on tracking events for postcards.
+ */
+function reiscout_mail_postcard_wh_page() {
+  if (!$request = file_get_contents('php://input')) {
+    return;
+  }
+
+  if (!$data = json_decode($request)) {
+    watchdog('reiscout_mail_postcard', 'Request cannot be decoded from JSON. Request: <pre>!request</pre>.', array('!request' => var_export($request, TRUE)));
+    return;
+  }
+
+  $filename = 'log.txt';
+  $content = array();
+  if (is_readable($filename)) {
+    $content = unserialize(file_get_contents($filename));
+  }
+
+  $content[] = $data;
+  file_put_contents($filename, serialize($content));
+}
+
+/**
  * Given Property nid, returns corresponding postcards sent history.
  *
  * Returns a list of postcards sent history records with info about
