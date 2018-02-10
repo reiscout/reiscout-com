@@ -213,6 +213,13 @@ function reiscout_mail_postcard_wh_page() {
 
   $content[] = $data;
   file_put_contents($filename, serialize($content));
+
+  if ('postcards' == $data->event_type->resource) {
+    $events = new Events();
+    foreach ($data->body->tracking_events as $event) {
+      $events->log($data->reference_id, (array) $event);
+    }
+  }
 }
 
 /**
