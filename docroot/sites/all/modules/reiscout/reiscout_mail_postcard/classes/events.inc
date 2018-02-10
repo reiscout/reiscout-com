@@ -31,7 +31,7 @@ class Events {
       case 'Processed for Delivery':
         $type = self::TYPE_PROCESSED_FOR_DELIVERY;
         break;
-      case 'Re-routed':
+      case 'Re-Routed':
         $type = self::TYPE_RE_ROUTED;
         break;
       case 'Returned to Sender':
