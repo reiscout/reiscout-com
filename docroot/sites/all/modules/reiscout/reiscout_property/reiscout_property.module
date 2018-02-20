@@ -752,6 +752,34 @@ function _reiscout_property_get_user_phone($uid = NULL) {
 }
 
 /**
+ * Returns an email of a user.
+ */
+function _reiscout_property_get_user_email($uid = NULL) {
+  global $user;
+
+  if (!isset($uid)) {
+    $uid = $user->uid;
+  }
+
+  $uw = entity_metadata_wrapper('user', $uid);
+  return $uw->mail->value();
+}
+
+/**
+ * Returns a website of a user.
+ */
+function _reiscout_property_get_user_website($uid = NULL) {
+  global $user;
+
+  if (!isset($uid)) {
+    $uid = $user->uid;
+  }
+
+  $uw = entity_metadata_wrapper('user', $uid);
+  return $uw->field_user_website->value();
+}
+
+/**
  * Checks if the property owner is an individual.
  */
 function _reiscout_property_is_owner_an_individual_by_nid($nid) {

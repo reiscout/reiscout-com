@@ -545,6 +545,16 @@ function _reiscout_mail_postcard_replace_tokens($content, $property_nid) {
     $content = str_replace('{{my_phone}}', $user_phone_number, $content);
   }
 
+  if (FALSE !== strpos($content, '{{my_website}}')) {
+    $website = _reiscout_property_get_user_website();
+    $content = str_replace('{{my_website}}', $website, $content);
+  }
+
+  if (FALSE !== strpos($content, '{{my_email}}')) {
+    $email = _reiscout_property_get_user_email();
+    $content = str_replace('{{my_email}}', $email, $content);
+  }
+
   return $content;
 }
 
