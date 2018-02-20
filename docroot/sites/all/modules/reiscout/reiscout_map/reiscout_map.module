@@ -108,7 +108,9 @@ function reiscout_map_field_access($op, $field, $entity_type, $entity, $account)
  */
 function reiscout_map_node_insert($node) {
   $helper = new SellMapSquareHelper();
-  $helper->onEntityCreate($node);
+  if ($node->type == $helper->getEntityBundle()) {
+    $helper->onEntityCreate($node);
+  }
 }
 
 /**
@@ -118,7 +120,9 @@ function reiscout_map_node_insert($node) {
  */
 function reiscout_map_node_delete($node) {
   $helper = new SellMapSquareHelper();
-  $helper->onEntityDelete($node);
+  if ($node->type == $helper->getEntityBundle()) {
+    $helper->onEntityDelete($node);
+  }
 }
 
 /**
