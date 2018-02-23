@@ -575,3 +575,9 @@ footer#colophon .col-sm-12 a:first-child{
 #mailchimp-signup-subscribe-page-join-our-mailing-list-page-form label {
   width: 100px;
 }
+
+@media screen and (min-width: 1200px) {
+  .page-reiscout-mail-postcard-send .container {
+    max-width: 1205px;
+  }
+}
