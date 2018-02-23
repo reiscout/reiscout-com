@@ -1,0 +1,104 @@
+<html>
+<head>
+  <meta charset="UTF-8">
+  <title>Roofing 4x6 Postcard Back</title>
+  <link href="https://use.fontawesome.com/releases/v5.0.6/css/solid.css" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css?family=Open+Sans:600,700" rel="stylesheet">
+  <style>
+    *, *:before, *:after {
+      -webkit-box-sizing: border-box;
+      -moz-box-sizing: border-box;
+      box-sizing: border-box;
+    }
+
+    body {
+      width: 6.25in;
+      height: 4.25in;
+      margin: 0;
+      padding: 0;
+      /* Background image should have dimensions of 1875x1275 pixels. */
+      background-image: url('https://s3.amazonaws.com/reiscout/postcard_bg_images/roofing_back.jpg');
+      background-size: 6.25in 4.25in;
+      background-repeat: no-repeat;
+      line-height: normal;
+    }
+
+    #safe-area {
+      position: absolute;
+      width: 5.875in;
+      height: 3.875in;
+      left: 0.1875in;
+      top: 0.1875in;
+/*
+      background-color: rgba(255, 255, 255, 0.5);
+*/
+    }
+
+    #ink-free {
+      position: absolute;
+      width: 3.2835in;
+      height: 2.375in;
+      right: 0.275in;
+      bottom: 0.25in;
+      background-color: white;
+    }
+
+    .psc_text {
+      padding: 45px 0;
+      font-family: Helvetica, Arial, sans-serif;
+      color: #FFF;
+    }
+
+    #psc_title {
+      max-width: 245px;
+      font-family: 'Open Sans', sans-serif;
+      font-size: 18pt;
+      font-weight: 700;
+      text-transform: uppercase;
+      line-height: 21pt;
+    }
+
+    #psc_line {
+      margin-left: 1pt;
+      width: 42px;
+      height: 8px;
+      border-bottom: 2pt solid #FFF;
+    }
+
+    .psc_section_title {
+      max-width: 210px;
+      margin-top: 5px;
+      font-family: 'Open Sans', sans-serif;
+      font-size: 12pt;
+      font-weight: 600;
+      line-height: 14pt;
+      text-transform: uppercase;
+      color: #EF3734;
+    }
+
+    .psc_description {
+      max-width: 190px;
+      margin-top: 3px;
+      margin-bottom: 3px;
+      font-size: 10pt;
+      line-height: 10pt;
+    }
+  </style>
+</head>
+<body>
+  <div id="safe-area">
+    <!-- All text should appear within the safe area. -->
+    <div class="psc_text">
+      <div id="psc_title">Protect Your Largest Investment!</div>
+      <div id="psc_line"></div>
+      <div class="psc_section_title">Our Assessment can save thousands of $</div>
+      <div class="psc_description">Size, or condition do not matter.</div>
+      <div class="psc_description">There are no fees involved and we will provide a comprehensive report when we are done.</div>
+      <div class="psc_description">Give us a call now!</div>
+    </div>
+    <div id="ink-free">
+      <!-- Do not place any artwork or text in the ink free area. Address and postage will be automatically printed here. Delete this div before submitting your postcard! -->
+    </div>
+  </div>
+</body>
+</html>

@@ -1,0 +1,126 @@
+<html>
+<head>
+  <meta charset="UTF-8">
+  <title>Roofing 4x6 Postcard Front</title>
+  <link href="https://use.fontawesome.com/releases/v5.0.6/css/solid.css" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css?family=Open+Sans:600,700" rel="stylesheet">
+  <style>
+    *, *:before, *:after {
+      -webkit-box-sizing: border-box;
+      -moz-box-sizing: border-box;
+      box-sizing: border-box;
+    }
+
+    body {
+      width: 6.25in;
+      height: 4.25in;
+      margin: 0;
+      padding: 0;
+      /* Background image should have dimensions of 1875x1275 pixels. */
+      background-image: url('https://s3.amazonaws.com/reiscout/postcard_bg_images/roofing_front.jpg');
+      background-size: 6.25in 4.25in;
+      background-repeat: no-repeat;
+      line-height: normal;
+    }
+
+    #safe-area {
+      position: absolute;
+      width: 5.875in;
+      height: 3.875in;
+      left: 0.1875in;
+      top: 0.1875in;
+/*
+      background-color: rgba(255, 255, 255, 0.5);
+*/
+    }
+
+    .psc_text {
+      padding: 5px 5px;
+      font-family: Helvetica, Arial, sans-serif;
+      color: #FFF;
+    }
+
+    #psc_title {
+      max-width: 200px;
+      font-family: 'Open Sans', sans-serif;
+      font-size: 18pt;
+      font-weight: 700;
+      text-transform: uppercase;
+      line-height: 21pt;
+    }
+
+    #psc_line {
+      margin-left: 1pt;
+      width: 42px;
+      height: 8px;
+      border-bottom: 2pt solid #FFF;
+    }
+
+    .psc_section_title {
+      max-width: 244px;
+      margin-top: 5px;
+      font-family: 'Open Sans', sans-serif;
+      font-size: 12pt;
+      font-weight: 600;
+      line-height: 14pt;
+      text-transform: uppercase;
+      color: #EF3734;
+    }
+
+    .psc_description {
+      max-width: 236px;
+      margin-top: 3px;
+      margin-bottom: 3px;
+      font-size: 10pt;
+      line-height: 10pt;
+    }
+
+    #psc_phone {
+      margin-top: 5px;
+      margin-bottom: 5px;
+      font-size: 17pt;
+    }
+
+    #psc_phone::before {
+      display: inline-block;
+      width: 27px;
+      height: 30px;
+      margin-left: 1px;
+      margin-right: 7px;
+      padding-top: 2px;
+      padding-right: 1px;
+      background: #EF3734;
+      content: '\f3cd';
+      font-family: 'Font Awesome 5 Free';
+      font-size: 17pt;
+      font-weight: 900;
+      text-align: center;
+    }
+
+    #psc_url {
+      font-size: 11pt;
+    }
+
+    #psc_url::before {
+      display: inline-block;
+      width: 27px;
+      height: 29px;
+      margin-left: 1px;
+      margin-right: 7px;
+      padding-top: 5px;
+      background: #EF3734;
+      content: '\f0c1';
+      font-family: 'Font Awesome 5 Free';
+      font-size: 13pt;
+      font-weight: 900;
+      text-align: center;
+    }
+  </style>
+</head>
+<body>
+  <div id="safe-area">
+    <!-- All text should appear within the safe area. -->
+    <div class="psc_text">{{content}}</div>
+  </div>
+</body>
+</html>
