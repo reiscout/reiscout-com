@@ -369,9 +369,13 @@ function _reiscout_mail_postcard_build_back_content($property_nid, $template_nid
 function _reiscout_mail_postcard_build_front_html($property_nid, $template_nid) {
   $content = _reiscout_mail_postcard_build_front_content($property_nid, $template_nid);
 
-  $template_file_path = drupal_get_path('module', 'reiscout_mail_postcard') . '/html/front.html';
+  $tnw = entity_metadata_wrapper('node', $template_nid);
+  $design_type = $tnw->field_postcard_design_template->machine_name->value();
+  $template_file_name = $design_type . '_front.html';
+  $template_file_path = drupal_get_path('module', 'reiscout_mail_postcard') . '/html_templates/' . $template_file_name;
+
   if (!$template_file_content = @file_get_contents($template_file_path)) {
-    $msg = t('front.html file, that is used as a template for front of a postcard, cannot be read.');
+    $msg = t('!file_name file, that is used as a template for front of a postcard, cannot be read.', array('!file_name' => $template_file_name));
     throw new Exception($msg, REISCOUT_MAIL_POSTCARD_EXCEPTION_TEMPLATE_FRONT_FILE_IS_NOT_READABLE);
   }
 
@@ -387,9 +391,13 @@ function _reiscout_mail_postcard_build_front_html($property_nid, $template_nid) 
 function _reiscout_mail_postcard_build_back_html($property_nid, $template_nid) {
   $content = _reiscout_mail_postcard_build_back_content($property_nid, $template_nid);
 
-  $template_file_path = drupal_get_path('module', 'reiscout_mail_postcard') . '/html/back.html';
+  $tnw = entity_metadata_wrapper('node', $template_nid);
+  $design_type = $tnw->field_postcard_design_template->machine_name->value();
+  $template_file_name = $design_type . '_back.html';
+  $template_file_path = drupal_get_path('module', 'reiscout_mail_postcard') . '/html_templates/' . $template_file_name;
+
   if (!$template_file_content = @file_get_contents($template_file_path)) {
-    $msg = t('back.html file, that is used as a template for back of a postcard, cannot be read.');
+    $msg = t('!file_name file, that is used as a template for back of a postcard, cannot be read.', array('!file_name' => $template_file_name));
     throw new Exception($msg, REISCOUT_MAIL_POSTCARD_EXCEPTION_TEMPLATE_BACK_FILE_IS_NOT_READABLE);
   }
 
@@ -422,6 +430,7 @@ function _reiscout_mail_postcard_combine_template_option($template_node, $proper
   $option = array();
 
   $tnw = entity_metadata_wrapper('node', $template_node);
+  $design_type = $tnw->field_postcard_design_template->machine_name->value();
 
   $front = _reiscout_mail_postcard_build_front_content($property_node->nid, $template_node->nid);
   $back = _reiscout_mail_postcard_build_back_content($property_node->nid, $template_node->nid);
@@ -464,7 +473,7 @@ function _reiscout_mail_postcard_combine_template_option($template_node, $proper
   );
 
   $option['front'] = array(
-    '#prefix' => '<div class="template ' . $type . '"><div class="front">',
+    '#prefix' => '<div class="template ' . $type . ' ' . $design_type . '"><div class="front">',
     '#markup' => $front,
     '#suffix' => '</div>',
   );
