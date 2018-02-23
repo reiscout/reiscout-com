@@ -1,119 +1,43 @@
+@import url('https://use.fontawesome.com/releases/v5.0.6/css/solid.css');
+@import url('https://fonts.googleapis.com/css?family=Open+Sans:600,700');
+@import url('https://fonts.googleapis.com/css?family=Source+Sans+Pro:400,600,700');
+
 .template {
     margin-top: 10px;
+    margin-bottom: 5px;
+    font-weight: normal;
+    line-height: normal;
+}
+
+.template *, .template *::before {
+    -webkit-box-sizing: border-box;
+    -moz-box-sizing: border-box;
+    box-sizing: border-box;
 }
 
 .template .front, .template .back {
     float: left;
-    position: relative;
+    position: relative; /* This line is here, because #ink-free is positioned absolutely */
+    padding: 0;
+    width: 6.25in;
+    height: 4.25in;
     border: 1px solid #ccc;
     border-radius: 5px;
-    font: normal 11pt Helvetica, Arial, sans-serif;
-    background: #fff110;
-    color: #000;
 }
 
 .template .front {
-    width: 6in;
-    height: 4.25in;
-    margin: 0 5px 5px 0;
-    padding: 25px;
-}
-
-.template .front #top {
-    font-size: 14.5pt;
-    font-weight: bold;
-    line-height: 23px;
-}
-
-.template .front #middle {
-    margin: 10pt 0 11pt 0;
-    text-align: center;
-    font-weight: bold;
-}
-
-.template .front #middle .title {
-    margin-bottom: 6pt;
-    font-size: 18pt;
-    font-style: italic;
-    text-decoration: underline;
-    color: #2E74B5;
-}
-
-.template .front #middle .body {
-    line-height: 13pt;
-}
-
-.template .front #columns {
-    margin-bottom: 10pt;
-}
-.template .front #columns::after {
-    content: "";
-    clear: both;
-    display: table;
-}
-
-.template .front #columns .left {
-    float: left;
-    margin-left: 25pt;
-}
-
-.template .front #columns .right {
-    float: right;
-    margin-right: 25pt;
-}
-
-.template .front #bottom {
-    padding: 0;
-    background: none;
-    border: none;
-    font-size: 14pt;
-    text-align: center;
-}
-
-.template .front #phone {
-    font-size: 19pt;
-    font-weight: bold;
-    text-align: center;
-}
-
-.template .front #url {
-    font-size: 15pt;
-    font-weight: bold;
-    text-align: center;
-    color: #2E74B5;
-}
-
-.template .back {
-    width: 6in;
-    height: 4.25in;
-    padding: 85px 0 0 25px;
-}
-
-.template .back #title,
-.template .back #subtitle,
-.template .back #text {
-    width: 180px;
-}
-
-.template .back #title {
-    font-size: 14.5pt;
-    font-weight: bold;
-    text-align: center;
-}
-
-.template .back #subtitle {
-    margin: 10pt 0 15pt 0;
-    text-align: center;
-    font-weight: bold;
+    margin: 0 5px 0 0;
 }
 
 .template .back #ink-free {
     position: absolute;
-    width: 3.5in;
-    height: 2.6in;
-    top: 1.65in;
-    left: 2.5in;
+    width: 3.2835in;
+    height: 2.375in;
+    right: 0.275in;
+    bottom: 0.25in;
+    border: solid 1px #DDD;
     background-color: white;
+    color: #000;
 }
 
 .template .back #ink-free #postage-indicia {
@@ -141,6 +65,217 @@
     font-size: 13px;
     line-height: 18px;
 }
+
+/*- Real Estate (text) */
+.real_estate_text .front,
+.real_estate_text .back {
+    font: normal 11pt Helvetica, Arial, sans-serif;
+    background-color: #FFF110;
+    color: #000;
+}
+
+.real_estate_text .front {
+    padding: 28px 38px 0px 38px; /* Take into account the left (0.1875in) and the top (0.1875in) paddings of the safe-area */
+}
+
+.real_estate_text .back {
+    padding: 88px 43px 0px 43px; /* Take into account the left (0.1875in) and the top (0.1875in) paddings of the safe-area */
+}
+
+.real_estate_text #top {
+    font-size: 14.5pt;
+    font-weight: bold;
+    line-height: 22px;
+}
+
+.real_estate_text #middle {
+    margin: 10pt 0 11pt 0;
+    text-align: center;
+    font-weight: bold;
+}
+
+.real_estate_text #middle .title {
+    margin-bottom: 6pt;
+    font-size: 18pt;
+    font-style: italic;
+    text-decoration: underline;
+    color: #2E74B5;
+}
+
+.real_estate_text #middle .body {
+    line-height: 13pt;
+}
+
+.real_estate_text #columns {
+    margin-bottom: 10pt;
+}
+.real_estate_text #columns::after {
+    content: "";
+    clear: both;
+    display: table;
+}
+
+.real_estate_text #columns .left {
+    float: left;
+    margin-left: 25pt;
+}
+
+.real_estate_text #columns .right {
+    float: right;
+    margin-right: 25pt;
+}
+
+.real_estate_text #bottom {
+    font-size: 14pt;
+    text-align: center;
+    /* These lines overrides inherit properties */
+    padding: 0;
+    background: none;
+    border: none;
+}
+
+.real_estate_text #phone {
+    font-size: 19pt;
+    font-weight: bold;
+    text-align: center;
+}
+
+.real_estate_text #url {
+    font-size: 15pt;
+    font-weight: bold;
+    text-align: center;
+    color: #2E74B5;
+}
+
+.real_estate_text #title,
+.real_estate_text #subtitle,
+.real_estate_text #text {
+    width: 200px;
+}
+
+.real_estate_text #title {
+    font-size: 14.5pt;
+    font-weight: bold;
+    text-align: center;
+}
+
+.real_estate_text #subtitle {
+    margin: 10pt 0 15pt 0;
+    text-align: center;
+    font-weight: bold;
+}
+
+/* Real Estate (text) -*/
+
+/*- Roofing */
+.roofing .front,
+.roofing .back {
+    font-family: 'Source Sans Pro', sans-serif;
+    color: #FFF;
+}
+
+.roofing .front {
+    padding: 23px 5px 5px 23px; /* Take into account the left (0.1875in) and the top (0.1875in) paddings of the safe-area */
+    background-image: url('html_templates/images/roofing_front.jpg');
+    background-size: 6.25in 4.25in;
+    background-repeat: no-repeat;
+}
+
+.roofing .back {
+    padding: 63px 0 45px 18px;
+    background-image: url('html_templates/images/roofing_back.jpg');
+    background-size: 6.25in 4.25in;
+    background-repeat: no-repeat;
+}
+
+.roofing #psc_title {
+    max-width: 200px;
+    font-family: 'Open Sans', sans-serif;
+    font-size: 18pt;
+    font-weight: 700;
+    text-transform: uppercase;
+    line-height: 21pt;
+}
+
+.roofing .back #psc_title {
+    max-width: 245px;
+}
+
+.roofing #psc_line {
+    margin-left: 1pt;
+    width: 42px;
+    height: 8px;
+    border-bottom: 2pt solid #FFF;
+}
+
+.roofing .psc_section_title {
+    max-width: 244px;
+    margin-top: 5px;
+    font-family: 'Open Sans', sans-serif;
+    font-size: 12pt;
+    font-weight: 600;
+    line-height: 14pt;
+    text-transform: uppercase;
+    color: #EF3734;
+}
+
+.roofing .back .psc_section_title {
+    max-width: 210px;
+}
+
+.roofing .psc_description {
+    max-width: 236px;
+    margin-top: 3px;
+    margin-bottom: 3px;
+    font-size: 10.5pt;
+    line-height: 10pt;
+}
+
+.roofing .back .psc_description {
+    max-width: 188px;
+}
+
+.roofing #psc_phone {
+    margin-top: 5px;
+    margin-bottom: 5px;
+    font-size: 17pt;
+}
+
+.roofing #psc_phone::before {
+    display: inline-block;
+    width: 27px;
+    height: 30px;
+    margin-left: 1px;
+    margin-right: 7px;
+    padding-top: 2px;
+    padding-right: 1px;
+    background: #EF3734;
+    content: '\f3cd';
+    font-family: 'Font Awesome 5 Free';
+    font-size: 17pt;
+    font-weight: 900;
+    text-align: center;
+}
+
+.roofing #psc_url {
+    font-size: 11pt;
+}
+
+.roofing #psc_url::before {
+    display: inline-block;
+    width: 27px;
+    height: 29px;
+    margin-left: 1px;
+    margin-right: 7px;
+    padding-top: 5px;
+    background: #EF3734;
+    content: '\f0c1';
+    font-family: 'Font Awesome 5 Free';
+    font-size: 13pt;
+    font-weight: 900;
+    text-align: center;
+}
+/* Roofing -*/
 
 .form-item-template-nid:after {
     display: table;
