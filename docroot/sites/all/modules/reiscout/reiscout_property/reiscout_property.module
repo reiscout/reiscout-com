@@ -780,6 +780,20 @@ function _reiscout_property_get_user_website($uid = NULL) {
 }
 
 /**
+ * Returns a company name of a user.
+ */
+function _reiscout_property_get_user_company_name($uid = NULL) {
+  global $user;
+
+  if (!isset($uid)) {
+    $uid = $user->uid;
+  }
+
+  $uw = entity_metadata_wrapper('user', $uid);
+  return $uw->field_user_company_name->value();
+}
+
+/**
  * Checks if the property owner is an individual.
  */
 function _reiscout_property_is_owner_an_individual_by_nid($nid) {

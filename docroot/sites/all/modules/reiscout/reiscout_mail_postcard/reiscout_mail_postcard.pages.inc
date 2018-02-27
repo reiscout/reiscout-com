@@ -564,6 +564,11 @@ function _reiscout_mail_postcard_replace_tokens($content, $property_nid) {
     $content = str_replace('{{my_email}}', $email, $content);
   }
 
+  if (FALSE !== strpos($content, '{{my_company}}')) {
+    $company = _reiscout_property_get_user_company_name();
+    $content = str_replace('{{my_company}}', $company, $content);
+  }
+
   return $content;
 }
 
