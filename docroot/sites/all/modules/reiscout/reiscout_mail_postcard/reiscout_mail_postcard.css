@@ -277,6 +277,77 @@
 }
 /* Roofing -*/
 
+/*- Roofing Raindrops */
+.roofing_raindrops .front,
+.roofing_raindrops .back {
+    font-family: 'Source Sans Pro', sans-serif;
+}
+
+.roofing_raindrops .front {
+    background-image: url('https://s3.amazonaws.com/reiscout/images/Raindrops_Roofing.png');
+    background-size: 6.25in 4.25in;
+    background-repeat: no-repeat;
+}
+
+.roofing_raindrops .back {
+    padding: 18px 18px 18px 18px;
+    color: #000;
+}
+
+.roofing_raindrops #psc_banner {
+    margin: -18px -18px;
+    border-radius: 4px 4px 0 0;
+    padding-top: .4in;
+    height: 1in;
+    background-color: #AC1A1C;
+    font-weight: 700;
+    font-size: .16in;
+    text-transform: uppercase;
+    letter-spacing: .03in;
+    text-align: center;
+    color: white;
+}
+
+.roofing_raindrops #subtitle {
+    letter-spacing: .02in;
+}
+
+.roofing_raindrops #psc_message {
+    position: absolute;
+    width: 2.2in;
+    height: 2in;
+    top: 114px;
+    left: .25in;
+    font-weight: 400;
+    font-size: .122in;
+}
+
+.roofing_raindrops .psc_description {
+    margin-bottom: 11px;
+}
+
+.roofing_raindrops .psc_accent {
+    color: #AC1A1C;
+}
+
+.roofing_raindrops #psc_code-banner {
+    text-align: center;
+    font-size: .14in;
+}
+
+.roofing_raindrops #psc_code {
+    margin: .1in auto;
+    padding: .1in;
+    width: 2in;
+    font-size: .15in;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: .02in;
+    color: #AC1A1C;
+    border: 2px solid #AC1A1C;
+}
+/* Roofing Raindrops -*/
+
 .form-item-template-nid:after {
     display: table;
     content: '';
