@@ -284,7 +284,7 @@
 }
 
 .roofing_raindrops .front {
-    background-image: url('https://s3.amazonaws.com/reiscout/images/Raindrops_Roofing.png');
+    background-image: url('html_templates/images/roofing_raindrops_front.jpg');
     background-size: 6.25in 4.25in;
     background-repeat: no-repeat;
 }
