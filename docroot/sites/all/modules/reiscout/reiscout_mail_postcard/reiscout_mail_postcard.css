@@ -277,24 +277,74 @@
 }
 /* Roofing -*/
 
-/*- Roofing Raindrops */
-.roofing_raindrops .front,
-.roofing_raindrops .back {
+/*- Template class 1 */
+.roofing_raindrops .front, .roofing_raindrops .back,
+.garage_door_repair .front, .garage_door_repair .back,
+.general_trades .front, .general_trades .back,
+.hvac_repair .front, .hvac_repair .back,
+.lawn_care .front, .lawn_care .back,
+.tree_service .front, .tree_service .back,
+.women_fitness .front, .women_fitness .back {
     font-family: 'Source Sans Pro', sans-serif;
 }
 
-.roofing_raindrops .front {
-    background-image: url('html_templates/images/roofing_raindrops_front.jpg');
+.roofing_raindrops .front,
+.garage_door_repair .front,
+.general_trades .front,
+.hvac_repair .front,
+.lawn_care .front,
+.tree_service .front,
+.women_fitness .front {
     background-size: 6.25in 4.25in;
     background-repeat: no-repeat;
 }
 
-.roofing_raindrops .back {
+.roofing_raindrops .front {
+    background-image: url('html_templates/images/roofing_raindrops_front.jpg');
+}
+
+.garage_door_repair .front {
+    background-image: url('html_templates/images/garage_door_repair_front.jpg');
+}
+
+.general_trades .front {
+    background-image: url('html_templates/images/general_trades_front.jpg');
+}
+
+.hvac_repair .front {
+    background-image: url('html_templates/images/hvac_repair_front.jpg');
+}
+
+.lawn_care .front {
+    background-image: url('html_templates/images/lawn_care_front.jpg');
+}
+
+.tree_service .front {
+    background-image: url('html_templates/images/tree_service_front.jpg');
+}
+
+.women_fitness .front {
+    background-image: url('html_templates/images/women_fitness_front.jpg');
+}
+
+.roofing_raindrops .back,
+.garage_door_repair .back,
+.general_trades .back,
+.hvac_repair .back,
+.lawn_care .back,
+.tree_service .back,
+.women_fitness .back {
     padding: 18px 18px 18px 18px;
     color: #000;
 }
 
-.roofing_raindrops #psc_banner {
+.roofing_raindrops #psc_banner,
+.garage_door_repair #psc_banner,
+.general_trades #psc_banner,
+.hvac_repair #psc_banner,
+.lawn_care #psc_banner,
+.tree_service #psc_banner,
+.women_fitness #psc_banner {
     margin: -18px -18px;
     border-radius: 4px 4px 0 0;
     padding-top: .4in;
@@ -308,11 +358,23 @@
     color: white;
 }
 
-.roofing_raindrops #subtitle {
+.roofing_raindrops #subtitle,
+.garage_door_repair #subtitle,
+.general_trades #subtitle,
+.hvac_repair #subtitle,
+.lawn_care #subtitle,
+.tree_service #subtitle,
+.women_fitness #subtitle {
     letter-spacing: .02in;
 }
 
-.roofing_raindrops #psc_message {
+.roofing_raindrops #psc_message,
+.garage_door_repair #psc_message,
+.general_trades #psc_message,
+.hvac_repair #psc_message,
+.lawn_care #psc_message,
+.tree_service #psc_message,
+.women_fitness #psc_message {
     position: absolute;
     width: 2.2in;
     height: 2in;
@@ -322,20 +384,44 @@
     font-size: .122in;
 }
 
-.roofing_raindrops .psc_description {
+.roofing_raindrops .psc_description,
+.garage_door_repair .psc_description,
+.general_trades .psc_description,
+.hvac_repair .psc_description,
+.lawn_care .psc_description,
+.tree_service .psc_description,
+.women_fitness .psc_description {
     margin-bottom: 11px;
 }
 
-.roofing_raindrops .psc_accent {
+.roofing_raindrops .psc_accent,
+.garage_door_repair .psc_accent,
+.general_trades .psc_accent,
+.hvac_repair .psc_accent,
+.lawn_care .psc_accent,
+.tree_service .psc_accent,
+.women_fitness .psc_accent {
     color: #AC1A1C;
 }
 
-.roofing_raindrops #psc_code-banner {
+.roofing_raindrops #psc_code-banner,
+.garage_door_repair #psc_code-banner,
+.general_trades #psc_code-banner,
+.hvac_repair #psc_code-banner,
+.lawn_care #psc_code-banner,
+.tree_service #psc_code-banner,
+.women_fitness #psc_code-banner {
     text-align: center;
     font-size: .14in;
 }
 
-.roofing_raindrops #psc_code {
+.roofing_raindrops #psc_code,
+.garage_door_repair #psc_code,
+.general_trades #psc_code,
+.hvac_repair #psc_code,
+.lawn_care #psc_code,
+.tree_service #psc_code,
+.women_fitness #psc_code {
     margin: .1in auto;
     padding: .1in;
     width: 2in;
@@ -346,7 +432,7 @@
     color: #AC1A1C;
     border: 2px solid #AC1A1C;
 }
-/* Roofing Raindrops -*/
+/* Template class 1 -*/
 
 .form-item-template-nid:after {
     display: table;

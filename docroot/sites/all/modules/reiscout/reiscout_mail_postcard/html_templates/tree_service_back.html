@@ -1,0 +1,93 @@
+<html>
+<head>
+  <meta charset="UTF-8">
+  <title>Roofing 4x6 Postcard Back</title>
+  <link href="https://fonts.googleapis.com/css?family=Source+Sans+Pro:400,700" rel="stylesheet">
+  <style>
+    *, *:before, *:after {
+      -webkit-box-sizing: border-box;
+      -moz-box-sizing: border-box;
+      box-sizing: border-box;
+    }
+
+    body {
+      width: 6.25in;
+      height: 4.25in;
+      margin: 0;
+      padding: 0;
+      background-color: white;
+      font-family: 'Source Sans Pro';
+    }
+
+    /* do not put text outside of the safe area */
+    #safe-area {
+      position: absolute;
+      width: 5.875in;
+      height: 3.875in;
+      left: 0.1875in;
+      top: 0.1875in;
+      /*
+            background-color: rgba(55, 55, 55, 0.5);
+      */
+    }
+
+    #psc_banner {
+      margin: -0.1875in -0.1875in;
+      padding-top: .4in;
+      height: 1in;
+      background-color: #AC1A1C;
+      font-weight: 700;
+      font-size: .16in;
+      text-transform: uppercase;
+      letter-spacing: .03in;
+      text-align: center;
+      color: white;
+    }
+
+    #subtitle {
+      letter-spacing: .02in;
+    }
+
+    #psc_message {
+      position: absolute;
+      width: 2.2in;
+      height: 2in;
+      top: 1in;
+      left: .25in;
+      font-weight: 400;
+      font-size: .122in;
+    }
+
+    .psc_description {
+      margin-bottom: 11px;
+    }
+
+    .psc_accent {
+      color: #AC1A1C;
+    }
+
+    #psc_code-banner {
+      text-align: center;
+      font-size: .14in;
+    }
+
+    #psc_code {
+      margin: .1in auto;
+      padding: .1in;
+      width: 2in;
+      font-size: .15in;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: .02in;
+      color: #AC1A1C;
+      border: 2px solid #AC1A1C;
+    }
+  </style>
+</head>
+<body>
+<!-- do not put text outside of the safe area -->
+<div id="safe-area">
+  {{content}}
+</div>
+</body>
+</html>
