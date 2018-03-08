@@ -19,10 +19,10 @@
     float: left;
     position: relative; /* This line is here, because #ink-free is positioned absolutely */
     padding: 0;
-    width: 6.25in;
-    height: 4.25in;
+    width: 6.02in;   /* Take into account left and right borders. */
+    height: 4.02in;  /* Take into account top and bottom borders. */
     border: 1px solid #ccc;
-    border-radius: 5px;
+    border-radius: 4px;
 }
 
 .template .front {
@@ -33,7 +33,7 @@
     position: absolute;
     width: 3.2835in;
     height: 2.375in;
-    right: 0.275in;
+    right: 0.12in;
     bottom: 0.25in;
     border: solid 1px #DDD;
     background-color: white;
@@ -42,10 +42,10 @@
 
 .template .back #ink-free #postage-indicia {
     position: absolute;
-    right: 0.35in;
-    top: 0.25in;
+    right: 0.33in;
+    top: 0.29in;
     padding: 15px 0 15px 0;
-    width: 80px;
+    width: 75px;
     text-align: center;
     border: solid 1px #000;
     font-family: "Liberation Sans Narrow";
@@ -53,15 +53,15 @@
 
 .template .back #ink-free #user-address {
     position: absolute;
-    left: 0.19in;
+    left: 0.12in;
     top: 0.34in;
     font-size: 9px;
 }
 
 .template .back #ink-free #owner-address {
     position: absolute;
-    left: 0.19in;
-    top: 1.3in;
+    left: 0.12in;
+    top: 1.24in;
     font-size: 13px;
     line-height: 18px;
 }
@@ -75,11 +75,11 @@
 }
 
 .real_estate_text .front {
-    padding: 28px 38px 0px 38px; /* Take into account the left (0.1875in) and the top (0.1875in) paddings of the safe-area */
+    padding: 10px 20px; /* Take into account the left (0.1875in) and the top (0.1875in) paddings of the safe-area */
 }
 
 .real_estate_text .back {
-    padding: 88px 43px 0px 43px; /* Take into account the left (0.1875in) and the top (0.1875in) paddings of the safe-area */
+    padding: 70px 10px 10px 25px; /* Take into account the left (0.1875in) and the top (0.1875in) paddings of the safe-area */
 }
 
 .real_estate_text #top {
@@ -175,17 +175,21 @@
 }
 
 .roofing .front {
-    padding: 23px 5px 5px 23px; /* Take into account the left (0.1875in) and the top (0.1875in) paddings of the safe-area */
+    padding-top: 20px;
+    padding-left: 15px;
     background-image: url('html_templates/images/roofing_front.jpg');
     background-size: 6.25in 4.25in;
     background-repeat: no-repeat;
+    background-position: center;
 }
 
 .roofing .back {
-    padding: 63px 0 45px 18px;
+    padding-top: 45px;
+    padding-left: 10px;
     background-image: url('html_templates/images/roofing_back.jpg');
     background-size: 6.25in 4.25in;
     background-repeat: no-repeat;
+    background-position: center;
 }
 
 .roofing #psc_title {
@@ -209,7 +213,7 @@
 }
 
 .roofing .psc_section_title {
-    max-width: 244px;
+    max-width: 232px;
     margin-top: 5px;
     font-family: 'Open Sans', sans-serif;
     font-size: 12pt;
@@ -220,7 +224,7 @@
 }
 
 .roofing .back .psc_section_title {
-    max-width: 210px;
+    max-width: 215px;
 }
 
 .roofing .psc_description {
@@ -296,6 +300,7 @@
 .tree_service .front,
 .women_fitness .front {
     background-size: 6.25in 4.25in;
+    background-position: center;
     background-repeat: no-repeat;
 }
 
@@ -334,21 +339,19 @@
 .lawn_care .back,
 .tree_service .back,
 .women_fitness .back {
-    padding: 18px 18px 18px 18px;
     color: #000;
 }
 
-.roofing_raindrops #psc_banner,
-.garage_door_repair #psc_banner,
-.general_trades #psc_banner,
-.hvac_repair #psc_banner,
-.lawn_care #psc_banner,
-.tree_service #psc_banner,
-.women_fitness #psc_banner {
-    margin: -18px -18px;
-    border-radius: 4px 4px 0 0;
-    padding-top: .4in;
-    height: 1in;
+.roofing_raindrops div[id^='psc_banner'],
+.garage_door_repair div[id^='psc_banner'],
+.general_trades div[id^='psc_banner'],
+.hvac_repair div[id^='psc_banner'],
+.lawn_care div[id^='psc_banner'],
+.tree_service div[id^='psc_banner'],
+.women_fitness div[id^='psc_banner'] {
+    border-radius: 3px 3px 0 0;
+    padding-top: .25in;
+    height: 0.9063in; /* It is equal to 87px */
     background-color: #AC1A1C;
     font-weight: 700;
     font-size: .16in;
@@ -356,6 +359,22 @@
     letter-spacing: .03in;
     text-align: center;
     color: white;
+}
+
+.roofing_raindrops div[id^='psc_banner_image'],
+.garage_door_repair div[id^='psc_banner_image'],
+.general_trades div[id^='psc_banner_image'],
+.hvac_repair div[id^='psc_banner_image'],
+.lawn_care div[id^='psc_banner_image'],
+.tree_service div[id^='psc_banner_image'],
+.women_fitness div[id^='psc_banner_image'] {
+    background-color: #FFF;
+    background-size: 6in 0.9063in;
+    background-repeat: no-repeat;
+}
+
+#psc_banner_image_bells_roofing {
+    background-image: url("https://s3.amazonaws.com/reiscout/postcard_custom_header_bg_images/bells_roofing.jpg");
 }
 
 .roofing_raindrops #subtitle,
@@ -375,11 +394,9 @@
 .lawn_care #psc_message,
 .tree_service #psc_message,
 .women_fitness #psc_message {
-    position: absolute;
+    margin-top: .185in;
+    margin-left: .27in;
     width: 2.2in;
-    height: 2in;
-    top: 114px;
-    left: .25in;
     font-weight: 400;
     font-size: .122in;
 }
