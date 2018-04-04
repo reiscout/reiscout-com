@@ -1,7 +1,0 @@
-<?php
-/**
- * @file
- * Code for the Reiscout Backups feature.
- */
-
-include_once 'reiscout_backups.features.inc';
