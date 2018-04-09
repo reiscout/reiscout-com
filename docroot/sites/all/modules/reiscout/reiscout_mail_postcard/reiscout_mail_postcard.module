@@ -164,6 +164,7 @@ function reiscout_mail_postcard_form_postcard_template_node_form_alter(&$form, &
   if (!user_has_role($role->rid)) {
     $form['field_postcard_template_global'][LANGUAGE_NONE]['#default_value'] = 0;
     $form['field_postcard_template_global']['#access'] = FALSE;
+    $form['field_postcard_design_template']['#access'] = FALSE;
   }
 }
 
