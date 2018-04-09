@@ -163,8 +163,21 @@ function reiscout_mail_postcard_form_postcard_template_node_form_alter(&$form, &
   $role = user_role_load_by_name('administrator');
   if (!user_has_role($role->rid)) {
     $form['field_postcard_template_global'][LANGUAGE_NONE]['#default_value'] = 0;
-    $form['field_postcard_template_global']['#access'] = FALSE;
-    $form['field_postcard_design_template']['#access'] = FALSE;
+  }
+}
+
+/**
+ * Implements hook_field_access().
+ */
+function reiscout_mail_postcard_field_access($op, $field, $entity_type, $entity, $account) {
+  if ('node' == $entity_type && isset($entity->type) && 'postcard_template' == $entity->type) {
+    if ('edit' == $op) {
+      if ('field_postcard_design_template' == $field['field_name']
+       || 'field_postcard_template_global' == $field['field_name']) {
+        $role_admin = user_role_load_by_name('administrator');
+        return user_has_role($role_admin->rid, $account);
+      }
+    }
   }
 }
 
