@@ -19,3 +19,34 @@ function reiscout_misc_admin_menu_output_alter(&$content) {
     }
   }
 }
+
+/**
+ * Implements hook_form_FORM_ID_alter().
+ */
+function reiscout_misc_form_user_profile_form_alter(&$form, &$form_state, $form_id) {
+  $form['#validate'][] = 'reiscout_misc_user_profile_form_validate';
+}
+
+/**
+ * Form validation handler for 'user_profile_form' form.
+ *
+ * Validates 'Phone Number' and 'Website' fields.
+ */
+function reiscout_misc_user_profile_form_validate(&$form, &$form_state, $form_id) {
+  $field_user_phone_number = $form_state['values']['field_user_phone_number'][LANGUAGE_NONE][0]['value'];
+  $field_user_website = $form_state['values']['field_user_website'][LANGUAGE_NONE][0]['value'];
+
+  if ($field_user_phone_number) {
+    if (!preg_match('!\d{2,}!', $field_user_phone_number)) {
+      $t_args = array('%phone' => $field_user_phone_number);
+      form_set_error('field_user_phone_number', t('The phone number %phone is not valid.', $t_args));
+    }
+  }
+
+  if ($field_user_website) {
+    if (!preg_match('!.+?\..{2,}!', $field_user_website)) {
+      $t_args = array('%url' => $field_user_website);
+      form_set_error('field_user_website', t('The website URL %url is not valid.', $t_args));
+    }
+  }
+}
