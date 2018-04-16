@@ -168,8 +168,8 @@ function reiscout_mail_postcard_sent_history_page($node) {
     foreach ($records as $record) {
       $rows[] = array(
         l($record->name, 'user/' . $record->uid),
-        format_date($record->timestamp) . ' (' . format_interval(time() - $record->timestamp) . ' ago)',
-        date('D, m/d/Y', $record->expected_delivery_date),
+        format_date($record->timestamp, 'custom', 'M j, Y - g:i a') . ' (' . format_interval(time() - $record->timestamp) . ' ago)',
+        date('M j, Y', $record->expected_delivery_date),
         array('data' => $events->getNameByType($record->type), 'title' => $events->getDescByType($record->type)),
         $record->location,
       );
