@@ -138,21 +138,44 @@ function reiscout_mail_postcard_node_view($node, $view_mode, $langcode) {
 
   // Add 'Send a Postcard' button
   $button_text = t('Send a Postcard');
-  $button_url = 'reiscout-mail-postcard/' . $node->nid . '/send';
-  $node->content['reiscout-mail-buttons']['send-postcard'] = array(
-    '#prefix' => '<div class="button">',
-    '#markup' => l($button_text, $button_url),
-    '#suffix' => '</div>',
-  );
 
-  // Add a link to the sample postcard
-  $link_text = t('Click here to view a sample postcard');
-  $link_url = drupal_get_path('module', 'reiscout_mail_postcard') . '/pdf/sample_postcard.pdf';
-  $node->content['reiscout-mail-buttons']['sample-postcard-link'] = array(
-    '#prefix' => '<div class="sample-postcard-link">',
-    '#markup' => l($link_text, $link_url, array('attributes' => array('target' => '_blank'))),
-    '#suffix' => '</div>',
-  );
+  if (!_reiscout_mail_postcard_is_user_already_sent_within_limit_period($node->nid)) {
+    $button_url = 'reiscout-mail-postcard/' . $node->nid . '/send';
+    $node->content['reiscout-mail-buttons']['send-postcard'] = array(
+      '#prefix' => '<div class="button">',
+      '#markup' => l($button_text, $button_url),
+      '#suffix' => '</div>',
+    );
+
+    // Add a link to the sample postcard
+    $link_text = t('Click here to view a sample postcard');
+    $link_url = drupal_get_path('module', 'reiscout_mail_postcard') . '/pdf/sample_postcard.pdf';
+    $node->content['reiscout-mail-buttons']['sample-postcard-link'] = array(
+      '#prefix' => '<div class="sample-postcard-link">',
+      '#markup' => l($link_text, $link_url, array('attributes' => array('target' => '_blank'))),
+      '#suffix' => '</div>',
+    );
+  }
+  else {
+    $node->content['reiscout-mail-buttons']['send-postcard'] = array(
+      '#prefix' => '<div class="button disabled">',
+      '#markup' => $button_text,
+      '#suffix' => '</div>',
+    );
+
+    $t_args = array(
+      '%period' => variable_get('reiscout_mail_postcard_send_limit_period', REISCOUT_MAIL_POSTCARD_SEND_LIMIT_PERIOD),
+      '%sent' => date('M j, Y - g:i a', _reiscout_mail_postcard_get_last_postcard_sent_time($node->nid)),
+    );
+    //'Mar 8, 2018 - 4:23 pm'
+    $node->content['reiscout-mail-buttons']['description'] = array(
+      '#prefix' => '<div class="description">',
+      '#markup' => t("You may send a postcard to the same property's owner only once per %period days.", $t_args)
+                 . '<br/>'
+                 . t('You sent a postcard on %sent.', $t_args),
+      '#suffix' => '</div>',
+    );
+  }
 }
 
 /**
@@ -312,6 +335,22 @@ function _reiscout_mail_postcard_get_sent_cnt($nid, $uid = NULL) {
   }
 
   return $query->execute()->rowCount();
+}
+
+/**
+ * Returns the time when the current user sent a postcard to a property's owner.
+ */
+function _reiscout_mail_postcard_get_last_postcard_sent_time($nid) {
+  global $user;
+
+  $query = db_select('reiscout_mail_postcard_history', 'h')
+    ->fields('h', array('timestamp'))
+    ->condition('pnid', $nid)
+    ->condition('uid', $user->uid)
+    ->orderBy('timestamp', 'DESC')
+    ->range(0, 1);
+
+  return $query->execute()->fetchField();
 }
 
 /**
