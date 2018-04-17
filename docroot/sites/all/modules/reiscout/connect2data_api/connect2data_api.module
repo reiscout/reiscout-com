@@ -56,6 +56,6 @@ function connect2data_api_get_detailed_subject_report($property_criteria, $reque
     return $api->getDetailedSubjectReport($property_criteria, $request_reason);
   }
   catch (Connect2DataAPIException $e) {
-    watchdog_exception('connect2data_api_get_detailed_subject_report', $e);
+    watchdog_exception('connect2data_api', $e);
   }
 }
