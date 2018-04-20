@@ -7,6 +7,7 @@ dependencies[] = commerce_checkout
 dependencies[] = commerce_features
 dependencies[] = commerce_product_ui
 dependencies[] = context
+dependencies[] = devel
 dependencies[] = entityreference
 dependencies[] = field_validation
 dependencies[] = views_infinite_scroll

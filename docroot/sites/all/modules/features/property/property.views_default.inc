@@ -551,6 +551,8 @@ function property_views_default_views() {
 
   /* Display: my properties */
   $handler = $view->new_display('page', 'my properties', 'page_3');
+  $handler->display->display_options['defaults']['title'] = FALSE;
+  $handler->display->display_options['title'] = 'My Properties';
   $handler->display->display_options['display_description'] = 'list of user added properties';
   $handler->display->display_options['defaults']['access'] = FALSE;
   $handler->display->display_options['access']['type'] = 'role';

@@ -25,6 +25,7 @@ function reiscout_property_commerce_feature_default_rules_configuration() {
   $items['rules_reiscout_property_commerce_limit_line_items_quantity'] = entity_import('rules_config', '{ "rules_reiscout_property_commerce_limit_line_items_quantity" : {
       "LABEL" : "Limit line items quantity to one item",
       "PLUGIN" : "reaction rule",
+      "ACTIVE" : false,
       "OWNER" : "rules",
       "TAGS" : [ "reiscout" ],
       "REQUIRES" : [ "rules", "entity" ],
