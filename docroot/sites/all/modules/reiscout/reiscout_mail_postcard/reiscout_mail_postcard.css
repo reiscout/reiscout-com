@@ -292,43 +292,44 @@
     font-family: 'Source Sans Pro', sans-serif;
 }
 
-.roofing_raindrops .front,
-.garage_door_repair .front,
-.general_trades .front,
-.hvac_repair .front,
-.lawn_care .front,
-.tree_service .front,
-.women_fitness .front {
-    background-size: 6.25in 4.25in;
+.roofing_raindrops .front div[id^='psc_banner'],
+.garage_door_repair .front div[id^='psc_banner'],
+.general_trades .front div[id^='psc_banner'],
+.hvac_repair .front div[id^='psc_banner'],
+.lawn_care .front div[id^='psc_banner'],
+.tree_service .front div[id^='psc_banner'],
+.women_fitness .front div[id^='psc_banner'] {
+    height: 100%;
+    background-size: 6in 4in;
     background-position: center;
     background-repeat: no-repeat;
 }
 
-.roofing_raindrops .front {
+.roofing_raindrops .front #psc_banner {
     background-image: url('html_templates/images/roofing_raindrops_front.jpg');
 }
 
-.garage_door_repair .front {
+.garage_door_repair .front #psc_banner {
     background-image: url('html_templates/images/garage_door_repair_front.jpg');
 }
 
-.general_trades .front {
+.general_trades .front #psc_banner {
     background-image: url('html_templates/images/general_trades_front.jpg');
 }
 
-.hvac_repair .front {
+.hvac_repair .front #psc_banner {
     background-image: url('html_templates/images/hvac_repair_front.jpg');
 }
 
-.lawn_care .front {
+.lawn_care .front #psc_banner {
     background-image: url('html_templates/images/lawn_care_front.jpg');
 }
 
-.tree_service .front {
+.tree_service .front #psc_banner {
     background-image: url('html_templates/images/tree_service_front.jpg');
 }
 
-.women_fitness .front {
+.women_fitness .front #psc_banner {
     background-image: url('html_templates/images/women_fitness_front.jpg');
 }
 
@@ -342,13 +343,13 @@
     color: #000;
 }
 
-.roofing_raindrops div[id^='psc_banner'],
-.garage_door_repair div[id^='psc_banner'],
-.general_trades div[id^='psc_banner'],
-.hvac_repair div[id^='psc_banner'],
-.lawn_care div[id^='psc_banner'],
-.tree_service div[id^='psc_banner'],
-.women_fitness div[id^='psc_banner'] {
+.roofing_raindrops .back div[id^='psc_banner'],
+.garage_door_repair .back div[id^='psc_banner'],
+.general_trades .back div[id^='psc_banner'],
+.hvac_repair .back div[id^='psc_banner'],
+.lawn_care .back div[id^='psc_banner'],
+.tree_service .back div[id^='psc_banner'],
+.women_fitness .back div[id^='psc_banner'] {
     border-radius: 3px 3px 0 0;
     padding-top: .25in;
     height: 0.9063in; /* It is equal to 87px */
