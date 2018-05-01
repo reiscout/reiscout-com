@@ -378,6 +378,10 @@
     background-image: url("https://s3.amazonaws.com/reiscout/postcard_custom_header_bg_images/bells_roofing.jpg");
 }
 
+#psc_banner_total_telecom_management {
+    background-image: url("https://s3.amazonaws.com/reiscout/postcard_bg_images/custom/total_telecom_management_front.jpg");
+}
+
 .roofing_raindrops #subtitle,
 .garage_door_repair #subtitle,
 .general_trades #subtitle,
