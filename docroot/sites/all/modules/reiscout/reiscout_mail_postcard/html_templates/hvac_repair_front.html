@@ -1,7 +1,7 @@
 <html>
 <head>
   <meta charset="UTF-8">
-  <title>Roofing 4x6 Postcard Front</title>
+  <title>HVAC Repair 4x6 Postcard Front</title>
   <style>
     *, *:before, *:after {
       -webkit-box-sizing: border-box;
@@ -10,14 +10,10 @@
     }
 
     body {
-      width: 6.25in;
-      height: 4.25in;
       margin: 0;
       padding: 0;
-      /* your background image should have dimensions of 1875x1275 pixels. */
-      background-image: url('https://s3.amazonaws.com/reiscout/postcard_bg_images/hvac_repair_front.jpg');
-      background-size: 6.25in 4.25in;
-      background-repeat: no-repeat;
+      width: 6.25in;
+      height: 4.25in;
     }
 
     /* do not put text outside of the safe area */
@@ -28,11 +24,19 @@
       left: 0.125in;
       top: 0.125in;
     }
+
+    div[id^='psc_banner'] {
+      height: 100%;
+      /* your background image should have dimensions of 1800x1200 pixels. */
+      background-image: url('https://s3.amazonaws.com/reiscout/postcard_bg_images/hvac_repair_front.jpg');
+      background-size: 6in 4in;
+      background-repeat: no-repeat;
+    }
   </style>
 </head>
 <body>
   <div id="safe-area">
-    <!-- All text should appear within the safe area. -->
+    {{content}}
   </div>
 </body>
 </html>
