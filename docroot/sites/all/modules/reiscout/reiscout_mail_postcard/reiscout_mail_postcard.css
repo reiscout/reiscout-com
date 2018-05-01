@@ -382,6 +382,19 @@
     background-image: url("https://s3.amazonaws.com/reiscout/postcard_bg_images/custom/total_telecom_management_front.jpg");
 }
 
+#total_telecom_management #psc_banner {
+    background-color: #2A2A2A;
+}
+
+#total_telecom_management .psc_accent {
+    color: #00A3E0;
+}
+
+#total_telecom_management #psc_code {
+    color: #00A3E0;
+    border: 2px solid #00A3E0;
+}
+
 .roofing_raindrops #subtitle,
 .garage_door_repair #subtitle,
 .general_trades #subtitle,
