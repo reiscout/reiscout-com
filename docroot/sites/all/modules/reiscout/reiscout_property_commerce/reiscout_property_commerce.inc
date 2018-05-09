@@ -32,11 +32,7 @@ function reiscout_property_commerce_create_product($type, $reference_node) {
 }
 
 /**
- * Return display nodes associated with purchased products by user.
- *
- * @param integer $uid user id
- * @param string $order_status an order status
- * @param string $sku product sku
+ * Return display nodes associated with products purchased by $uid user.
  */
 function reiscout_property_commerce_get_purchased_nids($product_type, $uid = '') {
   if (empty($uid)) {
@@ -53,14 +49,13 @@ function reiscout_property_commerce_get_purchased_nids($product_type, $uid = '')
   $query->join('field_data_commerce_product', 'li_prod', 'li.line_item_id = li_prod.entity_id');
   $query->join('commerce_product', 'prod', 'prod.product_id = li_prod.commerce_product_product_id');
   $query->join('field_data_field_property', 'prop_ref', 'prop_ref.entity_id = prod.product_id');
+  $query
+    ->fields('prop_ref', array('field_property_target_id'))
+    ->condition('ord.uid', $uid)
+    ->condition('ord.status', 'completed')
+    ->condition('prod.type', $product_type);
 
-  $query->condition('ord.uid', $uid, '=')
-    ->condition('ord.status', 'completed', '=')
-    ->condition('prod.type', $product_type, '=')
-    ->fields('prop_ref', array('field_property_target_id'));
-
-  $result = $query->execute();
-  return $result->fetchCol();
+  return $query->execute()->fetchCol();
 }
 
 /**
