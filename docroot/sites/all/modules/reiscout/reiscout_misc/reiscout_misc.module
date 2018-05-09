@@ -50,3 +50,11 @@ function reiscout_misc_user_profile_form_validate(&$form, &$form_state, $form_id
     }
   }
 }
+
+/**
+ * Checks if the current user has 'administrator' role.
+ */
+function _reiscout_misc_user_has_administrator_role() {
+  $role_admin = user_role_load_by_name('administrator');
+  return user_has_role($role_admin->rid);
+}
