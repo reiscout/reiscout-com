@@ -12,10 +12,34 @@ define('REISCOUT_PROPERTY_MESSAGE_TO_CHANGE', 'Property <em class="placeholder">
  * Implements hook_menu().
  */
 function reiscout_property_menu() {
-  $items['reiscout_property/address_locality'] = array(
-    'title' => 'Autocomplete for cities that is used in address of properties',
-    'page callback' => 'reiscout_property_address_locality_autocomplete',
+  $items['reiscout_property/csz_autocomplete'] = array(
+    'title' => 'Autocomplete for address components used in addresses of all properties',
+    'page callback' => 'reiscout_property_citystatezip_autocomplete',
     'access arguments' => array('access content'),
+    'file' => 'reiscout_property.pages.inc',
+    'type' => MENU_CALLBACK,
+  );
+
+  $items['reiscout_property/ascsz_autocomplete'] = array(
+    'title' => 'Autocomplete for address components used in addresses of all properties',
+    'page callback' => 'reiscout_property_addressstreetcitystatezip_autocomplete',
+    'access callback' => '_reiscout_misc_user_has_administrator_role',
+    'file' => 'reiscout_property.pages.inc',
+    'type' => MENU_CALLBACK,
+  );
+
+  $items['reiscout_property/ascsz_my_properties_autocomplete'] = array(
+    'title' => 'Autocomplete for address components used in addresses of properties added by the current user',
+    'page callback' => 'reiscout_property_addressstreetcitystatezip_my_properties_autocomplete',
+    'access callback' => 'user_is_logged_in',
+    'file' => 'reiscout_property.pages.inc',
+    'type' => MENU_CALLBACK,
+  );
+
+  $items['reiscout_property/ascsz_purchased_leads_autocomplete'] = array(
+    'title' => 'Autocomplete for address components used in addresses of properties purchased by the current user',
+    'page callback' => 'reiscout_property_addressstreetcitystatezip_purchased_leads_autocomplete',
+    'access callback' => 'user_is_logged_in',
     'file' => 'reiscout_property.pages.inc',
     'type' => MENU_CALLBACK,
   );
@@ -35,7 +59,85 @@ function reiscout_property_menu() {
  * Implements hook_form_FORM_ID_alter().
  */
 function reiscout_property_form_views_exposed_form_alter(&$form, &$form_state, $form_id) {
-  $form['city']['#autocomplete_path'] = 'reiscout_property/address_locality';
+  // 'Property Listing'
+  if ('views-exposed-form-property-listing-page' == $form['#id']) {
+    $role_admin = user_role_load_by_name('administrator');
+    if (user_has_role($role_admin->rid)) {
+      _reiscout_property_attach_addresscitystatezip_field($form);
+    }
+    else {
+      _reiscout_property_attach_citystatezip_field($form);
+    }
+    array_unshift($form['#submit'], 'reiscout_property_property_listing_views_exposed_form_submit');
+  }
+  // 'My Properties'
+  elseif ('views-exposed-form-property-listing-my-properties' == $form['#id']) {
+    _reiscout_property_attach_addresscitystatezip_field($form);
+    array_unshift($form['#submit'], 'reiscout_property_property_listing_views_exposed_form_submit');
+  }
+  // 'Purchased Leads'
+  elseif ('views-exposed-form-reiscout-property-commerce-purchased-nodes-page' == $form['#id']) {
+    _reiscout_property_attach_addresscitystatezip_field($form);
+    array_unshift($form['#submit'], 'reiscout_property_property_listing_views_exposed_form_submit');
+  }
+}
+
+/**
+ * Form submission handler for views_exposed_form on 'Property Listing' page.
+ *
+ * @see reiscout_property_form_views_exposed_form_alter()
+ */
+function reiscout_property_property_listing_views_exposed_form_submit($form, &$form_state) {
+  if (isset($form_state['values']['citystatezip'])) {
+    $search = $form_state['values']['citystatezip'];
+
+    // A user has entered a ZIP code
+    if (ctype_digit($search) && 5 >= strlen($search)) {
+      $form_state['values']['zip'] = $search;
+    }
+    // A user has entered a city and state
+    elseif (preg_match('!^([a-zA-Z\s]+) ([A-Z]{2})$!', $search, $matches)) {
+      $form_state['values']['city'] = $matches[1];
+      $form_state['values']['state'] = $matches[2];
+    }
+    // A user has entered a state
+    elseif (preg_match('!^[a-zA-Z\s]+$!', $search)) {
+      if ($state_code = PropertyAddressSuggestion::getStateCodeByName($search)) {
+        $form_state['values']['state'] = $state_code;
+      }
+    }
+  }
+  elseif (isset($form_state['values']['addresscitystatezip'])) {
+    $search = $form_state['values']['addresscitystatezip'];
+
+    // A user has entered a ZIP code
+    if (ctype_digit($search) && 5 >= strlen($search)) {
+      $form_state['values']['zip'] = $search;
+    }
+    // A user has entered a city and state
+    elseif (preg_match('!^([a-zA-Z\s]+) ([A-Z]{2})$!', $search, $matches)) {
+      $form_state['values']['city'] = $matches[1];
+      $form_state['values']['state'] = $matches[2];
+    }
+    // A user has entered a street, city and state
+    elseif (preg_match('!^([a-zA-Z\s]+), ([a-zA-Z\s]+) ([A-Z]{2})$!', $search, $matches)) {
+      $form_state['values']['address'] = $matches[1];
+      $form_state['values']['city'] = $matches[2];
+      $form_state['values']['state'] = $matches[3];
+    }
+    // A user has entered a state
+    elseif (preg_match('!^[a-zA-Z\s]+$!', $search)) {
+      if ($state_code = PropertyAddressSuggestion::getStateCodeByName($search)) {
+        $form_state['values']['state'] = $state_code;
+      }
+    }
+    // A user has entered an address, city and state
+    elseif (preg_match('!^([0-9]+ [a-zA-Z\s]+), ([a-zA-Z\s]+) ([A-Z]{2})$!', $search, $matches)) {
+      $form_state['values']['address'] = $matches[1];
+      $form_state['values']['city'] = $matches[2];
+      $form_state['values']['state'] = $matches[3];
+    }
+  }
 }
 
 /**
@@ -352,6 +454,46 @@ function reiscout_property_entity_load($entities, $type) {
       }
     }
   }
+}
+
+/**
+ * Attaches 'citystatezip' field to a views_exposed_form form.
+ */
+function _reiscout_property_attach_citystatezip_field(&$form) {
+  $form['citystatezip'] = array(
+    '#type' => 'textfield',
+    '#size' => 30,
+    '#default_value' => '',
+    '#attributes' => array('placeholder' => t('City, State or ZIP')),
+    '#autocomplete_path' => 'reiscout_property/csz_autocomplete',
+  );
+
+  $field_info = array(
+    'value' => 'citystatezip',
+    'label' => '',
+    'description' => '',
+  );
+  $form['#info'] = array('filter-citystatezip' => $field_info) + $form['#info'];
+}
+
+/**
+ * Attaches 'addresscitystatezip' field to a views_exposed_form form.
+ */
+function _reiscout_property_attach_addresscitystatezip_field(&$form) {
+  $form['addresscitystatezip'] = array(
+    '#type' => 'textfield',
+    '#size' => 30,
+    '#default_value' => '',
+    '#attributes' => array('placeholder' => t('Address, Street, City, State or ZIP')),
+    '#autocomplete_path' => 'reiscout_property/ascsz_autocomplete',
+  );
+
+  $field_info = array(
+    'value' => 'addresscitystatezip',
+    'label' => '',
+    'description' => '',
+  );
+  $form['#info'] = array('filter-addresscitystatezip' => $field_info) + $form['#info'];
 }
 
 /**

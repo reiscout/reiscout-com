@@ -446,12 +446,26 @@ body.page-onepage #main-menu a.active:active {
   margin-bottom: 25px;
 }
 
-#edit-city.form-autocomplete {
-  width: 200px;
+#views-exposed-form-property-listing-page #edit-address-wrapper,
+#views-exposed-form-property-listing-page #edit-city-wrapper,
+#views-exposed-form-property-listing-page #edit-state-wrapper,
+#views-exposed-form-property-listing-page #edit-zip-wrapper,
+#views-exposed-form-property-listing-my-properties #edit-address-wrapper,
+#views-exposed-form-property-listing-my-properties #edit-city-wrapper,
+#views-exposed-form-property-listing-my-properties #edit-state-wrapper,
+#views-exposed-form-property-listing-my-properties #edit-zip-wrapper,
+#views-exposed-form-reiscout-property-commerce-purchased-nodes-page #edit-address-wrapper,
+#views-exposed-form-reiscout-property-commerce-purchased-nodes-page #edit-city-wrapper,
+#views-exposed-form-reiscout-property-commerce-purchased-nodes-page #edit-state-wrapper,
+#views-exposed-form-reiscout-property-commerce-purchased-nodes-page #edit-zip-wrapper {
+  display: none;
 }
 
-#edit-zip.form-text {
-  width: 80px;
+#views-exposed-form-property-listing-page #edit-addresscitystatezip,
+#views-exposed-form-property-listing-my-properties #edit-addresscitystatezip,
+#views-exposed-form-reiscout-property-commerce-purchased-nodes-page #edit-addresscitystatezip {
+  margin-top: 6px;
+  width: 330px;
 }
 
 .data-quality-tag {

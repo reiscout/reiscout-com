@@ -6,15 +6,178 @@
  */
 
 /**
- * Page callback: returns an autocomplete suggestion list of cities.
+ * Page callback: returns a suggestion list of properties' addresses.
+ *
+ * Returns suggestions of address components for all properties.
  */
-function reiscout_property_address_locality_autocomplete($string) {
+function reiscout_property_citystatezip_autocomplete($search) {
   $matches = array();
 
-  $cities = _reiscout_property_get_cities_used_in_property_address($string);
-  if ($cities) {
-    foreach ($cities as $city) {
-      $matches[$city] = check_plain($city);
+  $pas = new PropertyAddressSuggestion();
+
+  if (ctype_digit($search) && 5 >= strlen($search)) {
+    if ($zipCodes = $pas->getZipCodes($search)) {
+      foreach ($zipCodes as $zipCode) {
+        $matches[$zipCode] = check_plain($zipCode);
+      }
+    }
+  }
+  elseif (preg_match('!^[a-zA-Z\s]+$!', $search)) {
+    if ($states = $pas->getStates($search)) {
+      foreach ($states as $state) {
+        $matches[$state] = check_plain($state);
+      }
+    }
+
+    if ($cities = $pas->getCities($search)) {
+      foreach ($cities as $city) {
+        $matches[$city] = check_plain($city);
+      }
+    }
+  }
+
+  drupal_json_output($matches);
+}
+
+/**
+ * Page callback: returns a suggestion list of properties' addresses.
+ *
+ * Returns suggestions of address components for all properties.
+ */
+function reiscout_property_addressstreetcitystatezip_autocomplete($search) {
+  $matches = array();
+
+  $pas = new PropertyAddressSuggestion();
+
+  if (ctype_digit($search) && 5 >= strlen($search)) {
+    if ($zipCodes = $pas->getZipCodes($search)) {
+      foreach ($zipCodes as $zipCode) {
+        $matches[$zipCode] = check_plain($zipCode);
+      }
+    }
+  }
+  elseif (preg_match('!^[a-zA-Z\s]+$!', $search)) {
+    if ($states = $pas->getStates($search)) {
+      foreach ($states as $state) {
+        $matches[$state] = check_plain($state);
+      }
+    }
+
+    if ($cities = $pas->getCities($search)) {
+      foreach ($cities as $city) {
+        $matches[$city] = check_plain($city);
+      }
+    }
+
+    if ($streets = $pas->getStreets($search)) {
+      foreach ($streets as $street) {
+        $matches[$street] = check_plain($street);
+      }
+    }
+  }
+  elseif (preg_match('!^[0-9a-zA-Z\s]+$!', $search)) {
+    if ($addresses = $pas->getAddresses($search)) {
+      foreach ($addresses as $address) {
+        $matches[$address] = check_plain($address);
+      }
+    }
+  }
+
+  drupal_json_output($matches);
+}
+
+/**
+ * Page callback: returns a suggestion list of properties' addresses.
+ *
+ * Returns suggestions of address components for properties added by
+ * the current user.
+ */
+function reiscout_property_addressstreetcitystatezip_my_properties_autocomplete($search) {
+  $matches = array();
+
+  global $user;
+  $pas = new PropertyAddressSuggestionMyProperties($user->uid);
+
+  if (ctype_digit($search) && 5 >= strlen($search)) {
+    if ($zipCodes = $pas->getZipCodes($search)) {
+      foreach ($zipCodes as $zipCode) {
+        $matches[$zipCode] = check_plain($zipCode);
+      }
+    }
+  }
+  elseif (preg_match('!^[a-zA-Z\s]+$!', $search)) {
+    if ($states = $pas->getStates($search)) {
+      foreach ($states as $state) {
+        $matches[$state] = check_plain($state);
+      }
+    }
+
+    if ($cities = $pas->getCities($search)) {
+      foreach ($cities as $city) {
+        $matches[$city] = check_plain($city);
+      }
+    }
+
+    if ($streets = $pas->getStreets($search)) {
+      foreach ($streets as $street) {
+        $matches[$street] = check_plain($street);
+      }
+    }
+  }
+  elseif (preg_match('!^[0-9a-zA-Z\s]+$!', $search)) {
+    if ($addresses = $pas->getAddresses($search)) {
+      foreach ($addresses as $address) {
+        $matches[$address] = check_plain($address);
+      }
+    }
+  }
+
+  drupal_json_output($matches);
+}
+
+/**
+ * Page callback: returns a suggestion list of properties' addresses.
+ *
+ * Returns suggestions of address components for properties purchased
+ * by the current user.
+ */
+function reiscout_property_addressstreetcitystatezip_purchased_leads_autocomplete($search) {
+  $matches = array();
+
+  global $user;
+  $pas = new PropertyAddressSuggestionPurchasedLeads($user->uid);
+
+  if (ctype_digit($search) && 5 >= strlen($search)) {
+    if ($zipCodes = $pas->getZipCodes($search)) {
+      foreach ($zipCodes as $zipCode) {
+        $matches[$zipCode] = check_plain($zipCode);
+      }
+    }
+  }
+  elseif (preg_match('!^[a-zA-Z\s]+$!', $search)) {
+    if ($states = $pas->getStates($search)) {
+      foreach ($states as $state) {
+        $matches[$state] = check_plain($state);
+      }
+    }
+
+    if ($cities = $pas->getCities($search)) {
+      foreach ($cities as $city) {
+        $matches[$city] = check_plain($city);
+      }
+    }
+
+    if ($streets = $pas->getStreets($search)) {
+      foreach ($streets as $street) {
+        $matches[$street] = check_plain($street);
+      }
+    }
+  }
+  elseif (preg_match('!^[0-9a-zA-Z\s]+$!', $search)) {
+    if ($addresses = $pas->getAddresses($search)) {
+      foreach ($addresses as $address) {
+        $matches[$address] = check_plain($address);
+      }
     }
   }
 
