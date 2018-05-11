@@ -256,11 +256,30 @@ function property_views_default_views() {
   $handler->display->display_options['filters']['type']['value'] = array(
     'property' => 'property',
   );
+  $handler->display->display_options['filters']['type']['group'] = 1;
+  /* Filter criterion: Content: Address - Thoroughfare (i.e. Street address) */
+  $handler->display->display_options['filters']['field_address_thoroughfare']['id'] = 'field_address_thoroughfare';
+  $handler->display->display_options['filters']['field_address_thoroughfare']['table'] = 'field_data_field_address';
+  $handler->display->display_options['filters']['field_address_thoroughfare']['field'] = 'field_address_thoroughfare';
+  $handler->display->display_options['filters']['field_address_thoroughfare']['operator'] = 'contains';
+  $handler->display->display_options['filters']['field_address_thoroughfare']['group'] = 1;
+  $handler->display->display_options['filters']['field_address_thoroughfare']['exposed'] = TRUE;
+  $handler->display->display_options['filters']['field_address_thoroughfare']['expose']['operator_id'] = 'field_address_thoroughfare_op';
+  $handler->display->display_options['filters']['field_address_thoroughfare']['expose']['label'] = 'Address';
+  $handler->display->display_options['filters']['field_address_thoroughfare']['expose']['operator'] = 'field_address_thoroughfare_op';
+  $handler->display->display_options['filters']['field_address_thoroughfare']['expose']['identifier'] = 'address';
+  $handler->display->display_options['filters']['field_address_thoroughfare']['expose']['remember_roles'] = array(
+    2 => '2',
+    1 => 0,
+    5 => 0,
+    4 => 0,
+    3 => 0,
+  );
   /* Filter criterion: Content: Address - Locality (i.e. City) */
   $handler->display->display_options['filters']['field_address_locality']['id'] = 'field_address_locality';
   $handler->display->display_options['filters']['field_address_locality']['table'] = 'field_data_field_address';
   $handler->display->display_options['filters']['field_address_locality']['field'] = 'field_address_locality';
-  $handler->display->display_options['filters']['field_address_locality']['operator'] = 'starts';
+  $handler->display->display_options['filters']['field_address_locality']['group'] = 1;
   $handler->display->display_options['filters']['field_address_locality']['exposed'] = TRUE;
   $handler->display->display_options['filters']['field_address_locality']['expose']['operator_id'] = 'field_address_locality_op';
   $handler->display->display_options['filters']['field_address_locality']['expose']['label'] = 'City';
@@ -269,6 +288,24 @@ function property_views_default_views() {
   $handler->display->display_options['filters']['field_address_locality']['expose']['remember_roles'] = array(
     2 => '2',
     1 => 0,
+    5 => 0,
+    4 => 0,
+    3 => 0,
+  );
+  /* Filter criterion: Content: Address - Administrative area (i.e. State / Province) */
+  $handler->display->display_options['filters']['field_address_administrative_area']['id'] = 'field_address_administrative_area';
+  $handler->display->display_options['filters']['field_address_administrative_area']['table'] = 'field_data_field_address';
+  $handler->display->display_options['filters']['field_address_administrative_area']['field'] = 'field_address_administrative_area';
+  $handler->display->display_options['filters']['field_address_administrative_area']['group'] = 1;
+  $handler->display->display_options['filters']['field_address_administrative_area']['exposed'] = TRUE;
+  $handler->display->display_options['filters']['field_address_administrative_area']['expose']['operator_id'] = 'field_address_administrative_area_op';
+  $handler->display->display_options['filters']['field_address_administrative_area']['expose']['label'] = 'State';
+  $handler->display->display_options['filters']['field_address_administrative_area']['expose']['operator'] = 'field_address_administrative_area_op';
+  $handler->display->display_options['filters']['field_address_administrative_area']['expose']['identifier'] = 'state';
+  $handler->display->display_options['filters']['field_address_administrative_area']['expose']['remember_roles'] = array(
+    2 => '2',
+    1 => 0,
+    5 => 0,
     4 => 0,
     3 => 0,
   );
@@ -277,6 +314,7 @@ function property_views_default_views() {
   $handler->display->display_options['filters']['field_address_postal_code']['table'] = 'field_data_field_address';
   $handler->display->display_options['filters']['field_address_postal_code']['field'] = 'field_address_postal_code';
   $handler->display->display_options['filters']['field_address_postal_code']['operator'] = 'starts';
+  $handler->display->display_options['filters']['field_address_postal_code']['group'] = 1;
   $handler->display->display_options['filters']['field_address_postal_code']['exposed'] = TRUE;
   $handler->display->display_options['filters']['field_address_postal_code']['expose']['operator_id'] = 'field_address_postal_code_op';
   $handler->display->display_options['filters']['field_address_postal_code']['expose']['label'] = 'ZIP Code';
@@ -292,6 +330,7 @@ function property_views_default_views() {
   $handler->display->display_options['filters']['field_data_quality_tags_tid']['id'] = 'field_data_quality_tags_tid';
   $handler->display->display_options['filters']['field_data_quality_tags_tid']['table'] = 'field_data_field_data_quality_tags';
   $handler->display->display_options['filters']['field_data_quality_tags_tid']['field'] = 'field_data_quality_tags_tid';
+  $handler->display->display_options['filters']['field_data_quality_tags_tid']['group'] = 1;
   $handler->display->display_options['filters']['field_data_quality_tags_tid']['exposed'] = TRUE;
   $handler->display->display_options['filters']['field_data_quality_tags_tid']['expose']['operator_id'] = 'field_data_quality_tags_tid_op';
   $handler->display->display_options['filters']['field_data_quality_tags_tid']['expose']['label'] = 'Data Quality Tags';
@@ -713,11 +752,30 @@ function property_views_default_views() {
   $handler->display->display_options['filters']['type']['value'] = array(
     'property' => 'property',
   );
+  $handler->display->display_options['filters']['type']['group'] = 1;
+  /* Filter criterion: Content: Address - Thoroughfare (i.e. Street address) */
+  $handler->display->display_options['filters']['field_address_thoroughfare']['id'] = 'field_address_thoroughfare';
+  $handler->display->display_options['filters']['field_address_thoroughfare']['table'] = 'field_data_field_address';
+  $handler->display->display_options['filters']['field_address_thoroughfare']['field'] = 'field_address_thoroughfare';
+  $handler->display->display_options['filters']['field_address_thoroughfare']['operator'] = 'contains';
+  $handler->display->display_options['filters']['field_address_thoroughfare']['group'] = 1;
+  $handler->display->display_options['filters']['field_address_thoroughfare']['exposed'] = TRUE;
+  $handler->display->display_options['filters']['field_address_thoroughfare']['expose']['operator_id'] = 'field_address_thoroughfare_op';
+  $handler->display->display_options['filters']['field_address_thoroughfare']['expose']['label'] = 'Address';
+  $handler->display->display_options['filters']['field_address_thoroughfare']['expose']['operator'] = 'field_address_thoroughfare_op';
+  $handler->display->display_options['filters']['field_address_thoroughfare']['expose']['identifier'] = 'address';
+  $handler->display->display_options['filters']['field_address_thoroughfare']['expose']['remember_roles'] = array(
+    2 => '2',
+    1 => 0,
+    5 => 0,
+    4 => 0,
+    3 => 0,
+  );
   /* Filter criterion: Content: Address - Locality (i.e. City) */
   $handler->display->display_options['filters']['field_address_locality']['id'] = 'field_address_locality';
   $handler->display->display_options['filters']['field_address_locality']['table'] = 'field_data_field_address';
   $handler->display->display_options['filters']['field_address_locality']['field'] = 'field_address_locality';
-  $handler->display->display_options['filters']['field_address_locality']['operator'] = 'starts';
+  $handler->display->display_options['filters']['field_address_locality']['group'] = 1;
   $handler->display->display_options['filters']['field_address_locality']['exposed'] = TRUE;
   $handler->display->display_options['filters']['field_address_locality']['expose']['operator_id'] = 'field_address_locality_op';
   $handler->display->display_options['filters']['field_address_locality']['expose']['label'] = 'City';
@@ -726,6 +784,24 @@ function property_views_default_views() {
   $handler->display->display_options['filters']['field_address_locality']['expose']['remember_roles'] = array(
     2 => '2',
     1 => 0,
+    5 => 0,
+    4 => 0,
+    3 => 0,
+  );
+  /* Filter criterion: Content: Address - Administrative area (i.e. State / Province) */
+  $handler->display->display_options['filters']['field_address_administrative_area']['id'] = 'field_address_administrative_area';
+  $handler->display->display_options['filters']['field_address_administrative_area']['table'] = 'field_data_field_address';
+  $handler->display->display_options['filters']['field_address_administrative_area']['field'] = 'field_address_administrative_area';
+  $handler->display->display_options['filters']['field_address_administrative_area']['group'] = 1;
+  $handler->display->display_options['filters']['field_address_administrative_area']['exposed'] = TRUE;
+  $handler->display->display_options['filters']['field_address_administrative_area']['expose']['operator_id'] = 'field_address_administrative_area_op';
+  $handler->display->display_options['filters']['field_address_administrative_area']['expose']['label'] = 'State';
+  $handler->display->display_options['filters']['field_address_administrative_area']['expose']['operator'] = 'field_address_administrative_area_op';
+  $handler->display->display_options['filters']['field_address_administrative_area']['expose']['identifier'] = 'state';
+  $handler->display->display_options['filters']['field_address_administrative_area']['expose']['remember_roles'] = array(
+    2 => '2',
+    1 => 0,
+    5 => 0,
     4 => 0,
     3 => 0,
   );
@@ -734,6 +810,7 @@ function property_views_default_views() {
   $handler->display->display_options['filters']['field_address_postal_code']['table'] = 'field_data_field_address';
   $handler->display->display_options['filters']['field_address_postal_code']['field'] = 'field_address_postal_code';
   $handler->display->display_options['filters']['field_address_postal_code']['operator'] = 'starts';
+  $handler->display->display_options['filters']['field_address_postal_code']['group'] = 1;
   $handler->display->display_options['filters']['field_address_postal_code']['exposed'] = TRUE;
   $handler->display->display_options['filters']['field_address_postal_code']['expose']['operator_id'] = 'field_address_postal_code_op';
   $handler->display->display_options['filters']['field_address_postal_code']['expose']['label'] = 'ZIP Code';
@@ -749,6 +826,7 @@ function property_views_default_views() {
   $handler->display->display_options['filters']['field_data_quality_tags_tid']['id'] = 'field_data_quality_tags_tid';
   $handler->display->display_options['filters']['field_data_quality_tags_tid']['table'] = 'field_data_field_data_quality_tags';
   $handler->display->display_options['filters']['field_data_quality_tags_tid']['field'] = 'field_data_quality_tags_tid';
+  $handler->display->display_options['filters']['field_data_quality_tags_tid']['group'] = 1;
   $handler->display->display_options['filters']['field_data_quality_tags_tid']['exposed'] = TRUE;
   $handler->display->display_options['filters']['field_data_quality_tags_tid']['expose']['operator_id'] = 'field_data_quality_tags_tid_op';
   $handler->display->display_options['filters']['field_data_quality_tags_tid']['expose']['label'] = 'Data Quality Tags';
