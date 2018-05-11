@@ -589,7 +589,7 @@ function property_views_default_views() {
   $handler->display->display_options['path'] = 'drupalgap/views_datasource/my-properties/%';
 
   /* Display: my properties */
-  $handler = $view->new_display('page', 'my properties', 'page_3');
+  $handler = $view->new_display('page', 'my properties', 'my_properties');
   $handler->display->display_options['defaults']['title'] = FALSE;
   $handler->display->display_options['title'] = 'My Properties';
   $handler->display->display_options['display_description'] = 'list of user added properties';
