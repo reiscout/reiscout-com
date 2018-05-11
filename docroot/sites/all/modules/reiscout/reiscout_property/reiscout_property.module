@@ -63,21 +63,21 @@ function reiscout_property_form_views_exposed_form_alter(&$form, &$form_state, $
   if ('views-exposed-form-property-listing-page' == $form['#id']) {
     $role_admin = user_role_load_by_name('administrator');
     if (user_has_role($role_admin->rid)) {
-      _reiscout_property_attach_addresscitystatezip_field($form);
+      _reiscout_property_attach_addresscitystatezip_field($form, 'reiscout_property/ascsz_autocomplete');
     }
     else {
-      _reiscout_property_attach_citystatezip_field($form);
+      _reiscout_property_attach_citystatezip_field($form, 'reiscout_property/csz_autocomplete');
     }
     array_unshift($form['#submit'], 'reiscout_property_property_listing_views_exposed_form_submit');
   }
   // 'My Properties'
   elseif ('views-exposed-form-property-listing-my-properties' == $form['#id']) {
-    _reiscout_property_attach_addresscitystatezip_field($form);
+    _reiscout_property_attach_addresscitystatezip_field($form, 'reiscout_property/ascsz_my_properties_autocomplete');
     array_unshift($form['#submit'], 'reiscout_property_property_listing_views_exposed_form_submit');
   }
   // 'Purchased Leads'
   elseif ('views-exposed-form-reiscout-property-commerce-purchased-nodes-page' == $form['#id']) {
-    _reiscout_property_attach_addresscitystatezip_field($form);
+    _reiscout_property_attach_addresscitystatezip_field($form, 'reiscout_property/ascsz_purchased_leads_autocomplete');
     array_unshift($form['#submit'], 'reiscout_property_property_listing_views_exposed_form_submit');
   }
 }
@@ -459,13 +459,13 @@ function reiscout_property_entity_load($entities, $type) {
 /**
  * Attaches 'citystatezip' field to a views_exposed_form form.
  */
-function _reiscout_property_attach_citystatezip_field(&$form) {
+function _reiscout_property_attach_citystatezip_field(&$form, $autocomplete_path) {
   $form['citystatezip'] = array(
     '#type' => 'textfield',
     '#size' => 30,
     '#default_value' => '',
     '#attributes' => array('placeholder' => t('City, State or ZIP')),
-    '#autocomplete_path' => 'reiscout_property/csz_autocomplete',
+    '#autocomplete_path' => $autocomplete_path,
   );
 
   $field_info = array(
@@ -479,13 +479,13 @@ function _reiscout_property_attach_citystatezip_field(&$form) {
 /**
  * Attaches 'addresscitystatezip' field to a views_exposed_form form.
  */
-function _reiscout_property_attach_addresscitystatezip_field(&$form) {
+function _reiscout_property_attach_addresscitystatezip_field(&$form, $autocomplete_path) {
   $form['addresscitystatezip'] = array(
     '#type' => 'textfield',
     '#size' => 30,
     '#default_value' => '',
     '#attributes' => array('placeholder' => t('Address, Street, City, State or ZIP')),
-    '#autocomplete_path' => 'reiscout_property/ascsz_autocomplete',
+    '#autocomplete_path' => $autocomplete_path,
   );
 
   $field_info = array(
