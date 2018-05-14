@@ -52,6 +52,24 @@ function reiscout_misc_user_profile_form_validate(&$form, &$form_state, $form_id
 }
 
 /**
+ * Implements hook_form_FORM_ID_alter().
+ */
+function reiscout_misc_form_node_delete_confirm_alter(&$form, &$form_state, $form_id) {
+  if ('property' == $form['#node']->type) {
+    $form['#submit'][] = 'reiscout_misc_node_delete_confirm_validate';
+  }
+}
+
+/**
+ * Form submission handler for 'node_delete_confirm' form.
+ *
+ * Redirect a user to 'My Properties' page after a node deleting.
+ */
+function reiscout_misc_node_delete_confirm_validate(&$form, &$form_state) {
+  $form_state['redirect'] = 'my-properties';
+}
+
+/**
  * Checks if the current user has 'administrator' role.
  */
 function _reiscout_misc_user_has_administrator_role() {
