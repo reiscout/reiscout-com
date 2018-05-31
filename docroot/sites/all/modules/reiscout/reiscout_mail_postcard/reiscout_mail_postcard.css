@@ -390,6 +390,10 @@
     background-image: url("https://s3.amazonaws.com/reiscout/postcard_bg_images/custom/janet_pickett_2_front.jpg");
 }
 
+#psc_banner_threeoakservices_fatigued_landlord {
+    background-image: url("https://s3.amazonaws.com/reiscout/postcard_bg_images/custom/threeoakservices_fatigued_landlord.jpg");
+}
+
 #total_telecom_management #psc_banner {
     background-color: #2A2A2A;
 }
@@ -414,6 +418,19 @@
 #janet_pickett #psc_code {
     color: #3D4B5C;
     border: 2px solid #3D4B5C;
+}
+
+#threeoakservices_fatigued_landlord #psc_banner {
+    background-color: #000;
+}
+
+#threeoakservices_fatigued_landlord .psc_accent {
+    color: #9b7464;
+}
+
+#threeoakservices_fatigued_landlord #psc_code {
+    color: #9b7464;
+    border: 2px solid #9b7464;
 }
 
 .roofing_raindrops #subtitle,
