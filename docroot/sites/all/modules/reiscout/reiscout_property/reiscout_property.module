@@ -157,53 +157,120 @@ function reiscout_property_form_property_node_form_alter(&$form, &$form_state, $
 
 /**
  * Implements hook_node_validate().
+ *
+ * If a user wants to place a node to the marketplace, checks its address for
+ * uniqueness within the marketplace. Otherwise, checks its address for
+ * uniqueness within the user's account.
+ *
+ * If at least one component of the address of the owner of a property is filled,
+ * checks whether all the required components of the address are filled.
  */
 function reiscout_property_node_validate($node, $form, &$form_state) {
+  global $user;
+
   if ('property' != $node->type) {
     return;
   }
 
-  // If a node is being deleted, we do not need
-  // to check its address for uniqueness.
+  // If a node is being deleted, we do not need make any checks.
   if ('Delete' == $form_state['values']['op']) {
     return;
   }
 
   $nw = entity_metadata_wrapper('node', $node);
 
-  if (!$nw->field_address->value()) {
-    return;
+  if ($nw->field_address->value()) {
+    // If a user wants to place this node to the marketplace, we need check its address for uniqueness within the marketplace
+    if ($nw->field_place_on_marketplace->value()) {
+      $query = new EntityFieldQuery;
+      $query->entityCondition('entity_type', 'node')
+        ->entityCondition('bundle', 'property')
+        ->fieldCondition('field_address', 'thoroughfare', $nw->field_address->thoroughfare->value())
+        ->fieldCondition('field_address', 'premise', $nw->field_address->premise->value())
+        ->fieldCondition('field_address', 'locality', $nw->field_address->locality->value())
+        ->fieldCondition('field_address', 'administrative_area', $nw->field_address->administrative_area->value())
+        ->fieldCondition('field_place_on_marketplace', 'value', 1);
+
+      // We do not want to compare a node with itself
+      if ($node->nid) {
+        $query->propertyCondition('nid', $node->nid, '!=');
+      }
+
+      if ($result = $query->execute()) {
+        $nodes = array_keys($result['node']);
+        $nid = array_shift($nodes);
+        $t_args = array('!node_url' => url('/node/' . $nid));
+        $msg = t('A <a href="!node_url">property with the same address</a> has already been placed on our marketplace. <br>If you want to add the property for yourself, you must uncheck the <strong>Place this lead on the marketplace</strong> checkbox.', $t_args);
+        form_set_error('field_address', $msg);
+      }
+    }
+    // Otherwise, we need check its address for uniqueness within the user's account
+    else {
+      $query = new EntityFieldQuery;
+      $query->entityCondition('entity_type', 'node')
+        ->entityCondition('bundle', 'property')
+        ->fieldCondition('field_address', 'thoroughfare', $nw->field_address->thoroughfare->value())
+        ->fieldCondition('field_address', 'premise', $nw->field_address->premise->value())
+        ->fieldCondition('field_address', 'locality', $nw->field_address->locality->value())
+        ->fieldCondition('field_address', 'administrative_area', $nw->field_address->administrative_area->value())
+        ->propertyCondition('uid', $user->uid);
+
+      // We do not want to compare a node with itself
+      if ($node->nid) {
+        $query->propertyCondition('nid', $node->nid, '!=');
+      }
+
+      if ($result = $query->execute()) {
+        $nodes = array_keys($result['node']);
+        $nid = array_shift($nodes);
+        $t_args = array('!node_url' => url('/node/' . $nid));
+        $msg = t('You have already added a <a href="!node_url">property with the same address</a>.', $t_args);
+        form_set_error('field_address', $msg);
+      }
+    }
   }
 
-  // If a node has not been placed to the marketplace, we do not
-  // need to check its address for uniqueness, because we want to
-  // allow a user to create a property with a non-unique address
-  // if he wants to use such property for himself.
-  if (!$nw->field_place_on_marketplace->value()) {
-    return;
-  }
+  if ($nw->field_owner_postal_address->value()) {
+    // If at least one component of the address of the owner of a property is filled
+    if ($nw->field_owner_postal_address->first_name->value()
+     || $nw->field_owner_postal_address->last_name->value()
+     || $nw->field_owner_postal_address->organisation_name->value()
+     || $nw->field_owner_postal_address->thoroughfare->value()
+     || $nw->field_owner_postal_address->premise->value()
+     || $nw->field_owner_postal_address->locality->value()
+     || $nw->field_owner_postal_address->administrative_area->value()
+     || $nw->field_owner_postal_address->postal_code->value()) {
+      // Checks whether the owner's name or the name of a company is filled
+      if ((!$nw->field_owner_postal_address->first_name->value()
+        || !$nw->field_owner_postal_address->last_name->value())
+        && !$nw->field_owner_postal_address->organisation_name->value()) {
+        $msg = t("Please fill out either <strong>First name</strong> and <strong>Last name</strong> fields or <strong>Company</strong> field of the owner's address.");
+        form_set_error('field_owner_postal_address][und][0][first_name', $msg);
+        form_set_error('field_owner_postal_address][und][0][last_name');
+        form_set_error('field_owner_postal_address][und][0][organisation_name');
+      }
 
-  // Check if a property with the same address has already been placed on our marketplace
-  $query = new EntityFieldQuery;
-  $query->entityCondition('entity_type', 'node')
-    ->entityCondition('bundle', 'property')
-    ->fieldCondition('field_address', 'thoroughfare', $nw->field_address->thoroughfare->value())
-    ->fieldCondition('field_address', 'locality', $nw->field_address->locality->value())
-    ->fieldCondition('field_address', 'administrative_area', $nw->field_address->administrative_area->value())
-    ->fieldCondition('field_address', 'postal_code', $nw->field_address->postal_code->value())
-    ->fieldCondition('field_place_on_marketplace', 'value', 1);
+      // Check whether all the required components of the address are filled
+      if (!$nw->field_owner_postal_address->thoroughfare->value()) {
+        $msg = t("Please fill out <strong>Address 1</strong> field of the owner's address.");
+        form_set_error('field_owner_postal_address][und][0][thoroughfare', $msg);
+      }
 
-  // We do not want to compare a node with itself
-  if ($node->nid) {
-    $query->propertyCondition('nid', $node->nid, '!=');
-  }
+      if (!$nw->field_owner_postal_address->locality->value()) {
+        $msg = t("Please fill out <strong>City</strong> field of the owner's address.");
+        form_set_error('field_owner_postal_address][und][0][locality', $msg);
+      }
 
-  if ($result = $query->execute()) {
-    $nodes = array_keys($result['node']);
-    $nid = array_shift($nodes);
-    $t_args = array('!node_url' => url('/node/' . $nid));
-    $msg = t('A <a href="!node_url">property with the same address</a> has already been placed on our marketplace. <br>If you want to add the property for yourself, you must uncheck the <strong>Place this lead on the marketplace</strong> checkbox.', $t_args);
-    form_set_error('field_address', $msg);
+      if (!$nw->field_owner_postal_address->administrative_area->value()) {
+        $msg = t("Please fill out <strong>State</strong> field of the owner's address.");
+        form_set_error('field_owner_postal_address][und][0][administrative_area', $msg);
+      }
+
+      if (!$nw->field_owner_postal_address->postal_code->value()) {
+        $msg = t("Please fill out <strong>ZIP code</strong> field of the owner's address.");
+        form_set_error('field_owner_postal_address][und][0][postal_code', $msg);
+      }
+    }
   }
 }
 
