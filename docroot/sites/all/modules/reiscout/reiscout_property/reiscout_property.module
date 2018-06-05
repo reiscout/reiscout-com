@@ -166,8 +166,6 @@ function reiscout_property_form_property_node_form_alter(&$form, &$form_state, $
  * checks whether all the required components of the address are filled.
  */
 function reiscout_property_node_validate($node, $form, &$form_state) {
-  global $user;
-
   if ('property' != $node->type) {
     return;
   }
@@ -213,7 +211,7 @@ function reiscout_property_node_validate($node, $form, &$form_state) {
         ->fieldCondition('field_address', 'premise', $nw->field_address->premise->value())
         ->fieldCondition('field_address', 'locality', $nw->field_address->locality->value())
         ->fieldCondition('field_address', 'administrative_area', $nw->field_address->administrative_area->value())
-        ->propertyCondition('uid', $user->uid);
+        ->propertyCondition('uid', $node->uid);
 
       // We do not want to compare a node with itself
       if ($node->nid) {
