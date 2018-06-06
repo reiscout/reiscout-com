@@ -635,3 +635,12 @@ footer#colophon .col-sm-12 a:first-child{
     max-width: 1205px;
   }
 }
+
+.street-block .thoroughfare {
+  display: inline;
+}
+
+.street-block .premise {
+  display: inline;
+  margin-left: 4px;
+}
