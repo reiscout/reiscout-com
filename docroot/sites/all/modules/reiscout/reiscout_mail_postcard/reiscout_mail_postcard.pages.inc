@@ -306,6 +306,7 @@ function _reiscout_mail_postcard_send($property_nid, $template_nid) {
     'to' => array(
       'name'            => $property_owner_name,
       'address_line1'   => $property_owner_address->thoroughfare->value(),
+      'address_line2'   => $property_owner_address->premise->value(),
       'address_city'    => $property_owner_address->locality->value(),
       'address_state'   => $property_owner_address->administrative_area->value(),
       'address_zip'     => $property_owner_address->postal_code->value(),
@@ -315,6 +316,7 @@ function _reiscout_mail_postcard_send($property_nid, $template_nid) {
     'from' => array(
       'name'            => $user_address->name_line->value(),
       'address_line1'   => $user_address->thoroughfare->value(),
+      'address_line2'   => $user_address->premise->value(),
       'address_city'    => $user_address->locality->value(),
       'address_state'   => $user_address->administrative_area->value(),
       'address_zip'     => $user_address->postal_code->value(),
@@ -508,6 +510,7 @@ function _reiscout_mail_postcard_add_address_block($content, $property_nid) {
     '#to' => array(
       'name'         => $property_owner_name,
       'thoroughfare' => $property_owner_address->thoroughfare->value(),
+      'premise'      => $property_owner_address->premise->value(),
       'city'         => $property_owner_address->locality->value(),
       'state'        => $property_owner_address->administrative_area->value(),
       'zip'          => $property_owner_address->postal_code->value(),
@@ -515,6 +518,7 @@ function _reiscout_mail_postcard_add_address_block($content, $property_nid) {
     '#from' => array(
       'name'         => $user_address->name_line->value(),
       'thoroughfare' => $user_address->thoroughfare->value(),
+      'premise'      => $user_address->premise->value(),
       'city'         => $user_address->locality->value(),
       'state'        => $user_address->administrative_area->value(),
       'zip'          => $user_address->postal_code->value(),

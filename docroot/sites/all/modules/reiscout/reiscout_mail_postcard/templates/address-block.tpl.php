@@ -21,12 +21,12 @@
   </div>
   <div id="user-address">
     <?php print $from['name'] ?><br />
-    <?php print $from['thoroughfare'] ?><br />
+    <?php print $from['thoroughfare'] . ($from['premise'] ? ' ' . $from['premise'] : '') ?><br />
     <?php print $from['city'] . ', ' . $from['state'] . ' ' . $from['zip'] ?>
   </div>
   <div id="owner-address">
     <?php print $to['name'] ?><br />
-    <?php print $to['thoroughfare'] ?><br />
+    <?php print $to['thoroughfare'] . ($to['premise'] ? ' ' . $to['premise'] : '') ?><br />
     <?php print $to['city'] . ', ' . $to['state'] . ' ' . $to['zip'] ?>
   </div>
 </div>
