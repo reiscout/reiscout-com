@@ -178,21 +178,22 @@ function reiscout_property_node_validate($node, $form, &$form_state) {
   $nw = entity_metadata_wrapper('node', $node);
 
   if ($nw->field_address->value()) {
+    $query = new EntityFieldQuery;
+    $query->entityCondition('entity_type', 'node')
+      ->entityCondition('bundle', 'property')
+      ->fieldCondition('field_address', 'thoroughfare', $nw->field_address->thoroughfare->value())
+      ->fieldCondition('field_address', 'premise', $nw->field_address->premise->value())
+      ->fieldCondition('field_address', 'locality', $nw->field_address->locality->value())
+      ->fieldCondition('field_address', 'administrative_area', $nw->field_address->administrative_area->value());
+
+    // We do not want to compare a node with itself
+    if ($node->nid) {
+      $query->propertyCondition('nid', $node->nid, '!=');
+    }
+
     // If a user wants to place this node to the marketplace, we need check its address for uniqueness within the marketplace
     if ($nw->field_place_on_marketplace->value()) {
-      $query = new EntityFieldQuery;
-      $query->entityCondition('entity_type', 'node')
-        ->entityCondition('bundle', 'property')
-        ->fieldCondition('field_address', 'thoroughfare', $nw->field_address->thoroughfare->value())
-        ->fieldCondition('field_address', 'premise', $nw->field_address->premise->value())
-        ->fieldCondition('field_address', 'locality', $nw->field_address->locality->value())
-        ->fieldCondition('field_address', 'administrative_area', $nw->field_address->administrative_area->value())
-        ->fieldCondition('field_place_on_marketplace', 'value', 1);
-
-      // We do not want to compare a node with itself
-      if ($node->nid) {
-        $query->propertyCondition('nid', $node->nid, '!=');
-      }
+      $query->fieldCondition('field_place_on_marketplace', 'value', 1);
 
       if ($result = $query->execute()) {
         $nodes = array_keys($result['node']);
@@ -204,19 +205,7 @@ function reiscout_property_node_validate($node, $form, &$form_state) {
     }
     // Otherwise, we need check its address for uniqueness within the user's account
     else {
-      $query = new EntityFieldQuery;
-      $query->entityCondition('entity_type', 'node')
-        ->entityCondition('bundle', 'property')
-        ->fieldCondition('field_address', 'thoroughfare', $nw->field_address->thoroughfare->value())
-        ->fieldCondition('field_address', 'premise', $nw->field_address->premise->value())
-        ->fieldCondition('field_address', 'locality', $nw->field_address->locality->value())
-        ->fieldCondition('field_address', 'administrative_area', $nw->field_address->administrative_area->value())
-        ->propertyCondition('uid', $node->uid);
-
-      // We do not want to compare a node with itself
-      if ($node->nid) {
-        $query->propertyCondition('nid', $node->nid, '!=');
-      }
+      $query->propertyCondition('uid', $node->uid);
 
       if ($result = $query->execute()) {
         $nodes = array_keys($result['node']);
