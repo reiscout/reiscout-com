@@ -1,0 +1,126 @@
+<?php
+
+/**
+ * @file
+ * Allows to attach address autocomplete feature to fields of 'Postal address' type.
+ */
+
+/**
+ * Implements hook_permission().
+ */
+function reiscout_addressfield_autocomplete_permission() {
+  return array(
+    'administer reiscout_addressfield_autocomplete' => array(
+      'title' => t('Administer Reiscout Address Field Autocomplete'),
+    ),
+  );
+}
+
+/**
+ * Implements hook_menu().
+ */
+function reiscout_addressfield_autocomplete_menu() {
+  $items['admin/config/content/reiscout-addressfield-autocomplete'] = array(
+    'title' => 'Reiscout Address Field Autocomplete',
+    'description' => 'Configure Reiscout Address Field Autocomplete settings.',
+    'page callback' => 'drupal_get_form',
+    'page arguments' => array('reiscout_addressfield_autocomplete_admin_settings_form'),
+    'access arguments' => array('administer reiscout_addressfield_autocomplete'),
+    'file' => 'reiscout_addressfield_autocomplete.admin.inc',
+  );
+
+  return $items;
+}
+
+/**
+ * Implements hook_libraries_info().
+ */
+function reiscout_addressfield_autocomplete_libraries_info() {
+  $libraries['geocomplete'] = array(
+    'name' => 'Geocomplete',
+    'vendor url' => 'https://ubilabs.github.io/geocomplete',
+    'download url' => 'https://github.com/ubilabs/geocomplete/archive/master.zip',
+    'version arguments' => array(
+      'file' => 'jquery.geocomplete.js',
+      'pattern' => '/V\s+([0-9\.\ \-]+)/',
+      'lines' => 5,
+    ),
+    'files' => array(
+      'js' => array(
+        'jquery.geocomplete.js' => array(
+          'type' => 'file',
+          'weight' => 2,
+        ),
+      ),
+    ),
+    'variants' => array(
+      'minified' => array(
+        'files' => array(
+          'js' => array(
+            'jquery.geocomplete.min.js',
+          ),
+        ),
+        'variant arguments' => array(
+          'variant' => 'minified',
+        ),
+      ),
+    ),
+  );
+
+  return $libraries;
+}
+
+/**
+ * Implements hook_form_alter().
+ *
+ * Attaches reiscout_addressfield_autocomplete.js to forms that must be
+ * processed by this module and provides corresponding JS settings.
+ *
+ * Also attaches Google Places library and geocomplete.js (jQuery Geocoding
+ * and Places Autocomplete Plugin).
+ */
+function reiscout_addressfield_autocomplete_form_alter(&$form, &$form_state, $form_id) {
+  if (!$fields = _reiscout_addressfield_autocomplete_get_fields()) {
+    return;
+  }
+
+  if (in_array($form_id, array_keys($fields))) {
+    $form['#attached']['js']['https://maps.googleapis.com/maps/api/js?libraries=places&key=' . gmap_get_key()] = array('type' => 'external');
+    $form['#attached']['libraries_load'][] = array('geocomplete');
+    $form['#attached']['js'][] = drupal_get_path('module', 'reiscout_addressfield_autocomplete') . '/reiscout_addressfield_autocomplete.js';
+    $form['#attached']['js'][] = array(
+      'type' => 'setting',
+      'data' => array(
+        'reiscout_addressfield_autocomplete' => array(
+          'fields' => $fields[$form_id],
+        ),
+      ),
+    );
+    $form['#attached']['css'][] = drupal_get_path('module', 'reiscout_addressfield_autocomplete') . '/reiscout_addressfield_autocomplete.css';
+  }
+}
+
+/**
+ * Returns a list of fields to attach the address autocomplete feature to.
+ */
+function _reiscout_addressfield_autocomplete_get_fields() {
+  $fields = array();
+
+  if (!$fields_rules = variable_get('reiscout_addressfield_autocomplete_fields')) {
+    return;
+  }
+
+  $fields_rules = explode(PHP_EOL, $fields_rules);
+  for ($i = 0, $len = count($fields_rules); $i < $len; ++$i) {
+    $fields_rules_parts = explode('|', $fields_rules[$i]);
+    // A valid rule must consist of exactly two parts
+    if (2 == count($fields_rules_parts)) {
+      $form_id = trim($fields_rules_parts[0]);
+      $fields_names = explode(',', $fields_rules_parts[1]);
+      $fields_names = array_map('trim', $fields_names);
+      $fields[$form_id] = $fields_names;
+    }
+  }
+
+  return $fields;
+}

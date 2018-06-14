@@ -1,0 +1,6 @@
+name = Reiscout Address Field Autocomplete
+description = Allows to attach address autocomplete feature to fields of 'Postal address' type.
+package = Reiscout
+core = 7.x
+dependencies[] = addressfield
+dependencies[] = gmap
