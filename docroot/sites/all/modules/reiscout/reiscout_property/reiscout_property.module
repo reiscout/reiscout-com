@@ -379,6 +379,11 @@ function reiscout_property_field_access($op, $field, $entity_type, $entity, $acc
         'field_under_contract',
       );
 
+      // This field is set in the app
+      if ('field_geo_position' == $field['field_name']) {
+        return FALSE;
+      }
+
       $role_admin = user_role_load_by_name('administrator');
 
       // It is only administrator who can edit the 'Lock data'
