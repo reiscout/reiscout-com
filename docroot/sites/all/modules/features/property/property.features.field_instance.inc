@@ -72,7 +72,9 @@ function property_field_default_field_instances() {
   // Exported field_instance: 'node-property-field_address'.
   $field_instances['node-property-field_address'] = array(
     'bundle' => 'property',
-    'default_value' => NULL,
+    'default_value' => array(
+      0 => array(),
+    ),
     'deleted' => 0,
     'description' => 'Enter property address. It will be visible only for users bought the access to this property.',
     'display' => array(
@@ -122,7 +124,7 @@ function property_field_default_field_instances() {
     ),
     'widget' => array(
       'active' => 1,
-      'module' => 'addressfield_autocomplete',
+      'module' => 'addressfield',
       'settings' => array(
         'available_countries' => array(
           'US' => 'US',
@@ -149,7 +151,7 @@ function property_field_default_field_instances() {
         'types' => 'geocode',
         'visible_markers' => 0,
       ),
-      'type' => 'addressfield_autocomplete',
+      'type' => 'addressfield_standard',
       'weight' => 4,
     ),
   );
