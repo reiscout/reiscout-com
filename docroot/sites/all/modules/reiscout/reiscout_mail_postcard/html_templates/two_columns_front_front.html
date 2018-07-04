@@ -1,0 +1,109 @@
+<html>
+<head>
+  <meta charset="UTF-8">
+  <title>Two Columns Front 4x6 Postcard Front</title>
+  <link href="https://fonts.googleapis.com/css?family=Pragati+Narrow:700|Roboto" rel="stylesheet">
+  <style>
+    *, *:before, *:after {
+      -webkit-box-sizing: border-box;
+      -moz-box-sizing: border-box;
+      box-sizing: border-box;
+    }
+
+    body {
+      margin: 0;
+      padding: 0;
+      width: 6.25in;
+      height: 4.25in;
+    }
+
+    #safe-area {
+      position: absolute;
+      width: 6in;
+      height: 4in;
+      left: 0.125in;
+      top: 0.125in;
+    }
+
+    div[id^='psc-image'] {
+      float: left;
+      width: 264px;
+      height: 100%;
+      background-color: #EEE;
+    }
+
+    div[id^='psc-text'] {
+      float: left;
+      padding-top: 20px;
+      width: 312px;
+      height: 100%;
+      background-color: #000;
+      color: #FFF;
+      font-family: 'Roboto', sans-serif;
+    }
+
+    #psc-title {
+      text-align: center;
+      text-transform: uppercase;
+      font-family: 'Pragati Narrow', sans-serif;
+      font-size: 26pt;
+      line-height: 25pt;
+    }
+
+    #psc-subtitle {
+      margin-top: 5px;
+      text-align: center;
+      text-transform: uppercase;
+      font-family: 'Roboto', sans-serif;
+      font-size: 12pt;
+    }
+
+    #psc-line {
+      margin: 7px 0 7px 15px;
+      width: 260px;
+      border-bottom: 2px solid #FFF;
+    }
+
+    .psc-description {
+      margin: 0 0 7px 15px;
+      font-size: 10pt;
+      line-height: 11pt;
+    }
+
+    .psc-description ul {
+      margin: 4px 0 0 0;
+      padding-left: 30px;
+    }
+
+    .psc-contacts {
+      margin-top: 15px;
+      font-size: 9pt;
+      line-height: 10pt;
+    }
+
+    .psc-address {
+      margin: 15px 15px 0 0;
+      text-align: right;
+      font-size: 8pt;
+      line-height: 9pt;
+    }
+
+    #psc-image-allison-ambrose {
+      /* The background image should have dimensions of 825x1200 pixels */
+      background-image: url('https://s3.amazonaws.com/reiscout/postcard_bg_images/custom/allison_ambrose.jpg');
+      background-size: 264px 4in;
+      background-repeat: no-repeat;
+    }
+
+    #psc-text-allison-ambrose {
+      background-color: #F48018;
+      color: #FFF;
+    }
+  </style>
+</head>
+<body>
+  <div id="safe-area">
+    {{content}}
+  </div>
+</body>
+</html>

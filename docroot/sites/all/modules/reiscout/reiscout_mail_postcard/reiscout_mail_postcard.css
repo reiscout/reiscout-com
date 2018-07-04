@@ -1,6 +1,5 @@
 @import url('https://use.fontawesome.com/releases/v5.0.6/css/solid.css');
-@import url('https://fonts.googleapis.com/css?family=Open+Sans:600,700');
-@import url('https://fonts.googleapis.com/css?family=Source+Sans+Pro:400,600,700');
+@import url('https://fonts.googleapis.com/css?family=Open+Sans:600,700|Source+Sans+Pro:400,600,700|Pragati+Narrow:700|Roboto:400,700');
 
 .template {
     margin-top: 10px;
@@ -19,8 +18,8 @@
     float: left;
     position: relative; /* This line is here, because #ink-free is positioned absolutely */
     padding: 0;
-    width: 6.02in;   /* Take into account left and right borders. */
-    height: 4.02in;  /* Take into account top and bottom borders. */
+    width: 578px;   /* 6 in = 576 px (96 DPI) + 2px for the left and right borders. */
+    height: 386px;  /* 4 in = 384 px (96 DPI) + 2px for the top and bottom borders. */
     border: 1px solid #ccc;
     border-radius: 4px;
 }
@@ -506,6 +505,152 @@
     border: 2px solid #AC1A1C;
 }
 /* Template class 1 -*/
+
+/*- Two Columns Front */
+.two_columns_front .front div[id^='psc-image'] {
+    float: left;
+    width: 264px;
+    height: 100%;
+    background-color: #EEE;
+}
+
+.two_columns_front .front div[id^='psc-text'] {
+    float: left;
+    padding-top: 20px;
+    width: 312px;
+    height: 100%;
+    background-color: #000;
+    color: #FFF;
+    font-family: 'Roboto', sans-serif;
+}
+
+.two_columns_front .front #psc-title {
+    text-align: center;
+    text-transform: uppercase;
+    font-family: 'Pragati Narrow', sans-serif;
+    font-size: 26pt;
+    line-height: 25pt;
+}
+
+.two_columns_front .front #psc-subtitle {
+    margin-top: 5px;
+    text-align: center;
+    text-transform: uppercase;
+    font-family: 'Roboto', sans-serif;
+    font-size: 12pt;
+}
+
+.two_columns_front .front #psc-line {
+    margin: 7px 0 7px 15px;
+    width: 260px;
+    border-bottom: 2px solid #FFF;
+}
+
+.two_columns_front .front .psc-description {
+    margin: 0 0 7px 15px;
+    font-size: 10pt;
+    line-height: 11pt;
+}
+
+.two_columns_front .front .psc-description ul {
+    margin: 4px 0 0 0;
+    padding-left: 30px;
+}
+
+.two_columns_front .front .psc-contacts {
+    margin-top: 15px;
+    font-size: 9pt;
+    line-height: 10pt;
+}
+
+.two_columns_front .front .psc-address {
+    margin: 15px 15px 0 0;
+    text-align: right;
+    font-size: 8pt;
+    line-height: 9pt;
+}
+
+.two_columns_front #psc-image-allison-ambrose {
+    /* The background image should have dimensions of 825x1200 pixels */
+    background-image: url('https://s3.amazonaws.com/reiscout/postcard_bg_images/custom/allison_ambrose.jpg');
+    background-size: 264px 4in;
+    background-repeat: no-repeat;
+}
+
+.two_columns_front #psc-text-allison-ambrose {
+    background-color: #F48018;
+    color: #FFF;
+}
+
+.two_columns_front div[id^='psc-banner'] {
+    padding-top: .26in;
+    height: 0.9063in; /* It is equal to 87px */
+    background-color: #000;
+    color: white;
+    text-align: center;
+    text-transform: uppercase;
+    font-family: 'Pragati Narrow', sans-serif;
+    font-size: 13pt;
+    line-height: 15pt;
+}
+
+.two_columns_front div[id^='psc-image-banner'] {
+    height: 0.9063in; /* It is equal to 87px */
+    background-color: #FFF;
+    background-size: 6in 0.9063in;
+    background-repeat: no-repeat;
+}
+
+.two_columns_front .back #psc-company-name {
+    letter-spacing: 2.15pt;
+}
+
+.two_columns_front .back #psc-subtitle {
+    letter-spacing: 1.45pt;
+}
+
+.two_columns_front div[id^='psc-message'] {
+    margin: 20px 0 0 15px;
+    width: 2.2in;
+    color: #000;
+    font-family: 'Roboto', sans-serif;
+    font-size: 10pt;
+    line-height: 11pt;
+}
+
+.two_columns_front .back .psc-description {
+    margin-bottom: 12px;
+}
+
+.two_columns_front .back .psc-description ul {
+    margin: 0;
+    padding-left: 20px;
+}
+
+.two_columns_front #psc-frame {
+    margin: 0 auto 12px auto;
+    padding: 9px;
+    width: 1.8in;
+    border: 2px solid #000;
+    text-align: center;
+    font-weight: bold;
+}
+
+.two_columns_front #psc-image-banner-allison-ambrose {
+    background-image: url("https://s3.amazonaws.com/reiscout/postcard_custom_header_bg_images/allison_ambrose.jpg");
+    border-top: 1px solid #ceb998;
+    border-bottom: 1px solid #ceb998;
+}
+
+.two_columns_front #psc-message-allison-ambrose {
+    color: #F48018;
+}
+
+.two_columns_front #psc-message-allison-ambrose #psc-frame {
+    color: #F48018;
+    border-color: #F48018;
+}
+/* Two Columns Front -*/
 
 .form-item-template-nid:after {
     display: table;
