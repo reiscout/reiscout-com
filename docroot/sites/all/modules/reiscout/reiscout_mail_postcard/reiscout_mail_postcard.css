@@ -643,12 +643,16 @@
 }
 
 .two_columns_front #psc-message-allison-ambrose {
+    min-height: 255px;
+    border-right: 3px solid #F48018;
     color: #F48018;
 }
 
 .two_columns_front #psc-message-allison-ambrose #psc-frame {
     color: #F48018;
     border-color: #F48018;
+    border-width: 1px;
+    font-weight: normal;
 }
 /* Two Columns Front -*/
 
