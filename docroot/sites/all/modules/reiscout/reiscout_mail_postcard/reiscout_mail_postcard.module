@@ -167,7 +167,6 @@ function reiscout_mail_postcard_node_view($node, $view_mode, $langcode) {
       '%period' => variable_get('reiscout_mail_postcard_send_limit_period', REISCOUT_MAIL_POSTCARD_SEND_LIMIT_PERIOD),
       '%sent' => date('M j, Y - g:i a', _reiscout_mail_postcard_get_last_postcard_sent_time($node->nid)),
     );
-    //'Mar 8, 2018 - 4:23 pm'
     $node->content['reiscout-mail-buttons']['description'] = array(
       '#prefix' => '<div class="description">',
       '#markup' => t("You may send a postcard to the same property's owner only once per %period days.", $t_args)
