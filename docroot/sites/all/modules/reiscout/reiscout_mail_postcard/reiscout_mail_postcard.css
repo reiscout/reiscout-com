@@ -37,6 +37,7 @@
     border: solid 1px #DDD;
     background-color: white;
     color: #000;
+    font-family: 'Source Sans Pro', sans-serif;
 }
 
 .template .back #ink-free #postage-indicia {
@@ -381,14 +382,6 @@
     background-image: url("https://s3.amazonaws.com/reiscout/postcard_bg_images/custom/total_telecom_management_front.jpg");
 }
 
-#psc_banner_janet_pickett_1 {
-    background-image: url("https://s3.amazonaws.com/reiscout/postcard_bg_images/custom/janet_pickett_1_front.jpg");
-}
-
-#psc_banner_janet_pickett_2 {
-    background-image: url("https://s3.amazonaws.com/reiscout/postcard_bg_images/custom/janet_pickett_2_front.jpg");
-}
-
 #psc_banner_threeoakservices_fatigued_landlord {
     background-image: url("https://s3.amazonaws.com/reiscout/postcard_bg_images/custom/threeoakservices_fatigued_landlord.jpg");
 }
@@ -404,19 +397,6 @@
 #total_telecom_management #psc_code {
     color: #00A3E0;
     border: 2px solid #00A3E0;
-}
-
-#janet_pickett #psc_banner {
-    background-color: #3D4B5C;
-}
-
-#janet_pickett .psc_accent {
-    color: #6D7B8C;
-}
-
-#janet_pickett #psc_code {
-    color: #3D4B5C;
-    border: 2px solid #3D4B5C;
 }
 
 #threeoakservices_fatigued_landlord #psc_banner {
@@ -570,6 +550,7 @@
     line-height: 9pt;
 }
 
+/*- Allison Ambrose */
 .two_columns_front #psc-image-allison-ambrose {
     /* The background image should have dimensions of 825x1200 pixels */
     background-image: url('https://s3.amazonaws.com/reiscout/postcard_bg_images/custom/allison_ambrose.jpg');
@@ -581,6 +562,56 @@
     background-color: #3E4C5C;
     color: #FFF;
 }
+
+.two_columns_front #psc-image-banner-allison-ambrose {
+    background-image: url("https://s3.amazonaws.com/reiscout/postcard_custom_header_bg_images/allison_ambrose.jpg");
+    border-top: 1px solid #ceb998;
+    border-bottom: 1px solid #ceb998;
+}
+
+.two_columns_front #psc-message-allison-ambrose {
+    min-height: 255px;
+    border-right: 3px solid #F48018;
+    color: #F48018;
+}
+
+.two_columns_front #psc-message-allison-ambrose #psc-frame {
+    color: #F48018;
+    border-color: #F48018;
+    border-width: 1px;
+    font-weight: normal;
+}
+/* Allison Ambrose -*/
+
+/*- Janet Pickett */
+.two_columns_front #psc-image-janet-pickett-black {
+    /* The background image should have dimensions of 825x1200 pixels */
+    background-image: url('https://s3.amazonaws.com/reiscout/postcard_bg_images/janet_pickett_black.jpg');
+    background-size: 264px 4in;
+    background-repeat: no-repeat;
+}
+
+.two_columns_front #psc-image-janet-pickett-white {
+    /* The background image should have dimensions of 825x1200 pixels */
+    background-image: url('https://s3.amazonaws.com/reiscout/postcard_bg_images/janet_pickett_white.jpg');
+    background-size: 264px 4in;
+    background-repeat: no-repeat;
+}
+
+.two_columns_front #psc-text-janet-pickett {
+    background-color: #3E4C5C;
+    color: #FFF;
+}
+
+.two_columns_front #psc-banner-janet-pickett {
+    background-color: #3E4C5C;
+}
+
+.two_columns_front #psc-message-janet-pickett #psc-frame {
+    color: #3E4C5C;
+    border-color: #3E4C5C;
+}
+/* Janet Pickett -*/
 
 .two_columns_front div[id^='psc-banner'] {
     padding-top: .26in;
@@ -634,25 +665,6 @@
     border: 2px solid #000;
     text-align: center;
     font-weight: bold;
-}
-
-.two_columns_front #psc-image-banner-allison-ambrose {
-    background-image: url("https://s3.amazonaws.com/reiscout/postcard_custom_header_bg_images/allison_ambrose.jpg");
-    border-top: 1px solid #ceb998;
-    border-bottom: 1px solid #ceb998;
-}
-
-.two_columns_front #psc-message-allison-ambrose {
-    min-height: 255px;
-    border-right: 3px solid #F48018;
-    color: #F48018;
-}
-
-.two_columns_front #psc-message-allison-ambrose #psc-frame {
-    color: #F48018;
-    border-color: #F48018;
-    border-width: 1px;
-    font-weight: normal;
 }
 /* Two Columns Front -*/
 
