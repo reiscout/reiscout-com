@@ -553,6 +553,65 @@
     line-height: 9pt;
 }
 
+.two_columns_front div[id^='psc-banner'] {
+    padding-top: .26in;
+    height: 0.9063in; /* It is equal to 87px */
+    background-color: #000;
+    color: white;
+    text-align: center;
+    text-transform: uppercase;
+    font-family: 'Pragati Narrow', sans-serif;
+    font-size: 13pt;
+    line-height: 15pt;
+}
+
+.two_columns_front div[id^='psc-image-banner'] {
+    height: 0.9063in; /* It is equal to 87px */
+    background-color: #FFF;
+    background-size: 6in 0.9063in;
+    background-repeat: no-repeat;
+}
+
+.two_columns_front .back #psc-company-name {
+    letter-spacing: 2.15pt;
+}
+
+.two_columns_front .back #psc-subtitle {
+    letter-spacing: 1.45pt;
+}
+
+.two_columns_front div[id^='psc-message'] {
+    margin: 20px 0 0 15px;
+    width: 2.2in;
+    color: #000;
+    font-family: 'Roboto', sans-serif;
+    font-size: 10pt;
+    line-height: 11pt;
+}
+
+.two_columns_front .back .psc-description {
+    margin-bottom: 12px;
+}
+
+.two_columns_front .back .psc-description ul {
+    margin: 0;
+    padding-left: 20px;
+}
+
+.two_columns_front #psc-frame {
+    margin: 0 auto 12px auto;
+    padding: 9px;
+    width: 1.8in;
+    border: 2px solid #AC1A1C;
+    text-align: center;
+    font-weight: bold;
+    color: #AC1A1C;
+}
+
+.two_columns_front .psc-accent {
+    color: #AC1A1C;
+}
+
 /*- Allison Ambrose */
 .two_columns_front #psc-image-allison-ambrose {
     background-image: url('https://s3.amazonaws.com/reiscout/postcard_bg_images/custom/allison_ambrose.jpg');
@@ -605,61 +664,11 @@
     color: #3E4C5C;
     border-color: #3E4C5C;
 }
+
+.two_columns_front #psc-message-janet-pickett .psc-accent {
+    color: #3E4C5C;
+}
 /* Janet Pickett -*/
-
-.two_columns_front div[id^='psc-banner'] {
-    padding-top: .26in;
-    height: 0.9063in; /* It is equal to 87px */
-    background-color: #000;
-    color: white;
-    text-align: center;
-    text-transform: uppercase;
-    font-family: 'Pragati Narrow', sans-serif;
-    font-size: 13pt;
-    line-height: 15pt;
-}
-
-.two_columns_front div[id^='psc-image-banner'] {
-    height: 0.9063in; /* It is equal to 87px */
-    background-color: #FFF;
-    background-size: 6in 0.9063in;
-    background-repeat: no-repeat;
-}
-
-.two_columns_front .back #psc-company-name {
-    letter-spacing: 2.15pt;
-}
-
-.two_columns_front .back #psc-subtitle {
-    letter-spacing: 1.45pt;
-}
-
-.two_columns_front div[id^='psc-message'] {
-    margin: 20px 0 0 15px;
-    width: 2.2in;
-    color: #000;
-    font-family: 'Roboto', sans-serif;
-    font-size: 10pt;
-    line-height: 11pt;
-}
-
-.two_columns_front .back .psc-description {
-    margin-bottom: 12px;
-}
-
-.two_columns_front .back .psc-description ul {
-    margin: 0;
-    padding-left: 20px;
-}
-
-.two_columns_front #psc-frame {
-    margin: 0 auto 12px auto;
-    padding: 9px;
-    width: 1.8in;
-    border: 2px solid #000;
-    text-align: center;
-    font-weight: bold;
-}
 /* Two Columns Front -*/
 
 .form-item-template-nid:after {
