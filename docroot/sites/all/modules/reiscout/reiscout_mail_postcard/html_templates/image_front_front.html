@@ -1,0 +1,78 @@
+<html>
+<head>
+  <meta charset="UTF-8">
+  <title>Image Front 4x6 Postcard Front</title>
+  <style>
+    *, *:before, *:after {
+      -webkit-box-sizing: border-box;
+      -moz-box-sizing: border-box;
+      box-sizing: border-box;
+    }
+
+    body {
+      margin: 0;
+      padding: 0;
+      width: 6.25in;
+      height: 4.25in;
+    }
+
+    #safe-area {
+      position: absolute;
+      width: 6in;
+      height: 4in;
+      left: 0.125in;
+      top: 0.125in;
+    }
+
+    div[id^='psc-image'] {
+      width: 100%;
+      height: 100%;
+      /* The background image should have dimensions of 1800x1200 pixels */
+      background-size: 6in 4in;
+      background-repeat: no-repeat;
+      background-color: #EEE;
+    }
+
+    #psc-image-roofing-raindrops {
+      background-image: url('https://s3.amazonaws.com/reiscout/postcard_images/roofing_raindrops.jpg');
+    }
+
+    #psc-image-garage-door-repair {
+      background-image: url('https://s3.amazonaws.com/reiscout/postcard_images/garage_door_repair.jpg');
+    }
+
+    #psc-image-general-trades {
+      background-image: url('https://s3.amazonaws.com/reiscout/postcard_images/general_trades.jpg');
+    }
+
+    #psc-image-hvac-repair {
+      background-image: url('https://s3.amazonaws.com/reiscout/postcard_images/hvac_repair.jpg');
+    }
+
+    #psc-image-lawn-care {
+      background-image: url('https://s3.amazonaws.com/reiscout/postcard_images/lawn_care.jpg');
+    }
+
+    #psc-image-tree-service {
+      background-image: url('https://s3.amazonaws.com/reiscout/postcard_images/tree_service.jpg');
+    }
+
+    #psc-image-women-fitness {
+      background-image: url('https://s3.amazonaws.com/reiscout/postcard_images/women_fitness.jpg');
+    }
+
+    #psc-image-total-telecom-management {
+      background-image: url("https://s3.amazonaws.com/reiscout/postcard_images/total_telecom_management.jpg");
+    }
+
+    #psc-image-threeoakservices-fatigued-landlord {
+      background-image: url("https://s3.amazonaws.com/reiscout/postcard_images/threeoakservices_fatigued_landlord.jpg");
+    }
+  </style>
+</head>
+<body>
+  <div id="safe-area">
+    {{content}}
+  </div>
+</body>
+</html>

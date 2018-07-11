@@ -281,210 +281,261 @@
 }
 /* Roofing -*/
 
-/*- Template class 1 */
-.roofing_raindrops .front, .roofing_raindrops .back,
-.garage_door_repair .front, .garage_door_repair .back,
-.general_trades .front, .general_trades .back,
-.hvac_repair .front, .hvac_repair .back,
-.lawn_care .front, .lawn_care .back,
-.tree_service .front, .tree_service .back,
-.women_fitness .front, .women_fitness .back {
-    font-family: 'Source Sans Pro', sans-serif;
-}
-
-.roofing_raindrops .front div[id^='psc_banner'],
-.garage_door_repair .front div[id^='psc_banner'],
-.general_trades .front div[id^='psc_banner'],
-.hvac_repair .front div[id^='psc_banner'],
-.lawn_care .front div[id^='psc_banner'],
-.tree_service .front div[id^='psc_banner'],
-.women_fitness .front div[id^='psc_banner'] {
+/*- Image Front */
+.image_front div[id^='psc-image'] {
+    width: 100%;
     height: 100%;
+    /* The background image should have dimensions of 1800x1200 pixels */
     background-size: 6in 4in;
-    background-position: center;
     background-repeat: no-repeat;
+    background-color: #EEE;
 }
 
-.roofing_raindrops .front #psc_banner {
-    background-image: url('html_templates/images/roofing_raindrops_front.jpg');
-}
-
-.garage_door_repair .front #psc_banner {
-    background-image: url('html_templates/images/garage_door_repair_front.jpg');
-}
-
-.general_trades .front #psc_banner {
-    background-image: url('html_templates/images/general_trades_front.jpg');
-}
-
-.hvac_repair .front #psc_banner {
-    background-image: url('html_templates/images/hvac_repair_front.jpg');
-}
-
-.lawn_care .front #psc_banner {
-    background-image: url('html_templates/images/lawn_care_front.jpg');
-}
-
-.tree_service .front #psc_banner {
-    background-image: url('html_templates/images/tree_service_front.jpg');
-}
-
-.women_fitness .front #psc_banner {
-    background-image: url('html_templates/images/women_fitness_front.jpg');
-}
-
-.roofing_raindrops .back,
-.garage_door_repair .back,
-.general_trades .back,
-.hvac_repair .back,
-.lawn_care .back,
-.tree_service .back,
-.women_fitness .back {
-    color: #000;
-}
-
-.roofing_raindrops .back div[id^='psc_banner'],
-.garage_door_repair .back div[id^='psc_banner'],
-.general_trades .back div[id^='psc_banner'],
-.hvac_repair .back div[id^='psc_banner'],
-.lawn_care .back div[id^='psc_banner'],
-.tree_service .back div[id^='psc_banner'],
-.women_fitness .back div[id^='psc_banner'] {
-    border-radius: 3px 3px 0 0;
-    padding-top: .25in;
+.image_front div[id^='psc-banner'] {
+    padding-top: .26in;
     height: 0.9063in; /* It is equal to 87px */
-    background-color: #AC1A1C;
-    font-weight: 700;
-    font-size: .16in;
-    text-transform: uppercase;
-    letter-spacing: .03in;
-    text-align: center;
+    background-color: #000;
     color: white;
+    text-align: center;
+    text-transform: uppercase;
+    font-family: 'Pragati Narrow', sans-serif;
+    font-size: 13pt;
+    line-height: 15pt;
 }
 
-.roofing_raindrops div[id^='psc_banner_image'],
-.garage_door_repair div[id^='psc_banner_image'],
-.general_trades div[id^='psc_banner_image'],
-.hvac_repair div[id^='psc_banner_image'],
-.lawn_care div[id^='psc_banner_image'],
-.tree_service div[id^='psc_banner_image'],
-.women_fitness div[id^='psc_banner_image'] {
+.image_front div[id^='psc-image-banner'] {
+    height: 0.9063in; /* It is equal to 87px */
     background-color: #FFF;
     background-size: 6in 0.9063in;
     background-repeat: no-repeat;
 }
 
-#psc_banner_image_bells_roofing {
-    background-image: url("https://s3.amazonaws.com/reiscout/postcard_custom_header_bg_images/bells_roofing.jpg");
+.image_front #psc-company-name {
+    letter-spacing: 2.15pt;
 }
 
-#psc_banner_total_telecom_management {
-    background-image: url("https://s3.amazonaws.com/reiscout/postcard_bg_images/custom/total_telecom_management_front.jpg");
+.image_front #psc-subtitle {
+    letter-spacing: 1.45pt;
 }
 
-#psc_banner_threeoakservices_fatigued_landlord {
-    background-image: url("https://s3.amazonaws.com/reiscout/postcard_bg_images/custom/threeoakservices_fatigued_landlord.jpg");
-}
-
-#total_telecom_management #psc_banner {
-    background-color: #2A2A2A;
-}
-
-#total_telecom_management .psc_accent {
-    color: #00A3E0;
-}
-
-#total_telecom_management #psc_code {
-    color: #00A3E0;
-    border: 2px solid #00A3E0;
-}
-
-#threeoakservices_fatigued_landlord #psc_banner {
-    background-color: #000;
-}
-
-#threeoakservices_fatigued_landlord .psc_accent {
-    color: #9b7464;
-}
-
-#threeoakservices_fatigued_landlord #psc_code {
-    color: #9b7464;
-    border: 2px solid #9b7464;
-}
-
-.roofing_raindrops #subtitle,
-.garage_door_repair #subtitle,
-.general_trades #subtitle,
-.hvac_repair #subtitle,
-.lawn_care #subtitle,
-.tree_service #subtitle,
-.women_fitness #subtitle {
-    letter-spacing: .02in;
-}
-
-.roofing_raindrops #psc_message,
-.garage_door_repair #psc_message,
-.general_trades #psc_message,
-.hvac_repair #psc_message,
-.lawn_care #psc_message,
-.tree_service #psc_message,
-.women_fitness #psc_message {
-    margin-top: .185in;
-    margin-left: .27in;
+.image_front div[id^='psc-message'] {
+    margin: 20px 0 0 15px;
     width: 2.2in;
-    font-weight: 400;
-    font-size: .122in;
+    color: #000;
+    font-family: 'Roboto', sans-serif;
+    font-size: 10pt;
+    line-height: 11pt;
 }
 
-.roofing_raindrops .psc_description,
-.garage_door_repair .psc_description,
-.general_trades .psc_description,
-.hvac_repair .psc_description,
-.lawn_care .psc_description,
-.tree_service .psc_description,
-.women_fitness .psc_description {
-    margin-bottom: 11px;
+.image_front .psc-description {
+    margin-bottom: 12px;
 }
 
-.roofing_raindrops .psc_accent,
-.garage_door_repair .psc_accent,
-.general_trades .psc_accent,
-.hvac_repair .psc_accent,
-.lawn_care .psc_accent,
-.tree_service .psc_accent,
-.women_fitness .psc_accent {
-    color: #AC1A1C;
+.image_front .psc-description ul {
+    margin: 0;
+    padding-left: 20px;
 }
 
-.roofing_raindrops #psc_code-banner,
-.garage_door_repair #psc_code-banner,
-.general_trades #psc_code-banner,
-.hvac_repair #psc_code-banner,
-.lawn_care #psc_code-banner,
-.tree_service #psc_code-banner,
-.women_fitness #psc_code-banner {
-    text-align: center;
-    font-size: .14in;
-}
-
-.roofing_raindrops #psc_code,
-.garage_door_repair #psc_code,
-.general_trades #psc_code,
-.hvac_repair #psc_code,
-.lawn_care #psc_code,
-.tree_service #psc_code,
-.women_fitness #psc_code {
-    margin: .1in auto;
-    padding: .1in;
-    width: 2in;
-    font-size: .15in;
-    font-weight: 700;
-    text-transform: uppercase;
-    letter-spacing: .02in;
-    color: #AC1A1C;
+.image_front #psc-frame {
+    margin: 0 auto 12px auto;
+    padding: 9px;
+    width: 1.8in;
     border: 2px solid #AC1A1C;
+    text-align: center;
+    font-weight: bold;
+    color: #AC1A1C;
 }
-/* Template class 1 -*/
+
+.image_front .psc-accent {
+    color: #AC1A1C;
+}
+
+/*- Roofing Raindrops */
+.image_front #psc-image-roofing-raindrops {
+    background-image: url('https://s3.amazonaws.com/reiscout/postcard_images/roofing_raindrops.jpg');
+}
+
+.image_front #psc-banner-roofing-raindrops {
+    background-color: #9A928D;
+}
+
+.image_front #psc-message-roofing-raindrops #psc-frame {
+    border-color: #9A928D;
+    color: #9A928D;
+}
+
+.image_front #psc-message-roofing-raindrops .psc-accent {
+    color: #9A928D;
+}
+/* Roofing Raindrops -*/
+
+/*- Garage Door Repair */
+.image_front #psc-image-garage-door-repair {
+    background-image: url('https://s3.amazonaws.com/reiscout/postcard_images/garage_door_repair.jpg');
+}
+
+.image_front #psc-banner-garage-door-repair {
+    background-color: #8E95A7;
+}
+
+.image_front #psc-message-garage-door-repair #psc-frame {
+    border-color: #8E95A7;
+    color: #8E95A7;
+}
+
+.image_front #psc-message-garage-door-repair .psc-accent {
+    color: #8E95A7;
+}
+/* Garage Door Repair -*/
+
+/*- General Trades */
+.image_front #psc-image-general-trades {
+    background-image: url('https://s3.amazonaws.com/reiscout/postcard_images/general_trades.jpg');
+}
+
+.image_front #psc-banner-general-trades {
+    background-color: #8BA637;
+}
+
+.image_front #psc-message-general-trades #psc-frame {
+    border-color: #8BA637;
+    color: #8BA637;
+}
+
+.image_front #psc-message-general-trades .psc-accent {
+    color: #8BA637;
+}
+/* General Trades -*/
+
+/*- HVAC Repair */
+.image_front #psc-image-hvac-repair {
+    background-image: url('https://s3.amazonaws.com/reiscout/postcard_images/hvac_repair.jpg');
+}
+
+.image_front #psc-banner-hvac-repair {
+    background-color: #557194;
+}
+
+#psc-message-hvac-repair #psc-frame {
+    border-color: #557194;
+    color: #557194;
+}
+
+.image_front #psc-message-hvac-repair .psc-accent {
+    color: #557194;
+}
+/* HVAC Repair -*/
+
+/*- Lawn Care */
+.image_front #psc-image-lawn-care {
+    background-image: url('https://s3.amazonaws.com/reiscout/postcard_images/lawn_care.jpg');
+}
+
+.image_front #psc-banner-lawn-care {
+    background-color: #7A982A;
+}
+
+.image_front #psc-message-lawn-care #psc-frame {
+    border-color: #7A982A;
+    color: #7A982A;
+}
+
+.image_front #psc-message-lawn-care .psc-accent {
+    color: #7A982A;
+}
+/* Lawn Care -*/
+
+/*- Tree Service */
+.image_front #psc-image-tree-service {
+    background-image: url('https://s3.amazonaws.com/reiscout/postcard_images/tree_service.jpg');
+}
+
+.image_front #psc-banner-tree-service {
+    background-color: #9C814E;
+}
+
+.image_front #psc-message-tree-service #psc-frame {
+    border-color: #9C814E;
+    color: #9C814E;
+}
+
+.image_front #psc-message-tree-service .psc-accent {
+    color: #9C814E;
+}
+/* Tree Service -*/
+
+/*- Women Fitness */
+.image_front #psc-image-women-fitness {
+    background-image: url('https://s3.amazonaws.com/reiscout/postcard_images/women_fitness.jpg');
+}
+
+.image_front #psc-banner-women-fitness {
+    background-color: #810425;
+}
+
+.image_front #psc-message-women-fitness #psc-frame {
+    border-color: #810425;
+    color: #810425;
+}
+
+.image_front #psc-message-women-fitness .psc-accent {
+    color: #810425;
+}
+/* Women Fitness -*/
+
+/*- Total Telecom Management */
+.image_front #psc-image-total-telecom-management {
+    background-image: url("https://s3.amazonaws.com/reiscout/postcard_images/total_telecom_management.jpg");
+}
+
+.image_front #psc-banner-total-telecom-management {
+    background-color: #1E3D6B;
+}
+
+.image_front #psc-message-total-telecom-management #psc-frame {
+    border-color: #1E3D6B;
+    color: #1E3D6B;
+}
+
+.image_front #psc-message-total-telecom-management .psc-accent {
+    color: #1E3D6B;
+}
+/* Total Telecom Management -*/
+
+/*- Fatigued Landlord */
+.image_front #psc-image-threeoakservices-fatigued-landlord {
+    background-image: url("https://s3.amazonaws.com/reiscout/postcard_images/threeoakservices_fatigued_landlord.jpg");
+}
+
+.image_front #psc-banner-threeoakservices-fatigued-landlord {
+    background-color: #66554D;
+}
+
+.image_front #psc-message-threeoakservices-fatigued-landlord #psc-frame {
+    border-color: #66554D;
+    color: #66554D;
+}
+
+.image_front #psc-message-threeoakservices-fatigued-landlord .psc-accent {
+    color: #66554D;
+}
+/* Fatigued Landlord -*/
+
+/*- Bell's Roofing */
+.image_front #psc-image-banner-bells-roofing {
+    background-image: url("https://s3.amazonaws.com/reiscout/postcard_images/bells_roofing_back_header.jpg");
+}
+
+.image_front #psc-message-bells-roofing #psc-frame {
+    border-color: #E31A22;
+    color: #E31A22;
+}
+
+.image_front #psc-message-bells-roofing .psc-accent {
+    color: #E31A22;
+}
+/* Bell's Roofing -*/
+/* Image Front -*/
 
 /*- Two Columns Front */
 .two_columns_front .front div[id^='psc-image'] {

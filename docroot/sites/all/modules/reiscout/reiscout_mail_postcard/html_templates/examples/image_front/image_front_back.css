@@ -1,0 +1,233 @@
+*, *:before, *:after {
+    -webkit-box-sizing: border-box;
+    -moz-box-sizing: border-box;
+    box-sizing: border-box;
+}
+
+body {
+    margin: 0;
+    padding: 0;
+    width: 6.25in;
+    height: 4.25in;
+    background-color: white;
+}
+
+#safe-area {
+    position: absolute;
+    width: 6in;
+    height: 4in;
+    left: 0.125in;
+    top: 0.125in;
+/*
+    background-color: rgba(55, 55, 55, 0.5);
+*/
+}
+
+div[id^='psc-banner'] {
+    padding-top: .26in;
+    height: 0.9063in; /* It is equal to 87px */
+    background-color: #000;
+    color: white;
+    text-align: center;
+    text-transform: uppercase;
+    font-family: 'Pragati Narrow', sans-serif;
+    font-size: 13pt;
+    line-height: 15pt;
+}
+
+div[id^='psc-image-banner'] {
+    height: 0.9063in; /* It is equal to 87px */
+    background-color: #FFF;
+    background-size: 6in 0.9063in;
+    background-repeat: no-repeat;
+}
+
+#psc-company-name {
+    letter-spacing: 2.15pt;
+}
+
+#psc-subtitle {
+    letter-spacing: 1.45pt;
+}
+
+div[id^='psc-message'] {
+    margin: 20px 0 0 15px;
+    width: 2.2in;
+    color: #000;
+    font-family: 'Roboto', sans-serif;
+    font-size: 10pt;
+    line-height: 11pt;
+}
+
+.psc-description {
+    margin-bottom: 12px;
+}
+
+.psc-description ul {
+    margin: 0;
+    padding-left: 20px;
+}
+
+#psc-frame {
+    margin: 0 auto 12px auto;
+    padding: 9px;
+    width: 1.8in;
+    border: 2px solid #AC1A1C;
+    text-align: center;
+    font-weight: bold;
+    color: #AC1A1C;
+}
+
+.psc-accent {
+    color: #AC1A1C;
+}
+
+/*- Roofing Raindrops */
+#psc-banner-roofing-raindrops {
+    background-color: #9A928D;
+}
+
+#psc-message-roofing-raindrops #psc-frame {
+    border-color: #9A928D;
+    color: #9A928D;
+}
+
+#psc-message-roofing-raindrops .psc-accent {
+    color: #9A928D;
+}
+/* Roofing Raindrops -*/
+
+/*- Garage Door Repair */
+#psc-banner-garage-door-repair {
+    background-color: #8E95A7;
+}
+
+#psc-message-garage-door-repair #psc-frame {
+    border-color: #8E95A7;
+    color: #8E95A7;
+}
+
+#psc-message-garage-door-repair .psc-accent {
+    color: #8E95A7;
+}
+/* Garage Door Repair -*/
+
+/*- General Trades */
+#psc-banner-general-trades {
+    background-color: #8BA637;
+}
+
+#psc-message-general-trades #psc-frame {
+    border-color: #8BA637;
+    color: #8BA637;
+}
+
+#psc-message-general-trades .psc-accent {
+    color: #8BA637;
+}
+/* General Trades -*/
+
+/*- HVAC Repair */
+#psc-banner-hvac-repair {
+    background-color: #557194;
+}
+
+#psc-message-hvac-repair #psc-frame {
+    border-color: #557194;
+    color: #557194;
+}
+
+#psc-message-hvac-repair .psc-accent {
+    color: #557194;
+}
+/* HVAC Repair -*/
+
+/*- Lawn Care */
+#psc-banner-lawn-care {
+    background-color: #7A982A;
+}
+
+#psc-message-lawn-care #psc-frame {
+    border-color: #7A982A;
+    color: #7A982A;
+}
+
+#psc-message-lawn-care .psc-accent {
+    color: #7A982A;
+}
+/* Lawn Care -*/
+
+/*- Tree Service */
+#psc-banner-tree-service {
+    background-color: #9C814E;
+}
+
+#psc-message-tree-service #psc-frame {
+    border-color: #9C814E;
+    color: #9C814E;
+}
+
+#psc-message-tree-service .psc-accent {
+    color: #9C814E;
+}
+/* Tree Service -*/
+
+/*- Women Fitness */
+#psc-banner-women-fitness {
+    background-color: #810425;
+}
+
+#psc-message-women-fitness #psc-frame {
+    border-color: #810425;
+    color: #810425;
+}
+
+#psc-message-women-fitness .psc-accent {
+    color: #810425;
+}
+/* Women Fitness -*/
+
+/*- Total Telecom Management */
+#psc-banner-total-telecom-management {
+    background-color: #1E3D6B;
+}
+
+#psc-message-total-telecom-management #psc-frame {
+    border-color: #1E3D6B;
+    color: #1E3D6B;
+}
+
+#psc-message-total-telecom-management .psc-accent {
+    color: #1E3D6B;
+}
+/* Total Telecom Management -*/
+
+/*- Fatigued Landlord */
+#psc-banner-threeoakservices-fatigued-landlord {
+    background-color: #66554D;
+}
+
+#psc-message-threeoakservices-fatigued-landlord #psc-frame {
+    border-color: #66554D;
+    color: #66554D;
+}
+
+#psc-message-threeoakservices-fatigued-landlord .psc-accent {
+    color: #66554D;
+}
+/* Fatigued Landlord -*/
+
+/*- Bell's Roofing */
+#psc-image-banner-bells-roofing {
+    background-image: url("https://s3.amazonaws.com/reiscout/postcard_images/bells_roofing_back_header.jpg");
+}
+
+#psc-message-bells-roofing #psc-frame {
+    border-color: #E31A22;
+    color: #E31A22;
+}
+
+#psc-message-bells-roofing .psc-accent {
+    color: #E31A22;
+}
+/* Bell's Roofing -*/
