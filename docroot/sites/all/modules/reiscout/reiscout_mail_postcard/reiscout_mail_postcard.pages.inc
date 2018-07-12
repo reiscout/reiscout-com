@@ -628,6 +628,8 @@ function _reiscout_mail_postcard_get_global_templates_nids() {
     ->entityCondition('bundle', 'postcard_template')
     ->propertyCondition('status', NODE_PUBLISHED)
     ->fieldCondition('field_postcard_template_global', 'value', TRUE)
+    ->fieldOrderBy('field_postcard_design_template', 'tid')
+    ->propertyOrderBy('created')
     ->execute();
 
   if (!isset($result['node'])) {
