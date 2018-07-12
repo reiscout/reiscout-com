@@ -177,7 +177,7 @@
 .roofing .front {
     padding-top: 20px;
     padding-left: 15px;
-    background-image: url('html_templates/images/roofing_front.jpg');
+    background-image: url('https://s3.amazonaws.com/reiscout/postcard_images/roofing_front.jpg');
     background-size: 6.25in 4.25in;
     background-repeat: no-repeat;
     background-position: center;
@@ -186,7 +186,7 @@
 .roofing .back {
     padding-top: 45px;
     padding-left: 10px;
-    background-image: url('html_templates/images/roofing_back.jpg');
+    background-image: url('https://s3.amazonaws.com/reiscout/postcard_images/roofing_back.jpg');
     background-size: 6.25in 4.25in;
     background-repeat: no-repeat;
     background-position: center;
@@ -665,7 +665,7 @@
 
 /*- Allison Ambrose */
 .two_columns_front #psc-image-allison-ambrose {
-    background-image: url('https://s3.amazonaws.com/reiscout/postcard_bg_images/custom/allison_ambrose.jpg');
+    background-image: url('https://s3.amazonaws.com/reiscout/postcard_images/allison_ambrose.jpg');
 }
 
 .two_columns_front #psc-text-allison-ambrose {
@@ -674,7 +674,7 @@
 }
 
 .two_columns_front #psc-image-banner-allison-ambrose {
-    background-image: url("https://s3.amazonaws.com/reiscout/postcard_custom_header_bg_images/allison_ambrose.jpg");
+    background-image: url("https://s3.amazonaws.com/reiscout/postcard_images/allison_ambrose_back_header.jpg");
     border-top: 1px solid #ceb998;
     border-bottom: 1px solid #ceb998;
 }
@@ -695,11 +695,11 @@
 
 /*- Janet Pickett */
 .two_columns_front #psc-image-janet-pickett-black {
-    background-image: url('https://s3.amazonaws.com/reiscout/postcard_bg_images/janet_pickett_black.jpg');
+    background-image: url('https://s3.amazonaws.com/reiscout/postcard_images/janet_pickett_black.jpg');
 }
 
 .two_columns_front #psc-image-janet-pickett-white {
-    background-image: url('https://s3.amazonaws.com/reiscout/postcard_bg_images/janet_pickett_white.jpg');
+    background-image: url('https://s3.amazonaws.com/reiscout/postcard_images/janet_pickett_white.jpg');
 }
 
 .two_columns_front #psc-text-janet-pickett {
