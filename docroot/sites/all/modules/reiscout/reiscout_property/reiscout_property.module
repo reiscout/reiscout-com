@@ -160,6 +160,14 @@ function reiscout_property_node_validate($node, $form, &$form_state) {
     return;
   }
 
+  if ($node->field_address[LANGUAGE_NONE][0]['thoroughfare']) {
+    $node->field_address[LANGUAGE_NONE][0]['thoroughfare'] = _reiscout_misc_standardize_address_thoroughfare($node->field_address[LANGUAGE_NONE][0]['thoroughfare']);
+  }
+
+  if ($node->field_owner_postal_address[LANGUAGE_NONE][0]['thoroughfare']) {
+    $node->field_owner_postal_address[LANGUAGE_NONE][0]['thoroughfare'] = _reiscout_misc_standardize_address_thoroughfare($node->field_owner_postal_address[LANGUAGE_NONE][0]['thoroughfare']);
+  }
+
   $nw = entity_metadata_wrapper('node', $node);
 
   if ($nw->field_address->value()) {
