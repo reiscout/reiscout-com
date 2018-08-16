@@ -1,0 +1,217 @@
+<html>
+<head>
+  <meta charset="UTF-8">
+  <title>8.5x11 Letter</title>
+  <link href="https://fonts.googleapis.com/css?family=Pragati+Narrow:700|Roboto:400,700" rel="stylesheet">
+  <style>
+    *, *:before, *:after {
+      -webkit-box-sizing: border-box;
+      -moz-box-sizing: border-box;
+      box-sizing: border-box;
+    }
+
+    body {
+      margin: 0;
+      padding: 0;
+      width: 8.5in;
+    }
+
+    .page {
+      page-break-after: always;
+      position: relative;
+      width: 8.5in;
+      height: 11in;
+    }
+
+    .safe-zone {
+      position: absolute;
+      padding: 40px 40px 0 40px;
+      width: 8.125in;
+      height: 10.625in;
+      left: 0.1875in;
+      top: 0.1875in;
+      font-family: 'Roboto', sans-serif;
+      font-size: 12pt;
+      line-height: 13pt;
+      box-shadow: 0 0 5px rgba(0, 0, 0, 0.5);
+    }
+
+    .page:first-child .safe-zone {
+      padding-top: 3in;
+    }
+
+    #white-box {
+      position: absolute;
+      left: .6in;
+      top: .84in;
+      width: 3.15in;
+      height: 2in;
+      background-color: white;
+      z-index: 1;
+    }
+
+    #return-address-window {
+      position: absolute;
+      left: .625in;
+      top: .5in;
+      width: 3.25in;
+      height: .875in;
+      background-color: rgba(255,0,0,0.5);
+      z-index: 2;
+    }
+
+    /* Should the width be increased? */
+    #return-logo {
+      position: absolute;
+      left: .07in;
+      top: .02in;
+      width: 2.05in;
+      height: .3in;
+    }
+
+    /* Should the width be increased? */
+    #return-address-text {
+      position: absolute;
+      left: .07in;
+      top: .34in;
+      width: 2.05in;
+      height: .44in;
+      font-size: .11in;
+    }
+
+    #recipient-address-window {
+      position: absolute;
+      left: .625in;
+      top: 1.7in;
+      width: 4in;
+      height: 1in;
+      background-color: rgba(255,0,0,0.5);
+      z-index: 2;
+    }
+
+    #recipient-address-text {
+      position: absolute;
+      left: .07in;
+      top: .05in;
+      width: 2.92in;
+      height: .9in;
+    }
+
+    .safe-zone div {
+      margin-top: 15px;
+    }
+
+    .safe-zone .ltr-right {
+      text-align: right;
+    }
+
+    #ltr-date {
+      padding-left: 50px;
+    }
+  </style>
+</head>
+<body>
+  <div class="page">
+    <!-- This block will be displayed on preview page only -->
+    <div id="white-box"></div>
+
+    <div id="return-address-window">
+      <div id="return-logo">Room for company logo</div>
+      <div id="return-address-text">The Return Address will be printed here. The red area will be visible through the envelope window.</div>
+    </div>
+
+    <div id="recipient-address-window">
+      <div id="recipient-address-text">The Recipient's Address will be printed here. The red area will be visible through the envelope window.</div>
+    </div>
+    <!-- This block will be displayed on preview page only -->
+
+    <div class="safe-zone">
+      <div class="ltr-right">{Date} (July 19, 2018)</div>
+      <div>
+        Dear {Property Owner First Name},
+      </div>
+      <div>
+        The purpose of this letter is to set forth some of the basic terms and conditions of the proposed purchase by the undersigned (the "Buyer") of certain real estate owned by you (the "Seller"). The terms set forth in this Letter will not become binding until a more detailed "Purchase Agreement" is negotiated and signed by the parties, as contemplated below by the section of this Letter entitled "Non-Binding."
+      </div>
+      <div>
+        <strong>1. DESCRIPTION OF PROPERTY.</strong> The property proposed to be sold is located at {Property Address} {Property City} {Property State} {Property Zip}.
+      </div>
+      <div>
+        The Real Estate is subject to public highways, covenants, restrictions and zoning, if any.
+      </div>
+      <div>
+        <strong>2. PRICE.</strong> We are prepared to purchase your property in one of the following ways:
+      </div>
+      <div>
+        OPTION 1
+      </div>
+      <div>
+        1. ‘All Cash’ purchase price: $((Market Value - $5000) – (Sq footage * $10)) * .5<br>
+        2. Full purchase price payable to you at closing.<br>
+        3. We pay all closing costs.
+      </div>
+      <div>
+        OPTION 2
+      </div>
+      <div>
+        1. Purchase price: $(Market Value *.75) – (Sq. footage * $10) - $5000<br>
+        2. We pay all closing costs.<br>
+        3. $5000 cash to you at closing.<br>
+        4. Seller to finance the balance at 6% interest only payments for 10 years (term) with full balance payable at the end of term.
+      </div>
+      <div>
+        OPTION 3
+      </div>
+      <div>
+        1. Purchase price: $(Market Value *.75) – (Sq. footage * $10) - $5000<br>
+        2. We pay all closing costs.<br>
+        3. $5000 cash to you at closing.<br>
+        4. Balance to be paid in equal monthly payments of $((Market Value *.75) – (Sq. footage * $10) - $10000)/120.
+      </div>
+    </div>
+  </div>
+  <div class="page">
+    <div class="safe-zone">
+      <div>
+        <strong>3. POSSESSION.</strong> Possession would be given on {Date + 45 Days}, or sooner by mutual agreement. Settlement would be made at the closing, immediately prior to possession.
+      </div>
+      <div>
+        <strong>4. INSPECTION.</strong> After the final acceptance of a binding Purchase Agreement, Buyer may have the Real Estate inspected by a person of Buyer's choice to determine if there are any structural, mechanical, plumbing or electrical deficiencies, structural pest damage or infestation, any unsafe conditions or other damage, including the presence of radon gas, any lead-based paint hazards, and inspections for other conditions that are customary to the locality and/or that are required by law.
+      </div>
+      <div>
+        <strong>5. SELLER'S WARRANTIES.</strong> Seller warrants that the title of the proposed property to be sold is and shall be good. Good title consists of Seller's actual possession of the property, Seller's right of possession of the property, and Seller's right of property. Buyer is responsible for performing any title search or other due diligence investigation of title as may be appropriate and may withdraw from a binding Purchase Agreement if it is discovered that Seller does not have good title. Seller shall deliver title to the property to Buyer in the form of a Warranty Deed.
+      </div>
+      <div>
+        <strong>6. STANDARD PROVISIONS.</strong> The Purchase Agreement will include the standard provisions that are customary to the locality and/or that are required by law.
+      </div>
+      <div>
+        <strong>7. NON-BINDING.</strong> This Letter of Intent does not, and is not intended to, contractually bind the parties, and is only an expression of the basic conditions to be incorporated into a binding Purchasing Agreement. This Letter of Intent does not address all of the essential terms of any potential Purchase Agreement. This Letter does not require either party to negotiate in good faith or to proceed to the completion of a binding Purchase Agreement. The parties shall not be contractually bound unless and until they enter into a formal, written Purchase Agreement, which must be in form and content satisfactory to each party and to each party's legal counsel, in their sole discretion. Neither party may rely on this Letter as creating any legal obligation of any kind; neither party has taken or will take any action in reliance on this non-binding Letter of Intent, whether a contract claim, a claim for reliance or estoppel (such as a claim for out-of-pocket expenses incurred by a party), or a claim for breach of any obligation to negotiate in good faith.
+      </div>
+      <div>
+        <strong>8. CONFIDENTIALITY.</strong> Buyer and Seller agree to make good faith efforts to hold any pricing terms, negotiations, and any other confidential information in confidence and will not disclose this information to any person or entity without prior written consent from either party.
+      </div>
+      <div>
+        If you would like to discuss a sale of the Real Estate with the undersigned on these general terms, please sign and return a copy of this Letter of Intent to the undersigned at your earliest convenience. Please give us a call at {Company Phone Number} if you have any questions.
+      </div>
+    </div>
+  </div>
+  <div class="page">
+    <div class="safe-zone">
+      <div>
+        Sincerely,<br><br>
+        BUYER:<br>
+        {Company Name}<br><br><br><br>
+        _____________________________________<br>
+        Boris Baeta<br><br><br><br><br>
+        SELLER:<br><br><br><br><br>
+        _____________________________________<span id="ltr-date">DATE:</span> _______________________<br>
+        {Owner FN} {Owner LN}
+      </div>
+      <div>
+        <br><br><br><br>
+        The above Letter reflects our mutual understanding and sets forth the basis for proceeding to negotiate a Purchase Agreement as outlined above.
+      </div>
+    </div>
+  </div>
+</body>
+</html>

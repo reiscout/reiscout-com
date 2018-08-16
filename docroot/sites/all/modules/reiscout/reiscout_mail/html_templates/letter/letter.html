@@ -1,0 +1,119 @@
+<html>
+<head>
+  <meta charset="UTF-8">
+  <title>8.5x11 Letter</title>
+  <link href="https://fonts.googleapis.com/css?family=Pragati+Narrow:700|Roboto:400,700" rel="stylesheet">
+  <style>
+    *, *:before, *:after {
+      -webkit-box-sizing: border-box;
+      -moz-box-sizing: border-box;
+      box-sizing: border-box;
+    }
+
+    body {
+      margin: 0;
+      padding: 0;
+      width: 8.5in;
+    }
+
+    .page {
+      page-break-after: always;
+      position: relative;
+      width: 8.5in;
+      height: 11in;
+    }
+
+    .safe-zone {
+      position: absolute;
+      padding: 40px 40px 0 40px;
+      width: 8.125in;
+      height: 10.625in;
+      left: 0.1875in;
+      top: 0.1875in;
+      font-family: 'Roboto', sans-serif;
+      font-size: 12pt;
+      line-height: 13pt;
+    }
+
+    #preview .safe-zone {
+      box-shadow: 0 0 5px rgba(0, 0, 0, 0.5);
+    }
+
+    .page:first-child .safe-zone {
+      padding-top: 3in;
+    }
+
+    #white-box {
+      position: absolute;
+      left: .6in;
+      top: .84in;
+      width: 3.15in;
+      height: 2in;
+      background-color: white;
+      z-index: 1;
+    }
+
+    #return-address-window {
+      position: absolute;
+      left: .625in;
+      top: .5in;
+      width: 3.25in;
+      height: .875in;
+      background-color: rgba(255,0,0,0.5);
+      z-index: 2;
+    }
+
+    /* Should the width be increased? */
+    #return-logo {
+      position: absolute;
+      left: .07in;
+      top: .02in;
+      width: 2.05in;
+      height: .3in;
+    }
+
+    /* Should the width be increased? */
+    #return-address-text {
+      position: absolute;
+      left: .07in;
+      top: .34in;
+      width: 2.05in;
+      height: .44in;
+      font-size: .11in;
+    }
+
+    #recipient-address-window {
+      position: absolute;
+      left: .625in;
+      top: 1.7in;
+      width: 4in;
+      height: 1in;
+      background-color: rgba(255,0,0,0.5);
+      z-index: 2;
+    }
+
+    #recipient-address-text {
+      position: absolute;
+      left: .07in;
+      top: .05in;
+      width: 2.92in;
+      height: .9in;
+    }
+
+    .safe-zone div {
+      margin-top: 15px;
+    }
+
+    .safe-zone .ltr-right {
+      text-align: right;
+    }
+
+    #ltr-date {
+      padding-left: 50px;
+    }
+  </style>
+</head>
+<body>
+  {{content}}
+</body>
+</html>

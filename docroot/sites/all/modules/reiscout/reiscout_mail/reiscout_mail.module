@@ -1,0 +1,530 @@
+<?php
+
+/**
+ * @file
+ * Allows to send a physical mail to an owner of a property.
+ */
+
+class ReiscoutMailNoGlobalTemplatesDefined extends Exception {}
+class ReiscoutMailTemplateFileIsNotReadable extends Exception {}
+
+/**
+ * Implements hook_permission().
+ */
+function reiscout_mail_permission() {
+  return array(
+    'administer reiscout mail' => array(
+      'title' => t('Administer Reiscout Mail'),
+    ),
+    'view all users mail sent history' => array(
+      'title' => t("View all users' mail sent history"),
+    ),
+  );
+}
+
+/**
+ * Implements hook_menu().
+ */
+function reiscout_mail_menu() {
+  $items['admin/config/services/reiscout-mail'] = array(
+    'title' => 'Reiscout Mail',
+    'description' => 'Configure Reiscout Mail settings.',
+    'page callback' => 'drupal_get_form',
+    'page arguments' => array('reiscout_mail_admin_settings_form'),
+    'access arguments' => array('administer reiscout mail'),
+    'file' => 'reiscout_mail.admin.inc',
+  );
+
+  $items['reiscout-mail/send-letter/%node'] = array(
+    'title' => 'Pick up a template',
+    'description' => 'Allows to pick up a template for a letter and send it.',
+    'page callback' => 'drupal_get_form',
+    'page arguments' => array('reiscout_mail_send_letter_form', 2),
+    'access callback' => '_reiscout_mail_can_user_send',
+    'access arguments' => array(2),
+    'type' => MENU_CALLBACK,
+    'file' => 'reiscout_mail.pages.inc',
+  );
+
+  $items['reiscout-mail/send-postcard/%node'] = array(
+    'title' => 'Pick up a template',
+    'description' => 'Allows to pick up a template for a postcard and send it.',
+    'page callback' => 'drupal_get_form',
+    'page arguments' => array('reiscout_mail_send_postcard_form', 2),
+    'access callback' => '_reiscout_mail_can_user_send',
+    'access arguments' => array(2),
+    'type' => MENU_CALLBACK,
+    'file' => 'reiscout_mail.pages.inc',
+  );
+
+  // @todo: check if the current user can send a letter using this template
+  $items['reiscout-mail/preview-letter/%node/%node'] = array(
+    'title' => 'Letter Preview',
+    'description' => 'Displays a letter preview.',
+    'page callback' => 'reiscout_mail_preview_letter_page',
+    'page arguments' => array(2, 3),
+    'access callback' => '_reiscout_mail_can_user_send',
+    'access arguments' => array(2),
+    'type' => MENU_CALLBACK,
+    'file' => 'reiscout_mail.pages.inc',
+  );
+
+  $items['node/%node/mail-sent-history'] = array(
+    'title' => 'Mail Sent History',
+    'page callback' => 'reiscout_mail_sent_history_page',
+    'page arguments' => array(1),
+    'access callback' => '_reiscout_mail_can_user_see_sent_history',
+    'access arguments' => array(1),
+    'type' => MENU_LOCAL_TASK,
+    'file' => 'reiscout_mail.pages.inc',
+  );
+
+  $items['reiscout-mail/wh'] = array(
+    'title' => 'Lob Webhook',
+    'description' => 'Webhook to get notifications from Lob on tracking events for mail.',
+    'page callback' => 'reiscout_mail_wh_page',
+    'access callback' => TRUE,
+    'type' => MENU_CALLBACK,
+    'file' => 'reiscout_mail.pages.inc',
+  );
+
+  return $items;
+}
+
+/**
+ * Implements hook_admin_paths().
+ */
+function reiscout_mail_admin_paths() {
+  return array(
+    'node/*/mail-sent-history' => TRUE,
+  );
+}
+
+/**
+ * Implements hook_reiscout_points_product_info().
+ */
+function reiscout_mail_reiscout_points_product_info() {
+  return array(
+    'send_letter' => array(
+      'title' => t('Send a Letter'),
+      'description' => t('Sends a letter to an owner of a property'),
+      'desc_callback' => '_reiscout_mail_get_desc_for_send_letter_product',
+      'services_sell_callback' => '_reiscout_mail_provide_send_letter_product_services',
+      'access_callback' => '_reiscout_mail_can_user_send',
+    ),
+    'send_postcard' => array(
+      'title' => t('Send a Postcard'),
+      'description' => t('Sends a postcard to an owner of a property'),
+      'desc_callback' => '_reiscout_mail_get_desc_for_send_postcard_product',
+      'services_sell_callback' => '_reiscout_mail_provide_send_postcard_product_services',
+      'access_callback' => '_reiscout_mail_can_user_send',
+    ),
+  );
+}
+
+/**
+ * Implements hook_field_extra_fields().
+ */
+function reiscout_mail_field_extra_fields() {
+  $return = array();
+
+  $return['node']['property'] = array(
+    'display' => array(
+      'reiscout-mail-buttons' => array(
+        'label' => t('Reiscout Mail Buttons'),
+        'description' => t("'Send a Letter' and 'Send a Postcard' buttons."),
+        'weight' => -1,
+      ),
+    ),
+  );
+
+  return $return;
+}
+
+/**
+ * Implements hook_node_view().
+ */
+function reiscout_mail_node_view($node, $view_mode, $langcode) {
+  if ('property' != $node->type || 'full' != $view_mode) {
+    return;
+  }
+
+  if (!ReiscoutMail::canUserSend($node)) {
+    return;
+  }
+
+  // Prepare an HTML-container for buttons
+  $node->content['reiscout-mail-buttons'] = array(
+    '#type' => 'container',
+    '#attributes' => array(
+      'class' => array('reiscout-mail-buttons'),
+    ),
+    '#weight' => -1,
+  );
+
+  $button_send_letter_text = t('Send a Letter');
+  $button_send_postcard_text = t('Send a Postcard');
+
+  if (ReiscoutMail::canUserSendBySendLimitPeriod($node->nid)) {
+    // Add 'Send a Letter' button
+    $button_url = 'reiscout-mail/send-letter/' . $node->nid;
+    $node->content['reiscout-mail-buttons']['send-letter'] = array(
+      '#prefix' => '<div class="button">',
+      '#markup' => l($button_send_letter_text, $button_url),
+      '#suffix' => '</div>',
+    );
+
+    // Add a link to the sample letter
+    $link_text = t('Click here to view a sample letter');
+    $link_url = drupal_get_path('module', 'reiscout_mail') . '/pdf/sample_letter.pdf';
+    $node->content['reiscout-mail-buttons']['sample-letter-link'] = array(
+      '#prefix' => '<div class="sample-mail-link">',
+      '#markup' => l($link_text, $link_url, array('attributes' => array('target' => '_blank'))),
+      '#suffix' => '</div>',
+    );
+
+    // Add 'Send a Postcard' button
+    $button_url = 'reiscout-mail/send-postcard/' . $node->nid;
+    $node->content['reiscout-mail-buttons']['send-postcard'] = array(
+      '#prefix' => '<div class="button">',
+      '#markup' => l($button_send_postcard_text, $button_url),
+      '#suffix' => '</div>',
+    );
+
+    // Add a link to the sample postcard
+    $link_text = t('Click here to view a sample postcard');
+    $link_url = drupal_get_path('module', 'reiscout_mail') . '/pdf/sample_postcard.pdf';
+    $node->content['reiscout-mail-buttons']['sample-postcard-link'] = array(
+      '#prefix' => '<div class="sample-mail-link">',
+      '#markup' => l($link_text, $link_url, array('attributes' => array('target' => '_blank'))),
+      '#suffix' => '</div>',
+    );
+  }
+  else {
+    $node->content['reiscout-mail-buttons']['send-letter'] = array(
+      '#prefix' => '<div class="button disabled">',
+      '#markup' => $button_send_letter_text,
+      '#suffix' => '</div>',
+    );
+
+    $node->content['reiscout-mail-buttons']['send-postcard'] = array(
+      '#prefix' => '<div class="button disabled">',
+      '#markup' => $button_send_postcard_text,
+      '#suffix' => '</div>',
+    );
+
+    $lastMailSentInfo = ReiscoutMail::getLastMailSentInfo($node->nid);
+
+    $t_args = array(
+      '%period' => ReiscoutMail::getSendLimitPeriod(),
+      '%type' => $lastMailSentInfo->typeName,
+      '%sent' => date('M j, Y - g:i a', $lastMailSentInfo->timestamp),
+    );
+
+    $node->content['reiscout-mail-buttons']['description'] = array(
+      '#prefix' => '<div class="description">',
+      '#markup' => t("You may send a mail to the same property's owner only once per %period days.", $t_args)
+                 . '<br>'
+                 . t('You sent a %type on %sent.', $t_args),
+      '#suffix' => '</div>',
+    );
+  }
+}
+
+/**
+ * Implements hook_form_FORM_ID_alter().
+ */
+function reiscout_mail_form_letter_template_node_form_alter(&$form, &$form_state, $form_id) {
+  // If the current user does not have an 'administrator' user role, set the
+  // value of 'Global template' field to 0, because we don't want to allow such
+  // user to create global templates.
+  $role = user_role_load_by_name('administrator');
+  if (!user_has_role($role->rid)) {
+    $form['field_letter_tpl_global'][LANGUAGE_NONE]['#default_value'] = 0;
+  }
+}
+
+/**
+ * Implements hook_form_FORM_ID_alter().
+ */
+function reiscout_mail_form_postcard_template_node_form_alter(&$form, &$form_state, $form_id) {
+  // If the current user does not have an 'administrator' user role, set the
+  // value of 'Global template' field to 0, because we don't want to allow such
+  // user to create global templates.
+  $role = user_role_load_by_name('administrator');
+  if (!user_has_role($role->rid)) {
+    $form['field_postcard_template_global'][LANGUAGE_NONE]['#default_value'] = 0;
+  }
+}
+
+/**
+ * Implements hook_field_access().
+ */
+function reiscout_mail_field_access($op, $field, $entity_type, $entity, $account) {
+  if ('node' != $entity_type) {
+    return;
+  }
+
+  // If the current user does not have an 'administrator' user role,
+  // hide 'Design template' and 'Global template' fields.
+  if ('edit' == $op) {
+    if ('letter_template' == $entity->type) {
+      if ('field_letter_tpl_global' == $field['field_name']) {
+        $role_admin = user_role_load_by_name('administrator');
+        return user_has_role($role_admin->rid, $account);
+      }
+    }
+    elseif ('postcard_template' == $entity->type) {
+      if ('field_postcard_design_template' == $field['field_name']
+       || 'field_postcard_template_global' == $field['field_name']) {
+        $role_admin = user_role_load_by_name('administrator');
+        return user_has_role($role_admin->rid, $account);
+      }
+    }
+  }
+}
+
+/**
+ * Implements hook_node_delete().
+ */
+function reiscout_mail_node_delete($node) {
+  db_query('DELETE h, e
+           FROM {reiscout_mail_history} h
+           LEFT JOIN {reiscout_mail_tracking_events} e
+           ON `e`.`mid` = `h`.`lob_api_mail_id`
+           WHERE `pnid` = :nid', array(':nid' => $node->nid));
+}
+
+/**
+ * Implements hook_theme().
+ */
+function reiscout_mail_theme($existing, $type, $theme, $path) {
+  return array(
+    'reiscout_mail_letter_address_block' => array(
+      'variables' => array('to' => NULL, 'from' => NULL),
+      'path' => drupal_get_path('module', 'reiscout_mail'),
+      'template' => 'templates/letter-address-block',
+    ),
+    'reiscout_mail_letter_content' => array(
+      'variables' => array('is_preview' => NULL, 'address_block' => NULL, 'page1' => NULL, 'page2' => NULL, 'page3' => NULL),
+      'path' => drupal_get_path('module', 'reiscout_mail'),
+      'template' => 'templates/letter-content',
+    ),
+    'reiscout_mail_postcard_address_block' => array(
+      'variables' => array('to' => NULL, 'from' => NULL),
+      'path' => drupal_get_path('module', 'reiscout_mail'),
+      'template' => 'templates/postcard-address-block',
+    ),
+  );
+}
+
+/**
+ * Preprocess variables for letter-address-block.tpl.php
+ *
+ * @see letter-address-block.tpl.php
+ */
+function template_preprocess_reiscout_mail_letter_address_block(&$variables) {
+  $variables['to']['name'] = strtoupper($variables['to']['name']);
+  $variables['to']['thoroughfare'] = strtoupper($variables['to']['thoroughfare']);
+  $variables['to']['premise'] = strtoupper($variables['to']['premise']);
+  $variables['to']['city'] = strtoupper($variables['to']['city']);
+  $variables['to']['state'] = strtoupper($variables['to']['state']);
+  $variables['to']['zip'] = strtoupper($variables['to']['zip']);
+
+  $variables['from']['name'] = strtoupper($variables['from']['name']);
+  $variables['from']['thoroughfare'] = strtoupper($variables['from']['thoroughfare']);
+  $variables['from']['premise'] = strtoupper($variables['from']['premise']);
+  $variables['from']['city'] = strtoupper($variables['from']['city']);
+  $variables['from']['state'] = strtoupper($variables['from']['state']);
+  $variables['from']['zip'] = strtoupper($variables['from']['zip']);
+}
+
+/**
+ * Preprocess variables for postcard-address-block.tpl.php
+ *
+ * @see postcard-address-block.tpl.php
+ */
+function template_preprocess_reiscout_mail_postcard_address_block(&$variables) {
+  $variables['to']['name'] = strtoupper($variables['to']['name']);
+  $variables['to']['thoroughfare'] = strtoupper($variables['to']['thoroughfare']);
+  $variables['to']['premise'] = strtoupper($variables['to']['premise']);
+  $variables['to']['city'] = strtoupper($variables['to']['city']);
+  $variables['to']['state'] = strtoupper($variables['to']['state']);
+  $variables['to']['zip'] = strtoupper($variables['to']['zip']);
+
+  $variables['from']['name'] = strtoupper($variables['from']['name']);
+  $variables['from']['thoroughfare'] = strtoupper($variables['from']['thoroughfare']);
+  $variables['from']['premise'] = strtoupper($variables['from']['premise']);
+  $variables['from']['city'] = strtoupper($variables['from']['city']);
+  $variables['from']['state'] = strtoupper($variables['from']['state']);
+  $variables['from']['zip'] = strtoupper($variables['from']['zip']);
+}
+
+/**
+ * Adapter function.
+ */
+function _reiscout_mail_can_user_send($node) {
+  return ReiscoutMail::canUserSend($node);
+}
+
+/**
+ * Adapter function.
+ */
+function _reiscout_mail_can_user_see_sent_history($node) {
+  return ReiscoutMail::canUserSeeSentHistory($node);
+}
+
+/**
+ * Swaps the first name and the last name in a full name string.
+ *
+ * Given a full name of a postcard's recipient,
+ * swaps the first name and the last name.
+ *
+ * @todo: is this function still needed?
+ */
+function _reiscout_mail_postcard_swap_recipient_first_and_last_names($full_name) {
+  if (strpos($full_name, '/')) {
+    $names = explode('/', $full_name);
+    $names = array_map('trim', $names);
+    $names = array_map('_reiscout_mail_postcard_swap_recipient_first_and_last_names', $names);
+    $full_name = implode(' / ', $names);
+  }
+  elseif (strpos($full_name, ' ')) {
+    $names = explode(' ', $full_name);
+    $names = array_map('trim', $names);
+    $last_name = array_shift($names);
+    $names[] = $last_name;
+    $full_name = implode(' ', $names);
+  }
+
+  return $full_name;
+}
+
+/**
+ * Provides a 'Send a Postcard' product (service) to a user.
+ *
+ * This function is called via a Services resource.
+ */
+function _reiscout_mail_provide_send_postcard_product_services($params) {
+  global $user;
+
+  $result = array(
+    'status' => FALSE,
+    'message' => '',
+  );
+
+  try {
+    $property_nid = $params['nid'];
+
+    if (!ReiscoutMail::canUserSendBySendLimitPeriod($property_nid)) {
+      $t_args = array(
+        '!period' => ReiscoutMail::getSendLimitPeriod(),
+      );
+      $result['message'] = t("You may send a postcard to the same property's owner only once per !period days!", $t_args);
+      return $result;
+    }
+
+    $template_nid = Postcard::getTemplateNidByUid($user->uid);
+    $postcard = Postcard::send($property_nid, $template_nid);
+    ReiscoutMail::log($property_nid, $template_nid, $postcard['id'], $postcard['expected_delivery_date'], ReiscoutMail::TYPE_POSTCARD);
+
+    $t_args = array(
+      '!url' => $postcard['url'],
+      '%carrier' => $postcard['carrier'],
+      '%date' => $postcard['expected_delivery_date'],
+      '!url_login' => url('/user', array('absolute' => TRUE)),
+    );
+
+    $result['status'] = TRUE;
+    $result['message'] = t('Your <a href="#" onclick="javascript:window.open(\'!url\', \'_system\');">postcard</a> will be sent via %carrier. Expected delivery date is %date. <br><a onclick="javascript:window.open(\'!url_login\', \'_system\');">Log in to reiscout.com</a> with the same credentials and create your own template for a postcard.', $t_args);
+  }
+  catch (ReiscoutPropertyUserAddressIsNotSet $e) {
+    watchdog_exception('reiscout_mail', $e);
+    $t_args = array('!user_edit_link' => 'user/' . $user->uid . '/edit');
+    $result['message'] = t("To send a postcard you must fill in your postal address for <a href='#' onclick='javascript:drupalgap_goto(\"!user_edit_link\", {});'>your profile</a>.", $t_args);
+  }
+  catch (ReiscoutPropertyUserPhoneNumberIsNotSet $e) {
+    watchdog_exception('reiscout_mail', $e);
+    $t_args = array('!user_edit_link' => 'user/' . $user->uid . '/edit');
+    $result['message'] = t("To send a postcard you must fill in your phone number for <a href='#' onclick='javascript:drupalgap_goto(\"!user_edit_link\", {});'>your profile</a>.", $t_args);
+  }
+  catch (LobApiException $e) {
+    $result['message'] = t("A postcard to the property's owner cannot be sent. Please, try again later or contact technical support for assistance!");
+  }
+  catch (Exception $e) {
+    watchdog_exception('reiscout_mail', $e);
+    $result['message'] = t("A postcard to the property's owner cannot be sent. Please, try again later or contact technical support for assistance!");
+  }
+
+  return $result;
+}
+
+/**
+ * Returns a description for 'Send a Letter' product (service).
+ *
+ * @todo: we can use a system_settings_form() to configure description.
+ */
+function _reiscout_mail_get_desc_for_send_letter_product($type, $place) {
+  if (!in_array($type, array('standard', 'condition'))
+    || !in_array($place, array('site', 'app'))) {
+    return '';
+  }
+
+  if ('standard' == $type) {
+    if ('site' == $place) {
+      return '';
+    }
+    else {
+      $t_arg = array(
+        '!url' => url(drupal_get_path('module', 'reiscout_mail') . '/pdf/sample_letter.pdf', array('absolute' => TRUE)),
+      );
+      return t('<a href="#" onclick="javascript:window.open(\'!url\', \'_system\');">Click here to view a sample letter</a>', $t_arg);
+    }
+  }
+  elseif ('condition' == $type) {
+    if ('site' == $place) {
+      return t('To send a letter');
+    }
+    else {
+      $t_arg = array(
+        '!url' => url(drupal_get_path('module', 'reiscout_mail') . '/pdf/sample_letter.pdf', array('absolute' => TRUE)),
+      );
+      return t('To send a letter (<a href="#" onclick="javascript:window.open(\'!url\', \'_system\');">see a sample letter</a>)', $t_arg);
+    }
+  }
+}
+
+/**
+ * Returns a description for 'Send a Postcard' product (service).
+ *
+ * @todo: we can use a system_settings_form() to configure description.
+ */
+function _reiscout_mail_get_desc_for_send_postcard_product($type, $place) {
+  if (!in_array($type, array('standard', 'condition'))
+   || !in_array($place, array('site', 'app'))) {
+    return '';
+  }
+
+  if ('standard' == $type) {
+    if ('site' == $place) {
+      return '';
+    }
+    else {
+      $t_arg = array(
+        '!url' => url(drupal_get_path('module', 'reiscout_mail') . '/pdf/sample_postcard.pdf', array('absolute' => TRUE)),
+      );
+      return t('<a href="#" onclick="javascript:window.open(\'!url\', \'_system\');">Click here to view a sample postcard</a>', $t_arg);
+    }
+  }
+  elseif ('condition' == $type) {
+    if ('site' == $place) {
+      return t('To send a postcard');
+    }
+    else {
+      $t_arg = array(
+        '!url' => url(drupal_get_path('module', 'reiscout_mail') . '/pdf/sample_postcard.pdf', array('absolute' => TRUE)),
+      );
+      return t('To send a postcard (<a href="#" onclick="javascript:window.open(\'!url\', \'_system\');">see a sample postcard</a>)', $t_arg);
+    }
+  }
+}

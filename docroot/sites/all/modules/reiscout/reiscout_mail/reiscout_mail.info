@@ -1,0 +1,18 @@
+name = Reiscout Mail
+description = Allows to send a physical mail to an owner of a property.
+configure = admin/config/services/reiscout-mail
+package = Reiscout
+core = 7.x
+
+files[] = classes/event.inc
+files[] = classes/letter.inc
+files[] = classes/postcard.inc
+files[] = classes/reiscout_mail.inc
+
+dependencies[] = clone
+dependencies[] = services
+
+dependencies[] = lob_api
+dependencies[] = reiscout_points
+dependencies[] = reiscout_property
+dependencies[] = reiscout_property_commerce

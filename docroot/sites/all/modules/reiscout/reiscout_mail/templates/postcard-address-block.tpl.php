@@ -3,7 +3,7 @@
 /**
  * @file
  * Theme implementation to build content of an address block
- * that will be added to a predefined template for a postcard.
+ * that will be added to a template for a postcard.
  *
  * Available variables:
  * - $to: property owner address;

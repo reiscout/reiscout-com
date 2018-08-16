@@ -1,0 +1,176 @@
+<?php
+
+/**
+ * @file
+ * Install, update and uninstall functions for the Reiscout Mail module.
+ */
+
+/**
+ * Implements hook_schema().
+ */
+function reiscout_mail_schema() {
+  $schema['reiscout_mail_history'] = array(
+    'description' => "Stores information about mail sent to properties' owners.",
+    'fields' => array(
+      'hid' => array(
+        'description' => 'The primary identifier for a record.',
+        'type' => 'serial',
+        'unsigned' => TRUE,
+        'not null' => TRUE,
+      ),
+      'uid' => array(
+        'description' => 'The {users}.uid that sent this mail.',
+        'type' => 'int',
+        'unsigned' => TRUE,
+        'not null' => TRUE,
+      ),
+      'pnid' => array(
+        'description' => 'The {node}.nid of the property whose owner this mail was sent to.',
+        'type' => 'int',
+        'unsigned' => TRUE,
+        'not null' => TRUE,
+      ),
+      'tnid' => array(
+        'description' => "The {node}.nid of the template that was used for generating a mail's body.",
+        'type' => 'int',
+        'unsigned' => TRUE,
+        'not null' => TRUE,
+      ),
+      'lob_api_mail_id' => array(
+        'description' => 'The unique mail (letter or postcard) ID that was returned by the Lob API.',
+        'type' => 'char',
+        'length' => 50,
+        'not null' => TRUE,
+      ),
+      'expected_delivery_date' => array(
+        'description' => 'Timestamp for an expected delivery date.',
+        'type' => 'int',
+        'unsigned' => TRUE,
+        'not null' => TRUE,
+      ),
+      'type' => array(
+        'description' => 'The type of a mail: 0 - letter, 1 - postcard.',
+        'type' => 'int',
+        'size' => 'tiny',
+        'unsigned' => TRUE,
+        'not null' => TRUE,
+      ),
+      'timestamp' => array(
+        'description' => 'Timestamp for when a mail was sent.',
+        'type' => 'int',
+        'unsigned' => TRUE,
+        'not null' => TRUE,
+      ),
+    ),
+    'primary key' => array('hid'),
+    'indexes' => array(
+      'uid' => array('uid'),
+      'property_nid' => array('pnid'),
+      'template_nid' => array('tnid'),
+      'lob_api_mail_id' => array('lob_api_mail_id'),
+      'mail_type' => array('type'),
+      'mail_sent' => array('timestamp'),
+    ),
+    'foreign keys' => array(
+      'mail_sender' => array(
+        'table' => 'users',
+        'columns' => array('uid' => 'uid'),
+      ),
+      'property' => array(
+        'table' => 'node',
+        'columns' => array('pnid' => 'nid'),
+      ),
+      'template' => array(
+        'table' => 'node',
+        'columns' => array('tnid' => 'nid'),
+      ),
+    ),
+  );
+
+  $schema['reiscout_mail_tracking_events'] = array(
+    'description' => 'Stores information about tracking events for mail.',
+    'fields' => array(
+      'eid' => array(
+        'description' => 'The unique ID of an event.',
+        'type' => 'varchar',
+        'length' => 30,
+        'not null' => TRUE,
+      ),
+      'mid' => array(
+        'description' => 'The ID of a mail (letter or postcard) an event associated with.',
+        'type' => 'varchar',
+        'length' => 30,
+        'not null' => TRUE,
+      ),
+      'type' => array(
+        'description' => 'The type of an event.',
+        'type' => 'int',
+        'size' => 'tiny',
+        'unsigned' => TRUE,
+        'not null' => TRUE,
+      ),
+      'location' => array(
+        'description' => 'The zip code in which an event occurred.',
+        'type' => 'char',
+        'length' => 5,
+        'not null' => TRUE,
+      ),
+      'time' => array(
+        'description' => 'A timestamp of the date USPS registered an event.',
+        'type' => 'int',
+        'unsigned' => TRUE,
+        'not null' => TRUE,
+      ),
+    ),
+    'primary key' => array('eid'),
+    'indexes' => array(
+      'mail_id' => array('mid'),
+      'type' => array('type'),
+    ),
+    'foreign keys' => array(
+      'mail_id' => array(
+        'table' => 'reiscout_mail_history',
+        'columns' => array('mid' => 'lob_api_mail_id'),
+      ),
+    ),
+  );
+
+  $schema['reiscout_mail_user_settings'] = array(
+    'description' => 'Stores users settings.',
+    'fields' => array(
+      'uid' => array(
+        'description' => 'The {users}.uid.',
+        'type' => 'int',
+        'unsigned' => TRUE,
+        'not null' => TRUE,
+      ),
+      'default_letter_template_nid' => array(
+        'description' => 'The {node}.nid of the default letter template for a user.',
+        'type' => 'int',
+        'unsigned' => TRUE,
+      ),
+      'default_postcard_template_nid' => array(
+        'description' => 'The {node}.nid of the default postcard template for a user.',
+        'type' => 'int',
+        'unsigned' => TRUE,
+      ),
+    ),
+    'primary key' => array('uid'),
+    'foreign keys' => array(
+      'user' => array(
+        'table' => 'users',
+        'columns' => array('uid' => 'uid'),
+      ),
+      'letter_template' => array(
+        'table' => 'node',
+        'columns' => array('default_letter_template_nid' => 'nid'),
+      ),
+      'postcard_template' => array(
+        'table' => 'node',
+        'columns' => array('default_postcard_template_nid' => 'nid'),
+      ),
+    ),
+  );
+
+  return $schema;
+}

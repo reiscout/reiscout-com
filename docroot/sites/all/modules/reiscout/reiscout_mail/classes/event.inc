@@ -2,10 +2,10 @@
 
 /*
  * @file
- * Definition of Events class.
+ * Definition of Event class.
  */
 
-class Events {
+class Event {
   const TYPE_CREATED = 1;
   const TYPE_RENDERED_PDF = 2;
   const TYPE_RENDERED_THUMBNAILS = 3;
@@ -18,7 +18,7 @@ class Events {
   /**
    * Given the name of an event, returns its type.
    */
-  private function getTypeByName($name) {
+  static function getTypeByName($name) {
     $type = '';
 
     switch ($name) {
@@ -45,7 +45,7 @@ class Events {
   /**
    * Given the type of an event, returns its name.
    */
-  public function getNameByType($type) {
+  static function getNameByType($type) {
     $name = '';
 
     switch ($type) {
@@ -72,7 +72,7 @@ class Events {
   /**
    * Given the type of an event, returns its description.
    */
-  public function getDescByType($type) {
+  static function getDescByType($type) {
     $desc = '';
 
     switch ($type) {
@@ -97,17 +97,17 @@ class Events {
   }
 
   /**
-   * Saves info about tracking event into DB.
+   * Saves information about an event into DB.
    */
-  public function log($postcardId, $info) {
+  static function log($mailId, $info) {
     $fields = array(
-      'pid' => $postcardId,
-      'type' => $this->getTypeByName($info['name']),
-      'location' => $info['location'],
-      'time' => strtotime($info['time']),
+      'mid' => $mailId,
+      'type' => self::getTypeByName($info->name),
+      'location' => $info->location,
+      'time' => strtotime($info->time),
     );
-    db_merge('reiscout_mail_postcard_tracking_events')
-      ->key(array('eid' => $info['id']))
+    db_merge('reiscout_mail_tracking_events')
+      ->key(array('eid' => $info->id))
       ->fields($fields)
       ->execute();
   }
