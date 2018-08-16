@@ -47,7 +47,7 @@ function reiscout_misc_form_user_profile_form_alter(&$form, &$form_state, $form_
  *
  * Validates 'Phone Number' and 'Website' fields.
  */
-function reiscout_misc_user_profile_form_validate(&$form, &$form_state, $form_id) {
+function reiscout_misc_user_profile_form_validate(&$form, &$form_state) {
   $field_user_phone_number = $form_state['values']['field_user_phone_number'][LANGUAGE_NONE][0]['value'];
   $field_user_website = $form_state['values']['field_user_website'][LANGUAGE_NONE][0]['value'];
 
