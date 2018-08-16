@@ -4,6 +4,8 @@ class ReiscoutPropertyAddressIsNotSet extends Exception {}
 class ReiscoutPropertyOwnerAddressIsNotSet extends Exception {}
 class ReiscoutPropertyUserAddressIsNotSet extends Exception {}
 class ReiscoutPropertyUserPhoneNumberIsNotSet extends Exception {}
+class ReiscoutPropertyValueIsUnknown extends Exception {}
+class ReiscoutPropertyGrossAreaIsUnknown extends Exception {}
 
 define('REISCOUT_PROPERTY_NODE_TITLE_TO_CHANGE', 'Property #');
 define('REISCOUT_PROPERTY_MESSAGE_TO_CHANGE', 'Property <em class="placeholder">Property #</em> has been created.');
@@ -880,6 +882,40 @@ function _reiscout_property_get_owner_name_by_nid($nid) {
   }
 
   return $owner_name;
+}
+
+/**
+ * Given a property NID, returns the property value.
+ */
+function _reiscout_property_get_value_by_nid($nid) {
+  $nw = entity_metadata_wrapper('node', $nid);
+
+  if ($nw->field_appraised_value->value()) {
+    $property_value = $nw->field_appraised_value->value() * 1000;
+  }
+  elseif ($nw->field_market_value->value()) {
+    $property_value = $nw->field_market_value->value() * 1000;
+  }
+  else {
+    $msg = t('The value of the property !nid is unknown.', array('!nid' => $nid));
+    throw new ReiscoutPropertyValueIsUnknown($msg);
+  }
+
+  return $property_value;
+}
+
+/**
+ * Given a property NID, returns the gross area of the property.
+ */
+function _reiscout_property_get_gross_area_by_nid($nid) {
+  $nw = entity_metadata_wrapper('node', $nid);
+
+  if (!$nw->field_gross_area->value()) {
+    $msg = t('The gross area of the property !nid is unknown.', array('!nid' => $nid));
+    throw new ReiscoutPropertyGrossAreaIsUnknown($msg);
+  }
+
+  return $nw->field_gross_area->value();
 }
 
 /**
