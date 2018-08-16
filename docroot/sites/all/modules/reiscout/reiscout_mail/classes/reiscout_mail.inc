@@ -271,6 +271,19 @@ class ReiscoutMail {
       $content = str_replace('{{owner_name}}', $propertyOwnerName, $content);
     }
 
+    if (FALSE !== strpos($content, '{{owner_fullname}}')) {
+      $propertyOwnerAddress = _reiscout_property_get_owner_address_by_nid($propertyNid);
+      if ($propertyOwnerAddress->first_name->value()) {
+        $propertyOwnerFullName = mb_convert_case($propertyOwnerAddress->first_name->value(), MB_CASE_TITLE, "UTF-8")
+                               . ' '
+                               . mb_convert_case($propertyOwnerAddress->last_name->value(), MB_CASE_TITLE, "UTF-8");
+      }
+      else {
+        $propertyOwnerFullName = $propertyOwnerAddress->organisation_name->value();
+      }
+      $content = str_replace('{{owner_fullname}}', $propertyOwnerFullName, $content);
+    }
+
     if (FALSE !== strpos($content, '{{address}}')) {
       $propertyAddress = _reiscout_property_get_address_by_nid($propertyNid);
       $address = $propertyAddress->thoroughfare->value() . ', '
