@@ -637,6 +637,11 @@
     background-color: #66554D;
 }
 
+.image_front #psc-message-threeoakservices-fatigued-landlord .psc-description {
+    margin-bottom: 11px;
+    line-height: 10.5pt;
+}
+
 .image_front #psc-message-threeoakservices-fatigued-landlord #psc-frame {
     border-color: #66554D;
     color: #66554D;
