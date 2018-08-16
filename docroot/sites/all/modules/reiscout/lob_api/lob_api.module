@@ -35,6 +35,26 @@ function lob_api_menu() {
 }
 
 /**
+ * Makes a request to the Lob API to print and mail a letter.
+ */
+function lob_api_send_letter($data) {
+  try {
+    require_once libraries_get_path('lob') . '/vendor/autoload.php';
+
+    $lob_api_key = variable_get('lob_api_key');
+    $lob = new \Lob\Lob($lob_api_key);
+    $letter = $lob->letters()->create($data);
+    _lob_api_log_debug_data($data, $letter);
+
+    return $letter;
+  }
+  catch (Exception $e) {
+    watchdog_exception('lob_api', $e);
+    throw new LobApiException($e);
+  }
+}
+
+/**
  * Makes a request to the Lob API to print and mail a postcard.
  */
 function lob_api_send_postcard($data) {
