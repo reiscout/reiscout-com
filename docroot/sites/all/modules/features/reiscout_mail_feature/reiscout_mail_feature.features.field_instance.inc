@@ -162,7 +162,8 @@ You can use these tokens:
 <ul>
 <li>{{date}}</em> - the current date, e.g., <em>August 15, 2018</em></li>
 <li>{{greeting}}</em> - the content of the corresponding <em>Greeting</em> field</li>
-<li>{{owner_name}}</em> - the first name of a property owner</li>
+<li>{{owner_fullname}}</em> - either the full name of a property owner or the name of a corporation</li>
+<li>{{owner_name}}</em> - either the first name of a property owner or the name of a corporation</li>
 <li>{{address}}</em> - the full address of a property, e.g., <em>123 Some St, Somecity, CA 98765</em></li>
 <li>{{street_address}}</em> - the street address of a property</li>
 <li>{{city}}</em> - the city name of a property</li>
@@ -227,7 +228,8 @@ You can use these tokens:
 <ul>
 <li>{{date}}</em> - the current date, e.g., <em>August 15, 2018</em></li>
 <li>{{greeting}}</em> - the content of the corresponding <em>Greeting</em> field</li>
-<li>{{owner_name}}</em> - the first name of a property owner</li>
+<li>{{owner_fullname}}</em> - either the full name of a property owner or the name of a corporation</li>
+<li>{{owner_name}}</em> - either the first name of a property owner or the name of a corporation</li>
 <li>{{address}}</em> - the full address of a property, e.g., <em>123 Some St, Somecity, CA 98765</em></li>
 <li>{{street_address}}</em> - the street address of a property</li>
 <li>{{city}}</em> - the city name of a property</li>
@@ -292,7 +294,8 @@ You can use these tokens:
 <ul>
 <li>{{date}}</em> - the current date, e.g., <em>August 15, 2018</em></li>
 <li>{{greeting}}</em> - the content of the corresponding <em>Greeting</em> field</li>
-<li>{{owner_name}}</em> - the first name of a property owner</li>
+<li>{{owner_fullname}}</em> - either the full name of a property owner or the name of a corporation</li>
+<li>{{owner_name}}</em> - either the first name of a property owner or the name of a corporation</li>
 <li>{{address}}</em> - the full address of a property, e.g., <em>123 Some St, Somecity, CA 98765</em></li>
 <li>{{street_address}}</em> - the street address of a property</li>
 <li>{{city}}</em> - the city name of a property</li>
@@ -657,7 +660,8 @@ You can use these tokens:
 <ul>
 <li>{{date}}</em> - the current date, e.g., <em>August 15, 2018</em></li>
 <li>{{greeting}}</em> - the content of the corresponding <em>Greeting</em> field</li>
-<li>{{owner_name}}</em> - the first name of a property owner</li>
+<li>{{owner_fullname}}</em> - either the full name of a property owner or the name of a corporation</li>
+<li>{{owner_name}}</em> - either the first name of a property owner or the name of a corporation</li>
 <li>{{address}}</em> - the full address of a property, e.g., <em>123 Some St, Somecity, CA 98765</em></li>
 <li>{{street_address}}</em> - the street address of a property</li>
 <li>{{city}}</em> - the city name of a property</li>
@@ -677,7 +681,8 @@ You can use these tokens:
 <ul>
 <li>{{date}}</em> - the current date, e.g., <em>August 15, 2018</em></li>
 <li>{{greeting}}</em> - the content of the corresponding <em>Greeting</em> field</li>
-<li>{{owner_name}}</em> - the first name of a property owner</li>
+<li>{{owner_fullname}}</em> - either the full name of a property owner or the name of a corporation</li>
+<li>{{owner_name}}</em> - either the first name of a property owner or the name of a corporation</li>
 <li>{{address}}</em> - the full address of a property, e.g., <em>123 Some St, Somecity, CA 98765</em></li>
 <li>{{street_address}}</em> - the street address of a property</li>
 <li>{{city}}</em> - the city name of a property</li>
@@ -697,7 +702,8 @@ You can use these tokens:
 <ul>
 <li>{{date}}</em> - the current date, e.g., <em>August 15, 2018</em></li>
 <li>{{greeting}}</em> - the content of the corresponding <em>Greeting</em> field</li>
-<li>{{owner_name}}</em> - the first name of a property owner</li>
+<li>{{owner_fullname}}</em> - either the full name of a property owner or the name of a corporation</li>
+<li>{{owner_name}}</em> - either the first name of a property owner or the name of a corporation</li>
 <li>{{address}}</em> - the full address of a property, e.g., <em>123 Some St, Somecity, CA 98765</em></li>
 <li>{{street_address}}</em> - the street address of a property</li>
 <li>{{city}}</em> - the city name of a property</li>
