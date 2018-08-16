@@ -1,13 +1,13 @@
 <?php
 /**
  * @file
- * reiscout_mail_postcard_feature.features.uuid_term.inc
+ * reiscout_mail_feature.features.uuid_term.inc
  */
 
 /**
  * Implements hook_uuid_features_default_terms().
  */
-function reiscout_mail_postcard_feature_uuid_features_default_terms() {
+function reiscout_mail_feature_uuid_features_default_terms() {
   $terms = array();
 
   $terms[] = array(

@@ -1,7 +1,0 @@
-<?php
-/**
- * @file
- * Code for the Reiscout Mail Postcard feature.
- */
-
-include_once 'reiscout_mail_postcard_feature.features.inc';

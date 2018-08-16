@@ -1,13 +1,13 @@
 <?php
 /**
  * @file
- * reiscout_mail_postcard_feature.features.taxonomy.inc
+ * reiscout_mail_feature.features.taxonomy.inc
  */
 
 /**
  * Implements hook_taxonomy_default_vocabularies().
  */
-function reiscout_mail_postcard_feature_taxonomy_default_vocabularies() {
+function reiscout_mail_feature_taxonomy_default_vocabularies() {
   return array(
     'postcard_design_templates' => array(
       'name' => 'Postcard design templates',
