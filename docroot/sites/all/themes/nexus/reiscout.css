@@ -243,7 +243,7 @@ body.page-onepage #main-menu a.active:active {
   margin-right: 1em;
 }
 
-.reiscout-mail-buttons .sample-postcard-link {
+.reiscout-mail-buttons .sample-mail-link {
   margin-top: -0.8em;
   font-size: 85%;
   line-height: 16px;
@@ -631,7 +631,7 @@ footer#colophon .col-sm-12 a:first-child{
 }
 
 @media screen and (min-width: 1200px) {
-  .page-reiscout-mail-postcard-send .container {
+  .page-reiscout-mail-send-postcard .container {
     max-width: 1205px;
   }
 }
