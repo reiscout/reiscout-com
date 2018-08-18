@@ -2,7 +2,7 @@
 <head>
   <meta charset="UTF-8">
   <title>8.5x11 Letter</title>
-  <link href="https://fonts.googleapis.com/css?family=Pragati+Narrow:700|Roboto:400,700" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css?family=Pragati+Narrow:700|Roboto:400,700|Homemade+Apple" rel="stylesheet">
   <style>
     *, *:before, *:after {
       -webkit-box-sizing: border-box;
@@ -105,6 +105,14 @@
       text-align: right;
     }
 
+    #ltr-sign {
+      position: relative;
+      top: 14px;
+      left: 10px;
+      font-family: 'Homemade Apple', cursive;
+      font-size: 20px;
+    }
+
     #ltr-date {
       padding-left: 50px;
     }
@@ -126,7 +134,7 @@
     <!-- This block will be displayed on preview page only -->
 
     <div class="safe-zone">
-      <div class="ltr-right">{Date} (July 19, 2018)</div>
+      <div class="ltr-right">July 19, 2018</div>
       <div>
         Dear {Property Owner First Name},
       </div>
@@ -200,7 +208,8 @@
       <div>
         Sincerely,<br><br>
         BUYER:<br>
-        {Company Name}<br><br><br><br>
+        {Company Name}<br><br><br>
+        <span id="ltr-sign">Boris Baeta</span><br>
         _____________________________________<br>
         Boris Baeta<br><br><br><br><br>
         SELLER:<br><br><br><br><br>
