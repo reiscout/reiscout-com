@@ -382,7 +382,6 @@ function reiscout_property_field_access($op, $field, $entity_type, $entity, $acc
       $fields_to_edit_node_was_pulled = array(
         'field_image',
         'body',
-        'field_place_on_marketplace',
         'field_owner_phone',
         'field_repairs_price',
         'field_arv',
@@ -391,6 +390,14 @@ function reiscout_property_field_access($op, $field, $entity_type, $entity, $acc
 
       // This field is set in the app
       if ('field_geo_position' == $field['field_name']) {
+        return FALSE;
+      }
+
+      // We want the nodes only to be seen by the owner,
+      // so we disable access to this field.
+      // @todo: should we delete 'Place this lead on the marketplace' field
+      // from the Property content type?
+      if ('field_place_on_marketplace' == $field['field_name']) {
         return FALSE;
       }
 
