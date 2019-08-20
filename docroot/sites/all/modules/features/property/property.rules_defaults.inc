@@ -1,4 +1,5 @@
 <?php
+
 /**
  * @file
  * property.rules_defaults.inc

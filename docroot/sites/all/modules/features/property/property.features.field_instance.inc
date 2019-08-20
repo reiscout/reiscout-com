@@ -1,4 +1,5 @@
 <?php
+
 /**
  * @file
  * property.features.field_instance.inc
@@ -167,6 +168,7 @@ function property_field_default_field_instances() {
         'label' => 'above',
         'module' => 'commerce_cart',
         'settings' => array(
+          'button_text' => 'Add to cart',
           'combine' => TRUE,
           'default_quantity' => 1,
           'line_item_type' => 'product',
