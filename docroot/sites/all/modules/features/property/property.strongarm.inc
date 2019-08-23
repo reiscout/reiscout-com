@@ -139,77 +139,77 @@ function property_strongarm() {
           'weight' => '1',
         ),
         'path' => array(
-          'weight' => '18',
+          'weight' => '20',
         ),
       ),
       'display' => array(
         'product:sku' => array(
           'drupalgap' => array(
-            'weight' => '35',
+            'weight' => '39',
             'visible' => FALSE,
           ),
           'default' => array(
-            'weight' => '24',
+            'weight' => '43',
             'visible' => FALSE,
           ),
           'full' => array(
-            'weight' => '22',
+            'weight' => '24',
             'visible' => FALSE,
           ),
         ),
         'product:title' => array(
           'drupalgap' => array(
-            'weight' => '36',
+            'weight' => '40',
             'visible' => FALSE,
           ),
           'default' => array(
-            'weight' => '25',
+            'weight' => '44',
             'visible' => FALSE,
           ),
           'full' => array(
-            'weight' => '23',
+            'weight' => '25',
             'visible' => FALSE,
           ),
         ),
         'product:status' => array(
           'drupalgap' => array(
-            'weight' => '37',
+            'weight' => '41',
             'visible' => FALSE,
           ),
           'default' => array(
-            'weight' => '26',
+            'weight' => '45',
             'visible' => FALSE,
           ),
           'full' => array(
-            'weight' => '25',
+            'weight' => '27',
             'visible' => FALSE,
           ),
         ),
         'product:commerce_price' => array(
           'drupalgap' => array(
-            'weight' => '34',
+            'weight' => '38',
             'visible' => FALSE,
           ),
           'default' => array(
-            'weight' => '0',
+            'weight' => '5',
             'visible' => TRUE,
           ),
           'full' => array(
-            'weight' => '24',
+            'weight' => '26',
             'visible' => FALSE,
           ),
         ),
         'product:field_property' => array(
           'full' => array(
-            'weight' => '20',
+            'weight' => '22',
             'visible' => FALSE,
           ),
           'drupalgap' => array(
-            'weight' => '27',
+            'weight' => '30',
             'visible' => TRUE,
           ),
           'default' => array(
-            'weight' => '18',
+            'weight' => '17',
             'visible' => TRUE,
           ),
         ),
@@ -219,25 +219,25 @@ function property_strongarm() {
             'visible' => TRUE,
           ),
           'drupalgap' => array(
-            'weight' => '30',
+            'weight' => '34',
             'visible' => FALSE,
           ),
           'default' => array(
-            'weight' => '-1',
+            'weight' => '3',
             'visible' => TRUE,
           ),
         ),
         'reiscout-mail-buttons' => array(
           'full' => array(
-            'weight' => '22',
+            'weight' => '24',
             'visible' => TRUE,
           ),
           'drupalgap' => array(
-            'weight' => '29',
+            'weight' => '33',
             'visible' => FALSE,
           ),
           'default' => array(
-            'weight' => '-1',
+            'weight' => '4',
             'visible' => TRUE,
           ),
         ),
@@ -247,6 +247,10 @@ function property_strongarm() {
             'visible' => TRUE,
           ),
           'drupalgap' => array(
+            'weight' => '0',
+            'visible' => TRUE,
+          ),
+          'default' => array(
             'weight' => '0',
             'visible' => TRUE,
           ),
@@ -260,6 +264,10 @@ function property_strongarm() {
             'weight' => '2',
             'visible' => TRUE,
           ),
+          'default' => array(
+            'weight' => '2',
+            'visible' => TRUE,
+          ),
         ),
         'reiscout-property-data-form' => array(
           'full' => array(
@@ -267,6 +275,10 @@ function property_strongarm() {
             'visible' => TRUE,
           ),
           'drupalgap' => array(
+            'weight' => '1',
+            'visible' => TRUE,
+          ),
+          'default' => array(
             'weight' => '1',
             'visible' => TRUE,
           ),
