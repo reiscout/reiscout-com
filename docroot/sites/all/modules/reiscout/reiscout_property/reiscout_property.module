@@ -366,6 +366,27 @@ function reiscout_property_field_access($op, $field, $entity_type, $entity, $acc
       }
     }
     else if ('edit' == $op) {
+      // Fields that can be edited by a user with an administrator role only
+      $fields_editable_by_admin = array(
+        'field_source',
+        'field_case_file_date',
+        'field_data_locked',
+        'field_data_quality_tags',
+      );
+
+      // Fields that can be edited by the superuser only
+      $fields_editable_by_root = array(
+        // This field is set in the app
+        'field_geo_position',
+        // We want the nodes only to be seen by the owner.
+        // @todo: should 'Place this lead on the marketplace' field be deleted?
+        'field_place_on_marketplace',
+        // These fields are set automatically
+        'field_fips_county_code',
+        'field_owner_status',
+        'field_zillow_page_url',
+      );
+
       // A list of a node's fields that a user is allowed to edit
       // after the node has been purchased
       $fields_to_edit_node_was_purchased = array(
@@ -388,27 +409,14 @@ function reiscout_property_field_access($op, $field, $entity_type, $entity, $acc
         'field_under_contract',
       );
 
-      // This field is set in the app
-      if ('field_geo_position' == $field['field_name']) {
-        return FALSE;
-      }
-
-      // We want the nodes only to be seen by the owner,
-      // so we disable access to this field.
-      // @todo: should we delete 'Place this lead on the marketplace' field
-      // from the Property content type?
-      if ('field_place_on_marketplace' == $field['field_name']) {
-        return FALSE;
-      }
-
       $role_admin = user_role_load_by_name('administrator');
 
-      // It is only administrator who can edit the 'Lock data'
-      // and the 'Data Quality Tags' fields
-      if (in_array($field['field_name'], array('field_data_locked', 'field_data_quality_tags'))) {
-        if (!user_has_role($role_admin->rid, $account)) {
-          return FALSE;
-        }
+      if (in_array($field['field_name'], $fields_editable_by_admin)) {
+        return user_has_role($role_admin->rid, $account);
+      }
+
+      if (in_array($field['field_name'], $fields_editable_by_root)) {
+        return 1 == $account->uid;
       }
 
       // If a node is being edited

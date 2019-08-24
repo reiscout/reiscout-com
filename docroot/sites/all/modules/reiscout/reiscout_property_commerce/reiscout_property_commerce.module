@@ -174,6 +174,7 @@ function reiscout_property_commerce_node_view($node, $view_mode, $langcode) {
 function reiscout_property_commerce_fields_access_to_sell() {
   return array(
     'field_address',
+    'field_owner_status',
     'field_owner_postal_address',
     'field_owner_phone',
   );
