@@ -1463,7 +1463,7 @@ function property_field_default_field_instances() {
     'bundle' => 'property',
     'default_value' => NULL,
     'deleted' => 0,
-    'description' => 'The estimated total market value from the local taxing authority',
+    'description' => 'The estimated total market value',
     'display' => array(
       'default' => array(
         'label' => 'above',
@@ -2201,7 +2201,7 @@ function property_field_default_field_instances() {
   t('The appraised total value from the local taxing authority');
   t('The date the sale records was recorded with the local authority');
   t('The estimate of a property’s value after all repairs and upgrades are completed');
-  t('The estimated total market value from the local taxing authority');
+  t('The estimated total market value');
   t('The name of the lender who grants the first mortgage on a property');
   t('The recorded amount of the sale transaction');
   t('The size of the finished property');
