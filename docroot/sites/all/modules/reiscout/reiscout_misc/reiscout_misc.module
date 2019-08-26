@@ -23,16 +23,6 @@ function reiscout_misc_admin_menu_output_alter(&$content) {
 /**
  * Implements hook_form_FORM_ID_alter().
  */
-function reiscout_misc_form_property_node_form_alter(&$form, &$form_state, $form_id) {
-  $form['#attached']['css'][] = array(
-    'data' => '#edit-field-owner-postal-address .form-item-field-owner-postal-address-und-0-country {display: none}',
-    'type' => 'inline',
-  );
-}
-
-/**
- * Implements hook_form_FORM_ID_alter().
- */
 function reiscout_misc_form_user_profile_form_alter(&$form, &$form_state, $form_id) {
   $form['#attached']['css'][] = array(
     'data' => '#edit-field-user-postal-address .form-item-field-user-postal-address-und-0-country {display: none}',

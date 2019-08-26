@@ -60,6 +60,16 @@ function reiscout_property_menu() {
 /**
  * Implements hook_form_FORM_ID_alter().
  */
+function reiscout_property_form_property_node_form_alter(&$form, &$form_state, $form_id) {
+  $form['#attached']['css'][] = array(
+    'data' => '#edit-field-owner-postal-address .form-item-field-owner-postal-address-und-0-country {display: none}',
+    'type' => 'inline',
+  );
+}
+
+/**
+ * Implements hook_form_FORM_ID_alter().
+ */
 function reiscout_property_form_views_exposed_form_alter(&$form, &$form_state, $form_id) {
   // 'Property Listing'
   if ('views-exposed-form-property-listing-page' == $form['#id']) {
