@@ -310,6 +310,25 @@ function reiscout_property_node_presave($node) {
   if ($nw->field_owner_postal_address->thoroughfare->value()) {
     $nw->field_owner_postal_address->thoroughfare = _reiscout_misc_standardize_address_thoroughfare($nw->field_owner_postal_address->thoroughfare->value());
   }
+
+  if ($nw->is_new->value()) {
+    if (_reiscout_property_is_owner_address_filled_by_nid($node)) {
+      $nw->field_owner_status = _reiscout_property_determine_owner_status($nw->field_address, $nw->field_owner_postal_address);
+    }
+  }
+  else {
+    $nwo = entity_metadata_wrapper('node', $node->original);
+
+    // If an owner address has been removed
+    if (!_reiscout_property_is_owner_address_filled_by_nid($node)) {
+      $nw->field_owner_status = null;
+    }
+    // If either a property address or owner address have been changed
+    elseif (_reiscout_property_is_address_changed($nwo->field_address, $nw->field_address)
+         || _reiscout_property_is_owner_address_changed($nwo->field_owner_postal_address, $nw->field_owner_postal_address)) {
+      $nw->field_owner_status = _reiscout_property_determine_owner_status($nw->field_address, $nw->field_owner_postal_address);
+    }
+  }
 }
 
 /**
@@ -884,6 +903,16 @@ function _reiscout_property_is_address_filled_by_nid($nid) {
 }
 
 /**
+ * Checks if the new property address is different from the old one.
+ */
+function _reiscout_property_is_address_changed($old_address, $new_address) {
+  return $old_address->thoroughfare->value() != $new_address->thoroughfare->value()
+    || $old_address->locality->value() != $new_address->locality->value()
+    || $old_address->administrative_area->value() != $new_address->administrative_area->value()
+    || $old_address->postal_code->value() != $new_address->postal_code->value();
+}
+
+/**
  * Returns an address of a property.
  */
 function _reiscout_property_get_address_by_nid($nid) {
@@ -916,6 +945,19 @@ function _reiscout_property_is_owner_address_filled_by_nid($nid) {
     && $nw->field_owner_postal_address->locality->value()
     && $nw->field_owner_postal_address->administrative_area->value()
     && $nw->field_owner_postal_address->postal_code->value();
+}
+
+/**
+ * Checks if the new owner address is different from the old one.
+ */
+function _reiscout_property_is_owner_address_changed($old_address, $new_address) {
+  return $old_address->first_name->value() != $new_address->first_name->value()
+    || $old_address->last_name->value() != $new_address->last_name->value()
+    || $old_address->organisation_name->value() != $new_address->organisation_name->value()
+    || $old_address->thoroughfare->value() != $new_address->thoroughfare->value()
+    || $old_address->locality->value() != $new_address->locality->value()
+    || $old_address->administrative_area->value() != $new_address->administrative_area->value()
+    || $old_address->postal_code->value() != $new_address->postal_code->value();
 }
 
 /**
@@ -1153,6 +1195,27 @@ function _reiscout_property_is_data_quality_tag_attached($nid, $tag_name) {
 
   $tag = taxonomy_term_machine_name_load($tag_name, 'data_quality_tags');
   return in_array($tag, $nw->field_data_quality_tags->value());
+}
+
+/**
+ * Given a property and owner addresses, determines the owner status.
+ */
+function _reiscout_property_determine_owner_status($address, $owner_address) {
+  if ($owner_address->organisation_name->value()) {
+    $status = 1;
+  }
+  elseif ($address->administrative_area->value() != $owner_address->administrative_area->value()) {
+    $status = 4;
+  }
+  elseif ($address->thoroughfare->value() == $owner_address->thoroughfare->value()
+       && $address->locality->value() == $owner_address->locality->value()) {
+    $status = 2;
+  }
+  else {
+    $status = 3;
+  }
+
+  return $status;
 }
 
 /**
