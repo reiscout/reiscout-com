@@ -303,10 +303,12 @@ function reiscout_property_node_presave($node) {
     return;
   }
 
-  $node->field_address[LANGUAGE_NONE][0]['thoroughfare'] = _reiscout_misc_standardize_address_thoroughfare($node->field_address[LANGUAGE_NONE][0]['thoroughfare']);
+  $nw = entity_metadata_wrapper('node', $node);
 
-  if ($node->field_owner_postal_address[LANGUAGE_NONE][0]['thoroughfare']) {
-    $node->field_owner_postal_address[LANGUAGE_NONE][0]['thoroughfare'] = _reiscout_misc_standardize_address_thoroughfare($node->field_owner_postal_address[LANGUAGE_NONE][0]['thoroughfare']);
+  $nw->field_address->thoroughfare = _reiscout_misc_standardize_address_thoroughfare($nw->field_address->thoroughfare->value());
+
+  if ($nw->field_owner_postal_address->thoroughfare->value()) {
+    $nw->field_owner_postal_address->thoroughfare = _reiscout_misc_standardize_address_thoroughfare($nw->field_owner_postal_address->thoroughfare->value());
   }
 }
 
