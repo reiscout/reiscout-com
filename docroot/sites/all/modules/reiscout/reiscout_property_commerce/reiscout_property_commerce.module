@@ -26,16 +26,6 @@ define('REISCOUT_PROPERTY_COMMERCE_NODE_TYPE', 'property');
 require_once 'reiscout_property_commerce.inc';
 
 function reiscout_property_commerce_menu() {
-  // Module settings.
-  $items['admin/commerce/config/reiscout'] = array(
-    'title' => 'Reiscout Commerce Settings',
-    'description' => 'Reiscout settings.',
-    'page callback' => 'drupal_get_form',
-    'page arguments' => array('reiscout_property_commerce_settings_form'),
-    'access arguments' => array('access administration pages'),
-    'file' => 'reiscout_property_commerce.admin.inc',
-  );
-
   // AJAX callback to show login modal
   $items['reiscout_property_commerce_login_modal_ajax_callback/%ctools_js/%node'] = array(
     'page callback' => 'reiscout_property_commerce_login_modal_ajax_callback',
