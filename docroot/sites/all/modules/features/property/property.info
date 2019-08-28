@@ -1,5 +1,5 @@
 name = Property
-description = Provides 'Property' content type
+description = Provides 'Property' content type and 'Property Listings' views
 core = 7.x
 package = Reiscout
 dependencies[] = addressfield
