@@ -1,4 +1,5 @@
 name = Reiscout Property Commerce Feature
+description = Provides 'Purchased Nodes' views
 core = 7.x
 package = Reiscout
 dependencies[] = better_exposed_filters
@@ -13,7 +14,6 @@ dependencies[] = views_infinite_scroll
 dependencies[] = views_json
 features[commerce_product_type][] = reiscout_property_address_access
 features[commerce_product_type][] = reiscout_property_owner_info
-features[context][] = reiscout_property_commerce_admin_form
 features[ctools][] = context:context:3
 features[ctools][] = field_validation:default_field_validation_rules:2
 features[ctools][] = views:views_default:3.0

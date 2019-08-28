@@ -1,4 +1,5 @@
 <?php
+
 /**
  * @file
  * reiscout_property_commerce_feature.rules_defaults.inc
@@ -63,7 +64,7 @@ function reiscout_property_commerce_feature_default_rules_configuration() {
       ],
       "DO" : [
         { "mail" : {
-            "to" : "boris@reiscout.com",
+            "to" : "bbaeta@reiscout.com",
             "subject" : "A new order [commerce-order:order-number] at [site:name]",
             "message" : "\\u0027Address Access\\u0027 product was purchased.\\r\\n\\r\\nOrder number: [commerce-order:order-number]\\r\\nOrder link: [commerce-order:admin-url]",
             "language" : [ "commerce-order:state" ]

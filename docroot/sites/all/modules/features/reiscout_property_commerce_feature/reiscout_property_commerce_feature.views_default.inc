@@ -1,4 +1,5 @@
 <?php
+
 /**
  * @file
  * reiscout_property_commerce_feature.views_default.inc
@@ -62,7 +63,7 @@ function reiscout_property_commerce_feature_views_default_views() {
   $handler->display->display_options['relationships']['field_address_access_product']['field'] = 'field_address_access_product';
   $handler->display->display_options['relationships']['field_address_access_product']['relationship'] = 'commerce_product_product_id';
   $handler->display->display_options['relationships']['field_address_access_product']['required'] = TRUE;
-  /* Field: Content: Photo */
+  /* Field: Content: Image */
   $handler->display->display_options['fields']['field_image']['id'] = 'field_image';
   $handler->display->display_options['fields']['field_image']['table'] = 'field_data_field_image';
   $handler->display->display_options['fields']['field_image']['field'] = 'field_image';
@@ -248,7 +249,7 @@ function reiscout_property_commerce_feature_views_default_views() {
     ),
   );
   $handler->display->display_options['defaults']['fields'] = FALSE;
-  /* Field: Content: Photo */
+  /* Field: Content: Image */
   $handler->display->display_options['fields']['field_image']['id'] = 'field_image';
   $handler->display->display_options['fields']['field_image']['table'] = 'field_data_field_image';
   $handler->display->display_options['fields']['field_image']['field'] = 'field_image';
@@ -432,7 +433,7 @@ function reiscout_property_commerce_feature_views_default_views() {
   $handler->display->display_options['defaults']['row_plugin'] = FALSE;
   $handler->display->display_options['defaults']['row_options'] = FALSE;
   $handler->display->display_options['defaults']['fields'] = FALSE;
-  /* Field: Content: Photo */
+  /* Field: Content: Image */
   $handler->display->display_options['fields']['field_image']['id'] = 'field_image';
   $handler->display->display_options['fields']['field_image']['table'] = 'field_data_field_image';
   $handler->display->display_options['fields']['field_image']['field'] = 'field_image';

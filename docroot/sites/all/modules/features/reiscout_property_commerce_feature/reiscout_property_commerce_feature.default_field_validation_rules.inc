@@ -1,4 +1,5 @@
 <?php
+
 /**
  * @file
  * reiscout_property_commerce_feature.default_field_validation_rules.inc
