@@ -1,0 +1,33 @@
+<?php
+
+/**
+ * @file
+ * Provides Do Not Call registry and allows to check a phone number against it.
+ */
+
+/**
+ * Implements hook_permission().
+ */
+function reiscout_dnc_registry_permission() {
+  return array(
+    'administer reiscout_dnc_registry' => array(
+      'title' => t('Administer Reiscout DNC Registry'),
+    ),
+  );
+}
+
+/**
+ * Implements hook_menu().
+ */
+function reiscout_dnc_registry_menu() {
+  $items['admin/config/content/reiscout-dnc-registry'] = array(
+    'title' => 'Reiscout DNC Registry',
+    'description' => 'Configure Reiscout DNC Registry.',
+    'page callback' => 'drupal_get_form',
+    'page arguments' => array('reiscout_dnc_registry_configure_form'),
+    'access arguments' => array('administer reiscout_dnc_registry'),
+    'file' => 'reiscout_dnc_registry.admin.inc',
+  );
+
+  return $items;
+}

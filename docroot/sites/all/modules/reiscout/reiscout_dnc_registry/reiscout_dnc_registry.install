@@ -1,0 +1,27 @@
+<?php
+
+/**
+ * @file
+ * Install, update and uninstall functions for the Reiscout DNC Registry module.
+ */
+
+/**
+ * Implements hook_schema().
+ */
+function reiscout_dnc_registry_schema() {
+  $schema['reiscout_dnc_registry'] = array(
+    'description' => 'Stores Do Not Call registry.',
+    'fields' => array(
+      'number' => array(
+        'type' => 'int',
+        'size' => 'big',
+        'unsigned' => TRUE,
+        'not null' => TRUE,
+        'description' => 'A phone number.',
+      ),
+    ),
+    'primary key' => array('number'),
+  );
+
+  return $schema;
+}

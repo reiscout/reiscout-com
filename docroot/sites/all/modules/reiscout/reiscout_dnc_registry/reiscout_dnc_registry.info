@@ -1,0 +1,5 @@
+name = Reiscout DNC Registry
+description = Provides Do Not Call registry and allows to check a phone number against it.
+package = Reiscout
+core = 7.x
+files[] = reiscout_dnc_registry.inc
