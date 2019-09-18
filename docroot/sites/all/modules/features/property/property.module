@@ -5,3 +5,49 @@
  */
 
 include_once 'property.features.inc';
+
+/**
+ * Implements hook_menu().
+ */
+function property_menu() {
+  $items['properties/my/table'] = array(
+    'title' => 'Table',
+    'description' => 'A list of properties in table form.',
+    'page callback' => 'drupal_get_form',
+    'page arguments' => array('property_table_form'),
+    'access callback' => '_reiscout_misc_user_has_administrator_role',
+    'type' => MENU_LOCAL_TASK,
+    'weight' => 1,
+    'file' => 'property.pages.inc',
+  );
+
+  return $items;
+}
+
+/**
+ * Implements hook_query_TAG_alter().
+ */
+function property_query_phone_not_in_dnc_alter(QueryAlterableInterface $query) {
+  $query->innerJoin('field_data_field_owner_phone', 'fop', 'node.nid = fop.entity_id');
+  $query->leftJoin('reiscout_dnc_registry', 'r', "REGEXP_REPLACE(fop.field_owner_phone_value, '\\\D', '') = r.number");
+  $query->isNull('r.number');
+}
+
+/**
+ * Implements hook_query_TAG_alter().
+ */
+function property_query_phone_in_dnc_alter(QueryAlterableInterface $query) {
+  $query->innerJoin('field_data_field_owner_phone', 'fop', 'node.nid = fop.entity_id');
+  $query->innerJoin('reiscout_dnc_registry', 'r', "REGEXP_REPLACE(fop.field_owner_phone_value, '\\\D', '') = r.number");
+}
+
+/**
+ * Implements hook_query_TAG_alter().
+ *
+ * @todo: what if Last Sale Date field is not set for a property?
+ */
+function property_query_exclude_sold_after_file_date_alter(QueryAlterableInterface $query) {
+  $query->innerJoin('field_data_field_last_sale_date', 'flsd', 'node.nid = flsd.entity_id');
+  $query->innerJoin('field_data_field_case_file_date', 'fcfd', 'node.nid = fcfd.entity_id');
+  $query->where('field_last_sale_date_value < field_case_file_date_value');
+}

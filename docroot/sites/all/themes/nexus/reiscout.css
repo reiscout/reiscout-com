@@ -419,7 +419,8 @@ body.page-onepage #main-menu a.active:active {
   display: inline;
 }
 
-.view-property-listing .view-content,
+.view-property-listing.view-display-id-page .view-content,
+.view-property-listing.view-display-id-my_properties .view-content,
 .view-reiscout-property-commerce-purchased-nodes .view-content {
   max-width: 480px;
 }
@@ -643,4 +644,100 @@ footer#colophon .col-sm-12 a:first-child{
 .street-block .premise {
   display: inline;
   margin-left: 4px;
+}
+
+#property-table-form #edit-source,
+#property-table-form .form-type-radio.form-item-source,
+#property-table-form .form-item-file-date-from-date,
+#property-table-form .form-item-file-date-to-date,
+#property-table-form .form-item-market-value-from,
+#property-table-form .form-item-market-value-to,
+#property-table-form .form-item-beds,
+#property-table-form .form-item-beds-from,
+#property-table-form .form-item-beds-to,
+#property-table-form .form-item-baths,
+#property-table-form .form-item-baths-from,
+#property-table-form .form-item-baths-to,
+#property-table-form .form-item-rooms,
+#property-table-form .form-item-rooms-from,
+#property-table-form .form-item-rooms-to,
+#property-table-form .form-item-built-from,
+#property-table-form .form-item-built-to {
+  display: inline-block;
+}
+
+#property-table-form .container-inline-date {
+  display: inline;
+}
+
+#property-table-form .container-inline-date input {
+  margin: 0;
+}
+
+#property-table-form #edit-source {
+  margin-left: 2px;
+}
+
+#property-table-form .form-type-radio.form-item-source {
+  margin-top: 0;
+  margin-bottom: 0;
+}
+
+#property-table-form .form-type-radio label {
+  margin-left: 1px;
+}
+
+#property-table-form .form-type-radio.form-item-source:first-child {
+  margin-right: 3px;
+}
+
+#property-table-form .form-item-source input,
+#property-table-form .form-item-hide-sold-after-file-date input {
+  margin: 0;
+}
+
+#property-table-form .form-item-file-date-from,
+#property-table-form .form-item-file-date-to {
+  margin-bottom: 1em;
+  margin-top: 2px;
+}
+
+#property-table-form .form-item-file-date-from .date-padding,
+#property-table-form .form-item-file-date-to .date-padding {
+  float: none;
+}
+
+#property-table-form .form-item-file-date-from .description,
+#property-table-form .form-item-file-date-to .description {
+  display: none;
+}
+
+#property-table-form .form-item-market-value-from,
+#property-table-form .form-item-beds,
+#property-table-form .form-item-beds-from,
+#property-table-form .form-item-baths,
+#property-table-form .form-item-baths-from,
+#property-table-form .form-item-rooms,
+#property-table-form .form-item-rooms-from,
+#property-table-form .form-item-built-from {
+  margin-right: 7px;
+}
+
+#property-table-form #showing-rows-info {
+  margin-bottom: 1px;
+  text-align: right;
+}
+
+#property-table-form .owner-status {
+  font-size: 0.9em;
+  text-align: right;
+}
+
+#property-table-form .owner-phone.in-dnc {
+  background-color: #E80000;
+}
+
+#property-table-form .form-actions {
+  margin: 0;
+  padding-top: 0;
 }
