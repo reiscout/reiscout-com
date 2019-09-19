@@ -1207,8 +1207,8 @@ function _reiscout_property_determine_owner_status($address, $owner_address) {
   elseif ($address->administrative_area->value() != $owner_address->administrative_area->value()) {
     $status = 4;
   }
-  elseif ($address->thoroughfare->value() == $owner_address->thoroughfare->value()
-       && $address->locality->value() == $owner_address->locality->value()) {
+  elseif (drupal_strtolower($address->thoroughfare->value()) == drupal_strtolower($owner_address->thoroughfare->value())
+       && drupal_strtolower($address->locality->value()) == drupal_strtolower($owner_address->locality->value())) {
     $status = 2;
   }
   else {
