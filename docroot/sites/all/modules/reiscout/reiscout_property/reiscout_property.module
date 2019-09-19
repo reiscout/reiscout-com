@@ -312,7 +312,7 @@ function reiscout_property_node_presave($node) {
   }
 
   if ($nw->is_new->value()) {
-    if (_reiscout_property_is_owner_address_filled_by_nid($node)) {
+    if (Property::isOwnerAddressFilledOut($nw->field_owner_postal_address)) {
       $nw->field_owner_status = _reiscout_property_determine_owner_status($nw->field_address, $nw->field_owner_postal_address);
     }
   }
@@ -320,7 +320,7 @@ function reiscout_property_node_presave($node) {
     $nwo = entity_metadata_wrapper('node', $node->original);
 
     // If an owner address has been removed
-    if (!_reiscout_property_is_owner_address_filled_by_nid($node)) {
+    if (!Property::isOwnerAddressFilledOut($nw->field_owner_postal_address)) {
       $nw->field_owner_status = null;
     }
     // If either a property address or owner address have been changed
