@@ -329,6 +329,18 @@ function reiscout_property_node_presave($node) {
       $nw->field_owner_status = _reiscout_property_determine_owner_status($nw->field_address, $nw->field_owner_postal_address);
     }
   }
+
+  if (!$nw->field_baths->value()) {
+    if ($nw->field_full_baths->value() && $nw->field_half_baths->value()) {
+      $nw->field_baths = $nw->field_full_baths->value() + $nw->field_half_baths->value() * 0.5;
+    }
+    elseif ($nw->field_full_baths->value()) {
+      $nw->field_baths = $nw->field_full_baths->value();
+    }
+    elseif ($nw->field_half_baths->value()) {
+      $nw->field_baths = $nw->field_half_baths->value() * 0.5;
+    }
+  }
 }
 
 /**
