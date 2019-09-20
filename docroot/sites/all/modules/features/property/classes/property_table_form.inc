@@ -554,13 +554,19 @@ class PropertyTableForm {
 
   /**
    * Returns the property list.
+   *
+   * Sine fieldOrderBy() excludes entities with empty field values from results,
+   * we add 'order_by' tag to the query, the field and the direction as meta
+   * data, and order results in the implementation of the corresponding hook.
    */
   static function getPropertyList(array $header): ?array {
     $order = tablesort_get_order($header);
     $sort = tablesort_get_sort($header);
 
     $result = self::genPropertyListQuery()
-      ->fieldOrderBy($order['sql'], 'value', $sort)
+      ->addTag('order_by')
+      ->addMetaData('order_field', $order['sql'])
+      ->addMetaData('order_direction', $sort)
       ->pager(self::PER_PAGE)
       ->execute();
 

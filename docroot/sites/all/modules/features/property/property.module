@@ -51,3 +51,13 @@ function property_query_exclude_sold_after_file_date_alter(QueryAlterableInterfa
   $query->innerJoin('field_data_field_case_file_date', 'fcfd', 'node.nid = fcfd.entity_id');
   $query->where('field_last_sale_date_value < field_case_file_date_value');
 }
+
+/**
+ * Implements hook_query_TAG_alter().
+ */
+function property_query_order_by_alter(QueryAlterableInterface $query) {
+  $field = $query->getMetaData('order_field');
+  $direction = $query->getMetaData('order_direction');
+  $query->leftJoin('field_data_' . $field, 'of', 'node.nid = of.entity_id');
+  $query->orderBy('of.' . $field . '_value', $direction);
+}
