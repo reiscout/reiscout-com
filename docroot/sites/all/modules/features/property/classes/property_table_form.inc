@@ -110,7 +110,7 @@ class PropertyTableForm {
           '#title' => t('Market Value >='),
           '#options' => array(
             '' => '',
-          ) + self::genPriceOptions($min, $max - 1000, 1000),
+          ) + self::genPriceOptions($min, $max - 1000, 1000, 10000),
           '#default_value' => $filters['market_value_from'] ?? '',
           '#prefix' => '<div id="filters-market-value">',
         );
@@ -120,7 +120,7 @@ class PropertyTableForm {
           '#title' => t('Market Value <='),
           '#options' => array(
             '' => '',
-          ) + self::genPriceOptions($min + 1000, $max, 1000),
+          ) + self::genPriceOptions($min + 1000, $max, 1000, 10000),
           '#default_value' => $filters['market_value_to'] ?? '',
           '#suffix' => '</div>',
         );
@@ -629,9 +629,20 @@ class PropertyTableForm {
   /**
    * Generates a list of price values as options for a select element.
    */
-  static function genPriceOptions(int $from, int $to, int $step): array {
-    $prices = range($from, $to, $step);
-    return array_combine($prices, array_map('number_format', $prices));
+  static function genPriceOptions(int $from, int $to, int $stepBeforeMillion, int $stepAfterMillion): array {
+    if (1000000 >= $to) {
+      $prices = range($from, $to, $stepBeforeMillion);
+      $prices = array_combine($prices, array_map('number_format', $prices));
+    }
+    else {
+      $prices1 = range($from, 1000000, $stepBeforeMillion);
+      $prices1 = array_combine($prices1, array_map('number_format', $prices1));
+      $prices2 = range(1000000 + $stepAfterMillion, $to, $stepAfterMillion);
+      $prices2 = array_combine($prices2, array_map('number_format', $prices2));
+      $prices = $prices1 + $prices2;
+    }
+
+    return $prices;
   }
 
   /**
