@@ -190,8 +190,9 @@ function reiscout_property_node_validate($node, $form, &$form_state) {
     return;
   }
 
-  // If a node is being deleted, we do not need make any checks.
-  if ('Delete' == $form_state['values']['op']) {
+  // If a node has not been submitted via node create/edit form,
+  // or it is being deleted, we do not need make any checks.
+  if (!isset($form_state['values']['op']) || 'Delete' == $form_state['values']['op']) {
     return;
   }
 
