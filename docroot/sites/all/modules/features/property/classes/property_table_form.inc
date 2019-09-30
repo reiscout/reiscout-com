@@ -373,10 +373,14 @@ class PropertyTableForm {
                       . $property->field_owner_postal_address->postal_code->value()
                       . '</div>';
 
-          if ($number = $property->field_owner_phone->value()) {
-            $ownerInfo .= '<div class="owner-phone' . (DncRegistry::contains($number) ? ' in-dnc' : '') . '">'
-                        . $number
-                        . '</div>';
+          if ($numbers = $property->field_owner_phone->value()) {
+            $ownerInfo .= '<div class="owner-phones">';
+            foreach ($numbers as $number) {
+              $ownerInfo .= '<div class="owner-phone' . (DncRegistry::contains($number) ? ' in-dnc' : '') . '">'
+                          . $number
+                          . '</div>';
+            }
+            $ownerInfo .= '</div>';
           }
         }
 
