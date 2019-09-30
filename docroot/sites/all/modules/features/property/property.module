@@ -31,14 +31,31 @@ function property_query_phone_not_in_dnc_alter(QueryAlterableInterface $query) {
   $query->innerJoin('field_data_field_owner_phone', 'fop', 'node.nid = fop.entity_id');
   $query->leftJoin('reiscout_dnc_registry', 'r', "REGEXP_REPLACE(fop.field_owner_phone_value, '\\\D', '') = r.number");
   $query->isNull('r.number');
+  $query->groupBy('node.nid');
 }
 
 /**
  * Implements hook_query_TAG_alter().
  */
 function property_query_phone_in_dnc_alter(QueryAlterableInterface $query) {
+  global $user;
+
+  $query_not_in_dnc = db_select('node', 'n')
+    ->distinct()
+    ->fields('n', array('nid'));
+  $query_not_in_dnc
+    ->innerJoin('field_data_field_owner_phone', 'fop', 'n.nid = fop.entity_id');
+  $query_not_in_dnc
+    ->leftJoin('reiscout_dnc_registry', 'r', "REGEXP_REPLACE(fop.field_owner_phone_value, '\\\D', '') = r.number");
+  $query_not_in_dnc
+    ->isNull('r.number');
+  $query_not_in_dnc
+    ->condition('uid', $user->uid)
+    ->condition('type', 'property');
+
   $query->innerJoin('field_data_field_owner_phone', 'fop', 'node.nid = fop.entity_id');
-  $query->innerJoin('reiscout_dnc_registry', 'r', "REGEXP_REPLACE(fop.field_owner_phone_value, '\\\D', '') = r.number");
+  $query->condition('node.nid', $query_not_in_dnc, 'NOT IN');
+  $query->groupBy('node.nid');
 }
 
 /**
