@@ -7,6 +7,20 @@
 
 class Property {
   /**
+   * Given a property address, checks if all the required fields are filled out.
+   */
+  static function isAddressFilledOut(EntityStructureWrapper $address): bool {
+    if (!$address->value()) {
+      return FALSE;
+    }
+
+    return $address->thoroughfare->value()
+        && $address->locality->value()
+        && $address->administrative_area->value()
+        && $address->postal_code->value();
+  }
+
+  /**
    * Given an owner's address, checks if all the required fields are filled out.
    */
   static function isOwnerAddressFilledOut(EntityStructureWrapper $address): bool {
