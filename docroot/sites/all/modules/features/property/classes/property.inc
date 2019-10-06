@@ -7,6 +7,38 @@
 
 class Property {
   /**
+   * Checks if a user has a property with data obtained from a court case.
+   *
+   * Given a user id and case number, checks if the user has a property whose
+   * data have been obtained from the case.
+   */
+  static function userHasByCaseNumber(int $uid, string $number): bool {
+    $query = new EntityFieldQuery;
+    $query->entityCondition('entity_type', 'node')
+      ->entityCondition('bundle', 'property')
+      ->fieldCondition('field_case_number', 'value', $number)
+      ->propertyCondition('uid', $uid);
+
+    return $query->count()->execute();
+  }
+
+  /**
+   * Given a property address and user id, returns the corresponding property.
+   */
+  static function getByAddressAndUid(stdClass $address, int $uid): ?stdClass {
+    $query = new EntityFieldQuery;
+    $result = $query->entityCondition('entity_type', 'node')
+      ->entityCondition('bundle', 'property')
+      ->fieldCondition('field_address', 'thoroughfare', $address->thoroughfare)
+      ->fieldCondition('field_address', 'locality', $address->city)
+      ->fieldCondition('field_address', 'administrative_area', $address->state)
+      ->propertyCondition('uid', $uid)
+      ->execute();
+
+    return isset($result['node']) ? node_load(key($result['node'])) : NULL;
+  }
+
+  /**
    * Given a property address, checks if all the required fields are filled out.
    */
   static function isAddressFilledOut(EntityStructureWrapper $address): bool {
@@ -91,6 +123,25 @@ class Property {
     );
 
     return $counties[$code] ?? $code;
+  }
+
+  /**
+   * Given a county name, returns its FIPS code.
+   */
+  static function getCountyFipsCodeByName(string $name): ?int {
+    $counties = array(
+      13021 => 'Bibb',
+      13067 => 'Cobb',
+      13089 => 'DeKalb',
+      13121 => 'Fulton',
+      13135 => 'Gwinnett',
+      13151 => 'Henry',
+    );
+
+    $counties = array_map('strtolower', $counties);
+    $counties = array_flip($counties);
+
+    return $counties[strtolower($name)] ?? NULL;
   }
 
   /**
