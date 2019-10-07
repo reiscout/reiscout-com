@@ -21,6 +21,16 @@ function property_menu() {
     'file' => 'property.pages.inc',
   );
 
+  $items['properties/import'] = array(
+    'title' => 'Import properties from a XLSX document',
+    'description' => 'Allows to import properties from a XLSX document.',
+    'page callback' => 'drupal_get_form',
+    'page arguments' => array('property_import_form'),
+    'access callback' => '_reiscout_misc_user_has_administrator_role',
+    'type' => MENU_CALLBACK,
+    'file' => 'property.pages.inc',
+  );
+
   return $items;
 }
 

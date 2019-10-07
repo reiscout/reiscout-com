@@ -156,4 +156,5 @@ features_exclude[uuid_term][5bc252c6-d983-4035-8cbf-7389b958a769] = 5bc252c6-d98
 features_exclude[uuid_term][3ce39630-afd5-4afb-a9df-e804cd9b6673] = 3ce39630-afd5-4afb-a9df-e804cd9b6673
 features_exclude[uuid_term][c35e891f-2c63-4a35-adf8-47e2d972499f] = c35e891f-2c63-4a35-adf8-47e2d972499f
 files[] = classes/property.inc
+files[] = classes/property_importer.inc
 files[] = classes/property_table_form.inc
