@@ -72,7 +72,7 @@ class DncRegistry {
     $transaction = db_transaction();
 
     $i = 0;
-    while (!$file->eof() && $i < 150000) {
+    while (!$file->eof() && $i < 100000) {
       $number = DncRegistry::formatNumber($file->fgets());
       if (DncRegistry::addNumber($number)) {
         ++$context['results']['numbers_imported'];
