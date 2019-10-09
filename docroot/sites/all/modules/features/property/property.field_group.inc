@@ -481,6 +481,7 @@ function property_field_group_info() {
     'children' => array(
       0 => 'field_source',
       1 => 'field_case_file_date',
+      2 => 'field_case_number',
     ),
     'format_type' => 'fieldset',
     'format_settings' => array(
@@ -510,6 +511,7 @@ function property_field_group_info() {
     'children' => array(
       0 => 'field_source',
       1 => 'field_case_file_date',
+      2 => 'field_case_number',
     ),
     'format_type' => 'fieldset',
     'format_settings' => array(

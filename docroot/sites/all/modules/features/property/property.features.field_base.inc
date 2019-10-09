@@ -184,6 +184,27 @@ function property_field_default_field_bases() {
     'type' => 'datetime',
   );
 
+  // Exported field_base: 'field_case_number'.
+  $field_bases['field_case_number'] = array(
+    'active' => 1,
+    'cardinality' => 1,
+    'deleted' => 0,
+    'entity_types' => array(),
+    'field_name' => 'field_case_number',
+    'indexes' => array(
+      'format' => array(
+        0 => 'format',
+      ),
+    ),
+    'locked' => 0,
+    'module' => 'text',
+    'settings' => array(
+      'max_length' => 10,
+    ),
+    'translatable' => 0,
+    'type' => 'text',
+  );
+
   // Exported field_base: 'field_data_locked'.
   $field_bases['field_data_locked'] = array(
     'active' => 1,

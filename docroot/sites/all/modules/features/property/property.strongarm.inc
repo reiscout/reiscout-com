@@ -145,11 +145,11 @@ function property_strongarm() {
       'display' => array(
         'product:sku' => array(
           'drupalgap' => array(
-            'weight' => '39',
+            'weight' => '44',
             'visible' => FALSE,
           ),
           'default' => array(
-            'weight' => '43',
+            'weight' => '44',
             'visible' => FALSE,
           ),
           'full' => array(
@@ -159,11 +159,11 @@ function property_strongarm() {
         ),
         'product:title' => array(
           'drupalgap' => array(
-            'weight' => '40',
+            'weight' => '45',
             'visible' => FALSE,
           ),
           'default' => array(
-            'weight' => '44',
+            'weight' => '45',
             'visible' => FALSE,
           ),
           'full' => array(
@@ -173,11 +173,11 @@ function property_strongarm() {
         ),
         'product:status' => array(
           'drupalgap' => array(
-            'weight' => '41',
+            'weight' => '46',
             'visible' => FALSE,
           ),
           'default' => array(
-            'weight' => '45',
+            'weight' => '46',
             'visible' => FALSE,
           ),
           'full' => array(
@@ -187,7 +187,7 @@ function property_strongarm() {
         ),
         'product:commerce_price' => array(
           'drupalgap' => array(
-            'weight' => '38',
+            'weight' => '43',
             'visible' => FALSE,
           ),
           'default' => array(
@@ -219,7 +219,7 @@ function property_strongarm() {
             'visible' => TRUE,
           ),
           'drupalgap' => array(
-            'weight' => '34',
+            'weight' => '39',
             'visible' => FALSE,
           ),
           'default' => array(
@@ -233,7 +233,7 @@ function property_strongarm() {
             'visible' => TRUE,
           ),
           'drupalgap' => array(
-            'weight' => '33',
+            'weight' => '38',
             'visible' => FALSE,
           ),
           'default' => array(
