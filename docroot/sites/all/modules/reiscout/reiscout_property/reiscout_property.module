@@ -61,6 +61,10 @@ function reiscout_property_menu() {
  * Implements hook_form_FORM_ID_alter().
  */
 function reiscout_property_form_property_node_form_alter(&$form, &$form_state, $form_id) {
+  $form['field_case_number']['#states'] = array(
+    'visible' => array(':input[name="field_source[und]"]' => array('value' => 1)),
+  );
+
   $form['field_case_file_date']['#states'] = array(
     'visible' => array(':input[name="field_source[und]"]' => array('value' => 1)),
     'required' => array(':input[name="field_source[und]"]' => array('value' => 1)),
