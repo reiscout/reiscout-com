@@ -468,6 +468,7 @@ function reiscout_property_field_access($op, $field, $entity_type, $entity, $acc
       // Fields that can be edited by a user with an administrator role only
       $fields_editable_by_admin = array(
         'field_source',
+        'field_case_number',
         'field_case_file_date',
         'field_data_locked',
         'field_data_quality_tags',
