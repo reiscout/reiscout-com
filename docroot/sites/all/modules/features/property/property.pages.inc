@@ -34,6 +34,10 @@ function property_table_form_submit($form, &$form_state) {
   else {
     PropertyTableForm::clearFilters();
   }
+
+  if (isset($_GET['page'])) {
+    unset($_GET['page']);
+  }
 }
 
 /**
