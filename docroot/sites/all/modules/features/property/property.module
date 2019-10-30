@@ -35,6 +35,30 @@ function property_menu() {
 }
 
 /**
+ * Implements hook_menu_local_tasks_alter().
+ */
+function property_menu_local_tasks_alter(&$data, $router_item, $root_path) {
+  if ('properties/my' == $root_path || 'properties/my/table' == $root_path) {
+    $data['actions']['output'][] = array(
+      '#theme' => 'menu_local_action',
+      '#link' => array(
+        'title' => '+ Add property',
+        'href' => 'node/add/property',
+      ),
+    );
+
+    $item = menu_get_item('properties/import');
+    $item['title'] = "\u{2192} " . $item['title'];
+    if ($item['access']) {
+      $data['actions']['output'][] = array(
+        '#theme' => 'menu_local_action',
+        '#link' => $item,
+      );
+    }
+  }
+}
+
+/**
  * Implements hook_query_TAG_alter().
  */
 function property_query_phone_not_in_dnc_alter(QueryAlterableInterface $query) {

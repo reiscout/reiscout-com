@@ -741,3 +741,15 @@ footer#colophon .col-sm-12 a:first-child{
   margin: 0;
   padding-top: 0;
 }
+
+.page-properties-my .action-links {
+  margin-left: 0;
+  margin-bottom: 10px;
+  padding-top: 5px;
+}
+.page-properties-my .action-links li {
+  display: inline;
+}
+.page-properties-my .action-links li:first-child {
+  margin-right: 7px;
+}
