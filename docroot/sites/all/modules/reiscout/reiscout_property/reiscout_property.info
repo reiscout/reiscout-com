@@ -5,6 +5,7 @@ core = 7.x
 dependencies[] = reiscout_equity_percentage
 dependencies[] = reiscout_property_commerce
 dependencies[] = reiscout_misc
+dependencies[] = zillow_api
 files[] = classes/property_address_suggestion.inc
 files[] = classes/property_address_suggestion_my_properties.inc
 files[] = classes/property_address_suggestion_purchased_leads.inc

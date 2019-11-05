@@ -1,0 +1,49 @@
+<?php
+
+/**
+ * @file
+ * Install, update and uninstall functions for Reiscout Property module.
+ */
+
+/**
+ * Implements hook_schema().
+ */
+function reiscout_property_schema() {
+  $schema['reiscout_property_zillow_data_filling_history'] = array(
+    'description' => 'Stores the history of filling properties with Zillow data.',
+    'fields' => array(
+      'nid' => array(
+        'description' => 'The {node}.nid of the property.',
+        'type' => 'int',
+        'unsigned' => TRUE,
+        'not null' => TRUE,
+      ),
+      'result' => array(
+        'description' => 'The result of an attempt to fill the property with the data.',
+        'type' => 'int',
+        'size' => 'small',
+        'unsigned' => TRUE,
+        'not null' => TRUE,
+      ),
+      'created' => array(
+        'description' => 'Timestamp for when the record has been created.',
+        'type' => 'int',
+        'unsigned' => TRUE,
+        'not null' => TRUE,
+      ),
+    ),
+    'primary key' => array('nid'),
+    'indexes' => array(
+      'result' => array('result'),
+      'created' => array('created'),
+    ),
+    'foreign keys' => array(
+      'property' => array(
+        'table' => 'node',
+        'columns' => array('nid' => 'nid'),
+      ),
+    ),
+  );
+
+  return $schema;
+}

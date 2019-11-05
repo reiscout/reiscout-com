@@ -9,6 +9,9 @@ class ReiscoutPropertyGrossAreaIsUnknown extends Exception {}
 
 define('REISCOUT_PROPERTY_NODE_TITLE_TO_CHANGE', 'Property #');
 define('REISCOUT_PROPERTY_MESSAGE_TO_CHANGE', 'Property <em class="placeholder">Property #</em> has been created.');
+define('REISCOUT_PROPERTY_ADDRESS_IS_NOT_FILLED', 1000);
+define('REISCOUT_PROPERTY_INVALID_ZILLOW_API_RESPONSE', 1001);
+define('REISCOUT_PROPERTY_IS_FILLED_WITH_ZILLOW_DATA', 0);
 
 /**
  * Implements hook_menu().
@@ -55,6 +58,18 @@ function reiscout_property_menu() {
   );
 
   return $items;
+}
+
+/**
+ * Implements hook_cron_queue_info().
+ */
+function reiscout_property_cron_queue_info() {
+  $queues['fill_property_with_zillow_data'] = array(
+    'worker callback' => '_reiscout_property_fill_with_zillow_data_by_nid',
+    'time' => 120,
+  );
+
+  return $queues;
 }
 
 /**
@@ -356,11 +371,34 @@ function reiscout_property_node_presave($node) {
 }
 
 /**
+ * Implements hook_node_insert().
+ */
+function reiscout_property_node_insert($node) {
+  $admin_role = user_role_load_by_name('administrator');
+  $node_author = user_load($node->uid);
+  if (user_has_role($admin_role->rid, $node_author)) {
+    $queue = DrupalQueue::get('fill_property_with_zillow_data');
+    $queue->createItem($node->nid);
+  }
+}
+
+/**
  * Implements hook_node_update().
  */
 function reiscout_property_node_update($node) {
   if ('property' != $node->type) {
     return;
+  }
+
+  $admin_role = user_role_load_by_name('administrator');
+  $node_author = user_load($node->uid);
+  if (user_has_role($admin_role->rid, $node_author)) {
+    $nw = entity_metadata_wrapper('node', $node);
+    $nwo = entity_metadata_wrapper('node', $node->original);
+    if (_reiscout_property_is_address_changed($nwo->field_address, $nw->field_address)) {
+      $queue = DrupalQueue::get('fill_property_with_zillow_data');
+      $queue->createItem($node->nid);
+    }
   }
 
   // We use 'Automatic Entity Labels' module to automatic title creation for
@@ -380,6 +418,15 @@ function reiscout_property_node_update($node) {
       }
     }
   }
+}
+
+/**
+ * Implements hook_node_delete().
+ */
+function reiscout_property_node_delete($node) {
+  db_delete('reiscout_property_zillow_data_filling_history')
+    ->condition('nid', $node->nid)
+    ->execute();
 }
 
 /**
@@ -623,6 +670,116 @@ function reiscout_property_entity_load($entities, $type) {
       }
     }
   }
+}
+
+/**
+ * Logs the result of an attempt to fill a property with Zillow data.
+ */
+function _reiscout_property_log_filling_with_zillow_data(int $nid, int $result): void {
+  $fields = array(
+    'result' => $result,
+    'created' => time(),
+  );
+  db_merge('reiscout_property_zillow_data_filling_history')
+    ->key(array('nid' => $nid))
+    ->fields($fields)
+    ->execute();
+}
+
+/**
+ * Fills property's fields with Zillow GetDeepSearchResults API data.
+ */
+function _reiscout_property_fill_with_zillow_data_by_nid(int $nid): void {
+  static $zillowApiRequestsAreDeferred = FALSE;
+
+  $nw = entity_metadata_wrapper('node', $nid);
+
+  if (!Property::isAddressFilledOut($nw->field_address)) {
+    $message = 'Address of property !nid is not filled out';
+    watchdog('reiscout_property', $message, array('!nid' => $nid), WATCHDOG_WARNING);
+    _reiscout_property_log_filling_with_zillow_data($nid, REISCOUT_PROPERTY_ADDRESS_IS_NOT_FILLED);
+    return;
+  }
+
+  // If requests to Zillow API are deferred till the next cron run
+  if ($zillowApiRequestsAreDeferred) {
+    throw new Exception('Requests to Zillow API are deferred till the next cron run');
+  }
+
+  try {
+    $api = new ZillowApi();
+    $data = $api->getDeepSearchResults($nw->field_address->thoroughfare->value(),
+      $nw->field_address->locality->value(),
+      $nw->field_address->administrative_area->value(),
+      $nw->field_address->postal_code->value());
+  }
+  catch (ZillowApiNetworkError | ZillowApiUnavailable $e) {
+    // We want to defer requests to Zillow API till the next cron run
+    $zillowApiRequestsAreDeferred = TRUE;
+    throw $e;
+  }
+  catch (ZillowApiInvalidZwsid | ZillowApiRequestLimitIsReached $e) {
+    throw $e;
+  }
+  catch (ZillowApiInvalidResponse $e) {
+    _reiscout_property_log_filling_with_zillow_data($nid, REISCOUT_PROPERTY_INVALID_ZILLOW_API_RESPONSE);
+    return;
+  }
+  catch (ZillowApiInvalidRequest | ZillowApiNoResultsFound | ZillowApiUnknownError $e) {
+    _reiscout_property_log_filling_with_zillow_data($nid, $e->getCode());
+    return;
+  }
+
+  if (isset($data->FIPScounty)) {
+    $nw->field_fips_county_code = $data->FIPScounty;
+  }
+
+  if (isset($data->zestimate)) {
+    $nw->field_market_value = $data->zestimate / 1000;
+  }
+
+  if (isset($data->taxAssessment)) {
+    $nw->field_assessed_value = $data->taxAssessment / 1000;
+  }
+
+  if (isset($data->lastSoldPrice)) {
+    $nw->field_last_sale_price = $data->lastSoldPrice / 1000;
+  }
+
+  if (isset($data->lastSoldDate)) {
+    $nw->field_last_sale_date = strtotime($data->lastSoldDate);
+  }
+
+  if (isset($data->finishedSqFt)) {
+    $nw->field_finished_area = $data->finishedSqFt;
+  }
+
+  if (isset($data->lotSizeSqFt)) {
+    $nw->field_lot_area_acres = $data->lotSizeSqFt * 0.00002295684113865932;
+  }
+
+  if (isset($data->beds)) {
+    $nw->field_bedrooms = $data->beds;
+  }
+
+  if (isset($data->baths)) {
+    $nw->field_baths = $data->baths;
+  }
+
+  if (isset($data->rooms)) {
+    $nw->field_rooms = $data->rooms;
+  }
+
+  if (isset($data->built)) {
+    $nw->field_year_built = $data->built;
+  }
+
+  if (isset($data->url)) {
+    $nw->field_zillow_page_url = $data->url;
+  }
+
+  $nw->save();
+  _reiscout_property_log_filling_with_zillow_data($nid, REISCOUT_PROPERTY_IS_FILLED_WITH_ZILLOW_DATA);
 }
 
 /**
