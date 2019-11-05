@@ -1,0 +1,5 @@
+name = Zillow API
+description = Provides a wrapper for the Zillow API.
+configure = admin/config/services/zillow-api
+core = 7.x
+files[] = zillow_api.class.inc

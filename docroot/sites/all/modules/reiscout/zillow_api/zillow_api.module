@@ -1,0 +1,33 @@
+<?php
+
+/**
+ * @file
+ * Provides a wrapper for the Zillow API.
+ */
+
+/**
+ * Implements hook_permission().
+ */
+function zillow_api_permission() {
+  return array(
+    'administer zillow api' => array(
+      'title' => t('Administer Zillow API'),
+    ),
+  );
+}
+
+/**
+ * Implements hook_menu().
+ */
+function zillow_api_menu() {
+  $items['admin/config/services/zillow-api'] = array(
+    'title' => 'Zillow API',
+    'description' => 'Configure Zillow API settings.',
+    'page callback' => 'drupal_get_form',
+    'page arguments' => array('zillow_api_admin_settings_form'),
+    'access arguments' => array('administer zillow api'),
+    'file' => 'zillow_api.admin.inc',
+  );
+
+  return $items;
+}
