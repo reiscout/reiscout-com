@@ -12,6 +12,8 @@ define('REISCOUT_PROPERTY_MESSAGE_TO_CHANGE', 'Property <em class="placeholder">
 define('REISCOUT_PROPERTY_ADDRESS_IS_NOT_FILLED', 1000);
 define('REISCOUT_PROPERTY_INVALID_ZILLOW_API_RESPONSE', 1001);
 define('REISCOUT_PROPERTY_IS_FILLED_WITH_ZILLOW_DATA', 0);
+// We want to update Zillow data once per 3 months
+define('REISCOUT_PROPERTY_ZILLOW_DATA_UPDATE_PERIOD', 90 * 24 * 60 * 60);
 
 /**
  * Implements hook_menu().
@@ -58,6 +60,45 @@ function reiscout_property_menu() {
   );
 
   return $items;
+}
+
+/**
+ * Implements hook_cron().
+ */
+function reiscout_property_cron() {
+  // Download Zillow data for all Property nodes created by users with an
+  // administrator role for which Zillow data either has not been downloaded yet
+  // or got outdated.
+  $queue = DrupalQueue::get('fill_property_with_zillow_data');
+
+  if ($queue->numberOfItems()) {
+    return;
+  }
+
+  $admin_role = user_role_load_by_name('administrator');
+
+  $db_or = db_or();
+  $db_or->isNull('h.created');
+  $db_or->condition('h.created', time() - REISCOUT_PROPERTY_ZILLOW_DATA_UPDATE_PERIOD, '<');
+
+  $query = db_select('node', 'n')
+    ->fields('n', array('nid'));
+  $query
+    ->leftJoin('users_roles', 'r', 'n.uid = r.uid');
+  $query
+    ->leftJoin('reiscout_property_zillow_data_filling_history', 'h', 'n.nid = h.nid');
+  $query
+    ->condition('type', 'property')
+    ->condition('rid', $admin_role->rid)
+    ->condition($db_or)
+    ->orderBy('h.created')
+    ->range(0, 3);
+
+  if ($nids = $query->execute()->fetchCol()) {
+    foreach ($nids as $nid) {
+      $queue->createItem($nid);
+    }
+  }
 }
 
 /**
