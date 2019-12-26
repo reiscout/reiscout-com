@@ -505,10 +505,6 @@ body.page-onepage #main-menu a.active:active {
   content: '✔ ';
 }
 
-.node-type-property .field-name-body {
-  font-size: 13px;
-}
-
 footer#colophon .col-sm-12 {
   text-align: center;
 }
