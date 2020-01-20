@@ -18,6 +18,7 @@ function property_table_form($form, $form_state) {
   PropertyTableForm::attachPropertyList($form);
 
   $form['#attached']['js'][] = drupal_get_path('module', 'property') . '/property.table_form.js';
+  $form['#attached']['css'][] = drupal_get_path('module', 'property') . '/property.table_form.css';
 
   return $form;
 }
