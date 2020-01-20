@@ -110,6 +110,36 @@ class Property {
   }
 
   /**
+   * Given a lead status, returns its name.
+   */
+  static function getLeadStatusName(int $status): string {
+    switch ($status) {
+      case 1:
+        $name = t('Hot');
+        break;
+      case 2:
+        $name = t('Warm');
+        break;
+      case 3:
+        $name = t('Cold');
+        break;
+      case 4:
+        $name = t('DNC');
+        break;
+      case 5:
+        $name = t('Open');
+        break;
+      case 6:
+        $name = t('Hold');
+        break;
+      default:
+        $name = t('Closed');
+    }
+
+    return $name;
+  }
+
+  /**
    * Given a PIPS county code, returns its name.
    */
   static function getCountyNameByFipsCode(int $code): string {
