@@ -31,6 +31,22 @@ function property_menu() {
     'file' => 'property.pages.inc',
   );
 
+  $items['property/%/field/%/get-value'] = array(
+    'page callback' => 'property_field_get_value',
+    'page arguments' => array(1, 3),
+    'access callback' => '_reiscout_misc_user_has_administrator_role',
+    'type' => MENU_CALLBACK,
+    'file' => 'property.pages.inc',
+  );
+
+  $items['property/%/field/%/save-value'] = array(
+    'page callback' => 'property_field_save_value',
+    'page arguments' => array(1, 3),
+    'access callback' => '_reiscout_misc_user_has_administrator_role',
+    'type' => MENU_CALLBACK,
+    'file' => 'property.pages.inc',
+  );
+
   return $items;
 }
 
@@ -111,4 +127,16 @@ function property_query_order_by_alter(QueryAlterableInterface $query) {
   $direction = $query->getMetaData('order_direction');
   $query->leftJoin('field_data_' . $field, 'of', 'node.nid = of.entity_id');
   $query->orderBy('of.' . $field . '_value', $direction);
+}
+
+/**
+ * Changes the order of jquery.ui.button.min.js on a page.
+ *
+ * To display jQuery dialog messages on My Properties (Table) page correctly,
+ * jquery.ui.button.min.js must be added to the page after bootstrap.min.js.
+ */
+function property_js_alter(&$js) {
+  if (isset($js['sites/all/modules/contrib/jquery_update/replace/ui/ui/minified/jquery.ui.button.min.js'])) {
+    $js['sites/all/modules/contrib/jquery_update/replace/ui/ui/minified/jquery.ui.button.min.js']['group'] = JS_THEME;
+  }
 }

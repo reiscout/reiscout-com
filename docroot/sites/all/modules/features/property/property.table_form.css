@@ -1,3 +1,7 @@
+#property-table-form table {
+  line-height: 1.4;
+}
+
 #property-table-form #edit-source,
 #property-table-form .form-type-radio.form-item-source,
 #property-table-form .form-item-file-date-from-date,
@@ -92,4 +96,51 @@
 #property-table-form .form-actions {
   margin: 0;
   padding-top: 0;
+}
+
+#property-table-form .crm-fields {
+  margin-top: 2px;
+}
+
+#property-table-form .crm-fields .field {
+  display: flex;
+}
+
+#property-table-form .crm-fields .field .title {
+  margin-right: 4px;
+  color: #000;
+  white-space: nowrap;
+}
+
+#property-table-form .crm-fields .field .value {
+  flex-grow: 1;
+}
+
+#property-table-form .crm-fields .field input,
+#property-table-form .crm-fields .field select {
+  margin: 0;
+  padding: 1px;
+}
+
+#property-table-form .crm-fields .field .icon {
+  width: 16px;
+  height: 16px;
+  cursor: pointer;
+}
+
+#property-table-form .crm-fields .field:hover .icon.edit {
+  background: url('images/edit.svg') no-repeat;
+}
+
+#property-table-form .crm-fields .field .icon.save {
+  background: url('images/save.png') no-repeat;
+}
+
+#jquery-dialog-message-property-deleted,
+#jquery-dialog-message-403 {
+  display: none;
+}
+
+#jquery-dialog-message-403 a {
+  color: #F4473A;
 }

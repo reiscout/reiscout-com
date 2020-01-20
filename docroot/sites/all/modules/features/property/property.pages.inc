@@ -102,3 +102,72 @@ function property_import_form_submit($form, &$form_state) {
   );
   batch_set($batch);
 }
+
+/**
+ * Page callback: returns the value of a field.
+ */
+function property_field_get_value($nid, $field) {
+  $response = new stdClass();
+
+  if ($node = node_load($nid)) {
+    $node = entity_metadata_wrapper('node', $node);
+    $response->success = TRUE;
+
+    if ('last-contacted' == $field) {
+      $response->value = $node->field_last_contacted->value() ?
+                         date('Y-m-d', $node->field_last_contacted->value()) :
+                         '';
+    }
+    elseif ('lead-status' == $field) {
+      $response->value = (int)$node->field_lead_status->value();
+    }
+  }
+  else {
+    $response->success = FALSE;
+  }
+
+  drupal_json_output($response);
+}
+
+/**
+ * Page callback: saves the value of a field.
+ */
+function property_field_save_value($nid, $field) {
+  $response = new stdClass();
+
+  if ($node = node_load($nid)) {
+    $node = entity_metadata_wrapper('node', $node);
+    $response->success = TRUE;
+
+    if ('last-contacted' == $field) {
+      if ($_POST['value']) {
+        $ts = strtotime($_POST['value']);
+        $node->field_last_contacted = $ts;
+        $node->save();
+        $response->value = date('M j, Y', $ts);
+      }
+      else {
+        $node->field_last_contacted = NULL;
+        $node->save();
+        $response->value = t('never');
+      }
+    }
+    elseif ('lead-status' == $field) {
+      if ($_POST['value']) {
+        $node->field_lead_status = $_POST['value'];
+        $node->save();
+        $response->value = Property::getLeadStatusName($_POST['value']);
+      }
+      else {
+        $node->field_lead_status = NULL;
+        $node->save();
+        $response->value = t('New');
+      }
+    }
+  }
+  else {
+    $response->success = FALSE;
+  }
+
+  drupal_json_output($response);
+}

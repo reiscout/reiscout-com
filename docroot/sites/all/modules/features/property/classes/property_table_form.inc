@@ -340,6 +340,29 @@ class PropertyTableForm {
 
     $rows = array();
     if ($properties = self::getPropertyList($header)) {
+      $form['#attached']['js'][] = array(
+        'type' => 'setting',
+        'data' => array(
+          'property' => array(
+            'field_lead_status_allowed_values' => field_info_field('field_lead_status')['settings']['allowed_values'],
+          ),
+        ),
+      );
+
+      $form['#attached']['library'][] = array('system', 'ui.dialog');
+
+      $form['jquery_dialog_message_property_deleted'] = array(
+        '#markup' => '<div id="jquery-dialog-message-property-deleted" title="Property does not exist">
+                         The property was deleted.
+                      </div>',
+      );
+
+      $form['jquery_dialog_message_403'] = array(
+        '#markup' => '<div id="jquery-dialog-message-403" title="Please log in">
+                         You logged out.<br/>Please <a href="/user" target="_blank">log in</a> again.
+                      </div>',
+      );
+
       foreach ($properties as $property) {
         $property = entity_metadata_wrapper('node', $property);
 
@@ -382,6 +405,27 @@ class PropertyTableForm {
             }
             $ownerInfo .= '</div>';
           }
+
+          $lastContacted = $property->field_last_contacted->value() ?
+                           date('M j, Y', $property->field_last_contacted->value()) :
+                           t('never');
+
+          $leadStatus = $property->field_lead_status->value() ?
+                        Property::getLeadStatusName($property->field_lead_status->value()) :
+                        t('New');
+
+          $ownerInfo .= '<div id="crm-fields-' . $property->nid->value(). '" class="crm-fields">
+                            <div class="field last-contacted">
+                               <div class="title">Last Contacted:</div>
+                               <div class="value">' . $lastContacted . '</div>
+                               <div class="icon edit"></div>
+                            </div>
+                            <div class="field lead-status">
+                               <div class="title">Lead Status:</div>
+                               <div class="value">' . $leadStatus . '</div>
+                               <div class="icon edit"></div>
+                            </div>
+                         </div>';
         }
 
         $lastSold = '';
