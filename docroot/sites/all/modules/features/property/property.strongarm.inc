@@ -139,7 +139,7 @@ function property_strongarm() {
           'weight' => '1',
         ),
         'path' => array(
-          'weight' => '20',
+          'weight' => '21',
         ),
       ),
       'display' => array(
