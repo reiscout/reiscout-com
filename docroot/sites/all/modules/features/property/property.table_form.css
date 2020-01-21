@@ -153,13 +153,13 @@
   color: #F4473A;
 }
 
-@media screen and (min-width: 401px) {
+@media screen and (min-width: 421px) {
   #property-table-form .crm-fields .field:hover .icon.edit {
     background: url('images/edit.svg') no-repeat;
   }
 }
 
-@media screen and (max-width: 400px) {
+@media screen and (max-width: 420px) {
   #property-table-form .owner-phones {
     margin: 7px 0;
     font-size: 130%
