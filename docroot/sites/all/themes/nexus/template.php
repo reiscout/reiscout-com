@@ -95,18 +95,16 @@ function nexus_preprocess_node(&$variables) {
 }
 
 function nexus_page_alter($page) {
-  // <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"/>
   $viewport = array(
     '#type' => 'html_tag',
     '#tag' => 'meta',
     '#attributes' => array(
-    'name' =>  'viewport',
-    'content' =>  'width=device-width, initial-scale=1, maximum-scale=1'
-    )
+      'name' => 'viewport',
+      'content' => 'width=device-width, initial-scale=1',
+    ),
   );
   drupal_add_html_head($viewport, 'viewport');
 }
-
 
 /**
  * Add javascript files for front-page jquery slideshow.
