@@ -84,6 +84,10 @@
   text-align: right;
 }
 
+#property-table-form th#owner-info {
+  min-width: 280px;
+}
+
 #property-table-form .owner-status {
   font-size: 0.9em;
   text-align: right;
@@ -91,6 +95,14 @@
 
 #property-table-form .owner-phone.in-dnc {
   background-color: #E80000;
+}
+
+#property-table-form .owner-phone.in-dnc a {
+  color: #EEE;
+}
+
+#property-table-form .owner-phone.in-dnc a:hover {
+  color: #000;
 }
 
 #property-table-form .form-actions {
@@ -128,10 +140,6 @@
   cursor: pointer;
 }
 
-#property-table-form .crm-fields .field:hover .icon.edit {
-  background: url('images/edit.svg') no-repeat;
-}
-
 #property-table-form .crm-fields .field .icon.save {
   background: url('images/save.png') no-repeat;
 }
@@ -143,4 +151,42 @@
 
 #jquery-dialog-message-403 a {
   color: #F4473A;
+}
+
+@media screen and (min-width: 401px) {
+  #property-table-form .crm-fields .field:hover .icon.edit {
+    background: url('images/edit.svg') no-repeat;
+  }
+}
+
+@media screen and (max-width: 400px) {
+  #property-table-form .owner-phones {
+    margin: 7px 0;
+    font-size: 130%
+  }
+
+  #property-table-form .owner-phone:not(:last-child) {
+    margin-bottom: 7px;
+  }
+
+  #property-table-form .crm-fields .field {
+    line-height: 24px;
+  }
+
+  #property-table-form .crm-fields .field .icon {
+    width: 24px;
+    height: 24px;
+  }
+
+  #property-table-form .crm-fields .field .icon.edit {
+    background: url('images/edit-24.svg') no-repeat;
+  }
+
+  #property-table-form .crm-fields .field .icon.save {
+    background: url('images/save-24.png') no-repeat;
+  }
+
+  #property-table-form .crm-fields .lead-status {
+    margin-top: 9px;
+  }
 }

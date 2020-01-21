@@ -294,7 +294,10 @@ class PropertyTableForm {
   static function attachPropertyList(array &$form): void {
     $header = array(
       t('Address'),
-      t('Owner Info'),
+      array(
+        'data' => t('Owner Info'),
+        'id' => 'owner-info',
+      ),
       array(
         'data' => t('Market Value'),
         'field' => 'field_market_value',
@@ -400,7 +403,7 @@ class PropertyTableForm {
             $ownerInfo .= '<div class="owner-phones">';
             foreach ($numbers as $number) {
               $ownerInfo .= '<div class="owner-phone' . (DncRegistry::contains($number) ? ' in-dnc' : '') . '">'
-                          . $number
+                          . l($number, 'tel:' . DncRegistry::formatNumber($number))
                           . '</div>';
             }
             $ownerInfo .= '</div>';
