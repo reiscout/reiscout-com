@@ -568,7 +568,7 @@ function property_field_default_field_instances() {
     ),
     'entity_type' => 'node',
     'field_name' => 'field_case_file_date',
-    'label' => 'File Date',
+    'label' => 'Case File Date',
     'required' => 0,
     'settings' => array(
       'default_value' => 'blank',
@@ -623,7 +623,7 @@ function property_field_default_field_instances() {
     ),
     'entity_type' => 'node',
     'field_name' => 'field_case_number',
-    'label' => 'Number',
+    'label' => 'Case Number',
     'required' => 0,
     'settings' => array(
       'text_processing' => 0,
@@ -2373,13 +2373,14 @@ function property_field_default_field_instances() {
   t('Baths');
   t('Bedrooms');
   t('Buy Address Access');
+  t('Case File Date');
+  t('Case Number');
   t('Combined value of the assessed land and improvements of the subject property');
   t('Data Quality Tags');
   t('Effective Year Built');
   t('Enter property address. It will be visible only for users bought the access to this property.');
   t('Equity Percentage Estimate');
   t('FIPS County Code');
-  t('File Date');
   t('Finished Area');
   t('Full Baths');
   t('Gross Area');
@@ -2394,7 +2395,6 @@ function property_field_default_field_instances() {
   t('Market Value');
   t('Mortgage Company');
   t('Notes');
-  t('Number');
   t('Owner Address');
   t('Owner Phone');
   t('Owner Status');
