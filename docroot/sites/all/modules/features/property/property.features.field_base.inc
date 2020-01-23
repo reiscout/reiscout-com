@@ -550,6 +550,31 @@ function property_field_default_field_bases() {
     'type' => 'list_text',
   );
 
+  // Exported field_base: 'field_list'.
+  $field_bases['field_list'] = array(
+    'active' => 1,
+    'cardinality' => 1,
+    'deleted' => 0,
+    'entity_types' => array(),
+    'field_name' => 'field_list',
+    'indexes' => array(
+      'value' => array(
+        0 => 'value',
+      ),
+    ),
+    'locked' => 0,
+    'module' => 'list',
+    'settings' => array(
+      'allowed_values' => array(
+        1 => 'Dispossessory',
+        2 => 'Pre-foreclosure',
+      ),
+      'allowed_values_function' => '',
+    ),
+    'translatable' => 0,
+    'type' => 'list_integer',
+  );
+
   // Exported field_base: 'field_lot_area_acres'.
   $field_bases['field_lot_area_acres'] = array(
     'active' => 1,

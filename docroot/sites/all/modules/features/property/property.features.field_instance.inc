@@ -188,7 +188,7 @@ function property_field_default_field_instances() {
         'label' => 'hidden',
         'settings' => array(),
         'type' => 'hidden',
-        'weight' => 19,
+        'weight' => 20,
       ),
     ),
     'entity_type' => 'node',
@@ -401,7 +401,7 @@ function property_field_default_field_instances() {
       'module' => 'number',
       'settings' => array(),
       'type' => 'number',
-      'weight' => 11,
+      'weight' => 10,
     ),
   );
 
@@ -543,7 +543,7 @@ function property_field_default_field_instances() {
         'label' => 'above',
         'settings' => array(),
         'type' => 'hidden',
-        'weight' => 38,
+        'weight' => 41,
       ),
       'drupalgap' => array(
         'label' => 'above',
@@ -563,7 +563,7 @@ function property_field_default_field_instances() {
           'show_remaining_days' => 0,
         ),
         'type' => 'date_default',
-        'weight' => 4,
+        'weight' => 2,
       ),
     ),
     'entity_type' => 'node',
@@ -590,7 +590,7 @@ function property_field_default_field_instances() {
         'year_range' => '-10:+0',
       ),
       'type' => 'date_popup',
-      'weight' => 28,
+      'weight' => 34,
     ),
   );
 
@@ -605,7 +605,7 @@ function property_field_default_field_instances() {
         'label' => 'above',
         'settings' => array(),
         'type' => 'hidden',
-        'weight' => 37,
+        'weight' => 40,
       ),
       'drupalgap' => array(
         'label' => 'above',
@@ -618,7 +618,7 @@ function property_field_default_field_instances() {
         'module' => 'text',
         'settings' => array(),
         'type' => 'text_default',
-        'weight' => 3,
+        'weight' => 1,
       ),
     ),
     'entity_type' => 'node',
@@ -636,7 +636,7 @@ function property_field_default_field_instances() {
         'size' => 20,
       ),
       'type' => 'text_textfield',
-      'weight' => 27,
+      'weight' => 33,
     ),
   );
 
@@ -655,7 +655,7 @@ function property_field_default_field_instances() {
         'label' => 'above',
         'settings' => array(),
         'type' => 'hidden',
-        'weight' => 43,
+        'weight' => 46,
       ),
       'drupalgap' => array(
         'label' => 'above',
@@ -667,7 +667,7 @@ function property_field_default_field_instances() {
         'label' => 'above',
         'settings' => array(),
         'type' => 'hidden',
-        'weight' => 21,
+        'weight' => 22,
       ),
     ),
     'entity_type' => 'node',
@@ -865,7 +865,7 @@ function property_field_default_field_instances() {
       'module' => 'number',
       'settings' => array(),
       'type' => 'number',
-      'weight' => 12,
+      'weight' => 11,
     ),
   );
 
@@ -944,7 +944,7 @@ function property_field_default_field_instances() {
         'label' => 'above',
         'settings' => array(),
         'type' => 'hidden',
-        'weight' => 41,
+        'weight' => 44,
       ),
       'drupalgap' => array(
         'label' => 'above',
@@ -956,7 +956,7 @@ function property_field_default_field_instances() {
         'label' => 'above',
         'settings' => array(),
         'type' => 'hidden',
-        'weight' => 18,
+        'weight' => 19,
       ),
     ),
     'entity_type' => 'node',
@@ -1068,7 +1068,7 @@ function property_field_default_field_instances() {
         'label' => 'above',
         'settings' => array(),
         'type' => 'hidden',
-        'weight' => 23,
+        'weight' => 24,
       ),
       'teaser' => array(
         'label' => 'above',
@@ -1317,7 +1317,7 @@ function property_field_default_field_instances() {
           'show_remaining_days' => FALSE,
         ),
         'type' => 'date_default',
-        'weight' => 44,
+        'weight' => 36,
       ),
       'drupalgap' => array(
         'label' => 'above',
@@ -1521,7 +1521,7 @@ function property_field_default_field_instances() {
         'module' => 'list',
         'settings' => array(),
         'type' => 'list_default',
-        'weight' => 45,
+        'weight' => 37,
       ),
       'drupalgap' => array(
         'label' => 'above',
@@ -1550,6 +1550,49 @@ function property_field_default_field_instances() {
       'settings' => array(),
       'type' => 'options_select',
       'weight' => 15,
+    ),
+  );
+
+  // Exported field_instance: 'node-property-field_list'.
+  $field_instances['node-property-field_list'] = array(
+    'bundle' => 'property',
+    'default_value' => NULL,
+    'deleted' => 0,
+    'description' => '',
+    'display' => array(
+      'default' => array(
+        'label' => 'above',
+        'settings' => array(),
+        'type' => 'hidden',
+        'weight' => 38,
+      ),
+      'drupalgap' => array(
+        'label' => 'above',
+        'settings' => array(),
+        'type' => 'hidden',
+        'weight' => 0,
+      ),
+      'full' => array(
+        'label' => 'above',
+        'module' => 'list',
+        'settings' => array(),
+        'type' => 'list_default',
+        'weight' => 0,
+      ),
+    ),
+    'entity_type' => 'node',
+    'field_name' => 'field_list',
+    'label' => 'List',
+    'required' => 0,
+    'settings' => array(
+      'user_register_form' => FALSE,
+    ),
+    'widget' => array(
+      'active' => 1,
+      'module' => 'options',
+      'settings' => array(),
+      'type' => 'options_select',
+      'weight' => 32,
     ),
   );
 
@@ -1863,7 +1906,7 @@ function property_field_default_field_instances() {
         'label' => 'above',
         'settings' => array(),
         'type' => 'hidden',
-        'weight' => 39,
+        'weight' => 42,
       ),
       'drupalgap' => array(
         'label' => 'above',
@@ -1910,7 +1953,7 @@ function property_field_default_field_instances() {
         'label' => 'above',
         'settings' => array(),
         'type' => 'hidden',
-        'weight' => 42,
+        'weight' => 45,
       ),
       'drupalgap' => array(
         'label' => 'above',
@@ -1922,7 +1965,7 @@ function property_field_default_field_instances() {
         'label' => 'above',
         'settings' => array(),
         'type' => 'hidden',
-        'weight' => 20,
+        'weight' => 21,
       ),
     ),
     'entity_type' => 'node',
@@ -2082,7 +2125,7 @@ function property_field_default_field_instances() {
         'label' => 'above',
         'settings' => array(),
         'type' => 'hidden',
-        'weight' => 36,
+        'weight' => 39,
       ),
       'drupalgap' => array(
         'label' => 'above',
@@ -2238,7 +2281,7 @@ function property_field_default_field_instances() {
         'label' => 'above',
         'settings' => array(),
         'type' => 'hidden',
-        'weight' => 40,
+        'weight' => 43,
       ),
       'drupalgap' => array(
         'label' => 'above',
@@ -2345,6 +2388,7 @@ function property_field_default_field_instances() {
   t('Last Sale Date');
   t('Last Sale Price');
   t('Lead Status');
+  t('List');
   t('Lock data');
   t('Lot Area');
   t('Market Value');

@@ -22,7 +22,7 @@ function property_field_group_info() {
   $field_group->parent_name = '';
   $field_group->data = array(
     'label' => 'Last Market Sale Information',
-    'weight' => '13',
+    'weight' => '12',
     'children' => array(
       0 => 'field_mortgage_company',
       1 => 'field_last_sale_price',
@@ -73,6 +73,65 @@ function property_field_group_info() {
   $field_group = new stdClass();
   $field_group->disabled = FALSE; /* Edit this to true to make a default field_group disabled initially */
   $field_group->api_version = 1;
+  $field_group->identifier = 'group_list|node|property|form';
+  $field_group->group_name = 'group_list';
+  $field_group->entity_type = 'node';
+  $field_group->bundle = 'property';
+  $field_group->mode = 'form';
+  $field_group->parent_name = '';
+  $field_group->data = array(
+    'label' => 'List',
+    'weight' => '17',
+    'children' => array(
+      0 => 'field_case_file_date',
+      1 => 'field_case_number',
+      2 => 'field_list',
+    ),
+    'format_type' => 'fieldset',
+    'format_settings' => array(
+      'formatter' => 'collapsible',
+      'instance_settings' => array(
+        'description' => '',
+        'classes' => 'group-list field-group-fieldset',
+        'required_fields' => 1,
+        'id' => '',
+      ),
+    ),
+  );
+  $field_groups['group_list|node|property|form'] = $field_group;
+
+  $field_group = new stdClass();
+  $field_group->disabled = FALSE; /* Edit this to true to make a default field_group disabled initially */
+  $field_group->api_version = 1;
+  $field_group->identifier = 'group_list|node|property|full';
+  $field_group->group_name = 'group_list';
+  $field_group->entity_type = 'node';
+  $field_group->bundle = 'property';
+  $field_group->mode = 'full';
+  $field_group->parent_name = '';
+  $field_group->data = array(
+    'label' => 'List',
+    'weight' => '17',
+    'children' => array(
+      0 => 'field_case_file_date',
+      1 => 'field_case_number',
+      2 => 'field_list',
+    ),
+    'format_type' => 'fieldset',
+    'format_settings' => array(
+      'formatter' => 'collapsible',
+      'instance_settings' => array(
+        'description' => '',
+        'classes' => 'group-list field-group-fieldset',
+        'id' => '',
+      ),
+    ),
+  );
+  $field_groups['group_list|node|property|full'] = $field_group;
+
+  $field_group = new stdClass();
+  $field_group->disabled = FALSE; /* Edit this to true to make a default field_group disabled initially */
+  $field_group->api_version = 1;
   $field_group->identifier = 'group_other_information|node|property|form';
   $field_group->group_name = 'group_other_information';
   $field_group->entity_type = 'node';
@@ -112,7 +171,7 @@ function property_field_group_info() {
   $field_group->parent_name = '';
   $field_group->data = array(
     'label' => 'Other Information',
-    'weight' => '17',
+    'weight' => '18',
     'children' => array(
       0 => 'field_repairs_price',
       1 => 'field_arv',
@@ -142,7 +201,7 @@ function property_field_group_info() {
   $field_group->parent_name = '';
   $field_group->data = array(
     'label' => 'Owner Information',
-    'weight' => '14',
+    'weight' => '13',
     'children' => array(
       0 => 'field_owner_phone',
       1 => 'field_owner_postal_address',
@@ -264,7 +323,7 @@ function property_field_group_info() {
   $field_group->parent_name = '';
   $field_group->data = array(
     'label' => 'Property Characteristics',
-    'weight' => '15',
+    'weight' => '14',
     'children' => array(
       0 => 'field_bedrooms',
       1 => 'field_year_built',
@@ -424,7 +483,7 @@ function property_field_group_info() {
   $field_group->parent_name = '';
   $field_group->data = array(
     'label' => 'Site Information',
-    'weight' => '16',
+    'weight' => '15',
     'children' => array(
       0 => 'field_lot_area_acres',
       1 => 'field_zoning',
@@ -481,11 +540,9 @@ function property_field_group_info() {
   $field_group->parent_name = '';
   $field_group->data = array(
     'label' => 'Source Information',
-    'weight' => '17',
+    'weight' => '16',
     'children' => array(
       0 => 'field_source',
-      1 => 'field_case_file_date',
-      2 => 'field_case_number',
     ),
     'format_type' => 'fieldset',
     'format_settings' => array(
@@ -514,8 +571,6 @@ function property_field_group_info() {
     'weight' => '16',
     'children' => array(
       0 => 'field_source',
-      1 => 'field_case_file_date',
-      2 => 'field_case_number',
     ),
     'format_type' => 'fieldset',
     'format_settings' => array(
@@ -532,6 +587,7 @@ function property_field_group_info() {
   // Translatables
   // Included for use with string extractors like potx.
   t('Last Market Sale Information');
+  t('List');
   t('Other Information');
   t('Owner Info');
   t('Owner Information');
