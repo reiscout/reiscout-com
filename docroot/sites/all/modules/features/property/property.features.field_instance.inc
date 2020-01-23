@@ -2114,49 +2114,6 @@ function property_field_default_field_instances() {
     ),
   );
 
-  // Exported field_instance: 'node-property-field_source'.
-  $field_instances['node-property-field_source'] = array(
-    'bundle' => 'property',
-    'default_value' => NULL,
-    'deleted' => 0,
-    'description' => '',
-    'display' => array(
-      'default' => array(
-        'label' => 'above',
-        'settings' => array(),
-        'type' => 'hidden',
-        'weight' => 39,
-      ),
-      'drupalgap' => array(
-        'label' => 'above',
-        'settings' => array(),
-        'type' => 'hidden',
-        'weight' => 33,
-      ),
-      'full' => array(
-        'label' => 'above',
-        'module' => 'list',
-        'settings' => array(),
-        'type' => 'list_default',
-        'weight' => 2,
-      ),
-    ),
-    'entity_type' => 'node',
-    'field_name' => 'field_source',
-    'label' => 'Source',
-    'required' => 0,
-    'settings' => array(
-      'user_register_form' => FALSE,
-    ),
-    'widget' => array(
-      'active' => 1,
-      'module' => 'options',
-      'settings' => array(),
-      'type' => 'options_select',
-      'weight' => 26,
-    ),
-  );
-
   // Exported field_instance: 'node-property-field_under_contract'.
   $field_instances['node-property-field_under_contract'] = array(
     'bundle' => 'property',
@@ -2403,7 +2360,6 @@ function property_field_default_field_instances() {
   t('Position');
   t('Repairs (estimated)');
   t('Rooms');
-  t('Source');
   t('The appraised total value from the local taxing authority');
   t('The date the sale records was recorded with the local authority');
   t('The estimate of a property’s value after all repairs and upgrades are completed');
