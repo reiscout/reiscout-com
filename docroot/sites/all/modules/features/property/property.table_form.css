@@ -2,10 +2,10 @@
   line-height: 1.4;
 }
 
-#property-table-form #edit-source,
-#property-table-form .form-type-radio.form-item-source,
-#property-table-form .form-item-file-date-from-date,
-#property-table-form .form-item-file-date-to-date,
+#property-table-form #edit-list,
+#property-table-form .form-type-radio.form-item-list,
+#property-table-form .form-item-case-file-date-from-date,
+#property-table-form .form-item-case-file-date-to-date,
 #property-table-form .form-item-market-value-from,
 #property-table-form .form-item-market-value-to,
 #property-table-form .form-item-beds,
@@ -30,11 +30,11 @@
   margin: 0;
 }
 
-#property-table-form #edit-source {
+#property-table-form #edit-list {
   margin-left: 2px;
 }
 
-#property-table-form .form-type-radio.form-item-source {
+#property-table-form .form-type-radio.form-item-list {
   margin-top: 0;
   margin-bottom: 0;
 }
@@ -43,28 +43,28 @@
   margin-left: 1px;
 }
 
-#property-table-form .form-type-radio.form-item-source:first-child {
+#property-table-form .form-type-radio.form-item-list:first-child {
   margin-right: 3px;
 }
 
-#property-table-form .form-item-source input,
-#property-table-form .form-item-hide-sold-after-file-date input {
+#property-table-form .form-item-list input,
+#property-table-form .form-item-hide-sold-after-case-file-date input {
   margin: 0;
 }
 
-#property-table-form .form-item-file-date-from,
-#property-table-form .form-item-file-date-to {
+#property-table-form .form-item-case-file-date-from,
+#property-table-form .form-item-case-file-date-to {
   margin-bottom: 1em;
   margin-top: 2px;
 }
 
-#property-table-form .form-item-file-date-from .date-padding,
-#property-table-form .form-item-file-date-to .date-padding {
+#property-table-form .form-item-case-file-date-from .date-padding,
+#property-table-form .form-item-case-file-date-to .date-padding {
   float: none;
 }
 
-#property-table-form .form-item-file-date-from .description,
-#property-table-form .form-item-file-date-to .description {
+#property-table-form .form-item-case-file-date-from .description,
+#property-table-form .form-item-case-file-date-to .description {
   display: none;
 }
 

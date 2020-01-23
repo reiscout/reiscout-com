@@ -99,11 +99,13 @@ class Property {
   }
 
   /**
-   * Given the source of a property, returns its name.
+   * Given the id of a list, returns its name.
    */
-  static function getSourceName(int $source): string {
-    if (1 == $source) {
-      $name = t('Court Case');
+  static function getListName(int $list): string {
+    switch ($list) {
+      case 1:
+        $name = t('Dispossessory');
+        break;
     }
 
     return $name;

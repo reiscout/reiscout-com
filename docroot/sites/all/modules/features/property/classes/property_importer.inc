@@ -447,7 +447,7 @@ class PropertyImporter {
       $property->field_owner_phone->set($data->ownerPhoneNumbers);
     }
 
-    $property->field_source = 1;
+    $property->field_list = 1;
     $property->field_case_number = $data->caseNumber;
     $property->field_case_file_date = $data->caseFileDate;
 
@@ -480,7 +480,7 @@ class PropertyImporter {
       $property->field_owner_phone->set($data->ownerPhoneNumbers);
     }
 
-    $property->field_source = 1;
+    $property->field_list = 1;
     $property->field_case_number = $data->caseNumber;
     $property->field_case_file_date = $data->caseFileDate;
 

@@ -118,12 +118,12 @@ function reiscout_property_cron_queue_info() {
  */
 function reiscout_property_form_property_node_form_alter(&$form, &$form_state, $form_id) {
   $form['field_case_number']['#states'] = array(
-    'visible' => array(':input[name="field_source[und]"]' => array('value' => 1)),
+    'visible' => array(':input[name="field_list[und]"]' => array('value' => 1)),
   );
 
   $form['field_case_file_date']['#states'] = array(
-    'visible' => array(':input[name="field_source[und]"]' => array('value' => 1)),
-    'required' => array(':input[name="field_source[und]"]' => array('value' => 1)),
+    'visible' => array(':input[name="field_list[und]"]' => array('value' => 1)),
+    'required' => array(':input[name="field_list[und]"]' => array('value' => 1)),
   );
 
   $form['#attached']['css'][] = array(
@@ -348,9 +348,9 @@ function reiscout_property_node_validate($node, $form, &$form_state) {
     }
   }
 
-  // If the value of Source field is 'Court Case', check if 'File Date' field is filled out
-  if (1 == $nw->field_source->value() && !$nw->field_case_file_date->value()) {
-    $msg = t("Please fill out <strong>File Date</strong> field.");
+  // If the value of List field is 'Dispossessory', check if 'Case File Date' field is filled out
+  if (1 == $nw->field_list->value() && !$nw->field_case_file_date->value()) {
+    $msg = t("Please fill out <strong>Case File Date</strong> field.");
     form_set_error('field_case_file_date', $msg);
   }
 }
@@ -555,7 +555,7 @@ function reiscout_property_field_access($op, $field, $entity_type, $entity, $acc
     else if ('edit' == $op) {
       // Fields that can be edited by a user with an administrator role only
       $fields_editable_by_admin = array(
-        'field_source',
+        'field_list',
         'field_case_number',
         'field_case_file_date',
         'field_data_locked',

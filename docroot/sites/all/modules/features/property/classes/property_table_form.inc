@@ -21,46 +21,46 @@ class PropertyTableForm {
       '#title' => t('Show only properties where'),
     );
 
-    $form['filters']['source'] = array(
+    $form['filters']['list'] = array(
       '#type' => 'radios',
-      '#title' => t('Source'),
+      '#title' => t('List'),
       '#options' => array(
-        0 => t('Any'),
-        1 => t('Court Case'),
+        0 => t('All'),
+        1 => t('Dispossessory'),
       ),
-      '#default_value' => $filters['source'] ?? 0,
+      '#default_value' => $filters['list'] ?? 0,
     );
 
-    $form['filters']['file_date_from'] = array(
+    $form['filters']['case_file_date_from'] = array(
       '#type' => 'date_popup',
-      '#title' => t('File Date From'),
+      '#title' => t('Case File Date From'),
       '#date_format' => 'm/d/Y',
       '#date_year_range' => '2010:0',
       '#date_label_position' => 'invisible',
-      '#default_value' => $filters['file_date_from'] ?? '',
+      '#default_value' => $filters['case_file_date_from'] ?? '',
       '#states' => array(
-        'visible' => array(':input[name="source"]' => array('value' => 1)),
+        'visible' => array(':input[name="list"]' => array('value' => 1)),
       ),
     );
 
-    $form['filters']['file_date_to'] = array(
+    $form['filters']['case_file_date_to'] = array(
       '#type' => 'date_popup',
-      '#title' => t('File Date To'),
+      '#title' => t('Case File Date To'),
       '#date_format' => 'm/d/Y',
       '#date_year_range' => '2010:0',
       '#date_label_position' => 'invisible',
-      '#default_value' => $filters['file_date_to'] ?? '',
+      '#default_value' => $filters['case_file_date_to'] ?? '',
       '#states' => array(
-        'visible' => array(':input[name="source"]' => array('value' => 1)),
+        'visible' => array(':input[name="list"]' => array('value' => 1)),
       ),
     );
 
-    $form['filters']['hide_sold_after_file_date'] = array(
+    $form['filters']['hide_sold_after_case_file_date'] = array(
       '#type' => 'checkbox',
-      '#title' => t('Hide properties sold after File Date'),
-      '#default_value' => $filters['hide_sold_after_file_date'] ?? 0,
+      '#title' => t('Hide properties sold after Case File Date'),
+      '#default_value' => $filters['hide_sold_after_case_file_date'] ?? 0,
       '#states' => array(
-        'visible' => array(':input[name="source"]' => array('value' => 1)),
+        'visible' => array(':input[name="list"]' => array('value' => 1)),
       ),
     );
 
@@ -331,14 +331,14 @@ class PropertyTableForm {
 
     $filters = self::getFilters();
 
-    if (isset($filters['source']) && 1 == $filters['source']) {
+    if (isset($filters['list']) && 1 == $filters['list']) {
       $header[] = array(
-        'data' => t('File Date'),
+        'data' => t('Case File Date'),
         'field' => 'field_case_file_date',
       );
     }
     else {
-      $header[] = t('Source');
+      $header[] = t('List');
     }
 
     $rows = array();
@@ -441,11 +441,11 @@ class PropertyTableForm {
           }
         }
 
-        if (isset($filters['source']) && 1 == $filters['source']) {
+        if (isset($filters['list']) && 1 == $filters['list']) {
           $caseFileDate = date('m/d/Y', $property->field_case_file_date->value());
         }
         else {
-          $source = $property->field_source->value() ? Property::getSourceName($property->field_source->value()) : '';
+          $listName = $property->field_list->value() ? Property::getListName($property->field_list->value()) : '';
         }
 
         $rows[] = array(
@@ -458,7 +458,7 @@ class PropertyTableForm {
           $property->field_rooms->value(),
           $property->field_finished_area->value() ? number_format($property->field_finished_area->value()) : '',
           $property->field_year_built->value(),
-          $caseFileDate ?? $source,
+          $caseFileDate ?? $listName,
         );
       }
     }
@@ -494,20 +494,20 @@ class PropertyTableForm {
 
     $filters = self::getFilters();
 
-    if (isset($filters['source'])) {
-      if (1 == $filters['source']) {
-        $query->fieldCondition('field_source', 'value', 1);
+    if (isset($filters['list'])) {
+      if (1 == $filters['list']) {
+        $query->fieldCondition('field_list', 'value', 1);
 
-        if (isset($filters['file_date_from'])) {
-          $query->fieldCondition('field_case_file_date', 'value', $filters['file_date_from'], '>=');
+        if (isset($filters['case_file_date_from'])) {
+          $query->fieldCondition('field_case_file_date', 'value', $filters['case_file_date_from'], '>=');
         }
 
-        if (isset($filters['file_date_to'])) {
-          $query->fieldCondition('field_case_file_date', 'value', $filters['file_date_to'], '<=');
+        if (isset($filters['case_file_date_to'])) {
+          $query->fieldCondition('field_case_file_date', 'value', $filters['case_file_date_to'], '<=');
         }
 
-        if (!empty($filters['hide_sold_after_file_date'])) {
-          $query->addTag('exclude_sold_after_file_date');
+        if (!empty($filters['hide_sold_after_case_file_date'])) {
+          $query->addTag('exclude_sold_after_case_file_date');
         }
       }
     }
@@ -628,10 +628,10 @@ class PropertyTableForm {
    * Saves the values of the filters used to filter the property list by.
    */
   static function setFilters(array $values): void {
-    $_SESSION['property_table_form_filters']['source'] = $values['source'];
-    $_SESSION['property_table_form_filters']['file_date_from'] = $values['file_date_from'];
-    $_SESSION['property_table_form_filters']['file_date_to'] = $values['file_date_to'];
-    $_SESSION['property_table_form_filters']['hide_sold_after_file_date'] = $values['hide_sold_after_file_date'];
+    $_SESSION['property_table_form_filters']['list'] = $values['list'];
+    $_SESSION['property_table_form_filters']['case_file_date_from'] = $values['case_file_date_from'];
+    $_SESSION['property_table_form_filters']['case_file_date_to'] = $values['case_file_date_to'];
+    $_SESSION['property_table_form_filters']['hide_sold_after_case_file_date'] = $values['hide_sold_after_case_file_date'];
 
     if (isset($values['county'])) {
       $_SESSION['property_table_form_filters']['county'] = $values['county'];
