@@ -6,6 +6,8 @@
 #property-table-form .form-type-radio.form-item-list,
 #property-table-form .form-item-case-file-date-from-date,
 #property-table-form .form-item-case-file-date-to-date,
+#property-table-form .form-item-last-contacted-from-date,
+#property-table-form .form-item-last-contacted-to-date,
 #property-table-form .form-item-market-value-from,
 #property-table-form .form-item-market-value-to,
 #property-table-form .form-item-beds,
@@ -53,18 +55,24 @@
 }
 
 #property-table-form .form-item-case-file-date-from,
-#property-table-form .form-item-case-file-date-to {
+#property-table-form .form-item-case-file-date-to,
+#property-table-form .form-item-last-contacted-from,
+#property-table-form .form-item-last-contacted-to {
   margin-bottom: 1em;
   margin-top: 2px;
 }
 
 #property-table-form .form-item-case-file-date-from .date-padding,
-#property-table-form .form-item-case-file-date-to .date-padding {
+#property-table-form .form-item-case-file-date-to .date-padding,
+#property-table-form .form-item-last-contacted-from .date-padding,
+#property-table-form .form-item-last-contacted-to .date-padding {
   float: none;
 }
 
 #property-table-form .form-item-case-file-date-from .description,
-#property-table-form .form-item-case-file-date-to .description {
+#property-table-form .form-item-case-file-date-to .description,
+#property-table-form .form-item-last-contacted-from .description,
+#property-table-form .form-item-last-contacted-to .description {
   display: none;
 }
 

@@ -100,6 +100,24 @@ class PropertyTableForm {
       '#default_value' => $filters['phone'] ?? 0,
     );
 
+    $form['filters']['last_contacted_from'] = array(
+      '#type' => 'date_popup',
+      '#title' => t('Last Contacted From'),
+      '#date_format' => 'm/d/Y',
+      '#date_year_range' => '2017:0',
+      '#date_label_position' => 'invisible',
+      '#default_value' => $filters['last_contacted_from'] ?? '',
+    );
+
+    $form['filters']['last_contacted_to'] = array(
+      '#type' => 'date_popup',
+      '#title' => t('Last Contacted To'),
+      '#date_format' => 'm/d/Y',
+      '#date_year_range' => '2017:0',
+      '#date_label_position' => 'invisible',
+      '#default_value' => $filters['last_contacted_to'] ?? '',
+    );
+
     if ($marketValues = Property::getMinAndMaxMarketValuesByUid($user->uid)) {
       if ($marketValues['min'] != $marketValues['max']) {
         $min = intval($marketValues['min']) * 1000;
@@ -538,6 +556,14 @@ class PropertyTableForm {
       }
     }
 
+    if (isset($filters['last_contacted_from'])) {
+      $query->fieldCondition('field_last_contacted', 'value', $filters['last_contacted_from'], '>=');
+    }
+
+    if (isset($filters['last_contacted_to'])) {
+      $query->fieldCondition('field_last_contacted', 'value', $filters['last_contacted_to'], '<=');
+    }
+
     if (!empty($filters['market_value_from'])) {
       $query->fieldCondition('field_market_value', 'value', $filters['market_value_from'] / 1000, '>=');
     }
@@ -639,6 +665,8 @@ class PropertyTableForm {
 
     $_SESSION['property_table_form_filters']['owner_status'] = $values['owner_status'];
     $_SESSION['property_table_form_filters']['phone'] = $values['phone'];
+    $_SESSION['property_table_form_filters']['last_contacted_from'] = $values['last_contacted_from'];
+    $_SESSION['property_table_form_filters']['last_contacted_to'] = $values['last_contacted_to'];
 
     if (isset($values['market_value_from'])) {
       $_SESSION['property_table_form_filters']['market_value_from'] = $values['market_value_from'];
