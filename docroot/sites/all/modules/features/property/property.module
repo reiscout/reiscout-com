@@ -110,6 +110,14 @@ function property_query_phone_in_dnc_alter(QueryAlterableInterface $query) {
 
 /**
  * Implements hook_query_TAG_alter().
+ */
+function property_query_lead_status_is_not_set_alter(QueryAlterableInterface $query) {
+  $query->leftJoin('field_data_field_lead_status', 'fls', 'node.nid = fls.entity_id');
+  $query->isNull('fls.field_lead_status_value');
+}
+
+/**
+ * Implements hook_query_TAG_alter().
  *
  * @todo: what if Last Sale Date field is not set for a property?
  */

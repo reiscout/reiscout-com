@@ -118,6 +118,16 @@ class PropertyTableForm {
       '#default_value' => $filters['last_contacted_to'] ?? '',
     );
 
+    $form['filters']['lead_status'] = array(
+      '#type' => 'select',
+      '#title' => t('Lead Status'),
+      '#options' => array(
+        '' => t('Any'),
+        0 => t('- None -'),
+      ) + field_info_field('field_lead_status')['settings']['allowed_values'],
+      '#default_value' => $filters['lead_status'] ?? '',
+    );
+
     if ($marketValues = Property::getMinAndMaxMarketValuesByUid($user->uid)) {
       if ($marketValues['min'] != $marketValues['max']) {
         $min = intval($marketValues['min']) * 1000;
@@ -564,6 +574,16 @@ class PropertyTableForm {
       $query->fieldCondition('field_last_contacted', 'value', $filters['last_contacted_to'], '<=');
     }
 
+    if ('' != $filters['lead_status']) {
+      switch ($filters['lead_status']) {
+        case 0:
+          $query->addTag('lead_status_is_not_set');
+          break;
+        default:
+          $query->fieldCondition('field_lead_status', 'value', $filters['lead_status']);
+      }
+    }
+
     if (!empty($filters['market_value_from'])) {
       $query->fieldCondition('field_market_value', 'value', $filters['market_value_from'] / 1000, '>=');
     }
@@ -667,6 +687,7 @@ class PropertyTableForm {
     $_SESSION['property_table_form_filters']['phone'] = $values['phone'];
     $_SESSION['property_table_form_filters']['last_contacted_from'] = $values['last_contacted_from'];
     $_SESSION['property_table_form_filters']['last_contacted_to'] = $values['last_contacted_to'];
+    $_SESSION['property_table_form_filters']['lead_status'] = $values['lead_status'];
 
     if (isset($values['market_value_from'])) {
       $_SESSION['property_table_form_filters']['market_value_from'] = $values['market_value_from'];
