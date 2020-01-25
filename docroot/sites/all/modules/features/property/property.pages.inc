@@ -116,7 +116,7 @@ function property_field_get_value($nid, $field) {
     if ('last-contacted' == $field) {
       $response->value = $node->field_last_contacted->value() ?
                          date('Y-m-d', $node->field_last_contacted->value()) :
-                         '';
+                         date('Y-m-d', time());
     }
     elseif ('lead-status' == $field) {
       $response->value = (int)$node->field_lead_status->value();
