@@ -80,7 +80,7 @@
           else {
             el = document.createElement('select');
             el.appendChild(new Option('- None -', '0'));
-            for (const [value, text] of Object.entries(Drupal.settings.property.field_lead_status_allowed_values)) {
+            for (const [value, text] of fieldLeadStatusAllowedValues) {
               el.appendChild(new Option(text, value));
             }
             el.value = value;

@@ -371,13 +371,17 @@ class PropertyTableForm {
 
     $rows = array();
     if ($properties = self::getPropertyList($header)) {
+      // We create a JS map, because it respects the key order
+      $js = 'var fieldLeadStatusAllowedValues = new Map();';
+      foreach (field_info_field('field_lead_status')['settings']['allowed_values'] as $key => $value) {
+        $js .= "fieldLeadStatusAllowedValues.set(" . $key . ", '" . $value . "');";
+      }
+
       $form['#attached']['js'][] = array(
-        'type' => 'setting',
-        'data' => array(
-          'property' => array(
-            'field_lead_status_allowed_values' => field_info_field('field_lead_status')['settings']['allowed_values'],
-          ),
-        ),
+        'type' => 'inline',
+        'requires_jquery' => FALSE,
+        'cache' => FALSE,
+        'data' => $js,
       );
 
       $form['#attached']['library'][] = array('system', 'ui.dialog');
