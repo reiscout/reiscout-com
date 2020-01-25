@@ -443,7 +443,7 @@ class PropertyTableForm {
 
           $leadStatus = $property->field_lead_status->value() ?
                         Property::getLeadStatusName($property->field_lead_status->value()) :
-                        t('New');
+                        t('- None -');
 
           $ownerInfo .= '<div id="crm-fields-' . $property->nid->value(). '" class="crm-fields">
                             <div class="field last-contacted">

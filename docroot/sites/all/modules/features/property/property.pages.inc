@@ -161,7 +161,7 @@ function property_field_save_value($nid, $field) {
       else {
         $node->field_lead_status = NULL;
         $node->save();
-        $response->value = t('New');
+        $response->value = t('- None -');
       }
     }
   }

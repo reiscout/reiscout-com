@@ -79,7 +79,7 @@
           }
           else {
             el = document.createElement('select');
-            el.appendChild(new Option('New', '0'));
+            el.appendChild(new Option('- None -', '0'));
             for (const [value, text] of Object.entries(Drupal.settings.property.field_lead_status_allowed_values)) {
               el.appendChild(new Option(text, value));
             }
