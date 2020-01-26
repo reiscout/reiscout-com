@@ -569,6 +569,7 @@ function reiscout_property_field_access($op, $field, $entity_type, $entity, $acc
         'field_list',
         'field_case_number',
         'field_case_file_date',
+        'field_foreclosure_sale_date',
         'field_data_locked',
         'field_data_quality_tags',
       );
