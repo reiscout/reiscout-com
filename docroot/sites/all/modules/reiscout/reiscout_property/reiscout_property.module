@@ -126,6 +126,11 @@ function reiscout_property_form_property_node_form_alter(&$form, &$form_state, $
     'required' => array(':input[name="field_list[und]"]' => array('value' => 1)),
   );
 
+  $form['field_foreclosure_sale_date']['#states'] = array(
+    'visible' => array(':input[name="field_list[und]"]' => array('value' => 2)),
+    'required' => array(':input[name="field_list[und]"]' => array('value' => 2)),
+  );
+
   $form['#attached']['css'][] = array(
     'data' => '#edit-field-owner-postal-address .form-item-field-owner-postal-address-und-0-country {display: none}',
     'type' => 'inline',
@@ -352,6 +357,12 @@ function reiscout_property_node_validate($node, $form, &$form_state) {
   if (1 == $nw->field_list->value() && !$nw->field_case_file_date->value()) {
     $msg = t("Please fill out <strong>Case File Date</strong> field.");
     form_set_error('field_case_file_date', $msg);
+  }
+
+  // If the value of List field is 'Pre-foreclosure', check if 'Foreclosure Sale Date' field is filled out
+  if (2 == $nw->field_list->value() && !$nw->field_foreclosure_sale_date->value()) {
+    $msg = t("Please fill out <strong>Foreclosure Sale Date</strong> field.");
+    form_set_error('field_foreclosure_sale_date', $msg);
   }
 }
 
