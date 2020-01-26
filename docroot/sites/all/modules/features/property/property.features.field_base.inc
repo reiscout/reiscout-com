@@ -326,6 +326,35 @@ function property_field_default_field_bases() {
     'type' => 'text',
   );
 
+  // Exported field_base: 'field_foreclosure_sale_date'.
+  $field_bases['field_foreclosure_sale_date'] = array(
+    'active' => 1,
+    'cardinality' => 1,
+    'deleted' => 0,
+    'entity_types' => array(),
+    'field_name' => 'field_foreclosure_sale_date',
+    'indexes' => array(),
+    'locked' => 0,
+    'module' => 'date',
+    'settings' => array(
+      'cache_count' => 4,
+      'cache_enabled' => 0,
+      'granularity' => array(
+        'day' => 'day',
+        'hour' => 0,
+        'minute' => 0,
+        'month' => 'month',
+        'second' => 0,
+        'year' => 'year',
+      ),
+      'timezone_db' => '',
+      'todate' => '',
+      'tz_handling' => 'none',
+    ),
+    'translatable' => 0,
+    'type' => 'datetime',
+  );
+
   // Exported field_base: 'field_full_baths'.
   $field_bases['field_full_baths'] = array(
     'active' => 1,
@@ -536,9 +565,9 @@ function property_field_default_field_bases() {
     'module' => 'list',
     'settings' => array(
       'allowed_values' => array(
+        3 => 'Cold',
         1 => 'Hot',
         2 => 'Warm',
-        3 => 'Cold',
         4 => 'DNC',
         5 => 'Open',
         6 => 'Hold',

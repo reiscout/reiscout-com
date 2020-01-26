@@ -81,11 +81,12 @@ function property_field_group_info() {
   $field_group->parent_name = '';
   $field_group->data = array(
     'label' => 'List',
-    'weight' => '17',
+    'weight' => '16',
     'children' => array(
       0 => 'field_case_file_date',
       1 => 'field_case_number',
       2 => 'field_list',
+      3 => 'field_foreclosure_sale_date',
     ),
     'format_type' => 'fieldset',
     'format_settings' => array(
@@ -116,6 +117,7 @@ function property_field_group_info() {
       0 => 'field_case_file_date',
       1 => 'field_case_number',
       2 => 'field_list',
+      3 => 'field_foreclosure_sale_date',
     ),
     'format_type' => 'fieldset',
     'format_settings' => array(
