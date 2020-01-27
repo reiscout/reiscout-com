@@ -119,7 +119,7 @@ function property_field_get_value($nid, $field) {
                          date('Y-m-d', time());
     }
     elseif ('lead-status' == $field) {
-      $response->value = (int)$node->field_lead_status->value();
+      $response->value = $node->field_lead_status->value() ?? 3;
     }
   }
   else {
