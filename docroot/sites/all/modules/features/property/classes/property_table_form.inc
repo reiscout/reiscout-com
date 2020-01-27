@@ -63,6 +63,30 @@ class PropertyTableForm {
       ),
     );
 
+    $form['filters']['foreclosure_sale_date_from'] = array(
+      '#type' => 'date_popup',
+      '#title' => t('Foreclosure Sale Date From'),
+      '#date_format' => 'm/d/Y',
+      '#date_year_range' => '2017:+1',
+      '#date_label_position' => 'invisible',
+      '#default_value' => $filters['foreclosure_sale_date_from'] ?? '',
+      '#states' => array(
+        'visible' => array(':input[name="list"]' => array('value' => 2)),
+      ),
+    );
+
+    $form['filters']['foreclosure_sale_date_to'] = array(
+      '#type' => 'date_popup',
+      '#title' => t('Foreclosure Sale Date To'),
+      '#date_format' => 'm/d/Y',
+      '#date_year_range' => '2017:+1',
+      '#date_label_position' => 'invisible',
+      '#default_value' => $filters['foreclosure_sale_date_to'] ?? '',
+      '#states' => array(
+        'visible' => array(':input[name="list"]' => array('value' => 2)),
+      ),
+    );
+
     if ($counties = Property::getCountyListByUid($user->uid)) {
       $form['filters']['county'] = array(
         '#type' => 'select',
@@ -556,6 +580,14 @@ class PropertyTableForm {
       }
       elseif (2 == $filters['list']) {
         $query->fieldCondition('field_list', 'value', 2);
+
+        if (isset($filters['foreclosure_sale_date_from'])) {
+          $query->fieldCondition('field_foreclosure_sale_date', 'value', $filters['foreclosure_sale_date_from'], '>=');
+        }
+
+        if (isset($filters['foreclosure_sale_date_to'])) {
+          $query->fieldCondition('field_foreclosure_sale_date', 'value', $filters['foreclosure_sale_date_to'], '<=');
+        }
       }
     }
 
@@ -697,6 +729,8 @@ class PropertyTableForm {
     $_SESSION['property_table_form_filters']['case_file_date_from'] = $values['case_file_date_from'];
     $_SESSION['property_table_form_filters']['case_file_date_to'] = $values['case_file_date_to'];
     $_SESSION['property_table_form_filters']['hide_sold_after_case_file_date'] = $values['hide_sold_after_case_file_date'];
+    $_SESSION['property_table_form_filters']['foreclosure_sale_date_from'] = $values['foreclosure_sale_date_from'];
+    $_SESSION['property_table_form_filters']['foreclosure_sale_date_to'] = $values['foreclosure_sale_date_to'];
 
     if (isset($values['county'])) {
       $_SESSION['property_table_form_filters']['county'] = $values['county'];
