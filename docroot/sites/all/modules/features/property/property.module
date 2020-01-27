@@ -129,6 +129,17 @@ function property_query_exclude_sold_after_case_file_date_alter(QueryAlterableIn
 
 /**
  * Implements hook_query_TAG_alter().
+ *
+ * @todo: what if Last Sale Date field is not set for a property?
+ */
+function property_query_exclude_sold_after_foreclosure_sale_date_alter(QueryAlterableInterface $query) {
+  $query->innerJoin('field_data_field_last_sale_date', 'flsd', 'node.nid = flsd.entity_id');
+  $query->innerJoin('field_data_field_foreclosure_sale_date', 'ffsd', 'node.nid = ffsd.entity_id');
+  $query->where('flsd.field_last_sale_date_value < ffsd.field_foreclosure_sale_date_value');
+}
+
+/**
+ * Implements hook_query_TAG_alter().
  */
 function property_query_order_by_alter(QueryAlterableInterface $query) {
   $field = $query->getMetaData('order_field');

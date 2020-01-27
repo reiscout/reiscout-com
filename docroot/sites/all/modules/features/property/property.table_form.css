@@ -52,7 +52,8 @@
 }
 
 #property-table-form .form-item-list input,
-#property-table-form .form-item-hide-sold-after-case-file-date input {
+#property-table-form .form-item-hide-sold-after-case-file-date input,
+#property-table-form .form-item-hide-sold-after-foreclosure-sale-date input {
   margin: 0;
 }
 

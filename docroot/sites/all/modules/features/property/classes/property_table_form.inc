@@ -87,6 +87,15 @@ class PropertyTableForm {
       ),
     );
 
+    $form['filters']['hide_sold_after_foreclosure_sale_date'] = array(
+      '#type' => 'checkbox',
+      '#title' => t('Hide properties sold after Foreclosure Sale Date'),
+      '#default_value' => $filters['hide_sold_after_foreclosure_sale_date'] ?? 0,
+      '#states' => array(
+        'visible' => array(':input[name="list"]' => array('value' => 2)),
+      ),
+    );
+
     if ($counties = Property::getCountyListByUid($user->uid)) {
       $form['filters']['county'] = array(
         '#type' => 'select',
@@ -588,6 +597,10 @@ class PropertyTableForm {
         if (isset($filters['foreclosure_sale_date_to'])) {
           $query->fieldCondition('field_foreclosure_sale_date', 'value', $filters['foreclosure_sale_date_to'], '<=');
         }
+
+        if (!empty($filters['hide_sold_after_foreclosure_sale_date'])) {
+          $query->addTag('exclude_sold_after_foreclosure_sale_date');
+        }
       }
     }
 
@@ -731,6 +744,7 @@ class PropertyTableForm {
     $_SESSION['property_table_form_filters']['hide_sold_after_case_file_date'] = $values['hide_sold_after_case_file_date'];
     $_SESSION['property_table_form_filters']['foreclosure_sale_date_from'] = $values['foreclosure_sale_date_from'];
     $_SESSION['property_table_form_filters']['foreclosure_sale_date_to'] = $values['foreclosure_sale_date_to'];
+    $_SESSION['property_table_form_filters']['hide_sold_after_foreclosure_sale_date'] = $values['hide_sold_after_foreclosure_sale_date'];
 
     if (isset($values['county'])) {
       $_SESSION['property_table_form_filters']['county'] = $values['county'];
