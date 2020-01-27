@@ -420,6 +420,19 @@ function reiscout_property_node_presave($node) {
       $nw->field_baths = $nw->field_half_baths->value() * 0.5;
     }
   }
+
+  if (!$nw->field_list->value()) {
+    $nw->field_case_number = NULL;
+    $nw->field_case_file_date = NULL;
+    $nw->field_foreclosure_sale_date = NULL;
+  }
+  elseif (1 == $nw->field_list->value()) {
+    $nw->field_foreclosure_sale_date = NULL;
+  }
+  elseif (2 == $nw->field_list->value()) {
+    $nw->field_case_number = NULL;
+    $nw->field_case_file_date = NULL;
+  }
 }
 
 /**
