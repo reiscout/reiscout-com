@@ -45,7 +45,7 @@
   margin-left: 1px;
 }
 
-#property-table-form .form-type-radio.form-item-list:first-child {
+#property-table-form .form-type-radio.form-item-list:not(:last-child) {
   margin-right: 3px;
 }
 

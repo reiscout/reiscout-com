@@ -26,8 +26,7 @@ class PropertyTableForm {
       '#title' => t('List'),
       '#options' => array(
         0 => t('All'),
-        1 => t('Dispossessory'),
-      ),
+      ) + field_info_field('field_list')['settings']['allowed_values'],
       '#default_value' => $filters['list'] ?? 0,
     );
 
@@ -359,11 +358,19 @@ class PropertyTableForm {
 
     $filters = self::getFilters();
 
-    if (isset($filters['list']) && 1 == $filters['list']) {
-      $header[] = array(
-        'data' => t('Case File Date'),
-        'field' => 'field_case_file_date',
-      );
+    if (!empty($filters['list'])) {
+      if (1 == $filters['list']) {
+        $header[] = array(
+          'data' => t('Case File Date'),
+          'field' => 'field_case_file_date',
+        );
+      }
+      elseif (2 == $filters['list']) {
+        $header[] = array(
+          'data' => t('Foreclosure Sale Date'),
+          'field' => 'field_foreclosure_sale_date',
+        );
+      }
     }
     else {
       $header[] = t('List');
@@ -473,8 +480,13 @@ class PropertyTableForm {
           }
         }
 
-        if (isset($filters['list']) && 1 == $filters['list']) {
-          $caseFileDate = date('m/d/Y', $property->field_case_file_date->value());
+        if (!empty($filters['list'])) {
+          if (1 == $filters['list']) {
+            $caseFileDate = date('m/d/Y', $property->field_case_file_date->value());
+          }
+          elseif (2 == $filters['list']) {
+            $foreclosureSaleDate = date('m/d/Y', $property->field_foreclosure_sale_date->value());
+          }
         }
         else {
           $listName = $property->field_list->value() ? Property::getListName($property->field_list->value()) : '';
@@ -490,7 +502,7 @@ class PropertyTableForm {
           $property->field_rooms->value(),
           $property->field_finished_area->value() ? number_format($property->field_finished_area->value()) : '',
           $property->field_year_built->value(),
-          $caseFileDate ?? $listName,
+          $caseFileDate ?? $foreclosureSaleDate ?? $listName,
         );
       }
     }
@@ -526,7 +538,7 @@ class PropertyTableForm {
 
     $filters = self::getFilters();
 
-    if (isset($filters['list'])) {
+    if (!empty($filters['list'])) {
       if (1 == $filters['list']) {
         $query->fieldCondition('field_list', 'value', 1);
 
@@ -541,6 +553,9 @@ class PropertyTableForm {
         if (!empty($filters['hide_sold_after_case_file_date'])) {
           $query->addTag('exclude_sold_after_case_file_date');
         }
+      }
+      elseif (2 == $filters['list']) {
+        $query->fieldCondition('field_list', 'value', 2);
       }
     }
 

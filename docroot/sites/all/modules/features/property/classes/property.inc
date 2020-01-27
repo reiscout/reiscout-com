@@ -106,6 +106,8 @@ class Property {
       case 1:
         $name = t('Dispossessory');
         break;
+      default:
+        $name = t('Pre-foreclosure');
     }
 
     return $name;
