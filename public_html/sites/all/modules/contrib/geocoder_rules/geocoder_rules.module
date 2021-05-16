@@ -1,7 +1,7 @@
 <?php
 
 function geocoder_rules_geocode($handler, $address) {
-  $geometry = geocoder($handler, $address);
+  $geometry = geocoder($handler, strip_tags($address));
 
   watchdog("DEBUG GEOCODER RULES", var_export($geometry, true));
   $result = array(
