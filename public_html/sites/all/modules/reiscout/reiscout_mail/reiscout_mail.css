@@ -652,6 +652,25 @@
 }
 /* Fatigued Landlord -*/
 
+/*- Four Core */
+.image_front #psc-image-four-core {
+  background-image: url('https://s3.amazonaws.com/reiscout/postcard_images/four_core.jpg');
+}
+
+.image_front #psc-banner-four-core {
+  background-color: #00ACF2;
+}
+
+.image_front #psc-message-four-core #psc-frame {
+  border-color: #DE252B;
+  color: #DE252B;
+}
+
+.image_front #psc-message-four-core .psc-accent {
+  color: #DE252B;
+}
+/* Four Core -*/
+
 /*- Bell's Roofing */
 .image_front #psc-image-banner-bells-roofing {
     background-image: url("https://s3.amazonaws.com/reiscout/postcard_images/bells_roofing_back_header.jpg");
