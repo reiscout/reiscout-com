@@ -1,0 +1,37 @@
+<html>
+<head>
+  <meta charset="UTF-8">
+  <title>Sherrill Allen 4x6 Postcard Front</title>
+  <style>
+    *, *:before, *:after {
+      -webkit-box-sizing: border-box;
+      -moz-box-sizing: border-box;
+      box-sizing: border-box;
+    }
+
+    body {
+      margin: 0;
+      padding: 0;
+      width: 6.25in;
+      height: 4.25in;
+      /* Background image should have dimensions of 1875x1275 pixels. */
+      background-image: url('https://s3.amazonaws.com/reiscout/postcard_images/sherrill_allen_front.png');
+      background-size: 6.25in 4.25in;
+      background-repeat: no-repeat;
+    }
+
+    #safe-area {
+      position: absolute;
+      width: 6in;
+      height: 4in;
+      left: 0.125in;
+      top: 0.125in;
+    }
+  </style>
+</head>
+<body>
+  <div id="safe-area">
+    {{content}}
+  </div>
+</body>
+</html>

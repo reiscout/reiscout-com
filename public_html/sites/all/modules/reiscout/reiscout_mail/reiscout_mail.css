@@ -872,6 +872,23 @@
 /* Janet Pickett -*/
 /* Two Columns Front -*/
 
+/*- Sherrill Allen */
+.sherrill_allen .front,
+.sherrill_allen .back {
+  background-size: 6in 4in;
+  background-repeat: no-repeat;
+  background-position: center;
+}
+
+.sherrill_allen .front {
+  background-image: url('https://s3.amazonaws.com/reiscout/postcard_images/sherrill_allen_front.png');
+}
+
+.sherrill_allen .back {
+  background-image: url('https://s3.amazonaws.com/reiscout/postcard_images/sherrill_allen_back.png');
+}
+/* Sherrill Allen -*/
+
 .form-item-template-nid:after {
     display: table;
     content: '';
