@@ -107,14 +107,166 @@ function property_strongarm() {
   $strongarm->api_version = 1;
   $strongarm->name = 'field_bundle_settings_node__property';
   $strongarm->value = array(
-    'view_modes' => array(
-      'full' => array(
-        'custom_settings' => TRUE,
+    'extra_fields' => array(
+      'display' => array(
+        'address' => array(
+          'default' => array(
+            'visible' => TRUE,
+            'weight' => '3',
+          ),
+          'drupalgap' => array(
+            'visible' => FALSE,
+            'weight' => '39',
+          ),
+          'full' => array(
+            'visible' => TRUE,
+            'weight' => '6',
+          ),
+        ),
+        'product:commerce_price' => array(
+          'default' => array(
+            'visible' => TRUE,
+            'weight' => '5',
+          ),
+          'drupalgap' => array(
+            'visible' => FALSE,
+            'weight' => '43',
+          ),
+          'full' => array(
+            'visible' => FALSE,
+            'weight' => '27',
+          ),
+        ),
+        'product:field_property' => array(
+          'default' => array(
+            'visible' => TRUE,
+            'weight' => '17',
+          ),
+          'drupalgap' => array(
+            'visible' => TRUE,
+            'weight' => '30',
+          ),
+          'full' => array(
+            'visible' => FALSE,
+            'weight' => '23',
+          ),
+        ),
+        'product:sku' => array(
+          'default' => array(
+            'visible' => FALSE,
+            'weight' => '47',
+          ),
+          'drupalgap' => array(
+            'visible' => FALSE,
+            'weight' => '44',
+          ),
+          'full' => array(
+            'visible' => FALSE,
+            'weight' => '25',
+          ),
+        ),
+        'product:status' => array(
+          'default' => array(
+            'visible' => FALSE,
+            'weight' => '49',
+          ),
+          'drupalgap' => array(
+            'visible' => FALSE,
+            'weight' => '46',
+          ),
+          'full' => array(
+            'visible' => FALSE,
+            'weight' => '28',
+          ),
+        ),
+        'product:title' => array(
+          'default' => array(
+            'visible' => FALSE,
+            'weight' => '48',
+          ),
+          'drupalgap' => array(
+            'visible' => FALSE,
+            'weight' => '45',
+          ),
+          'full' => array(
+            'visible' => FALSE,
+            'weight' => '26',
+          ),
+        ),
+        'reiscout-mail-buttons' => array(
+          'default' => array(
+            'visible' => TRUE,
+            'weight' => '4',
+          ),
+          'drupalgap' => array(
+            'visible' => FALSE,
+            'weight' => '38',
+          ),
+          'full' => array(
+            'visible' => TRUE,
+            'weight' => '24',
+          ),
+        ),
+        'reiscout-number-of-property-lead-sales' => array(
+          'default' => array(
+            'visible' => TRUE,
+            'weight' => '0',
+          ),
+          'drupalgap' => array(
+            'visible' => TRUE,
+            'weight' => '0',
+          ),
+          'full' => array(
+            'visible' => TRUE,
+            'weight' => '3',
+          ),
+        ),
+        'reiscout-property-data-form' => array(
+          'default' => array(
+            'visible' => TRUE,
+            'weight' => '1',
+          ),
+          'drupalgap' => array(
+            'visible' => TRUE,
+            'weight' => '1',
+          ),
+          'full' => array(
+            'visible' => TRUE,
+            'weight' => '1',
+          ),
+        ),
+        'reiscout-property-lead-form' => array(
+          'default' => array(
+            'visible' => TRUE,
+            'weight' => '2',
+          ),
+          'drupalgap' => array(
+            'visible' => TRUE,
+            'weight' => '2',
+          ),
+          'full' => array(
+            'visible' => TRUE,
+            'weight' => '0',
+          ),
+        ),
       ),
-      'teaser' => array(
+      'form' => array(
+        'path' => array(
+          'weight' => '21',
+        ),
+        'title' => array(
+          'weight' => '1',
+        ),
+      ),
+    ),
+    'view_modes' => array(
+      'diff_standard' => array(
         'custom_settings' => FALSE,
       ),
       'drupalgap' => array(
+        'custom_settings' => TRUE,
+      ),
+      'full' => array(
         'custom_settings' => TRUE,
       ),
       'rss' => array(
@@ -126,163 +278,11 @@ function property_strongarm() {
       'search_result' => array(
         'custom_settings' => FALSE,
       ),
+      'teaser' => array(
+        'custom_settings' => FALSE,
+      ),
       'token' => array(
         'custom_settings' => FALSE,
-      ),
-      'diff_standard' => array(
-        'custom_settings' => FALSE,
-      ),
-    ),
-    'extra_fields' => array(
-      'form' => array(
-        'title' => array(
-          'weight' => '1',
-        ),
-        'path' => array(
-          'weight' => '21',
-        ),
-      ),
-      'display' => array(
-        'product:sku' => array(
-          'drupalgap' => array(
-            'weight' => '44',
-            'visible' => FALSE,
-          ),
-          'default' => array(
-            'weight' => '47',
-            'visible' => FALSE,
-          ),
-          'full' => array(
-            'weight' => '25',
-            'visible' => FALSE,
-          ),
-        ),
-        'product:title' => array(
-          'drupalgap' => array(
-            'weight' => '45',
-            'visible' => FALSE,
-          ),
-          'default' => array(
-            'weight' => '48',
-            'visible' => FALSE,
-          ),
-          'full' => array(
-            'weight' => '26',
-            'visible' => FALSE,
-          ),
-        ),
-        'product:status' => array(
-          'drupalgap' => array(
-            'weight' => '46',
-            'visible' => FALSE,
-          ),
-          'default' => array(
-            'weight' => '49',
-            'visible' => FALSE,
-          ),
-          'full' => array(
-            'weight' => '28',
-            'visible' => FALSE,
-          ),
-        ),
-        'product:commerce_price' => array(
-          'drupalgap' => array(
-            'weight' => '43',
-            'visible' => FALSE,
-          ),
-          'default' => array(
-            'weight' => '5',
-            'visible' => TRUE,
-          ),
-          'full' => array(
-            'weight' => '27',
-            'visible' => FALSE,
-          ),
-        ),
-        'product:field_property' => array(
-          'full' => array(
-            'weight' => '23',
-            'visible' => FALSE,
-          ),
-          'drupalgap' => array(
-            'weight' => '30',
-            'visible' => TRUE,
-          ),
-          'default' => array(
-            'weight' => '17',
-            'visible' => TRUE,
-          ),
-        ),
-        'address' => array(
-          'full' => array(
-            'weight' => '6',
-            'visible' => TRUE,
-          ),
-          'drupalgap' => array(
-            'weight' => '39',
-            'visible' => FALSE,
-          ),
-          'default' => array(
-            'weight' => '3',
-            'visible' => TRUE,
-          ),
-        ),
-        'reiscout-mail-buttons' => array(
-          'full' => array(
-            'weight' => '24',
-            'visible' => TRUE,
-          ),
-          'drupalgap' => array(
-            'weight' => '38',
-            'visible' => FALSE,
-          ),
-          'default' => array(
-            'weight' => '4',
-            'visible' => TRUE,
-          ),
-        ),
-        'reiscout-number-of-property-lead-sales' => array(
-          'full' => array(
-            'weight' => '3',
-            'visible' => TRUE,
-          ),
-          'drupalgap' => array(
-            'weight' => '0',
-            'visible' => TRUE,
-          ),
-          'default' => array(
-            'weight' => '0',
-            'visible' => TRUE,
-          ),
-        ),
-        'reiscout-property-lead-form' => array(
-          'full' => array(
-            'weight' => '0',
-            'visible' => TRUE,
-          ),
-          'drupalgap' => array(
-            'weight' => '2',
-            'visible' => TRUE,
-          ),
-          'default' => array(
-            'weight' => '2',
-            'visible' => TRUE,
-          ),
-        ),
-        'reiscout-property-data-form' => array(
-          'full' => array(
-            'weight' => '1',
-            'visible' => TRUE,
-          ),
-          'drupalgap' => array(
-            'weight' => '1',
-            'visible' => TRUE,
-          ),
-          'default' => array(
-            'weight' => '1',
-            'visible' => TRUE,
-          ),
-        ),
       ),
     ),
   );
@@ -344,22 +344,22 @@ function property_strongarm() {
   $strongarm->api_version = 1;
   $strongarm->name = 'theme_settings';
   $strongarm->value = array(
-    'toggle_logo' => 1,
-    'toggle_name' => 1,
-    'toggle_slogan' => 1,
-    'toggle_node_user_picture' => 1,
+    'default_favicon' => 0,
+    'default_logo' => 0,
+    'favicon_mimetype' => 'image/vnd.microsoft.icon',
+    'favicon_path' => 'sites/all/themes/reiscout_bootstrap/favicon.ico',
+    'favicon_upload' => '',
+    'logo_path' => 'sites/all/themes/reiscout_bootstrap/logo.png',
+    'logo_upload' => '',
     'toggle_comment_user_picture' => 1,
     'toggle_comment_user_verification' => 1,
     'toggle_favicon' => 1,
+    'toggle_logo' => 1,
     'toggle_main_menu' => 1,
+    'toggle_name' => 1,
+    'toggle_node_user_picture' => 1,
     'toggle_secondary_menu' => 1,
-    'default_logo' => 0,
-    'logo_path' => 'sites/all/themes/reiscout_bootstrap/logo.png',
-    'logo_upload' => '',
-    'default_favicon' => 0,
-    'favicon_path' => 'sites/all/themes/reiscout_bootstrap/favicon.ico',
-    'favicon_upload' => '',
-    'favicon_mimetype' => 'image/vnd.microsoft.icon',
+    'toggle_slogan' => 1,
   );
   $export['theme_settings'] = $strongarm;
 

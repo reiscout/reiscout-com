@@ -21,23 +21,23 @@ function property_field_group_info() {
   $field_group->mode = 'form';
   $field_group->parent_name = '';
   $field_group->data = array(
-    'label' => 'Last Market Sale Information',
-    'weight' => '12',
     'children' => array(
       0 => 'field_mortgage_company',
       1 => 'field_last_sale_price',
       2 => 'field_last_sale_date',
     ),
-    'format_type' => 'fieldset',
     'format_settings' => array(
       'formatter' => 'collapsible',
       'instance_settings' => array(
-        'description' => '',
         'classes' => 'group-last-mkt-sale-information field-group-fieldset',
-        'required_fields' => 1,
+        'description' => '',
         'id' => '',
+        'required_fields' => 1,
       ),
     ),
+    'format_type' => 'fieldset',
+    'label' => 'Last Market Sale Information',
+    'weight' => '12',
   );
   $field_groups['group_last_mkt_sale_information|node|property|form'] = $field_group;
 
@@ -51,22 +51,22 @@ function property_field_group_info() {
   $field_group->mode = 'full';
   $field_group->parent_name = '';
   $field_group->data = array(
-    'label' => 'Last Market Sale Information',
-    'weight' => '12',
     'children' => array(
       0 => 'field_mortgage_company',
       1 => 'field_last_sale_price',
       2 => 'field_last_sale_date',
     ),
-    'format_type' => 'fieldset',
     'format_settings' => array(
       'formatter' => 'collapsible',
       'instance_settings' => array(
-        'description' => '',
         'classes' => 'group-last-mkt-sale-information field-group-fieldset',
+        'description' => '',
         'id' => '',
       ),
     ),
+    'format_type' => 'fieldset',
+    'label' => 'Last Market Sale Information',
+    'weight' => '12',
   );
   $field_groups['group_last_mkt_sale_information|node|property|full'] = $field_group;
 
@@ -80,24 +80,24 @@ function property_field_group_info() {
   $field_group->mode = 'form';
   $field_group->parent_name = '';
   $field_group->data = array(
-    'label' => 'List',
-    'weight' => '16',
     'children' => array(
       0 => 'field_case_file_date',
       1 => 'field_case_number',
       2 => 'field_list',
       3 => 'field_foreclosure_sale_date',
     ),
-    'format_type' => 'fieldset',
     'format_settings' => array(
       'formatter' => 'collapsible',
       'instance_settings' => array(
-        'description' => '',
         'classes' => 'group-list field-group-fieldset',
-        'required_fields' => 1,
+        'description' => '',
         'id' => '',
+        'required_fields' => 1,
       ),
     ),
+    'format_type' => 'fieldset',
+    'label' => 'List',
+    'weight' => '16',
   );
   $field_groups['group_list|node|property|form'] = $field_group;
 
@@ -111,23 +111,23 @@ function property_field_group_info() {
   $field_group->mode = 'full';
   $field_group->parent_name = '';
   $field_group->data = array(
-    'label' => 'List',
-    'weight' => '17',
     'children' => array(
       0 => 'field_case_file_date',
       1 => 'field_case_number',
       2 => 'field_list',
       3 => 'field_foreclosure_sale_date',
     ),
-    'format_type' => 'fieldset',
     'format_settings' => array(
       'formatter' => 'collapsible',
       'instance_settings' => array(
-        'description' => '',
         'classes' => 'group-list field-group-fieldset',
+        'description' => '',
         'id' => '',
       ),
     ),
+    'format_type' => 'fieldset',
+    'label' => 'List',
+    'weight' => '17',
   );
   $field_groups['group_list|node|property|full'] = $field_group;
 
@@ -141,24 +141,24 @@ function property_field_group_info() {
   $field_group->mode = 'form';
   $field_group->parent_name = '';
   $field_group->data = array(
-    'label' => 'Other Information',
-    'weight' => '18',
     'children' => array(
       0 => 'field_repairs_price',
       1 => 'field_arv',
       2 => 'field_under_contract',
       3 => 'field_zillow_page_url',
     ),
-    'format_type' => 'fieldset',
     'format_settings' => array(
       'formatter' => 'collapsible',
       'instance_settings' => array(
-        'description' => '',
         'classes' => 'group-other-information field-group-fieldset',
-        'required_fields' => 1,
+        'description' => '',
         'id' => '',
+        'required_fields' => 1,
       ),
     ),
+    'format_type' => 'fieldset',
+    'label' => 'Other Information',
+    'weight' => '18',
   );
   $field_groups['group_other_information|node|property|form'] = $field_group;
 
@@ -172,23 +172,23 @@ function property_field_group_info() {
   $field_group->mode = 'full';
   $field_group->parent_name = '';
   $field_group->data = array(
-    'label' => 'Other Information',
-    'weight' => '18',
     'children' => array(
       0 => 'field_repairs_price',
       1 => 'field_arv',
       2 => 'field_under_contract',
       3 => 'field_zillow_page_url',
     ),
-    'format_type' => 'fieldset',
     'format_settings' => array(
       'formatter' => 'collapsible',
       'instance_settings' => array(
-        'description' => '',
         'classes' => 'group-other-information field-group-fieldset',
+        'description' => '',
         'id' => '',
       ),
     ),
+    'format_type' => 'fieldset',
+    'label' => 'Other Information',
+    'weight' => '18',
   );
   $field_groups['group_other_information|node|property|full'] = $field_group;
 
@@ -202,8 +202,6 @@ function property_field_group_info() {
   $field_group->mode = 'form';
   $field_group->parent_name = '';
   $field_group->data = array(
-    'label' => 'Owner Information',
-    'weight' => '13',
     'children' => array(
       0 => 'field_owner_phone',
       1 => 'field_owner_postal_address',
@@ -211,16 +209,18 @@ function property_field_group_info() {
       3 => 'field_last_contacted',
       4 => 'field_lead_status',
     ),
-    'format_type' => 'fieldset',
     'format_settings' => array(
       'formatter' => 'collapsible',
       'instance_settings' => array(
-        'description' => '',
         'classes' => 'group-owner-information field-group-fieldset',
-        'required_fields' => 1,
+        'description' => '',
         'id' => '',
+        'required_fields' => 1,
       ),
     ),
+    'format_type' => 'fieldset',
+    'label' => 'Owner Information',
+    'weight' => '13',
   );
   $field_groups['group_owner_information|node|property|form'] = $field_group;
 
@@ -234,8 +234,6 @@ function property_field_group_info() {
   $field_group->mode = 'full';
   $field_group->parent_name = '';
   $field_group->data = array(
-    'label' => 'Owner Information',
-    'weight' => '13',
     'children' => array(
       0 => 'field_owner_phone',
       1 => 'field_owner_postal_address',
@@ -244,15 +242,17 @@ function property_field_group_info() {
       4 => 'field_lead_status',
       5 => 'reiscout-mail-buttons',
     ),
-    'format_type' => 'fieldset',
     'format_settings' => array(
       'formatter' => 'collapsible',
       'instance_settings' => array(
-        'description' => '',
         'classes' => 'group-owner-information field-group-fieldset',
+        'description' => '',
         'id' => '',
       ),
     ),
+    'format_type' => 'fieldset',
+    'label' => 'Owner Information',
+    'weight' => '13',
   );
   $field_groups['group_owner_information|node|property|full'] = $field_group;
 
@@ -266,22 +266,22 @@ function property_field_group_info() {
   $field_group->mode = 'form';
   $field_group->parent_name = 'group_property_info';
   $field_group->data = array(
-    'label' => 'Owner Info',
-    'weight' => '14',
     'children' => array(
       0 => 'field_owner_phone',
       1 => 'field_owner_postal_address',
     ),
-    'format_type' => 'fieldset',
     'format_settings' => array(
       'formatter' => 'collapsible',
       'instance_settings' => array(
-        'description' => '',
         'classes' => 'group-owner-info field-group-fieldset',
-        'required_fields' => 1,
+        'description' => '',
         'id' => '',
+        'required_fields' => 1,
       ),
     ),
+    'format_type' => 'fieldset',
+    'label' => 'Owner Info',
+    'weight' => '14',
   );
   $field_groups['group_owner_info|node|property|form'] = $field_group;
 
@@ -295,22 +295,22 @@ function property_field_group_info() {
   $field_group->mode = 'full';
   $field_group->parent_name = 'group_property_info';
   $field_group->data = array(
-    'label' => 'Owner Info',
-    'weight' => '18',
     'children' => array(
       0 => 'field_owner_phone',
       1 => 'field_owner_postal_address',
       2 => 'reiscout-mail-buttons',
     ),
-    'format_type' => 'fieldset',
     'format_settings' => array(
       'formatter' => 'collapsible',
       'instance_settings' => array(
-        'description' => '',
         'classes' => 'group-owner-info field-group-fieldset',
+        'description' => '',
         'id' => '',
       ),
     ),
+    'format_type' => 'fieldset',
+    'label' => 'Owner Info',
+    'weight' => '18',
   );
   $field_groups['group_owner_info|node|property|full'] = $field_group;
 
@@ -324,8 +324,6 @@ function property_field_group_info() {
   $field_group->mode = 'form';
   $field_group->parent_name = '';
   $field_group->data = array(
-    'label' => 'Property Characteristics',
-    'weight' => '14',
     'children' => array(
       0 => 'field_bedrooms',
       1 => 'field_year_built',
@@ -337,16 +335,18 @@ function property_field_group_info() {
       7 => 'field_baths',
       8 => 'field_rooms',
     ),
-    'format_type' => 'fieldset',
     'format_settings' => array(
       'formatter' => 'collapsible',
       'instance_settings' => array(
-        'description' => '',
         'classes' => 'group-property-characteristics field-group-fieldset',
-        'required_fields' => 1,
+        'description' => '',
         'id' => '',
+        'required_fields' => 1,
       ),
     ),
+    'format_type' => 'fieldset',
+    'label' => 'Property Characteristics',
+    'weight' => '14',
   );
   $field_groups['group_property_characteristics|node|property|form'] = $field_group;
 
@@ -360,8 +360,6 @@ function property_field_group_info() {
   $field_group->mode = 'full';
   $field_group->parent_name = '';
   $field_group->data = array(
-    'label' => 'Property Characteristics',
-    'weight' => '14',
     'children' => array(
       0 => 'field_bedrooms',
       1 => 'field_year_built',
@@ -373,15 +371,17 @@ function property_field_group_info() {
       7 => 'field_baths',
       8 => 'field_rooms',
     ),
-    'format_type' => 'fieldset',
     'format_settings' => array(
       'formatter' => 'collapsible',
       'instance_settings' => array(
-        'description' => '',
         'classes' => 'group-property-characteristics field-group-fieldset',
+        'description' => '',
         'id' => '',
       ),
     ),
+    'format_type' => 'fieldset',
+    'label' => 'Property Characteristics',
+    'weight' => '14',
   );
   $field_groups['group_property_characteristics|node|property|full'] = $field_group;
 
@@ -395,8 +395,6 @@ function property_field_group_info() {
   $field_group->mode = 'form';
   $field_group->parent_name = '';
   $field_group->data = array(
-    'label' => 'Property Info',
-    'weight' => '10',
     'children' => array(
       0 => 'field_bedrooms',
       1 => 'field_mortgage_company',
@@ -417,16 +415,18 @@ function property_field_group_info() {
       16 => 'field_zoning',
       17 => 'group_owner_info',
     ),
-    'format_type' => 'fieldset',
     'format_settings' => array(
       'formatter' => 'collapsible',
       'instance_settings' => array(
-        'description' => '',
         'classes' => 'group-property-info field-group-fieldset',
-        'required_fields' => 1,
+        'description' => '',
         'id' => '',
+        'required_fields' => 1,
       ),
     ),
+    'format_type' => 'fieldset',
+    'label' => 'Property Info',
+    'weight' => '10',
   );
   $field_groups['group_property_info|node|property|form'] = $field_group;
 
@@ -440,8 +440,6 @@ function property_field_group_info() {
   $field_group->mode = 'full';
   $field_group->parent_name = '';
   $field_group->data = array(
-    'label' => 'Property Info',
-    'weight' => '8',
     'children' => array(
       0 => 'field_bedrooms',
       1 => 'field_mortgage_company',
@@ -462,15 +460,17 @@ function property_field_group_info() {
       16 => 'field_zoning',
       17 => 'group_owner_info',
     ),
-    'format_type' => 'fieldset',
     'format_settings' => array(
       'formatter' => 'collapsible',
       'instance_settings' => array(
-        'description' => '',
         'classes' => 'group-property-info field-group-fieldset',
+        'description' => '',
         'id' => '',
       ),
     ),
+    'format_type' => 'fieldset',
+    'label' => 'Property Info',
+    'weight' => '8',
   );
   $field_groups['group_property_info|node|property|full'] = $field_group;
 
@@ -484,22 +484,22 @@ function property_field_group_info() {
   $field_group->mode = 'form';
   $field_group->parent_name = '';
   $field_group->data = array(
-    'label' => 'Site Information',
-    'weight' => '15',
     'children' => array(
       0 => 'field_lot_area_acres',
       1 => 'field_zoning',
     ),
-    'format_type' => 'fieldset',
     'format_settings' => array(
       'formatter' => 'collapsible',
       'instance_settings' => array(
-        'description' => '',
         'classes' => 'group-site-information field-group-fieldset',
-        'required_fields' => 1,
+        'description' => '',
         'id' => '',
+        'required_fields' => 1,
       ),
     ),
+    'format_type' => 'fieldset',
+    'label' => 'Site Information',
+    'weight' => '15',
   );
   $field_groups['group_site_information|node|property|form'] = $field_group;
 
@@ -513,21 +513,21 @@ function property_field_group_info() {
   $field_group->mode = 'full';
   $field_group->parent_name = '';
   $field_group->data = array(
-    'label' => 'Site Information',
-    'weight' => '15',
     'children' => array(
       0 => 'field_lot_area_acres',
       1 => 'field_zoning',
     ),
-    'format_type' => 'fieldset',
     'format_settings' => array(
       'formatter' => 'collapsible',
       'instance_settings' => array(
-        'description' => '',
         'classes' => 'group-site-information field-group-fieldset',
+        'description' => '',
         'id' => '',
       ),
     ),
+    'format_type' => 'fieldset',
+    'label' => 'Site Information',
+    'weight' => '15',
   );
   $field_groups['group_site_information|node|property|full'] = $field_group;
 
@@ -541,21 +541,21 @@ function property_field_group_info() {
   $field_group->mode = 'form';
   $field_group->parent_name = '';
   $field_group->data = array(
-    'label' => 'Source Information',
-    'weight' => '16',
     'children' => array(
       0 => 'field_source',
     ),
-    'format_type' => 'fieldset',
     'format_settings' => array(
       'formatter' => 'collapsible',
       'instance_settings' => array(
-        'description' => '',
         'classes' => 'group-source-information field-group-fieldset',
-        'required_fields' => 1,
+        'description' => '',
         'id' => '',
+        'required_fields' => 1,
       ),
     ),
+    'format_type' => 'fieldset',
+    'label' => 'Source Information',
+    'weight' => '16',
   );
   $field_groups['group_source_information|node|property|form'] = $field_group;
 
@@ -569,20 +569,20 @@ function property_field_group_info() {
   $field_group->mode = 'full';
   $field_group->parent_name = '';
   $field_group->data = array(
-    'label' => 'Source Information',
-    'weight' => '16',
     'children' => array(
       0 => 'field_source',
     ),
-    'format_type' => 'fieldset',
     'format_settings' => array(
       'formatter' => 'collapsible',
       'instance_settings' => array(
-        'description' => '',
         'classes' => 'group-source-information field-group-fieldset',
+        'description' => '',
         'id' => '',
       ),
     ),
+    'format_type' => 'fieldset',
+    'label' => 'Source Information',
+    'weight' => '16',
   );
   $field_groups['group_source_information|node|property|full'] = $field_group;
 

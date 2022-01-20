@@ -22,20 +22,20 @@ function property_default_field_validation_rule() {
   $rule->bundle = 'property';
   $rule->validator = 'field_validation_unique_validator';
   $rule->settings = array(
-    'data' => 'bundle',
-    'per_user' => 0,
     'bypass' => 0,
-    'roles' => array(
-      1 => 0,
-      2 => 0,
-      3 => 0,
-    ),
-    'errors' => 1,
     'condition' => 0,
     'condition_wrapper' => array(
       'condition_field' => '',
       'condition_operator' => 'not_equals',
       'condition_value' => '',
+    ),
+    'data' => 'bundle',
+    'errors' => 1,
+    'per_user' => 0,
+    'roles' => array(
+      1 => 0,
+      2 => 0,
+      3 => 0,
     ),
   );
   $rule->error_message = 'Property with such address already exist. Please select another address.';
